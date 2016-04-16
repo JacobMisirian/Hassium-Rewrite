@@ -1,0 +1,37 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Parser/Ast/AttributeAccessNode.cs">
+    <Files>
+      <File FileName="Hassium/Program.cs" Line="24" Column="64" />
+      <File FileName="Hassium/CodeGen/ModuleCompiler.cs" Line="28" Column="13" />
+      <File FileName="Hassium/CodeGen/Instruction.cs" Line="43" Column="18" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="139" Column="10" />
+      <File FileName="Hassium/SemanticAnalysis/SemanticAnalyzer.cs" Line="25" Column="56" />
+      <File FileName="Hassium/Parser/Ast/AttributeAccessNode.cs" Line="13" Column="19" />
+      <File FileName="Hassium/Parser/Ast/ExpressionNode.cs" Line="68" Column="46" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Hassium" expanded="True">
+            <Node name="CodeGen" expanded="True" />
+            <Node name="Lexer" expanded="True" />
+            <Node name="Parser" expanded="True">
+              <Node name="Ast" expanded="True">
+                <Node name="AttributeAccessNode.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="Runtime" expanded="True">
+              <Node name="StandardLibrary" expanded="True" />
+            </Node>
+            <Node name="SemanticAnalysis" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
