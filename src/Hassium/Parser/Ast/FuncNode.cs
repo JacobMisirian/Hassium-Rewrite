@@ -20,12 +20,10 @@ namespace Hassium.Parser
         {
             parser.ExpectToken(TokenType.Identifier, "func");
             string name = parser.ExpectToken(TokenType.Identifier).Value;
-            parser.ExpectToken(TokenType.LeftParentheses);
             List<string> parameters = new List<string>();
-            if (!parser.MatchToken(TokenType.RightParentheses))
-                while (parser.AcceptToken(TokenType.Comma))
-                    parameters.Add(parser.ExpectToken(TokenType.Identifier).Value);
-            parser.ExpectToken(TokenType.RightParentheses);
+            ArgListNode args = ArgListNode.Parse(parser);
+            foreach (AstNode child in args.Children)
+                parameters.Add(((IdentifierNode)child).Identifier);
             AstNode body = StatementNode.Parse(parser);
 
             return new FuncNode(name, parameters, body);

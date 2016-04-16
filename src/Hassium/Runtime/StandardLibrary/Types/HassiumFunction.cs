@@ -1,5 +1,7 @@
 using System;
 
+using Hassium.Runtime;
+
 namespace Hassium.Runtime.StandardLibrary.Types
 {
     public delegate HassiumObject HassiumFunctionDelegate(params HassiumObject[] args);
@@ -14,7 +16,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             ParamLength = paramLength;
         }
 
-        public HassiumObject Invoke(HassiumObject[] args)
+        public virtual HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
             if (args.Length != ParamLength && ParamLength != -1)
                 throw new Exception(string.Format("Expected argument length of {0} got {1}!", ParamLength, args.Length));

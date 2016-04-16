@@ -48,7 +48,7 @@ namespace Hassium.Parser
         {
             bool matches = MatchToken(tokenType);
             if (!matches)
-                throw new Exception(tokenType + " was expected in parser!");
+                throw new Exception(tokenType + " was expected in parser! Instead got " + GetToken().TokenType + " with value " + GetToken().Value);
             return Tokens[Position++];
         }
         public Token ExpectToken(TokenType tokenType, string value)

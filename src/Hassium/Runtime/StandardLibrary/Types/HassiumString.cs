@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace Hassium.Runtime.StandardLibrary.Types
 {
@@ -9,16 +10,55 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             Value = value;
             Attributes.Add("toUpper", new HassiumFunction(toUpper, 0));
+            Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
+            Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
+        }
+
+        private HassiumObject toUpper(HassiumObject[] args)
+        {
+            return new HassiumString(Value.ToUpper());
+        }
+
+        private HassiumObject __equals__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumString)
+                return this == (HassiumString)obj;
+            throw new Exception("Cannot compare string to " + obj);
+        }
+        private HassiumObject __notequal__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumString)
+                return this != (HassiumString)obj;
+            throw new Exception("Cannot compare string to " + obj);
         }
 
         public static HassiumString operator + (HassiumString left, HassiumString right)
         {
             return new HassiumString(left.Value + right.Value);
         }
-
-        private HassiumObject toUpper(HassiumObject[] args)
+        public static HassiumString operator * (HassiumString left, HassiumDouble right)
         {
-            return new HassiumString(Value.ToUpper());
+            StringBuilder sb = new StringBuilder();
+            for (double i = 0; i < right.Value; i++)
+                sb.Append(left.Value);
+            return new HassiumString(sb.ToString());
+        }
+        public static HassiumString operator * (HassiumDouble left, HassiumString right)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (double i = 0; i < left.Value; i++)
+                sb.Append(right.Value);
+            return new HassiumString(sb.ToString());
+        }
+        public static HassiumBool operator == (HassiumString left, HassiumString right)
+        {
+            return new HassiumBool(left.Value == right.Value);
+        }
+        public static HassiumBool operator != (HassiumString left, HassiumString right)
+        {
+            return new HassiumBool(left.Value != right.Value);
         }
 
         public override string ToString()

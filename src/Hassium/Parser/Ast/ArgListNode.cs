@@ -7,19 +7,25 @@ namespace Hassium.Parser
 {
     public class ArgListNode: AstNode
     {
-        public ArgListNode(List<AstNode> nodes)
+        public ArgListNode()
         {
-            foreach (AstNode child in nodes)
-                Children.Add(child);
         }
 
         public static ArgListNode Parse(Parser parser)
         {
-            List<AstNode> nodes = new List<AstNode>();
-            nodes.Add(ExpressionNode.Parse(parser));
-            while (parser.AcceptToken(TokenType.Comma))
-                nodes.Add(ExpressionNode.Parse(parser));
-            return new ArgListNode(nodes);
+            ArgListNode ret = new ArgListNode();
+            parser.ExpectToken(TokenType.LeftParentheses);
+
+            while (!parser.MatchToken(TokenType.RightParentheses))
+            {
+                ret.Children.Add(ExpressionNode.Parse(parser));
+                if (!parser.AcceptToken(TokenType.Comma))
+                    break;
+            }
+
+            parser.ExpectToken(TokenType.RightParentheses);
+
+            return ret;
         }
 
         public override void Visit(IVisitor visitor)

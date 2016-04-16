@@ -114,7 +114,7 @@ namespace Hassium.Lexer
                                 result.Add(new Token(TokenType.Comparison, ">"));
                             }
                             else
-                                result.Add(new Token(TokenType.Comparison, ">"));
+                                result.Add(new Token(TokenType.Comparison, ">="));
                             break;
                         default:
                             throw new Exception("Caught unknown char in lexer: " + readChar());

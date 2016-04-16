@@ -1,5 +1,8 @@
-a = 0
-while (a <= 10) {
-	println (a)
-	a = a + 1
+func main () {
+	println("Hai".toUpper())
+	x ("that")
+}
+
+func x (a) {
+	println(a.toUpper())
 }

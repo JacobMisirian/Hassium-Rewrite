@@ -66,12 +66,11 @@
     <Compile Include="Runtime\StandardLibrary\GlobalFunctions.cs" />
     <Compile Include="CodeGen\Instruction.cs" />
     <Compile Include="CodeGen\HassiumModule.cs" />
-    <Compile Include="CodeGen\ModuleCompiler.cs" />
-    <Compile Include="CodeGen\HassiumCompiler.cs" />
     <Compile Include="Runtime\VirtualMachine.cs" />
     <Compile Include="Runtime\StackFrame.cs" />
-    <Compile Include="Runtime\HassiumFlags.cs" />
     <Compile Include="Parser\Ast\AttributeAccessNode.cs" />
+    <Compile Include="CodeGen\MethodBuilder.cs" />
+    <Compile Include="CodeGen\HassiumCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

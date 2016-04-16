@@ -1,0 +1,5 @@
+/home/reagan/Hassium-Rewrite/src/Hassium/obj/x86/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/home/reagan/Hassium-Rewrite/src/Hassium/bin/Debug/Hassium.exe.mdb
+/home/reagan/Hassium-Rewrite/src/Hassium/bin/Debug/Hassium.exe
+/home/reagan/Hassium-Rewrite/src/Hassium/obj/x86/Debug/Hassium.exe
+/home/reagan/Hassium-Rewrite/src/Hassium/obj/x86/Debug/Hassium.exe.mdb

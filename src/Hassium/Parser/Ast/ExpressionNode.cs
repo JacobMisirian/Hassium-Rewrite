@@ -67,10 +67,6 @@ namespace Hassium.Parser
                         parser.AcceptToken(TokenType.Assignment);
                         left = new BinaryOperationNode(BinaryOperation.Assignment, left, parseUnary(parser));
                         continue;
-                    case ".":
-                        parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new AttributeAccessNode(left, parseUnary(parser));
-                        break;
                      default:
                         break;
                 }
@@ -140,7 +136,7 @@ namespace Hassium.Parser
 
         private static AstNode parseFunctionCall(Parser parser)
         {
-            return parseFunctionCall(parser, parseTerm(parser));
+            return parseFunctionCall(parser, parseAttributeAccess(parser));
         }
         private static AstNode parseFunctionCall(Parser parser, AstNode left)
         {
@@ -148,6 +144,25 @@ namespace Hassium.Parser
                 return parseFunctionCall(parser, new FunctionCallNode(left, ArgListNode.Parse(parser)));
             else
                 return left;
+        }
+
+        private static AstNode parseAttributeAccess(Parser parser)
+        {
+            AstNode left = parseTerm(parser);
+            while (parser.MatchToken(TokenType.BinaryOperation))
+            {
+                switch (parser.GetToken().Value)
+                {
+                    case ".":
+                        parser.ExpectToken(TokenType.BinaryOperation);
+                        left = new AttributeAccessNode(left, parser.ExpectToken(TokenType.Identifier).Value);
+                        continue;
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
         }
 
         private static AstNode parseTerm(Parser parser)
@@ -167,14 +182,8 @@ namespace Hassium.Parser
                     block.Children.Add(StatementNode.Parse(parser));
                 return block;
             }
-            else if (parser.AcceptToken(TokenType.LeftParentheses))
-            {
-                AstNode expression = ExpressionNode.Parse(parser);
-                parser.ExpectToken(TokenType.RightParentheses);
-                return expression;
-            }
             else
-                throw new Exception("Unexpected " + parser.GetToken().Value + " of type " + parser.GetToken().TokenType + " in parser!");
+                throw new Exception(string.Format("Unexpected type {0} with value {1} encountered in parser!", parser.GetToken().TokenType, parser.GetToken().Value));
         }
 
         public override void Visit(IVisitor visitor)

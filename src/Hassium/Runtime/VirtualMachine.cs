@@ -13,7 +13,7 @@ namespace Hassium.Runtime
         private Dictionary<double, HassiumObject> globals;
         private Stack<HassiumObject> stack;
         private StackFrame stackFrame;
-        private HassiumFlags flags;
+        private HassiumModule module;
 
         public void Execute(HassiumModule module)
         {
@@ -21,16 +21,20 @@ namespace Hassium.Runtime
             globals = new Dictionary<double, HassiumObject>();
             stack = new Stack<HassiumObject>();
             stackFrame = new StackFrame();
-            flags = new HassiumFlags();
-
-            gatherLabels(module.Instructions);
+            this.module = module;
             gatherGlobals(module.ConstantPool);
 
-            for (int position = 0; position < module.Instructions.Count; position++)
+            ExecuteMethod((MethodBuilder)module.Attributes["main"]);
+        }
+
+        public void ExecuteMethod(MethodBuilder method)
+        {
+            gatherLabels(method.Instructions);
+            for (int position = 0; position < method.Instructions.Count; position++)
             {
                 HassiumDouble left, right;
-                double argument = module.Instructions[position].Argument;
-                switch (module.Instructions[position].InstructionType)
+                double argument = method.Instructions[position].Argument;
+                switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
                         stackFrame.EnterFrame();
@@ -66,6 +70,36 @@ namespace Hassium.Runtime
                         left = stack.Pop() as HassiumDouble;
                         stack.Push(left % right);
                         break;
+                    case InstructionType.Equal:
+                        rightObj = stack.Pop();
+                        leftObj = stack.Pop();
+                        stack.Push(leftObj.Equals(rightObj));
+                        break;
+                    case InstructionType.Not_Equal:
+                        rightObj = stack.Pop();
+                        leftObj = stack.Pop();
+                        stack.Push(leftObj.NotEquals(rightObj));
+                        break;
+                    case InstructionType.Greater_Than:
+                        rightObj = stack.Pop();
+                        leftObj = stack.Pop();
+                        stack.Push(leftObj.GreaterThan(rightObj));
+                        break;
+                    case InstructionType.Greater_Than_Or_Equal:
+                        rightObj = stack.Pop();
+                        leftObj = stack.Pop();
+                        stack.Push(leftObj.GreaterThanOrEqual(rightObj));
+                        break;
+                    case InstructionType.Lesser_Than:
+                        rightObj = stack.Pop();
+                        leftObj = stack.Pop();
+                        stack.Push(leftObj.LesserThan(rightObj));
+                        break;
+                    case InstructionType.Lesser_Than_Or_Equal:
+                        rightObj = stack.Pop();
+                        leftObj = stack.Pop();
+                        stack.Push(leftObj.LesserThanOrEqual(rightObj));
+                        break;
                     case InstructionType.Push:
                         stack.Push(new HassiumDouble(argument));
                         break;
@@ -85,43 +119,31 @@ namespace Hassium.Runtime
                     case InstructionType.Load_Global:
                         stack.Push(globals[argument]);
                         break;
+                    case InstructionType.Load_Attribute:
+                        string attribute = module.ConstantPool[Convert.ToInt32(argument)];
+                        stack.Push(stack.Pop().Attributes[attribute]);
+                        break;
                     case InstructionType.Call:
                         HassiumFunction target = stack.Pop() as HassiumFunction;
                         HassiumObject[] args = new HassiumObject[Convert.ToInt32(argument)];
-                        for (int i = 0; i < args.Length; i++)
-                            args[i] = stack.Pop();
-                        stack.Push(target.Invoke(args));
-                        break;
-                    case InstructionType.Compare:
-                        right = stack.Pop() as HassiumDouble;
-                        left = stack.Pop() as HassiumDouble;
-                        flags.ProcessFlags((left - right).Value);
+                        if (!(target is MethodBuilder))
+                        {
+                            for (int i = 0; i < args.Length; i++)
+                                args[i] = stack.Pop();
+                            stack.Push(target.Invoke(null, args));
+                        }
+                        else
+                            stack.Push(((MethodBuilder)target).Invoke(this, null));
                         break;
                     case InstructionType.Jump:
                         position = labels[argument];
                         break;
-                    case InstructionType.JumpIfEqual:
-                        if (flags.Equal)
+                    case InstructionType.Jump_If_True:
+                        if (((HassiumBool)stack.Pop()).Value)
                             position = labels[argument];
                         break;
-                    case InstructionType.JumpIfNotEqual:
-                        if (!flags.Equal)
-                            position = labels[argument];
-                        break;
-                    case InstructionType.JumpIfGreater:
-                        if (flags.Greater)
-                            position = labels[argument];
-                        break;
-                    case InstructionType.JumpIfGreaterOrEqual:
-                        if (flags.Greater || flags.Equal)
-                            position = labels[argument];
-                        break;
-                    case InstructionType.JumpIfLesser:
-                        if (!flags.Greater)
-                            position = labels[argument];
-                        break;
-                    case InstructionType.JumpIfLesserOrEqual:
-                        if (!flags.Greater || flags.Equal)
+                    case InstructionType.Jump_If_False:
+                        if (!((HassiumBool)stack.Pop()).Value)
                             position = labels[argument];
                         break;
                 }
@@ -130,9 +152,10 @@ namespace Hassium.Runtime
 
         private void gatherLabels(List<Instruction> instructions)
         {
+           // Console.WriteLine();
             for (int i = 0; i < instructions.Count; i++)
             {
-                Console.WriteLine("{0}\t{1}", instructions[i].InstructionType, instructions[i].Argument);
+              //  Console.WriteLine("{0}\t{1}", instructions[i].InstructionType, instructions[i].Argument);
                 if (instructions[i].InstructionType == InstructionType.Label)
                     labels.Add(instructions[i].Argument, i);
             }
@@ -143,7 +166,8 @@ namespace Hassium.Runtime
             for (int i = 0; i < constantPool.Count; i++)
                 if (GlobalFunctions.FunctionList.ContainsKey(constantPool[i]))
                     globals.Add(Convert.ToDouble(i), GlobalFunctions.FunctionList[constantPool[i]]);
+                else if (module.Attributes.ContainsKey(constantPool[i]))
+                    globals.Add(i, module.Attributes[constantPool[i]]);
         }
     }
 }
-

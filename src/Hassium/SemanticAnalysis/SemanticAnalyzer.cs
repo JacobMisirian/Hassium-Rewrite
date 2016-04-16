@@ -35,12 +35,7 @@ namespace Hassium.SemanticAnalysis
         }
         public void Accept(FuncNode node)
         {
-            result.AddSymbol(node.Name);
-            result.EnterScope();
-            foreach (string param in node.Parameters)
-                result.AddSymbol(param);
             node.VisitChildren(this);
-            result.PopScope(node.Name);
         }
         public void Accept(UnaryOperationNode node) {}
         public void Accept(IdentifierNode node) {}
