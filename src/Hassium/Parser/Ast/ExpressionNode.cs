@@ -181,6 +181,12 @@ namespace Hassium.Parser
                 return new StringNode(parser.ExpectToken(TokenType.String).Value);
             else if (parser.MatchToken(TokenType.Char))
                 return new CharNode(parser.ExpectToken(TokenType.Char).Value);
+            else if (parser.AcceptToken(TokenType.LeftParentheses))
+            {
+                AstNode expression = Parse(parser);
+                parser.ExpectToken(TokenType.RightParentheses);
+                return expression;
+            }
             else if (parser.AcceptToken(TokenType.LeftBrace))
             {
                 CodeBlockNode block = new CodeBlockNode();
@@ -191,6 +197,8 @@ namespace Hassium.Parser
                 }
                 return block;
             }
+            else if (parser.MatchToken(TokenType.LeftSquare))
+                return ArrayDeclarationNode.Parse(parser);
             else if (parser.AcceptToken(TokenType.Semicolon))
                 return new StatementNode();
             else

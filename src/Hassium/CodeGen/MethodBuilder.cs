@@ -16,6 +16,7 @@ namespace Hassium.CodeGen
         public Dictionary<double, int> Labels = new Dictionary<double, int>();
         public List<Instruction> Instructions = new List<Instruction>();
         public Stack<double> BreakLabels = new Stack<double>();
+        public Stack<double> ContinueLabels = new Stack<double>();
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {

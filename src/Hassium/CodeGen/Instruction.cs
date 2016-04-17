@@ -16,11 +16,7 @@ namespace Hassium.CodeGen
 
     public enum InstructionType
     {
-        Add,
-        Sub,
-        Mul,
-        Div,
-        Mod,
+        Binary_Operation,
         Greater_Than,
         Lesser_Than,
         Greater_Than_Or_Equal,
@@ -36,6 +32,9 @@ namespace Hassium.CodeGen
         Push,
         Push_String,
         Push_Bool,
+        Create_List,
+        Access_List,
+        Load_List_Element,
         Pop,
         Self_Reference,
         Construct,

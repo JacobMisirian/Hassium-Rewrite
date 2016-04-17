@@ -36,6 +36,11 @@ namespace Hassium.CodeGen
         {
             node.VisitChildren(this);
         }
+        public void Accept(ArrayDeclarationNode node)
+        {
+            node.VisitChildren(this);
+            currentMethod.Emit(InstructionType.Create_List, node.Children.Count);
+        }
         public void Accept(AttributeAccessNode node)
         {
             node.Left.Visit(this);
@@ -73,37 +78,37 @@ namespace Hassium.CodeGen
                     }
                     break;
                 case BinaryOperation.Addition:
-                    currentMethod.Emit(InstructionType.Add);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 0);
                     break;
                 case BinaryOperation.Subtraction:
-                    currentMethod.Emit(InstructionType.Sub);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 1);
                     break;
                 case BinaryOperation.Multiplication:
-                    currentMethod.Emit(InstructionType.Mul);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 2);
                     break;
                 case BinaryOperation.Division:
-                    currentMethod.Emit(InstructionType.Div);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 3);
                     break;
                 case BinaryOperation.Modulus:
-                    currentMethod.Emit(InstructionType.Mod);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 4);
                     break;
                 case BinaryOperation.EqualTo:
-                    currentMethod.Emit(InstructionType.Equal);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 5);
                     break;
                 case BinaryOperation.NotEqualTo:
-                    currentMethod.Emit(InstructionType.Not_Equal);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 6);
                     break;
                 case BinaryOperation.GreaterThan:
-                    currentMethod.Emit(InstructionType.Greater_Than);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 7);
                     break;
                 case BinaryOperation.GreaterThanOrEqual:
-                    currentMethod.Emit(InstructionType.Greater_Than_Or_Equal);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 8);
                     break;
                 case BinaryOperation.LesserThan:
-                    currentMethod.Emit(InstructionType.Lesser_Than);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 9);
                     break;
                 case BinaryOperation.LesserThanOrEqual:
-                    currentMethod.Emit(InstructionType.Lesser_Than_Or_Equal);
+                    currentMethod.Emit(InstructionType.Binary_Operation, 10);
                     break;
             }
         }
@@ -151,6 +156,10 @@ namespace Hassium.CodeGen
             if (node.Children.Count > 2)
                 node.ElseBody.Visit(this);
         }
+        public void Accept(ContinueNode node)
+        {
+            currentMethod.Emit(InstructionType.Jump, currentMethod.ContinueLabels.Pop());
+        }
         public void Accept(ExpressionNode node)
         {
         }
@@ -158,6 +167,7 @@ namespace Hassium.CodeGen
         {
             double forLabel = generateSymbol();
             double endLabel = generateSymbol();
+            currentMethod.ContinueLabels.Push(forLabel);
             currentMethod.BreakLabels.Push(endLabel);
             node.SingleStatement.Visit(this);
             currentMethod.Emit(InstructionType.Label, forLabel);
@@ -236,6 +246,7 @@ namespace Hassium.CodeGen
         {
             double whileLabel = generateSymbol();
             double endLabel = generateSymbol();
+            currentMethod.ContinueLabels.Push(whileLabel);
             currentMethod.BreakLabels.Push(endLabel);
             currentMethod.Emit(InstructionType.Label, whileLabel);
             node.Predicate.Visit(this);

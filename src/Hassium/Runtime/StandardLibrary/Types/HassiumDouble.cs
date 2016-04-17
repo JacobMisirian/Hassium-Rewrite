@@ -8,6 +8,11 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumDouble(double value)
         {
             Value = value;
+            Attributes.Add(HassiumObject.ADD_FUNCTION, new HassiumFunction(__add__, 1));
+            Attributes.Add(HassiumObject.SUB_FUNCTION, new HassiumFunction(__sub__, 1));
+            Attributes.Add(HassiumObject.MUL_FUNCTION, new HassiumFunction(__mul__, 1));
+            Attributes.Add(HassiumObject.DIV_FUNCTION, new HassiumFunction(__div__, 1));
+            Attributes.Add(HassiumObject.MOD_FUNCTION, new HassiumFunction(__mod__, 1));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
             Attributes.Add(HassiumObject.GREATER_FUNCTION, new HassiumFunction(__greater__, 1));
@@ -16,6 +21,41 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.LESSER_OR_EQUAL_FUNCTION, new HassiumFunction(__lesserorequal__, 1));
         }
 
+        private HassiumObject __add__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumDouble)
+                return this + (HassiumDouble)obj;
+            throw new Exception("Cannot operate double on " + obj);
+        }
+        private HassiumObject __sub__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumDouble)
+                return this - (HassiumDouble)obj;
+            throw new Exception("Cannot operate double on " + obj);
+        }
+        private HassiumObject __mul__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumDouble)
+                return this * (HassiumDouble)obj;
+            throw new Exception("Cannot operate double on " + obj);
+        }
+        private HassiumObject __div__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumDouble)
+                return this / (HassiumDouble)obj;
+            throw new Exception("Cannot operate double on " + obj);
+        }
+        private HassiumObject __mod__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumDouble)
+                return this % (HassiumDouble)obj;
+            throw new Exception("Cannot operate double on " + obj);
+        }
         private HassiumObject __equals__ (HassiumObject[] args)
         {
             HassiumObject obj = args[0];

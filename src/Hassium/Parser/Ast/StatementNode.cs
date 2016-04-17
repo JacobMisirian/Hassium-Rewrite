@@ -20,6 +20,8 @@ namespace Hassium.Parser
                 return ForNode.Parse(parser);
             else if (parser.AcceptToken(TokenType.Identifier, "break"))
                 return new BreakNode();
+            else if (parser.AcceptToken(TokenType.Identifier, "continue"))
+                return new ContinueNode();
             else
                 return ExpressionNode.Parse(parser);
         }

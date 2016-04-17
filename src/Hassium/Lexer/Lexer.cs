@@ -74,6 +74,7 @@ namespace Hassium.Lexer
                             break;
                         case '*':
                         case '/':
+                        case '%':
                             result.Add(new Token(TokenType.BinaryOperation, ((char)readChar()).ToString()));
                             break;
                         case '=':
@@ -115,6 +116,14 @@ namespace Hassium.Lexer
                             }
                             else
                                 result.Add(new Token(TokenType.Comparison, ">="));
+                            break;
+                        case '[':
+                            position++;
+                            result.Add(new Token(TokenType.LeftSquare, "["));
+                            break;
+                        case ']':
+                            position++;
+                            result.Add(new Token(TokenType.RightSquare, "]"));
                             break;
                         default:
                             throw new Exception("Caught unknown char in lexer: " + readChar());

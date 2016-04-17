@@ -19,6 +19,13 @@ namespace Hassium.Runtime.StandardLibrary.Types
             return new HassiumString(Value.ToUpper());
         }
 
+        private HassiumObject __add__ (HassiumObject[] args)
+        {
+            HassiumObject obj = args[0];
+            if (obj is HassiumString)
+                return this + (HassiumString)obj;
+            throw new Exception("Cannot operate string on " + obj);
+        }
         private HassiumObject __equals__ (HassiumObject[] args)
         {
             HassiumObject obj = args[0];
@@ -60,7 +67,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             return new HassiumBool(left.Value != right.Value);
         }
-
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         public override string ToString()
         {
             return Value;

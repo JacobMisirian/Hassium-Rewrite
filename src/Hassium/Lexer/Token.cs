@@ -27,6 +27,8 @@ namespace Hassium.Lexer
         RightBrace,
         LeftParentheses,
         RightParentheses,
+        LeftSquare,
+        RightSquare,
         Semicolon,
         Colon,
         BinaryOperation,

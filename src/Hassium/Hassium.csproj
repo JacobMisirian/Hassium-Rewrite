@@ -78,6 +78,8 @@
     <Compile Include="Parser\Ast\BreakNode.cs" />
     <Compile Include="Parser\Ast\BoolNode.cs" />
     <Compile Include="Parser\Ast\ForNode.cs" />
+    <Compile Include="Parser\Ast\ContinueNode.cs" />
+    <Compile Include="Parser\Ast\ArrayDeclarationNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

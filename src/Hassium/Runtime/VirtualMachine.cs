@@ -32,7 +32,7 @@ namespace Hassium.Runtime
             gatherLabels(method);
             for (int position = 0; position < method.Instructions.Count; position++)
             {
-                HassiumDouble left, right;
+                HassiumObject left, right;
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 string attribute;
@@ -45,63 +45,45 @@ namespace Hassium.Runtime
                     case InstructionType.Pop_Frame:
                         stackFrame.PopFrame();
                         break;
-                    case InstructionType.Add:
-                        HassiumObject rightObj = stack.Pop();
-                        HassiumObject leftObj = stack.Pop();
-                        if (rightObj is HassiumString || leftObj is HassiumString)
-                            stack.Push((HassiumString)leftObj + (HassiumString)rightObj);
-                        else
-                            stack.Push((HassiumDouble)leftObj + (HassiumDouble)rightObj);
-                        break;
-                    case InstructionType.Sub:
-                        right = stack.Pop() as HassiumDouble;
-                        left = stack.Pop() as HassiumDouble;
-                        stack.Push(left - right);
-                        break;
-                    case InstructionType.Mul:
-                        right = stack.Pop() as HassiumDouble;
-                        left = stack.Pop() as HassiumDouble;
-                        stack.Push(left * right);
-                        break;
-                    case InstructionType.Div:
-                        right = stack.Pop() as HassiumDouble;
-                        left = stack.Pop() as HassiumDouble;
-                        stack.Push(left / right);
-                        break;
-                    case InstructionType.Mod:
-                        right = stack.Pop() as HassiumDouble;
-                        left = stack.Pop() as HassiumDouble;
-                        stack.Push(left % right);
-                        break;
-                    case InstructionType.Equal:
-                        rightObj = stack.Pop();
-                        leftObj = stack.Pop();
-                        stack.Push(leftObj.Equals(rightObj));
-                        break;
-                    case InstructionType.Not_Equal:
-                        rightObj = stack.Pop();
-                        leftObj = stack.Pop();
-                        stack.Push(leftObj.NotEquals(rightObj));
-                        break;
-                    case InstructionType.Greater_Than:
-                        rightObj = stack.Pop();
-                        leftObj = stack.Pop();
-                        stack.Push(leftObj.GreaterThan(rightObj));
-                        break;
-                    case InstructionType.Greater_Than_Or_Equal:
-                        rightObj = stack.Pop();
-                        leftObj = stack.Pop();
-                        stack.Push(leftObj.GreaterThanOrEqual(rightObj));
-                        break;
-                    case InstructionType.Lesser_Than:
-                        rightObj = stack.Pop();
-                        leftObj = stack.Pop();
-                        stack.Push(leftObj.LesserThan(rightObj));
-                        break;
-                    case InstructionType.Lesser_Than_Or_Equal:
-                        rightObj = stack.Pop();
-                        leftObj = stack.Pop();
-                        stack.Push(leftObj.LesserThanOrEqual(rightObj));
+                    case InstructionType.Binary_Operation:
+                        right = stack.Pop();
+                        left = stack.Pop();
+                        switch (argumentInt)
+                        {
+                            case 0:
+                                stack.Push(left.Add(right));
+                                break;
+                            case 1:
+                                stack.Push(left.Sub(right));
+                                break;
+                            case 2:
+                                stack.Push(left.Mul(right));
+                                break;
+                            case 3:
+                                stack.Push(left.Div(right));
+                                break;
+                            case 4:
+                                stack.Push(left.Mod(right));
+                                break;
+                            case 5:
+                                stack.Push(left.Equals(right));
+                                break;
+                            case 6:
+                                stack.Push(left.NotEquals(right));
+                                break;
+                            case 7:
+                                stack.Push(left.GreaterThan(right));
+                                break;
+                            case 8:
+                                stack.Push(left.GreaterThanOrEqual(right));
+                                break;
+                            case 9:
+                                stack.Push(left.LesserThan(right));
+                                break;
+                            case 10:
+                                stack.Push(left.LesserThanOrEqual(right));
+                                break;
+                        }
                         break;
                     case InstructionType.Push:
                         stack.Push(new HassiumDouble(argument));
