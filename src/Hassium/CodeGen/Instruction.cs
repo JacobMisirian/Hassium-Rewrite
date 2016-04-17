@@ -36,6 +36,8 @@ namespace Hassium.CodeGen
         Push,
         Push_String,
         Pop,
+        Self_Reference,
+        Construct,
         Call,
         Label,
         Jump,

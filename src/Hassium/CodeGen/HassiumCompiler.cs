@@ -120,7 +120,10 @@ namespace Hassium.CodeGen
             {
                 child.Visit(this);
                 if (child is FuncNode)
+                {
+                    currentMethod.Parent = clazz;
                     clazz.Attributes.Add(currentMethod.Name, currentMethod);
+                }
             }
             module.Attributes.Add(node.Name, clazz);
         }
@@ -199,6 +202,10 @@ namespace Hassium.CodeGen
             if (!module.ConstantPool.Contains(node.String))
                 module.ConstantPool.Add(node.String);
             currentMethod.Emit(InstructionType.Push_String, findIndex(node.String));
+        }
+        public void Accept(ThisNode node)
+        {
+            currentMethod.Emit(InstructionType.Self_Reference, findIndex(currentMethod.Name));
         }
         public void Accept(UnaryOperationNode node)
         {

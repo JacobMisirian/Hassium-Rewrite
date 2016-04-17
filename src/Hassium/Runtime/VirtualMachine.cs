@@ -131,6 +131,9 @@ namespace Hassium.Runtime
                         attribute = module.ConstantPool[Convert.ToInt32(argument)];
                         stack.Push(stack.Pop().Attributes[attribute]);
                         break;
+                    case InstructionType.Self_Reference:
+                        stack.Push(method.Parent);
+                        break;
                     case InstructionType.Call:
                         HassiumObject target = stack.Pop();
                         HassiumObject[] args = new HassiumObject[argumentInt];
@@ -158,7 +161,7 @@ namespace Hassium.Runtime
            // Console.WriteLine();
             for (int i = 0; i < method.Instructions.Count; i++)
             {
-              //  Console.WriteLine("{0}\t{1}", instructions[i].InstructionType, instructions[i].Argument);
+               // Console.WriteLine("{0}\t{1}", method.Instructions[i].InstructionType, method.Instructions[i].Argument);
                 if (method.Labels.ContainsKey(method.Instructions[i].Argument))
                     method.Labels.Remove(method.Instructions[i].Argument);
                 if (method.Instructions[i].InstructionType == InstructionType.Label)
@@ -168,8 +171,6 @@ namespace Hassium.Runtime
 
         private void gatherGlobals(List<string> constantPool)
         {
-            foreach (string constant in constantPool)
-                Console.WriteLine(constant);
             for (int i = 0; i < constantPool.Count; i++)
                 if (GlobalFunctions.FunctionList.ContainsKey(constantPool[i]))
                     globals.Add(Convert.ToDouble(i), GlobalFunctions.FunctionList[constantPool[i]]);

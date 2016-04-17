@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Hassium.Runtime.StandardLibrary.Types
 {
-    public abstract class HassiumObject
+    public class HassiumObject : ICloneable
     {
         public const string EQUALS_FUNCTION = "__equals__";
         public const string NOT_EQUAL_FUNCTION = "__notequal__";
@@ -45,6 +45,11 @@ namespace Hassium.Runtime.StandardLibrary.Types
             if (Attributes.ContainsKey(INVOKE_FUNCTION))
                 return Attributes[INVOKE_FUNCTION].Invoke(vm, args);
             throw new Exception("Object does not support invoking!");
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }
