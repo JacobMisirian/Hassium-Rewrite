@@ -9,6 +9,7 @@ namespace Hassium.Parser
     {
         public string Name { get; private set; }
         public List<string> Parameters { get; private set; }
+
         public FuncNode(string name, List<string> parameters, AstNode body)
         {
             Name = name;

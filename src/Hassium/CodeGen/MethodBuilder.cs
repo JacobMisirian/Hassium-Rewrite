@@ -6,19 +6,21 @@ using Hassium.Runtime.StandardLibrary.Types;
 
 namespace Hassium.CodeGen
 {
-    public class MethodBuilder : HassiumFunction
+    public class MethodBuilder: HassiumObject
     {
+        public bool IsConstructor { get { return Name == "new"; } }
         public string Name { get; set; }
+        public Dictionary<string, int> Parameters = new Dictionary<string, int>();
         public List<Instruction> Instructions = new List<Instruction>();
         public Dictionary<double, int> Labels = new Dictionary<double, int>();
 
-        public MethodBuilder(HassiumFunctionDelegate target, int paramLength) : base (target, paramLength)
-        {
-        }
-
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
+            vm.StackFrame.EnterFrame();
+            foreach (int param in Parameters.Values)
+                vm.StackFrame.Add(param, args[param]);
             vm.ExecuteMethod(this);
+            vm.StackFrame.PopFrame();
             return null;
         }
 

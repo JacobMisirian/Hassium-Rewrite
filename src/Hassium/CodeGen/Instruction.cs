@@ -32,6 +32,7 @@ namespace Hassium.CodeGen
         Load_Local,
         Store_Local,
         Store_Global,
+        Store_Attribute,
         Push,
         Push_String,
         Pop,

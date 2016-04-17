@@ -167,7 +167,9 @@ namespace Hassium.Parser
 
         private static AstNode parseTerm(Parser parser)
         {
-            if (parser.MatchToken(TokenType.Identifier))
+            if (parser.MatchToken(TokenType.Identifier, "new"))
+                return new NewNode((FunctionCallNode)parseFunctionCall(parser));
+            else if (parser.MatchToken(TokenType.Identifier))
                 return new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value);
             else if (parser.MatchToken(TokenType.Number))
                 return new NumberNode(parser.ExpectToken(TokenType.Number).Value);

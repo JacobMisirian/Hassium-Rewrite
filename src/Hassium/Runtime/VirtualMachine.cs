@@ -9,6 +9,8 @@ namespace Hassium.Runtime
 {
     public class VirtualMachine
     {
+        public StackFrame StackFrame { get { return stackFrame; } }
+        public Stack<HassiumObject> Stack { get { return stack; } }
         private Dictionary<double, HassiumObject> globals;
         private Stack<HassiumObject> stack;
         private StackFrame stackFrame;
@@ -32,7 +34,9 @@ namespace Hassium.Runtime
             {
                 HassiumDouble left, right;
                 double argument = method.Instructions[position].Argument;
-                Console.WriteLine(method.Instructions[position].InstructionType + "\t" + argument);
+                int argumentInt = Convert.ToInt32(argument);
+                string attribute;
+              //  Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
@@ -112,6 +116,11 @@ namespace Hassium.Runtime
                         else
                             stackFrame.Add(argument, value);
                         break;
+                    case InstructionType.Store_Attribute:
+                        HassiumObject location = stack.Pop();
+                        attribute = module.ConstantPool[argumentInt];
+                        location.Attributes[attribute] = stack.Pop();
+                        break;
                     case InstructionType.Load_Local:
                         stack.Push(stackFrame.GetVariable(argument));
                         break;
@@ -119,20 +128,15 @@ namespace Hassium.Runtime
                         stack.Push(globals[argument]);
                         break;
                     case InstructionType.Load_Attribute:
-                        string attribute = module.ConstantPool[Convert.ToInt32(argument)];
+                        attribute = module.ConstantPool[Convert.ToInt32(argument)];
                         stack.Push(stack.Pop().Attributes[attribute]);
                         break;
                     case InstructionType.Call:
-                        HassiumFunction target = stack.Pop() as HassiumFunction;
-                        HassiumObject[] args = new HassiumObject[Convert.ToInt32(argument)];
-                        if (!(target is MethodBuilder))
-                        {
-                            for (int i = 0; i < args.Length; i++)
-                                args[i] = stack.Pop();
-                            stack.Push(target.Invoke(null, args));
-                        }
-                        else
-                            stack.Push(((MethodBuilder)target).Invoke(this, null));
+                        HassiumObject target = stack.Pop();
+                        HassiumObject[] args = new HassiumObject[argumentInt];
+                        for (int i = argumentInt; i > 0; i--)
+                            args[argumentInt - i] = stack.Pop();
+                        stack.Push(target.Invoke(this, args));
                         break;
                     case InstructionType.Jump:
                         position = method.Labels[argument];
@@ -164,6 +168,8 @@ namespace Hassium.Runtime
 
         private void gatherGlobals(List<string> constantPool)
         {
+            foreach (string constant in constantPool)
+                Console.WriteLine(constant);
             for (int i = 0; i < constantPool.Count; i++)
                 if (GlobalFunctions.FunctionList.ContainsKey(constantPool[i]))
                     globals.Add(Convert.ToDouble(i), GlobalFunctions.FunctionList[constantPool[i]]);

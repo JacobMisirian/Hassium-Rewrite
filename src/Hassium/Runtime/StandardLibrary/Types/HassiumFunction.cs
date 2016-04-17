@@ -16,7 +16,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             ParamLength = paramLength;
         }
 
-        public virtual HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
+        public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
             if (args.Length != ParamLength && ParamLength != -1)
                 throw new Exception(string.Format("Expected argument length of {0} got {1}!", ParamLength, args.Length));

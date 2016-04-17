@@ -11,6 +11,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public const string LESSER_FUNCTION = "__lesser__";
         public const string GREATER_OR_EQUAL_FUNCTION = "__greaterorequal__";
         public const string LESSER_OR_EQUAL_FUNCTION = "__lesserorequal__";
+        public const string INVOKE_FUNCTION = "__invoke__";
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
         public object Value { get; private set; }
@@ -38,6 +39,12 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public virtual HassiumBool LesserThanOrEqual(HassiumObject obj)
         {
             return ((HassiumBool)((HassiumFunction)Attributes[LESSER_OR_EQUAL_FUNCTION]).Invoke(null, new HassiumObject[] { obj }));
+        }
+        public virtual HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(INVOKE_FUNCTION))
+                return Attributes[INVOKE_FUNCTION].Invoke(vm, args);
+            throw new Exception("Object does not support invoking!");
         }
     }
 }

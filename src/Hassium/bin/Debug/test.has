@@ -1,9 +1,7 @@
 func main () {
-	MyClass.sayHello()
+	MyClass.attribute = 3
+	println(MyClass.attribute)
 }
 
 class MyClass {
-	func sayHello () {
-		println("Hello, World!")
-	}
 }

@@ -54,11 +54,23 @@ namespace Hassium.CodeGen
             {
                 case BinaryOperation.Assignment:
                     node.Right.Visit(this);
-                    string identifier = ((IdentifierNode)node.Left).Identifier;
-                    if (!table.FindSymbol(identifier))
-                        table.AddSymbol(identifier);
-                    currentMethod.Emit(InstructionType.Store_Local, table.GetIndex(identifier));
-                    currentMethod.Emit(InstructionType.Load_Local, table.GetIndex(identifier));
+                    if (node.Left is IdentifierNode)
+                    {
+                        string identifier = ((IdentifierNode)node.Left).Identifier;
+                        if (!table.FindSymbol(identifier))
+                            table.AddSymbol(identifier);
+                        currentMethod.Emit(InstructionType.Store_Local, table.GetIndex(identifier));
+                        currentMethod.Emit(InstructionType.Load_Local, table.GetIndex(identifier));
+                    }
+                    else if (node.Left is AttributeAccessNode)
+                    {
+                        AttributeAccessNode accessor = node.Left as AttributeAccessNode;
+                        accessor.Left.Visit(this);
+                        if (!module.ConstantPool.Contains(accessor.Right))
+                            module.ConstantPool.Add(accessor.Right);
+                        currentMethod.Emit(InstructionType.Store_Attribute, findIndex(accessor.Right));
+                        accessor.Left.Visit(this);
+                    }
                     break;
                 case BinaryOperation.Addition:
                     currentMethod.Emit(InstructionType.Add);
@@ -104,7 +116,7 @@ namespace Hassium.CodeGen
             if (!module.ConstantPool.Contains(node.Name))
                 module.ConstantPool.Add(node.Name);
             HassiumClass clazz = new HassiumClass();
-            foreach (AstNode child in node.Children)
+            foreach (AstNode child in node.Body.Children)
             {
                 child.Visit(this);
                 if (child is FuncNode)
@@ -136,7 +148,7 @@ namespace Hassium.CodeGen
             if (!module.ConstantPool.Contains(node.Name))
                 module.ConstantPool.Add(node.Name);
 
-            currentMethod = new MethodBuilder(null, node.Parameters.Count);
+            currentMethod = new MethodBuilder();
             currentMethod.Name = node.Name;
 
             currentMethod.Emit(InstructionType.Push_Frame);
@@ -144,9 +156,8 @@ namespace Hassium.CodeGen
 
             for (int i = node.Parameters.Count - 1; i >= 0; i--)
             {
-                string param = node.Parameters[i];
-                table.AddSymbol(param);
-                currentMethod.Emit(InstructionType.Store_Local, table.GetIndex(param));
+                table.AddSymbol(node.Parameters[i]);
+                currentMethod.Parameters.Add(node.Parameters[i], table.GetIndex(node.Parameters[i]));
             }
 
             node.Children[0].VisitChildren(this);
@@ -170,6 +181,11 @@ namespace Hassium.CodeGen
             }
             else
                 currentMethod.Emit(InstructionType.Load_Local, table.GetIndex(node.Identifier));
+        }
+        public void Accept(NewNode node)
+        {
+            node.Call.IsConstructorCall = true;
+            node.Call.Visit(this);
         }
         public void Accept(NumberNode node)
         {
