@@ -16,6 +16,10 @@ namespace Hassium.Parser
                 return ConditionalNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "while"))
                 return WhileNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "for"))
+                return ForNode.Parse(parser);
+            else if (parser.AcceptToken(TokenType.Identifier, "break"))
+                return new BreakNode();
             else
                 return ExpressionNode.Parse(parser);
         }

@@ -1,17 +1,4 @@
 func main () {
-	a = new MyClass(3, 4)
-	b = new MyClass(5, 6)
-	a.call()
-	b.call()
-}
-
-class MyClass {
-	func new (a, b) {
-		this.a = a
-		this.b = b
-	}
-
-	func call () {
-		println(this.a + this.b)
-	}
+	for (a = 0; a < 20; a = a + 1)
+		println(a)
 }

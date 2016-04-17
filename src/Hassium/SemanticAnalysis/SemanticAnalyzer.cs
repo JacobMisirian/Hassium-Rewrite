@@ -27,6 +27,8 @@ namespace Hassium.SemanticAnalysis
         {
             node.VisitChildren(this);
         }
+        public void Accept(BoolNode node) {}
+        public void Accept(BreakNode node) {}
         public void Accept(ClassNode node)
         {
             node.VisitChildren(this);
@@ -47,6 +49,10 @@ namespace Hassium.SemanticAnalysis
         public void Accept(NumberNode node) {}
         public void Accept(CharNode node) {}
         public void Accept(ConditionalNode node)
+        {
+            node.VisitChildren(this);
+        }
+        public void Accept(ForNode node)
         {
             node.VisitChildren(this);
         }

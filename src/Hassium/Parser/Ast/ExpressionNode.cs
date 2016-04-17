@@ -171,6 +171,8 @@ namespace Hassium.Parser
                 return new NewNode((FunctionCallNode)parseFunctionCall(parser));
             else if (parser.AcceptToken(TokenType.Identifier, "this"))
                 return new ThisNode();
+            else if (parser.MatchToken(TokenType.Identifier, "true") || parser.MatchToken(TokenType.Identifier, "false"))
+                return new BoolNode(parser.ExpectToken(TokenType.Identifier).Value);
             else if (parser.MatchToken(TokenType.Identifier))
                 return new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value);
             else if (parser.MatchToken(TokenType.Number))
@@ -183,9 +185,14 @@ namespace Hassium.Parser
             {
                 CodeBlockNode block = new CodeBlockNode();
                 while (!parser.AcceptToken(TokenType.RightBrace))
+                {
                     block.Children.Add(StatementNode.Parse(parser));
+                    parser.AcceptToken(TokenType.Semicolon);
+                }
                 return block;
             }
+            else if (parser.AcceptToken(TokenType.Semicolon))
+                return new StatementNode();
             else
                 throw new Exception(string.Format("Unexpected type {0} with value {1} encountered in parser!", parser.GetToken().TokenType, parser.GetToken().Value));
         }

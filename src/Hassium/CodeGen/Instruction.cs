@@ -35,6 +35,7 @@ namespace Hassium.CodeGen
         Store_Attribute,
         Push,
         Push_String,
+        Push_Bool,
         Pop,
         Self_Reference,
         Construct,

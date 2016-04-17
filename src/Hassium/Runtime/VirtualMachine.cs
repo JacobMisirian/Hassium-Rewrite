@@ -36,7 +36,7 @@ namespace Hassium.Runtime
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 string attribute;
-              //  Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+          //      Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
@@ -109,6 +109,9 @@ namespace Hassium.Runtime
                     case InstructionType.Push_String:
                         stack.Push(new HassiumString(module.ConstantPool[Convert.ToInt32(argument)]));
                         break;
+                    case InstructionType.Push_Bool:
+                        stack.Push(new HassiumBool(argument == 1));
+                        break;
                     case InstructionType.Store_Local:
                         HassiumObject value = stack.Pop();
                         if (stackFrame.Contains(argument))
@@ -161,9 +164,6 @@ namespace Hassium.Runtime
            // Console.WriteLine();
             for (int i = 0; i < method.Instructions.Count; i++)
             {
-               // Console.WriteLine("{0}\t{1}", method.Instructions[i].InstructionType, method.Instructions[i].Argument);
-                if (method.Labels.ContainsKey(method.Instructions[i].Argument))
-                    method.Labels.Remove(method.Instructions[i].Argument);
                 if (method.Instructions[i].InstructionType == InstructionType.Label)
                     method.Labels.Add(method.Instructions[i].Argument, i);
             }

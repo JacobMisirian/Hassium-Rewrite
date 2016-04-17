@@ -107,6 +107,14 @@ namespace Hassium.CodeGen
                     break;
             }
         }
+        public void Accept(BoolNode node)
+        {
+            currentMethod.Emit(InstructionType.Push_Bool, node.Value ? 1 : 0);
+        }
+        public void Accept(BreakNode node)
+        {
+            currentMethod.Emit(InstructionType.Jump, currentMethod.BreakLabels.Pop());
+        }
         public void Accept(CharNode node)
         {
             currentMethod.Emit(InstructionType.Push, node.Char);
@@ -145,6 +153,20 @@ namespace Hassium.CodeGen
         }
         public void Accept(ExpressionNode node)
         {
+        }
+        public void Accept(ForNode node)
+        {
+            double forLabel = generateSymbol();
+            double endLabel = generateSymbol();
+            currentMethod.BreakLabels.Push(endLabel);
+            node.SingleStatement.Visit(this);
+            currentMethod.Emit(InstructionType.Label, forLabel);
+            node.Predicate.Visit(this);
+            currentMethod.Emit(InstructionType.Jump_If_False, endLabel);
+            node.Body.Visit(this);
+            node.RepeatStatement.Visit(this);
+            currentMethod.Emit(InstructionType.Jump, forLabel);
+            currentMethod.Emit(InstructionType.Label, endLabel);
         }
         public void Accept(FuncNode node)
         {
@@ -214,6 +236,7 @@ namespace Hassium.CodeGen
         {
             double whileLabel = generateSymbol();
             double endLabel = generateSymbol();
+            currentMethod.BreakLabels.Push(endLabel);
             currentMethod.Emit(InstructionType.Label, whileLabel);
             node.Predicate.Visit(this);
             currentMethod.Emit(InstructionType.Jump_If_False, endLabel);
