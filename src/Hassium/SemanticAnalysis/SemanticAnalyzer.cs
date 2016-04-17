@@ -27,6 +27,10 @@ namespace Hassium.SemanticAnalysis
         {
             node.VisitChildren(this);
         }
+        public void Accept(ClassNode node)
+        {
+            node.VisitChildren(this);
+        }
         public void Accept(CodeBlockNode node)
         {
             result.EnterScope();

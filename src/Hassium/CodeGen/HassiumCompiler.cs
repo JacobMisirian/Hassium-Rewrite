@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Hassium.Parser;
+using Hassium.Runtime.StandardLibrary;
 
 namespace Hassium.CodeGen
 {
@@ -15,9 +16,19 @@ namespace Hassium.CodeGen
         {
             this.table = table;
             module = new HassiumModule(name);
+           
             foreach (AstNode child in ast.Children)
+            {
                 if (child is FuncNode)
+                {
                     child.Visit(this);
+                    module.Attributes.Add(currentMethod.Name, currentMethod);
+                }
+                else if (child is ClassNode)
+                {
+                    child.Visit(this);
+                }
+            }
             return module;
         }
 
@@ -88,6 +99,19 @@ namespace Hassium.CodeGen
         {
             currentMethod.Emit(InstructionType.Push, node.Char);
         }
+        public void Accept(ClassNode node)
+        {
+            if (!module.ConstantPool.Contains(node.Name))
+                module.ConstantPool.Add(node.Name);
+            HassiumClass clazz = new HassiumClass();
+            foreach (AstNode child in node.Children)
+            {
+                child.Visit(this);
+                if (child is FuncNode)
+                    clazz.Attributes.Add(currentMethod.Name, currentMethod);
+            }
+            module.Attributes.Add(node.Name, clazz);
+        }
         public void Accept(CodeBlockNode node)
         {
             currentMethod.Emit(InstructionType.Push_Frame);
@@ -126,7 +150,6 @@ namespace Hassium.CodeGen
             }
 
             node.Children[0].VisitChildren(this);
-            module.Attributes.Add(currentMethod.Name, currentMethod);
 
             table.PopScope();
             currentMethod.Emit(InstructionType.Pop_Frame);

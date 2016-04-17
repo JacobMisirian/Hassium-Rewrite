@@ -1,8 +1,9 @@
 func main () {
-	println("Hai".toUpper())
-	x ("that")
+	MyClass.sayHello()
 }
 
-func x (a) {
-	println(a.toUpper())
+class MyClass {
+	func sayHello () {
+		println("Hello, World!")
+	}
 }

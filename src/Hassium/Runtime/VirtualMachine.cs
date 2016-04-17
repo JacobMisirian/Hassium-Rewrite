@@ -9,7 +9,6 @@ namespace Hassium.Runtime
 {
     public class VirtualMachine
     {
-        private Dictionary<double, int> labels;
         private Dictionary<double, HassiumObject> globals;
         private Stack<HassiumObject> stack;
         private StackFrame stackFrame;
@@ -17,7 +16,6 @@ namespace Hassium.Runtime
 
         public void Execute(HassiumModule module)
         {
-            labels = new Dictionary<double, int>();
             globals = new Dictionary<double, HassiumObject>();
             stack = new Stack<HassiumObject>();
             stackFrame = new StackFrame();
@@ -29,11 +27,12 @@ namespace Hassium.Runtime
 
         public void ExecuteMethod(MethodBuilder method)
         {
-            gatherLabels(method.Instructions);
+            gatherLabels(method);
             for (int position = 0; position < method.Instructions.Count; position++)
             {
                 HassiumDouble left, right;
                 double argument = method.Instructions[position].Argument;
+                Console.WriteLine(method.Instructions[position].InstructionType + "\t" + argument);
                 switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
@@ -136,28 +135,30 @@ namespace Hassium.Runtime
                             stack.Push(((MethodBuilder)target).Invoke(this, null));
                         break;
                     case InstructionType.Jump:
-                        position = labels[argument];
+                        position = method.Labels[argument];
                         break;
                     case InstructionType.Jump_If_True:
                         if (((HassiumBool)stack.Pop()).Value)
-                            position = labels[argument];
+                            position = method.Labels[argument];
                         break;
                     case InstructionType.Jump_If_False:
                         if (!((HassiumBool)stack.Pop()).Value)
-                            position = labels[argument];
+                            position = method.Labels[argument];
                         break;
                 }
             }
         }
 
-        private void gatherLabels(List<Instruction> instructions)
+        private void gatherLabels(MethodBuilder method)
         {
            // Console.WriteLine();
-            for (int i = 0; i < instructions.Count; i++)
+            for (int i = 0; i < method.Instructions.Count; i++)
             {
               //  Console.WriteLine("{0}\t{1}", instructions[i].InstructionType, instructions[i].Argument);
-                if (instructions[i].InstructionType == InstructionType.Label)
-                    labels.Add(instructions[i].Argument, i);
+                if (method.Labels.ContainsKey(method.Instructions[i].Argument))
+                    method.Labels.Remove(method.Instructions[i].Argument);
+                if (method.Instructions[i].InstructionType == InstructionType.Label)
+                    method.Labels.Add(method.Instructions[i].Argument, i);
             }
         }
 

@@ -71,6 +71,8 @@
     <Compile Include="Parser\Ast\AttributeAccessNode.cs" />
     <Compile Include="CodeGen\MethodBuilder.cs" />
     <Compile Include="CodeGen\HassiumCompiler.cs" />
+    <Compile Include="Parser\Ast\ClassNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\HassiumClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

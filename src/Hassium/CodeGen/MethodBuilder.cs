@@ -10,6 +10,7 @@ namespace Hassium.CodeGen
     {
         public string Name { get; set; }
         public List<Instruction> Instructions = new List<Instruction>();
+        public Dictionary<double, int> Labels = new Dictionary<double, int>();
 
         public MethodBuilder(HassiumFunctionDelegate target, int paramLength) : base (target, paramLength)
         {

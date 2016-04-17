@@ -8,6 +8,7 @@ namespace Hassium.Parser
         void Accept(AttributeAccessNode node);
         void Accept(BinaryOperationNode node);
         void Accept(CharNode node);
+        void Accept(ClassNode node);
         void Accept(ConditionalNode node);
         void Accept(CodeBlockNode node);
         void Accept(ExpressionNode node);
