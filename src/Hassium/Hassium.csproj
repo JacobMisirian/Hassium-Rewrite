@@ -80,6 +80,9 @@
     <Compile Include="Parser\Ast\ForNode.cs" />
     <Compile Include="Parser\Ast\ContinueNode.cs" />
     <Compile Include="Parser\Ast\ArrayDeclarationNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumList.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumNull.cs" />
+    <Compile Include="Parser\Ast\ArrayAccessNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

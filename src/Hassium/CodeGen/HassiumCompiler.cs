@@ -36,6 +36,11 @@ namespace Hassium.CodeGen
         {
             node.VisitChildren(this);
         }
+        public void Accept(ArrayAccessNode node)
+        {
+            node.VisitChildren(this);
+            currentMethod.Emit(InstructionType.Load_List_Element);
+        }
         public void Accept(ArrayDeclarationNode node)
         {
             node.VisitChildren(this);
@@ -75,6 +80,13 @@ namespace Hassium.CodeGen
                             module.ConstantPool.Add(accessor.Right);
                         currentMethod.Emit(InstructionType.Store_Attribute, findIndex(accessor.Right));
                         accessor.Left.Visit(this);
+                    }
+                    else if (node.Left is ArrayAccessNode)
+                    {
+                        ArrayAccessNode access = node.Left as ArrayAccessNode;
+                        access.Target.Visit(this);
+                        access.Expression.Visit(this);
+                        currentMethod.Emit(InstructionType.Store_List_Element);
                     }
                     break;
                 case BinaryOperation.Addition:

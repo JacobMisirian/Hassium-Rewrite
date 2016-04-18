@@ -32,7 +32,7 @@ namespace Hassium.Runtime
             gatherLabels(method);
             for (int position = 0; position < method.Instructions.Count; position++)
             {
-                HassiumObject left, right;
+                HassiumObject left, right, value, list, index;
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 string attribute;
@@ -48,42 +48,7 @@ namespace Hassium.Runtime
                     case InstructionType.Binary_Operation:
                         right = stack.Pop();
                         left = stack.Pop();
-                        switch (argumentInt)
-                        {
-                            case 0:
-                                stack.Push(left.Add(right));
-                                break;
-                            case 1:
-                                stack.Push(left.Sub(right));
-                                break;
-                            case 2:
-                                stack.Push(left.Mul(right));
-                                break;
-                            case 3:
-                                stack.Push(left.Div(right));
-                                break;
-                            case 4:
-                                stack.Push(left.Mod(right));
-                                break;
-                            case 5:
-                                stack.Push(left.Equals(right));
-                                break;
-                            case 6:
-                                stack.Push(left.NotEquals(right));
-                                break;
-                            case 7:
-                                stack.Push(left.GreaterThan(right));
-                                break;
-                            case 8:
-                                stack.Push(left.GreaterThanOrEqual(right));
-                                break;
-                            case 9:
-                                stack.Push(left.LesserThan(right));
-                                break;
-                            case 10:
-                                stack.Push(left.LesserThanOrEqual(right));
-                                break;
-                        }
+                        executeBinaryOperation(left, right, argumentInt);
                         break;
                     case InstructionType.Push:
                         stack.Push(new HassiumDouble(argument));
@@ -95,7 +60,7 @@ namespace Hassium.Runtime
                         stack.Push(new HassiumBool(argument == 1));
                         break;
                     case InstructionType.Store_Local:
-                        HassiumObject value = stack.Pop();
+                        value = stack.Pop();
                         if (stackFrame.Contains(argument))
                             stackFrame.Modify(argument, value);
                         else
@@ -115,6 +80,23 @@ namespace Hassium.Runtime
                     case InstructionType.Load_Attribute:
                         attribute = module.ConstantPool[Convert.ToInt32(argument)];
                         stack.Push(stack.Pop().Attributes[attribute]);
+                        break;
+                    case InstructionType.Create_List:
+                        HassiumObject[] elements = new HassiumObject[argumentInt];
+                        for (int i = argumentInt - 1; i >= 0; i--)
+                            elements[i] = stack.Pop();
+                        stack.Push(new HassiumList(elements));
+                        break;
+                    case InstructionType.Load_List_Element:
+                        index = stack.Pop();
+                        list = stack.Pop();
+                        stack.Push(list.Index(index));
+                        break;
+                    case InstructionType.Store_List_Element:
+                        index = stack.Pop();
+                        list = stack.Pop();
+                        value = stack.Pop();
+                        stack.Push(list.StoreIndex(index, value));
                         break;
                     case InstructionType.Self_Reference:
                         stack.Push(method.Parent);
@@ -139,6 +121,47 @@ namespace Hassium.Runtime
                         break;
                 }
             }
+        }
+
+        private void executeBinaryOperation(HassiumObject left, HassiumObject right, int argument)
+        {
+            switch (argument)
+            {
+                case 0:
+                    stack.Push(left.Add(right));
+                    break;
+                case 1:
+                    stack.Push(left.Sub(right));
+                    break;
+                case 2:
+                    stack.Push(left.Mul(right));
+                    break;
+                case 3:
+                    stack.Push(left.Div(right));
+                    break;
+                case 4:
+                    stack.Push(left.Mod(right));
+                    break;
+                case 5:
+                    stack.Push(left.Equals(right));
+                    break;
+                case 6:
+                    stack.Push(left.NotEquals(right));
+                    break;
+                case 7:
+                    stack.Push(left.GreaterThan(right));
+                    break;
+                case 8:
+                    stack.Push(left.GreaterThanOrEqual(right));
+                    break;
+                case 9:
+                    stack.Push(left.LesserThan(right));
+                    break;
+                case 10:
+                    stack.Push(left.LesserThanOrEqual(right));
+                    break;
+            }
+
         }
 
         private void gatherLabels(MethodBuilder method)

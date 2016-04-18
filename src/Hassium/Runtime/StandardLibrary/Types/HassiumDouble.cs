@@ -5,6 +5,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
     public class HassiumDouble: HassiumObject
     {
         public new double Value { get; private set; }
+        public int ValueInt { get { return Convert.ToInt32(Value); } }
         public HassiumDouble(double value)
         {
             Value = value;

@@ -22,6 +22,7 @@ namespace Hassium.SemanticAnalysis
         {
             node.VisitChildren(this);
         }
+        public void Accept(ArrayAccessNode node) {}
         public void Accept(ArrayDeclarationNode node) {}
         public void Accept(AttributeAccessNode node) {}
         public void Accept(BinaryOperationNode node)

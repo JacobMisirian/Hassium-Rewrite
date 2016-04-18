@@ -5,6 +5,7 @@ namespace Hassium.Parser
     public interface IVisitor
     {
         void Accept(ArgListNode node);
+        void Accept(ArrayAccessNode node);
         void Accept(ArrayDeclarationNode node);
         void Accept(AttributeAccessNode node);
         void Accept(BinaryOperationNode node);
