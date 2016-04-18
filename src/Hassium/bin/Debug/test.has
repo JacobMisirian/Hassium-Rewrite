@@ -1,6 +1,4 @@
 func main () {
-	a = [1, 2, 3];
-	println(a[1])
-	a[1] = 4
-	println(a[1])
+	a = [1, 2, 3]
+	println(a.contains(2, 4))
 }

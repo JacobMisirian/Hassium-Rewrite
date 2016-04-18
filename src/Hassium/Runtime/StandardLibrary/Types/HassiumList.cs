@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hassium.Runtime.StandardLibrary.Types
 {
@@ -32,7 +33,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         }
         private HassiumObject contains(HassiumObject[] args)
         {
-            return new HassiumBool(Value.Contains(args[0]));
+            foreach (HassiumObject obj in args)
+                if (!Value.Any(x => x.Equals(args[0]).Value))
+                    return new HassiumBool(false);
+            return new HassiumBool(true);
         }
         private HassiumObject __index__ (HassiumObject[] args)
         {

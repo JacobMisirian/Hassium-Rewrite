@@ -104,6 +104,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             return new HassiumDouble(left.Value + right.Value);
         }
+        public static HassiumChar operator + (char left, HassiumDouble right)
+        {
+            return new HassiumChar(Convert.ToChar((int)left + right.ValueInt));
+        }
         public static HassiumDouble operator - (HassiumDouble left, HassiumDouble right)
         {
             return new HassiumDouble(left.Value - right.Value);
