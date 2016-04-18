@@ -1,13 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/VirtualMachine.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/Types/HassiumChar.cs">
     <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="106" Column="48" />
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="102" Column="76" />
-      <File FileName="Hassium/Runtime/StandardLibrary/HassiumObject.cs" Line="25" Column="10" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs" Line="26" Column="46" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumDouble.cs" Line="21" Column="55" />
-      <File FileName="Hassium/CodeGen/Instruction.cs" Line="33" Column="21" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="98" Column="45" />
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="90" Column="22" />
+      <File FileName="Hassium/Runtime/StandardLibrary/HassiumObject.cs" Line="82" Column="10" />
+      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumList.cs" Line="12" Column="47" />
+      <File FileName="Hassium/CodeGen/Instruction.cs" Line="38" Column="28" />
+      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumChar.cs" Line="27" Column="9" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,6 +15,13 @@
           <Node name="Hassium" expanded="True">
             <Node name="CodeGen" expanded="True" />
             <Node name="Lexer" expanded="True" />
+            <Node name="Runtime" expanded="True">
+              <Node name="StandardLibrary" expanded="True">
+                <Node name="Types" expanded="True">
+                  <Node name="HassiumChar.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
             <Node name="SemanticAnalysis" expanded="True" />
           </Node>
         </State>
