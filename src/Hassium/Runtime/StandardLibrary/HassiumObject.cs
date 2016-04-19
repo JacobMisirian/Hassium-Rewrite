@@ -6,20 +6,23 @@ namespace Hassium.Runtime.StandardLibrary.Types
     public class HassiumObject : ICloneable
     {
         public static HassiumNull Null = new HassiumNull();
-        public const string ADD_FUNCTION = "__add__";
-        public const string SUB_FUNCTION = "__sub__";
-        public const string MUL_FUNCTION = "__mul__";
-        public const string DIV_FUNCTION = "__div__";
-        public const string MOD_FUNCTION = "__mod__";
-        public const string EQUALS_FUNCTION = "__equals__";
-        public const string NOT_EQUAL_FUNCTION = "__notequal__";
-        public const string GREATER_FUNCTION = "__greater__";
-        public const string LESSER_FUNCTION = "__lesser__";
+        public const string ADD_FUNCTION =              "__add__";
+        public const string SUB_FUNCTION =              "__sub__";
+        public const string MUL_FUNCTION =              "__mul__";
+        public const string DIV_FUNCTION =              "__div__";
+        public const string MOD_FUNCTION =              "__mod__";
+        public const string XOR_FUNCTION =              "__xor__";
+        public const string OR_FUNCTION =               "__or__";
+        public const string XAND_FUNCTION =             "__xand__";
+        public const string EQUALS_FUNCTION =           "__equals__";
+        public const string NOT_EQUAL_FUNCTION =        "__notequal__";
+        public const string GREATER_FUNCTION =          "__greater__";
+        public const string LESSER_FUNCTION =           "__lesser__";
         public const string GREATER_OR_EQUAL_FUNCTION = "__greaterorequal__";
-        public const string LESSER_OR_EQUAL_FUNCTION = "__lesserorequal__";
-        public const string INVOKE_FUNCTION = "__invoke__";
-        public const string INDEX_FUNCTION = "__index__";
-        public const string STORE_INDEX_FUNCTION = "__storeindex__";
+        public const string LESSER_OR_EQUAL_FUNCTION =  "__lesserorequal__";
+        public const string INVOKE_FUNCTION =           "__invoke__";
+        public const string INDEX_FUNCTION =            "__index__";
+        public const string STORE_INDEX_FUNCTION =      "__storeindex__";
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
         public object Value { get; private set; }
@@ -43,6 +46,18 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public virtual HassiumObject Mod(HassiumObject obj)
         {
             return ((HassiumFunction)Attributes[MOD_FUNCTION]).Invoke(null, new HassiumObject[] { obj });
+        }
+        public virtual HassiumObject XOR(HassiumObject obj)
+        {
+            return ((HassiumFunction)Attributes[XOR_FUNCTION]).Invoke(null, new HassiumObject[] { obj });
+        }
+        public virtual HassiumObject OR(HassiumObject obj)
+        {
+            return ((HassiumFunction)Attributes[OR_FUNCTION]).Invoke(null, new HassiumObject[] { obj });
+        }
+        public virtual HassiumObject Xand(HassiumObject obj)
+        {
+            return ((HassiumFunction)Attributes[XAND_FUNCTION]).Invoke(null, new HassiumObject[] { obj });
         }
         public virtual HassiumBool Equals(HassiumObject obj)
         {

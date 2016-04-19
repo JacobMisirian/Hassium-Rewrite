@@ -6,6 +6,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
     {
         public new double Value { get; private set; }
         public int ValueInt { get { return Convert.ToInt32(Value); } }
+
+        public static HassiumDouble Create(HassiumObject obj)
+        {
+            if (!(obj is HassiumDouble))
+                throw new Exception(string.Format("Cannot convert from {0} to HassiumDouble!", obj.GetType()));
+            return (HassiumDouble)obj;
+        }
+
         public HassiumDouble(double value)
         {
             Value = value;
@@ -14,6 +22,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.MUL_FUNCTION, new HassiumFunction(__mul__, 1));
             Attributes.Add(HassiumObject.DIV_FUNCTION, new HassiumFunction(__div__, 1));
             Attributes.Add(HassiumObject.MOD_FUNCTION, new HassiumFunction(__mod__, 1));
+            Attributes.Add(HassiumObject.XOR_FUNCTION, new HassiumFunction(__xor__, 1));
+            Attributes.Add(HassiumObject.OR_FUNCTION, new HassiumFunction(__or__, 1));
+            Attributes.Add(HassiumObject.XAND_FUNCTION, new HassiumFunction(__xand__, 1));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
             Attributes.Add(HassiumObject.GREATER_FUNCTION, new HassiumFunction(__greater__, 1));
@@ -24,80 +35,59 @@ namespace Hassium.Runtime.StandardLibrary.Types
 
         private HassiumObject __add__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this + (HassiumDouble)obj;
-            throw new Exception("Cannot operate double on " + obj);
+            return this + Create(args[0]);
         }
         private HassiumObject __sub__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this - (HassiumDouble)obj;
-            throw new Exception("Cannot operate double on " + obj);
+            return this - Create(args[0]);
         }
         private HassiumObject __mul__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this * (HassiumDouble)obj;
-            throw new Exception("Cannot operate double on " + obj);
+            return this * Create(args[0]);
         }
         private HassiumObject __div__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this / (HassiumDouble)obj;
-            throw new Exception("Cannot operate double on " + obj);
+            return this / Create(args[0]);
         }
         private HassiumObject __mod__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this % (HassiumDouble)obj;
-            throw new Exception("Cannot operate double on " + obj);
+            return this % Create(args[0]);
+        }
+        private HassiumObject __xor__ (HassiumObject[] args)
+        {
+            return this ^ Create(args[0]);
+        }
+        private HassiumObject __or__ (HassiumObject[] args)
+        {
+            return this | Create(args[0]);
+        }
+        private HassiumObject __xand__ (HassiumObject[] args)
+        {
+            return this & Create(args[0]);
         }
         private HassiumObject __equals__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this == (HassiumDouble)obj;
-            throw new Exception("Cannot compare double to " + obj);
+            return this == Create(args[0]);
         }
         private HassiumObject __notequal__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this != (HassiumDouble)obj;
-            throw new Exception("Cannot compare double to " + obj);
+            return this != Create(args[0]);
         }
         private HassiumObject __greater__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this > (HassiumDouble)obj;
-            throw new Exception("Cannot compare double to " + obj);
+            return this > Create(args[0]);
         }
         private HassiumObject __greaterorequal__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this >= (HassiumDouble)obj;
-            throw new Exception("Cannot compare double to " + obj);
+            return this >= Create(args[0]);
         }
         private HassiumObject __lesser__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this < (HassiumDouble)obj;
-            throw new Exception("Cannot compare double to " + obj);
+            return this < Create(args[0]);
         }
         private HassiumObject __lesserorequal__ (HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumDouble)
-                return this <= (HassiumDouble)obj;
-            throw new Exception("Cannot compare double to " + obj);
+            return this <= Create(args[0]);
         }
 
         public static HassiumDouble operator + (HassiumDouble left, HassiumDouble right)
@@ -127,6 +117,18 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumDouble operator % (HassiumDouble left, HassiumDouble right)
         {
             return new HassiumDouble(left.Value % right.Value);
+        }
+        public static HassiumDouble operator ^ (HassiumDouble left, HassiumDouble right)
+        {
+            return new HassiumDouble((byte)(left.ValueInt ^ right.ValueInt));
+        }
+        public static HassiumDouble operator | (HassiumDouble left, HassiumDouble right)
+        {
+            return new HassiumDouble((byte)(left.ValueInt | right.ValueInt));
+        }
+        public static HassiumDouble operator & (HassiumDouble left, HassiumDouble right)
+        {
+            return new HassiumDouble((byte)(left.ValueInt & right.ValueInt));
         }
         public static HassiumBool operator == (HassiumDouble left, HassiumDouble right)
         {

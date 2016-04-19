@@ -56,6 +56,9 @@ namespace Hassium.Runtime
                     case InstructionType.Push_String:
                         stack.Push(new HassiumString(module.ConstantPool[Convert.ToInt32(argument)]));
                         break;
+                    case InstructionType.Push_Char:
+                        stack.Push(new HassiumChar((char)argumentInt));
+                        break;
                     case InstructionType.Push_Bool:
                         stack.Push(new HassiumBool(argument == 1));
                         break;
@@ -104,8 +107,8 @@ namespace Hassium.Runtime
                     case InstructionType.Call:
                         HassiumObject target = stack.Pop();
                         HassiumObject[] args = new HassiumObject[argumentInt];
-                        for (int i = argumentInt; i > 0; i--)
-                            args[argumentInt - i] = stack.Pop();
+                        for (int i = 0; i < args.Length; i++)
+                             args[i] = stack.Pop();
                         stack.Push(target.Invoke(this, args));
                         break;
                     case InstructionType.Jump:
@@ -143,21 +146,30 @@ namespace Hassium.Runtime
                     stack.Push(left.Mod(right));
                     break;
                 case 5:
-                    stack.Push(left.Equals(right));
+                    stack.Push(left.XOR(right));
                     break;
                 case 6:
-                    stack.Push(left.NotEquals(right));
+                    stack.Push(left.OR(right));
                     break;
                 case 7:
-                    stack.Push(left.GreaterThan(right));
+                    stack.Push(left.Xand(right));
                     break;
                 case 8:
-                    stack.Push(left.GreaterThanOrEqual(right));
+                    stack.Push(left.Equals(right));
                     break;
                 case 9:
-                    stack.Push(left.LesserThan(right));
+                    stack.Push(left.NotEquals(right));
                     break;
                 case 10:
+                    stack.Push(left.GreaterThan(right));
+                    break;
+                case 11:
+                    stack.Push(left.GreaterThanOrEqual(right));
+                    break;
+                case 12:
+                    stack.Push(left.LesserThan(right));
+                    break;
+                case 13:
                     stack.Push(left.LesserThanOrEqual(right));
                     break;
             }

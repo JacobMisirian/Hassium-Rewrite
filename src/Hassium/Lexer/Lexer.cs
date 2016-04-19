@@ -75,6 +75,9 @@ namespace Hassium.Lexer
                         case '*':
                         case '/':
                         case '%':
+                        case '^':
+                        case '|':
+                        case '&':
                             result.Add(new Token(TokenType.BinaryOperation, ((char)readChar()).ToString()));
                             break;
                         case '=':

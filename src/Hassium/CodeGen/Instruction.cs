@@ -31,6 +31,7 @@ namespace Hassium.CodeGen
         Store_Attribute,
         Push,
         Push_String,
+        Push_Char,
         Push_Bool,
         Create_List,
         Push_List,

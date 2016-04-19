@@ -33,12 +33,16 @@ namespace Hassium.Parser
         Multiplication,
         Division,
         Modulus,
+        Raise,
         EqualTo,
         NotEqualTo,
         GreaterThan,
         GreaterThanOrEqual,
         LesserThan,
-        LesserThanOrEqual
+        LesserThanOrEqual,
+        OR,
+        XOR,
+        XAnd
     }
 }
 

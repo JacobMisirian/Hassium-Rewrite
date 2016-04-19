@@ -104,23 +104,32 @@ namespace Hassium.CodeGen
                 case BinaryOperation.Modulus:
                     currentMethod.Emit(InstructionType.Binary_Operation, 4);
                     break;
-                case BinaryOperation.EqualTo:
+                case BinaryOperation.XOR:
                     currentMethod.Emit(InstructionType.Binary_Operation, 5);
                     break;
-                case BinaryOperation.NotEqualTo:
+                case BinaryOperation.OR:
                     currentMethod.Emit(InstructionType.Binary_Operation, 6);
                     break;
-                case BinaryOperation.GreaterThan:
+                case BinaryOperation.XAnd:
                     currentMethod.Emit(InstructionType.Binary_Operation, 7);
                     break;
-                case BinaryOperation.GreaterThanOrEqual:
+                case BinaryOperation.EqualTo:
                     currentMethod.Emit(InstructionType.Binary_Operation, 8);
                     break;
-                case BinaryOperation.LesserThan:
+                case BinaryOperation.NotEqualTo:
                     currentMethod.Emit(InstructionType.Binary_Operation, 9);
                     break;
-                case BinaryOperation.LesserThanOrEqual:
+                case BinaryOperation.GreaterThan:
                     currentMethod.Emit(InstructionType.Binary_Operation, 10);
+                    break;
+                case BinaryOperation.GreaterThanOrEqual:
+                    currentMethod.Emit(InstructionType.Binary_Operation, 11);
+                    break;
+                case BinaryOperation.LesserThan:
+                    currentMethod.Emit(InstructionType.Binary_Operation, 12);
+                    break;
+                case BinaryOperation.LesserThanOrEqual:
+                    currentMethod.Emit(InstructionType.Binary_Operation, 13);
                     break;
             }
         }
@@ -134,7 +143,7 @@ namespace Hassium.CodeGen
         }
         public void Accept(CharNode node)
         {
-            currentMethod.Emit(InstructionType.Push, node.Char);
+            currentMethod.Emit(InstructionType.Push_Char, node.Char);
         }
         public void Accept(ClassNode node)
         {
@@ -214,7 +223,8 @@ namespace Hassium.CodeGen
         }
         public void Accept(FunctionCallNode node)
         {
-            node.Arguments.Visit(this);
+            for (int i = node.Arguments.Children.Count - 1; i >= 0; i--)
+                node.Arguments.Children[i].Visit(this);
             node.Target.Visit(this);
             currentMethod.Emit(InstructionType.Call, node.Arguments.Children.Count);
         }

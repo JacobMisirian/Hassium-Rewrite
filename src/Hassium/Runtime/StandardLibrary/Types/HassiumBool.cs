@@ -9,6 +9,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             Value = value;
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
+            Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequals__, 1));
         }
 
         private HassiumObject __equals__ (HassiumObject[] args)

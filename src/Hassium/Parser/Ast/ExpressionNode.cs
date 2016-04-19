@@ -63,6 +63,18 @@ namespace Hassium.Parser
                         parser.AcceptToken(TokenType.BinaryOperation);
                         left = new BinaryOperationNode(BinaryOperation.Modulus, left, parseUnary(parser));
                         continue;
+                    case "^":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.XOR, left, parseUnary(parser));
+                        continue;
+                    case "|":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.OR, left, parseUnary(parser));
+                        continue;
+                    case "&":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.XAnd, left, parseUnary(parser));
+                        continue;
                     case "=":
                         parser.AcceptToken(TokenType.Assignment);
                         left = new BinaryOperationNode(BinaryOperation.Assignment, left, parseUnary(parser));
