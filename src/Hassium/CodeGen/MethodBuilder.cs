@@ -9,7 +9,8 @@ namespace Hassium.CodeGen
 {
     public class MethodBuilder: HassiumObject
     {
-        public string Name { get; set; }
+        public string Name { get { return name; } set { name = value; Types.Add("HassiumFunction"); } }
+        private string name = "";
         public bool IsConstructor { get { return Name == "new"; } }
         public HassiumClass Parent { get; set; }
         public Dictionary<string, int> Parameters = new Dictionary<string, int>();
@@ -29,6 +30,7 @@ namespace Hassium.CodeGen
             {
                 HassiumClass ret = new HassiumClass();
                 ret.Attributes = cloneDictionary(Parent.Attributes);
+                ret.Types.Add(Name);
                 foreach (HassiumObject obj in ret.Attributes.Values)
                     if (obj is MethodBuilder)
                         ((MethodBuilder)obj).Parent = ret;

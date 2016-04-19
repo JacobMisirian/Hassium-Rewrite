@@ -13,22 +13,17 @@ namespace Hassium.Runtime.StandardLibrary.Types
             foreach (HassiumObject obj in initial)
                 Value.Add(obj);
             Attributes.Add("add", new HassiumFunction(_add, -1));
-            Attributes.Add("remove", new HassiumFunction(remove, -1));
             Attributes.Add("contains", new HassiumFunction(contains, -1));
+            Attributes.Add("remove", new HassiumFunction(remove, -1));
             Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(__index__, 1));
             Attributes.Add(HassiumObject.STORE_INDEX_FUNCTION, new HassiumFunction(__storeindex__, 2));
+            Types.Add(GetType().Name);
         }
 
         private HassiumObject _add(HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
                 Value.Add(obj);
-            return HassiumObject.Null;
-        }
-        private HassiumObject remove(HassiumObject[] args)
-        {
-            foreach (HassiumObject obj in args)
-                Value.Remove(obj);
             return HassiumObject.Null;
         }
         private HassiumObject contains(HassiumObject[] args)
@@ -38,6 +33,13 @@ namespace Hassium.Runtime.StandardLibrary.Types
                     return new HassiumBool(false);
             return new HassiumBool(true);
         }
+        private HassiumObject remove(HassiumObject[] args)
+        {
+            foreach (HassiumObject obj in args)
+                Value.Remove(obj);
+            return HassiumObject.Null;
+        }
+
         private HassiumObject __index__ (HassiumObject[] args)
         {
             HassiumObject obj = args[0];

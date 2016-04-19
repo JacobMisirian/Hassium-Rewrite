@@ -25,6 +25,11 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public const string STORE_INDEX_FUNCTION =      "__storeindex__";
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
+        public List<string> Types = new List<string>()
+        {
+            "HassiumObject"
+        };
+
         public object Value { get; private set; }
 
         public virtual HassiumObject Add(HassiumObject obj)

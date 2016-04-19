@@ -17,7 +17,6 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumString(string value)
         {
             Value = value;
-
             Attributes.Add("substring", new HassiumFunction(substring, new int[] { 1, 2 }));
             Attributes.Add("toChar", new HassiumFunction(toChar, 0));
             Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
@@ -28,6 +27,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
             Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(__index__, 1));
+            Types.Add(this.GetType().Name);
         }
 
         private HassiumString substring(HassiumObject[] args)

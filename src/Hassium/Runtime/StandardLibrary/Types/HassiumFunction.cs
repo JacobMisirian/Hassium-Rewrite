@@ -14,11 +14,13 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             this.target = target;
             ParamLengths = new int[] { paramLength };
+            Types.Add(this.GetType().Name);
         }
         public HassiumFunction(HassiumFunctionDelegate target, int[] paramLengths)
         {
             this.target = target;
             ParamLengths = paramLengths;
+            Types.Add(this.GetType().Name);
         }
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)

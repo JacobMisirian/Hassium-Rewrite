@@ -1,3 +1,10 @@
 func main () {
-	println('A' + '%')
+	println(types(MyClass.myFunc))
+	println(type(print));
+}
+
+class MyClass {
+	func myFunc () {
+		println("Hello, World!");
+	}
 }
