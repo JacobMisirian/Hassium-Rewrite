@@ -23,6 +23,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public const string INVOKE_FUNCTION =           "__invoke__";
         public const string INDEX_FUNCTION =            "__index__";
         public const string STORE_INDEX_FUNCTION =      "__storeindex__";
+        public const string TOSTRING_FUNCTION =         "toString";
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
         public List<string> Types = new List<string>()
@@ -101,6 +102,13 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public virtual HassiumObject StoreIndex(HassiumObject index, HassiumObject value)
         {
             return ((HassiumFunction)Attributes[STORE_INDEX_FUNCTION]).Invoke(null, new HassiumObject[] { index, value });
+        }
+
+        public override string ToString()
+        {
+            if (Attributes.ContainsKey("toString"))
+                return ((HassiumString)Attributes["toString"].Invoke(null, new HassiumObject[0])).Value;
+            return base.GetType().Name;
         }
 
         public object Clone()

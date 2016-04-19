@@ -83,6 +83,7 @@
     <Compile Include="Runtime\StandardLibrary\Types\HassiumList.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumNull.cs" />
     <Compile Include="Parser\Ast\ArrayAccessNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumProperty.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

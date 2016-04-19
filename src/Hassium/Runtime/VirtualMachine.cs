@@ -81,8 +81,9 @@ namespace Hassium.Runtime
                         stack.Push(globals[argument]);
                         break;
                     case InstructionType.Load_Attribute:
-                        attribute = module.ConstantPool[Convert.ToInt32(argument)];
-                        stack.Push(stack.Pop().Attributes[attribute]);
+                        attribute = module.ConstantPool[argumentInt];
+                        HassiumObject attrib = stack.Pop().Attributes[attribute];
+                        stack.Push(attrib is HassiumProperty ? ((HassiumProperty)attrib).GetValue(null) : attrib);
                         break;
                     case InstructionType.Create_List:
                         HassiumObject[] elements = new HassiumObject[argumentInt];

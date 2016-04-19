@@ -1,10 +1,7 @@
 func main () {
-	println(types(MyClass.myFunc))
-	println(type(print));
-}
+	a = [1, 2, 3, 4];
 
-class MyClass {
-	func myFunc () {
-		println("Hello, World!");
-	}
+	println(a.length);
+	println(a.reverse());
+	println("Hello".stripChars(['e', 'l']));
 }

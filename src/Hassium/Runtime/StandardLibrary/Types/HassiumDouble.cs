@@ -31,6 +31,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.GREATER_OR_EQUAL_FUNCTION, new HassiumFunction(__greaterorequal__, 1));
             Attributes.Add(HassiumObject.LESSER_FUNCTION, new HassiumFunction(__lesser__, 1));
             Attributes.Add(HassiumObject.LESSER_OR_EQUAL_FUNCTION, new HassiumFunction(__lesserorequal__, 1));
+            Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Types.Add(this.GetType().Name);
         }
 
@@ -89,6 +90,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumObject __lesserorequal__ (HassiumObject[] args)
         {
             return this <= Create(args[0]);
+        }
+        private HassiumString __tostring__ (HassiumObject[] args)
+        {
+            return new HassiumString(Value.ToString());
         }
 
         public static HassiumDouble operator + (HassiumDouble left, HassiumDouble right)

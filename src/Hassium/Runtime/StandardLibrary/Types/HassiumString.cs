@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Hassium.Runtime.StandardLibrary.Types
@@ -17,12 +18,16 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumString(string value)
         {
             Value = value;
+            Attributes.Add("contains", new HassiumFunction(contains, 1));
+            Attributes.Add("reverse", new HassiumFunction(reverse, 0));
+            Attributes.Add("stripChars", new HassiumFunction(stripChars, 1));
             Attributes.Add("substring", new HassiumFunction(substring, new int[] { 1, 2 }));
             Attributes.Add("toChar", new HassiumFunction(toChar, 0));
             Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
             Attributes.Add("toList", new HassiumFunction(toList, 0));
             Attributes.Add("toLower", new HassiumFunction(toLower, 0));
             Attributes.Add("toUpper", new HassiumFunction(toUpper, 0));
+            Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Attributes.Add(HassiumObject.ADD_FUNCTION, new HassiumFunction(__add__, 1));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
@@ -30,6 +35,39 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(this.GetType().Name);
         }
 
+        private HassiumBool contains(HassiumObject[] args)
+        {
+            return new HassiumBool(Value.Contains(HassiumString.Create(args[0]).Value));
+        }
+        private HassiumString reverse(HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = Value.Length - 1; i >= 0; i--)
+                sb.Append(Value[i]);
+            return new HassiumString(sb.ToString());
+        }
+        private HassiumString stripChars(HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (args[0] is HassiumList)
+            {
+                HassiumList list = (HassiumList)args[0];
+                List<char> chars = new List<char>();
+                for (int i = 0; i < list.Value.Count; i++)
+                    chars.Add(Convert.ToChar(list.Value[i].ToString()));
+                foreach (char c in Value)
+                    if (!chars.Contains(c))
+                        sb.Append(c);
+            }
+            else
+            {
+                char ch = HassiumChar.Create(args[0]).Value;
+                foreach (char c in Value)
+                    if (c != ch)
+                        sb.Append(c);
+            }
+            return new HassiumString(sb.ToString());
+        }
         private HassiumString substring(HassiumObject[] args)
         {
             switch (args.Length)
@@ -63,6 +101,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumString toUpper(HassiumObject[] args)
         {
             return new HassiumString(Value.ToUpper());
+        }
+        private HassiumString __tostring__ (HassiumObject[] args)
+        {
+            return this;
         }
 
         private HassiumObject __add__ (HassiumObject[] args)

@@ -35,6 +35,11 @@ namespace Hassium.Runtime.StandardLibrary.Types
             else
                 return target(args);
         }
+
+        private HassiumString __tostring__ (HassiumObject[] args)
+        {
+            return new HassiumString(Value.ToString());
+        }
     }
 }
 

@@ -26,6 +26,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.XAND_FUNCTION, new HassiumFunction(__xand__, 1));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequals__, 1));
+            Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Types.Add(this.GetType().Name);
         }
 
@@ -154,6 +155,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
             else if (obj is HassiumDouble)
                 return this <= (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
+        }
+        private HassiumString __tostring__ (HassiumObject[] args)
+        {
+            return new HassiumString(Value.ToString());
         }
 
         public static HassiumChar operator + (HassiumChar left, HassiumChar right)
