@@ -24,7 +24,7 @@ namespace Hassium.CodeGen
             vm.StackFrame.EnterFrame();
             foreach (int param in Parameters.Values)
                 vm.StackFrame.Add(param, args[param]);
-            vm.ExecuteMethod(this);
+            HassiumObject returnValue = vm.ExecuteMethod(this);
             vm.StackFrame.PopFrame();
             if (IsConstructor)
             {
@@ -36,7 +36,7 @@ namespace Hassium.CodeGen
                         ((MethodBuilder)obj).Parent = ret;
                 return ret;
             }
-            return null;
+            return returnValue;
         }
 
         private Dictionary<TKey, TValue> cloneDictionary<TKey, TValue>

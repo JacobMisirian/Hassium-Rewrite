@@ -9,23 +9,20 @@ namespace Hassium.Runtime
     {
         public class Frame
         {
-            private Dictionary<double, HassiumObject> variables = new Dictionary<double, HassiumObject>();
-            public void Add(double index, HassiumObject value)
+            private Dictionary<int, HassiumObject> variables = new Dictionary<int, HassiumObject>();
+            public void Add(int index, HassiumObject value)
             {
                 variables.Add(index, value);
             }
-            public bool ContainsVariable(double index)
+            public bool ContainsVariable(int index)
             {
-                foreach (double indice in variables.Keys)
-                    if (indice == index)
-                        return true;
-                return false;
+                return variables.ContainsKey(index);
             }
-            public void Modify(double index, HassiumObject value)
+            public void Modify(int index, HassiumObject value)
             {
                 variables[index] = value;
             }
-            public HassiumObject GetVariable(double index)
+            public HassiumObject GetVariable(int index)
             {
                 return variables[index];
             }
@@ -44,18 +41,18 @@ namespace Hassium.Runtime
         {
             Frames.Pop();
         }
-        public void Add(double index, HassiumObject value = null)
+        public void Add(int index, HassiumObject value = null)
         {
             Frames.Peek().Add(index, value);
         }
-        public bool Contains(double index)
+        public bool Contains(int index)
         {
             foreach (Frame frame in Frames)
                 if (frame.ContainsVariable(index))
                     return true;
             return false;
         }
-        public void Modify(double index, HassiumObject value)
+        public void Modify(int index, HassiumObject value)
         {
             foreach (Frame frame in Frames)
             {
@@ -66,7 +63,7 @@ namespace Hassium.Runtime
                 }
             }
         }
-        public HassiumObject GetVariable(double index)
+        public HassiumObject GetVariable(int index)
         {
             foreach (Frame frame in Frames)
                 if (frame.ContainsVariable(index))

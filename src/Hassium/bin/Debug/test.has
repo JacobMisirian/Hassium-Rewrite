@@ -1,7 +1,7 @@
 func main () {
-	a = [1, 2, 3, 4];
+	Myclass.attrib
+}
 
-	println(a.length);
-	println(a.reverse());
-	println("Hello".stripChars(['e', 'l']));
+class Myclass {
+	attrib { get { println("Hai"); } }
 }

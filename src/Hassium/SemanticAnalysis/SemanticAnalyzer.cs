@@ -61,6 +61,8 @@ namespace Hassium.SemanticAnalysis
         }
         public void Accept(FunctionCallNode node) {}
         public void Accept(ExpressionNode node) {}
+        public void Accept(PropertyNode node) {}
+        public void Accept(ReturnNode node) {}
         public void Accept(StatementNode node) {}
         public void Accept(StringNode node) {}
         public void Accept(ThisNode node) {}

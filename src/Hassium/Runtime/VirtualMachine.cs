@@ -27,7 +27,7 @@ namespace Hassium.Runtime
             ExecuteMethod((MethodBuilder)module.Attributes["main"]);
         }
 
-        public void ExecuteMethod(MethodBuilder method)
+        public HassiumObject ExecuteMethod(MethodBuilder method)
         {
             gatherLabels(method);
             for (int position = 0; position < method.Instructions.Count; position++)
@@ -36,7 +36,7 @@ namespace Hassium.Runtime
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 string attribute;
-          //      Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+               Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
@@ -64,10 +64,10 @@ namespace Hassium.Runtime
                         break;
                     case InstructionType.Store_Local:
                         value = stack.Pop();
-                        if (stackFrame.Contains(argument))
-                            stackFrame.Modify(argument, value);
+                        if (stackFrame.Contains(argumentInt))
+                            stackFrame.Modify(argumentInt, value);
                         else
-                            stackFrame.Add(argument, value);
+                            stackFrame.Add(argumentInt, value);
                         break;
                     case InstructionType.Store_Attribute:
                         HassiumObject location = stack.Pop();
@@ -75,7 +75,7 @@ namespace Hassium.Runtime
                         location.Attributes[attribute] = stack.Pop();
                         break;
                     case InstructionType.Load_Local:
-                        stack.Push(stackFrame.GetVariable(argument));
+                        stack.Push(stackFrame.GetVariable(argumentInt));
                         break;
                     case InstructionType.Load_Global:
                         stack.Push(globals[argument]);
@@ -83,7 +83,12 @@ namespace Hassium.Runtime
                     case InstructionType.Load_Attribute:
                         attribute = module.ConstantPool[argumentInt];
                         HassiumObject attrib = stack.Pop().Attributes[attribute];
-                        stack.Push(attrib is HassiumProperty ? ((HassiumProperty)attrib).GetValue(null) : attrib);
+                        if (attrib is HassiumProperty)
+                            stack.Push(((HassiumProperty)attrib).GetValue(new HassiumObject[] { }));
+                        else if (attrib is UserDefinedProperty)
+                            stack.Push(ExecuteMethod(((UserDefinedProperty)attrib).GetMethod));
+                        else
+                            stack.Push(attrib);
                         break;
                     case InstructionType.Create_List:
                         HassiumObject[] elements = new HassiumObject[argumentInt];
@@ -123,8 +128,11 @@ namespace Hassium.Runtime
                         if (!((HassiumBool)stack.Pop()).Value)
                             position = method.Labels[argument];
                         break;
+                    case InstructionType.Return:
+                        return stack.Pop();
                 }
             }
+            return HassiumObject.Null;
         }
 
         private void executeBinaryOperation(HassiumObject left, HassiumObject right, int argument)

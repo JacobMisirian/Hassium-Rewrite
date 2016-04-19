@@ -158,6 +158,36 @@ namespace Hassium.CodeGen
                     currentMethod.Parent = clazz;
                     clazz.Attributes.Add(currentMethod.Name, currentMethod);
                 }
+                if (child is PropertyNode)
+                {
+                    PropertyNode propNode = child as PropertyNode;
+                    if (!module.ConstantPool.Contains(propNode.Identifier))
+                        module.ConstantPool.Add(propNode.Identifier);
+                    UserDefinedProperty property = new UserDefinedProperty(propNode.Identifier);
+                    currentMethod = new MethodBuilder();
+                    currentMethod.Name = propNode.Identifier + "__get__";
+                    currentMethod.Parent = clazz;
+                    currentMethod.Emit(InstructionType.Push_Frame);
+                    table.EnterScope();
+                    propNode.GetBody.Visit(this);
+                    currentMethod.Emit(InstructionType.Pop_Frame);
+                    table.PopScope();
+                    property.Attributes.Add(currentMethod.Name, currentMethod);
+
+                    if (node.Children.Count > 2)
+                    {
+                        currentMethod = new MethodBuilder();
+                        currentMethod.Name = propNode.Identifier + "__set__";
+                        currentMethod.Parent = clazz;
+                        currentMethod.Emit(InstructionType.Push_Frame);
+                        table.EnterScope();
+                        propNode.SetBody.Visit(this);
+                        currentMethod.Emit(InstructionType.Pop_Frame);
+                        table.PopScope();
+                        property.Attributes.Add(currentMethod.Name, currentMethod);
+                    }
+                    clazz.Attributes.Add(propNode.Identifier, property);
+                }
             }
             module.Attributes.Add(node.Name, clazz);
         }
@@ -247,6 +277,14 @@ namespace Hassium.CodeGen
         public void Accept(NumberNode node)
         {
             currentMethod.Emit(InstructionType.Push, node.Number);
+        }
+        public void Accept(PropertyNode node)
+        {
+        }
+        public void Accept(ReturnNode node)
+        {
+            node.Expression.VisitChildren(this);
+            currentMethod.Emit(InstructionType.Return);
         }
         public void Accept(StatementNode node)
         {

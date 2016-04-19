@@ -22,6 +22,10 @@ namespace Hassium.Parser
                 return new BreakNode();
             else if (parser.AcceptToken(TokenType.Identifier, "continue"))
                 return new ContinueNode();
+            else if (parser.MatchToken(TokenType.Identifier) && parser.GetToken(1).TokenType == TokenType.LeftBrace)
+                return PropertyNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "return"))
+                return ReturnNode.Parse(parser);
             else
                 return ExpressionNode.Parse(parser);
         }

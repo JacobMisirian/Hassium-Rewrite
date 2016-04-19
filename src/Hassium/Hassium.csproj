@@ -84,6 +84,9 @@
     <Compile Include="Runtime\StandardLibrary\Types\HassiumNull.cs" />
     <Compile Include="Parser\Ast\ArrayAccessNode.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumProperty.cs" />
+    <Compile Include="Parser\Ast\PropertyNode.cs" />
+    <Compile Include="CodeGen\UserDefinedProperty.cs" />
+    <Compile Include="Parser\Ast\ReturnNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

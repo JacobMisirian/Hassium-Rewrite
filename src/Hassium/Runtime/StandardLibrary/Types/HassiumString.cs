@@ -162,6 +162,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             return new HassiumBool(left.Value != right.Value);
         }
+
         public override bool Equals(object obj)
         {
             return base.Equals(obj);
