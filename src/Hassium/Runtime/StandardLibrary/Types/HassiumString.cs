@@ -23,6 +23,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add("split", new HassiumFunction(split, 1));
             Attributes.Add("stripChars", new HassiumFunction(stripChars, 1));
             Attributes.Add("substring", new HassiumFunction(substring, new int[] { 1, 2 }));
+            Attributes.Add("toBool", new HassiumFunction(toBool, 0));
             Attributes.Add("toChar", new HassiumFunction(toChar, 0));
             Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
             Attributes.Add("toList", new HassiumFunction(toList, 0));
@@ -91,6 +92,18 @@ namespace Hassium.Runtime.StandardLibrary.Types
                     return new HassiumString(Value.Substring(HassiumDouble.Create(args[0]).ValueInt, HassiumDouble.Create(args[1]).ValueInt));
             }
             return null;
+        }
+        private HassiumBool toBool(HassiumObject[] args)
+        {
+            switch (Value.ToLower())
+            {
+                case "false":
+                    return new HassiumBool(false);
+                case "true":
+                    return new HassiumBool(true);
+                default:
+                    throw new Exception("Cannot convert string to bool!");
+            }
         }
         private HassiumChar toChar(HassiumObject[] args)
         {

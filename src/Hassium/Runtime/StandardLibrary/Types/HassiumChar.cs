@@ -16,6 +16,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumChar(char value)
         {
             Value = value;
+            Attributes.Add("toBool", new HassiumFunction(toBool, 0));
+            Attributes.Add("toChar", new HassiumFunction(toChar, 0));
+            Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
             Attributes.Add(HassiumObject.ADD_FUNCTION, new HassiumFunction(__add__, 1));
             Attributes.Add(HassiumObject.SUB_FUNCTION, new HassiumFunction(__sub__, 1));
             Attributes.Add(HassiumObject.MUL_FUNCTION, new HassiumFunction(__mul__, 1));
@@ -28,6 +31,27 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequals__, 1));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Types.Add(this.GetType().Name);
+        }
+
+        private HassiumBool toBool(HassiumObject[] args)
+        {
+            switch ((int)Value)
+            {
+                case 0:
+                    return new HassiumBool(false);
+                case 1:
+                    return new HassiumBool(true);
+                default:
+                    throw new Exception("Cannot convert char to boolean!");
+            }
+        }
+        private HassiumChar toChar(HassiumObject[] args)
+        {
+            return this;
+        }
+        private HassiumDouble toDouble(HassiumObject[] args)
+        {
+            return new HassiumDouble(Convert.ToDouble(Value));
         }
 
         private HassiumObject __add__ (HassiumObject[] args)
