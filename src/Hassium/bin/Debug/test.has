@@ -1,15 +1,12 @@
 func main () {
-	a = new MyClass();
-	b = new MyClass();
-	println(a.Var);
-	a.Var = 3;
-	println(a.Var);
-	println(b.Var);
+	println(recurse(0));
 }
 
-class MyClass {
-	Var { get { return this.var; } set { this.var = value; } }
-	func new () {
-		this.var = 5;
+func recurse (n) {
+	if (n < 10) {
+		n = n + 1;
+		return recurse(n);
 	}
+	return n;
 }
+

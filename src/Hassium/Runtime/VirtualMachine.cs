@@ -36,7 +36,7 @@ namespace Hassium.Runtime
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 string attribute;
-            //   Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+               Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
@@ -201,7 +201,11 @@ namespace Hassium.Runtime
             for (int i = 0; i < method.Instructions.Count; i++)
             {
                 if (method.Instructions[i].InstructionType == InstructionType.Label)
+                {
+                    if (method.Labels.ContainsKey(method.Instructions[i].Argument))
+                        method.Labels.Remove(method.Instructions[i].Argument);
                     method.Labels.Add(method.Instructions[i].Argument, i);
+                }
             }
         }
 

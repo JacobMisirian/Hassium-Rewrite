@@ -20,6 +20,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Value = value;
             Attributes.Add("contains", new HassiumFunction(contains, 1));
             Attributes.Add("reverse", new HassiumFunction(reverse, 0));
+            Attributes.Add("split", new HassiumFunction(split, 1));
             Attributes.Add("stripChars", new HassiumFunction(stripChars, 1));
             Attributes.Add("substring", new HassiumFunction(substring, new int[] { 1, 2 }));
             Attributes.Add("toChar", new HassiumFunction(toChar, 0));
@@ -27,6 +28,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add("toList", new HassiumFunction(toList, 0));
             Attributes.Add("toLower", new HassiumFunction(toLower, 0));
             Attributes.Add("toUpper", new HassiumFunction(toUpper, 0));
+            Attributes.Add("trim", new HassiumFunction(trim, 0));
+            Attributes.Add("trimLeft", new HassiumFunction(trimLeft, 0));
+            Attributes.Add("trimRight", new HassiumFunction(trimRight, 0));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Attributes.Add(HassiumObject.ADD_FUNCTION, new HassiumFunction(__add__, 1));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
@@ -45,6 +49,15 @@ namespace Hassium.Runtime.StandardLibrary.Types
             for (int i = Value.Length - 1; i >= 0; i--)
                 sb.Append(Value[i]);
             return new HassiumString(sb.ToString());
+        }
+        private HassiumList split(HassiumObject[] args)
+        {
+            HassiumChar c = HassiumChar.Create(args[0]);
+            string[] strings = Value.Split(c.Value);
+            HassiumObject[] elements = new HassiumObject[strings.Length];
+            for (int i = 0; i < elements.Length; i++)
+                elements[i] = new HassiumString(strings[i]);
+            return new HassiumList(elements);
         }
         private HassiumString stripChars(HassiumObject[] args)
         {
@@ -101,6 +114,18 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumString toUpper(HassiumObject[] args)
         {
             return new HassiumString(Value.ToUpper());
+        }
+        private HassiumString trim(HassiumObject[] args)
+        {
+            return trimRight(new HassiumObject[] { trimLeft(args) });
+        }
+        private HassiumString trimLeft(HassiumObject[] args)
+        {
+            return new HassiumString(Value.TrimStart());
+        }
+        private HassiumString trimRight(HassiumObject[] args)
+        {
+            return new HassiumString(Value.TrimEnd());
         }
         private HassiumString __tostring__ (HassiumObject[] args)
         {
