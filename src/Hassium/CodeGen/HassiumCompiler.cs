@@ -165,26 +165,29 @@ namespace Hassium.CodeGen
                         module.ConstantPool.Add(propNode.Identifier);
                     UserDefinedProperty property = new UserDefinedProperty(propNode.Identifier);
                     currentMethod = new MethodBuilder();
-                    currentMethod.Name = propNode.Identifier + "__get__";
+                    currentMethod.Name =  "__get__" + propNode.Identifier;
                     currentMethod.Parent = clazz;
                     currentMethod.Emit(InstructionType.Push_Frame);
                     table.EnterScope();
                     propNode.GetBody.Visit(this);
                     currentMethod.Emit(InstructionType.Pop_Frame);
                     table.PopScope();
-                    property.Attributes.Add(currentMethod.Name, currentMethod);
+                    property.GetMethod = currentMethod;
 
                     if (node.Children.Count > 2)
                     {
                         currentMethod = new MethodBuilder();
-                        currentMethod.Name = propNode.Identifier + "__set__";
+                        currentMethod.Name = "__set__" + propNode.Identifier;
                         currentMethod.Parent = clazz;
                         currentMethod.Emit(InstructionType.Push_Frame);
                         table.EnterScope();
+                        if (!table.FindSymbol("value"))
+                            table.AddSymbol("value");
+                        currentMethod.Parameters.Add("value", table.GetIndex("value"));
                         propNode.SetBody.Visit(this);
                         currentMethod.Emit(InstructionType.Pop_Frame);
                         table.PopScope();
-                        property.Attributes.Add(currentMethod.Name, currentMethod);
+                        property.SetMethod = currentMethod;
                     }
                     clazz.Attributes.Add(propNode.Identifier, property);
                 }
@@ -213,6 +216,7 @@ namespace Hassium.CodeGen
         }
         public void Accept(ExpressionNode node)
         {
+            node.VisitChildren(this);
         }
         public void Accept(ForNode node)
         {
@@ -283,7 +287,7 @@ namespace Hassium.CodeGen
         }
         public void Accept(ReturnNode node)
         {
-            node.Expression.VisitChildren(this);
+            node.VisitChildren(this);
             currentMethod.Emit(InstructionType.Return);
         }
         public void Accept(StatementNode node)

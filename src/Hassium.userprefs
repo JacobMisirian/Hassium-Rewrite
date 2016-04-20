@@ -1,25 +1,27 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/HassiumCompiler.cs">
     <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="86" Column="115" />
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="146" Column="57" />
-      <File FileName="Hassium/CodeGen/MethodBuilder.cs" Line="12" Column="97" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumProperty.cs" Line="22" Column="42" />
-      <File FileName="Hassium/Runtime/StandardLibrary/HassiumObject.cs" Line="26" Column="66" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs" Line="22" Column="72" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="131" Column="49" />
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="62" Column="14" />
+      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs" Line="165" Column="9" />
+      <File FileName="Hassium/Runtime/StackFrame.cs" Line="66" Column="45" />
+      <File FileName="Hassium/CodeGen/MethodBuilder.cs" Line="39" Column="32" />
+      <File FileName="Hassium/Parser/Ast/ReturnNode.cs" Line="19" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Hassium" expanded="True">
-            <Node name="CodeGen" expanded="True" />
-            <Node name="Lexer" expanded="True" />
+            <Node name="CodeGen" expanded="True">
+              <Node name="HassiumCompiler.cs" selected="True" />
+            </Node>
+            <Node name="Parser" expanded="True">
+              <Node name="Ast" expanded="True" />
+            </Node>
             <Node name="Runtime" expanded="True">
               <Node name="StandardLibrary" expanded="True">
-                <Node name="Types" expanded="True">
-                  <Node name="HassiumString.cs" selected="True" />
-                </Node>
+                <Node name="Types" expanded="True" />
               </Node>
             </Node>
             <Node name="SemanticAnalysis" expanded="True" />

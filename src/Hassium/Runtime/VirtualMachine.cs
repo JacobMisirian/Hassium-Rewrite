@@ -36,7 +36,7 @@ namespace Hassium.Runtime
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 string attribute;
-               Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+            //   Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 switch (method.Instructions[position].InstructionType)
                 {
                     case InstructionType.Push_Frame:
@@ -72,7 +72,18 @@ namespace Hassium.Runtime
                     case InstructionType.Store_Attribute:
                         HassiumObject location = stack.Pop();
                         attribute = module.ConstantPool[argumentInt];
-                        location.Attributes[attribute] = stack.Pop();
+                        if (location is HassiumProperty)
+                        {
+                            HassiumProperty builtinProp = location as HassiumProperty;
+                            builtinProp.Invoke(new HassiumObject[] { stack.Pop() });
+                        }
+                        else if (location is UserDefinedProperty)
+                        {
+                            UserDefinedProperty userProp = location as UserDefinedProperty;
+                            userProp.SetMethod.Invoke(this, new HassiumObject[] { stack.Pop() });
+                        }
+                        else
+                            location.Attributes[attribute] = stack.Pop();
                         break;
                     case InstructionType.Load_Local:
                         stack.Push(stackFrame.GetVariable(argumentInt));
@@ -187,7 +198,6 @@ namespace Hassium.Runtime
 
         private void gatherLabels(MethodBuilder method)
         {
-           // Console.WriteLine();
             for (int i = 0; i < method.Instructions.Count; i++)
             {
                 if (method.Instructions[i].InstructionType == InstructionType.Label)

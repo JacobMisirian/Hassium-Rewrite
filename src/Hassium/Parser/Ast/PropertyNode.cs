@@ -22,10 +22,16 @@ namespace Hassium.Parser
             string identifier = parser.ExpectToken(TokenType.Identifier).Value;
             parser.ExpectToken(TokenType.LeftBrace);
             parser.ExpectToken(TokenType.Identifier, "get");
+            parser.ExpectToken(TokenType.LeftBrace);
             AstNode getBody = StatementNode.Parse(parser);
-            if (parser.AcceptToken(TokenType.RightBrace))
+            parser.AcceptToken(TokenType.Semicolon);
+            parser.ExpectToken(TokenType.RightBrace);
+            if (!parser.AcceptToken(TokenType.Identifier, "set"))
                 return new PropertyNode(identifier, getBody);
+            parser.ExpectToken(TokenType.LeftBrace);
             AstNode setBody = StatementNode.Parse(parser);
+            parser.AcceptToken(TokenType.Semicolon);
+            parser.ExpectToken(TokenType.RightBrace);
             parser.ExpectToken(TokenType.RightBrace);
             return new PropertyNode(identifier, getBody, setBody);
         }

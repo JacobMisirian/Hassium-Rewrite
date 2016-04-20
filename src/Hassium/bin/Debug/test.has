@@ -1,7 +1,15 @@
 func main () {
-	Myclass.attrib
+	a = new MyClass();
+	b = new MyClass();
+	println(a.Var);
+	a.Var = 3;
+	println(a.Var);
+	println(b.Var);
 }
 
-class Myclass {
-	attrib { get { println("Hai"); } }
+class MyClass {
+	Var { get { return this.var; } set { this.var = value; } }
+	func new () {
+		this.var = 5;
+	}
 }
