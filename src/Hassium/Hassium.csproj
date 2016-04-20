@@ -87,6 +87,11 @@
     <Compile Include="Parser\Ast\PropertyNode.cs" />
     <Compile Include="CodeGen\UserDefinedProperty.cs" />
     <Compile Include="Parser\Ast\ReturnNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\InternalModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\IO\HassiumFileReader.cs" />
+    <Compile Include="Runtime\StandardLibrary\IO\HassiumIOModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\IO\HassiumFile.cs" />
+    <Compile Include="Parser\Ast\UseNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -98,5 +103,6 @@
     <Folder Include="Runtime\StandardLibrary\" />
     <Folder Include="Runtime\StandardLibrary\Types\" />
     <Folder Include="CodeGen\" />
+    <Folder Include="Runtime\StandardLibrary\IO\" />
   </ItemGroup>
 </Project>

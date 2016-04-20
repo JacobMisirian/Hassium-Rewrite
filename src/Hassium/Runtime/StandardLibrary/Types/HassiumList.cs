@@ -25,7 +25,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add("contains", new HassiumFunction(contains, -1));
             Attributes.Add("indexOf", new HassiumFunction(indexOf, 1));
             Attributes.Add("lastIndexOf", new HassiumFunction(lastIndexOf, 1));
-            Attributes.Add("length", new HassiumProperty(length));
+            Attributes.Add("length", new HassiumProperty(get_Length));
             Attributes.Add("remove", new HassiumFunction(remove, -1));
             Attributes.Add("reverse", new HassiumFunction(reverse, 0));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
@@ -61,7 +61,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                     return new HassiumDouble(i);
             return new HassiumDouble(-1);
         }
-        private HassiumDouble length(HassiumObject[] args)
+        private HassiumDouble get_Length(HassiumObject[] args)
         {
             return new HassiumDouble(Value.Count);
         }

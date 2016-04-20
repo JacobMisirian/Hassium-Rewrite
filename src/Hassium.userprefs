@@ -1,26 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/HassiumCompiler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/IO/HassiumIOModule.cs">
     <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="131" Column="49" />
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="62" Column="14" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs" Line="165" Column="9" />
-      <File FileName="Hassium/Runtime/StackFrame.cs" Line="66" Column="45" />
-      <File FileName="Hassium/CodeGen/MethodBuilder.cs" Line="39" Column="32" />
-      <File FileName="Hassium/Parser/Ast/ReturnNode.cs" Line="19" Column="1" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="181" Column="34" />
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/StackFrame.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/StandardLibrary/GlobalFunctions.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/StandardLibrary/InternalModule.cs" Line="13" Column="13" />
+      <File FileName="Hassium/Runtime/StandardLibrary/IO/HassiumIOModule.cs" Line="11" Column="67" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Hassium" expanded="True">
-            <Node name="CodeGen" expanded="True">
-              <Node name="HassiumCompiler.cs" selected="True" />
-            </Node>
-            <Node name="Parser" expanded="True">
-              <Node name="Ast" expanded="True" />
-            </Node>
             <Node name="Runtime" expanded="True">
               <Node name="StandardLibrary" expanded="True">
+                <Node name="IO" expanded="True" selected="True" />
                 <Node name="Types" expanded="True" />
               </Node>
             </Node>

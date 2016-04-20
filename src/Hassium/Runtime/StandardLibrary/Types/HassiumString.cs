@@ -19,6 +19,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             Value = value;
             Attributes.Add("contains", new HassiumFunction(contains, 1));
+            Attributes.Add("length", new HassiumProperty(get_Length));
             Attributes.Add("reverse", new HassiumFunction(reverse, 0));
             Attributes.Add("split", new HassiumFunction(split, 1));
             Attributes.Add("stripChars", new HassiumFunction(stripChars, 1));
@@ -43,6 +44,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumBool contains(HassiumObject[] args)
         {
             return new HassiumBool(Value.Contains(HassiumString.Create(args[0]).Value));
+        }
+        private HassiumDouble get_Length(HassiumObject[] args)
+        {
+            return new HassiumDouble(Value.Length);
         }
         private HassiumString reverse(HassiumObject[] args)
         {
