@@ -66,6 +66,7 @@ namespace Hassium.SemanticAnalysis
         public void Accept(StatementNode node) {}
         public void Accept(StringNode node) {}
         public void Accept(ThisNode node) {}
+        public void Accept(UseNode node) {}
         public void Accept(WhileNode node)
         {
             node.VisitChildren(this);

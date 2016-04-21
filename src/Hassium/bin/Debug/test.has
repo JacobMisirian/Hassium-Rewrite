@@ -1,12 +1,7 @@
+use IO;
+
 func main () {
-	println(recurse(0));
+	println(File.currentDirectory);
+	File.currentDirectory = "/";
+	println(File.currentDirectory);
 }
-
-func recurse (n) {
-	if (n < 10) {
-		n = n + 1;
-		return recurse(n);
-	}
-	return n;
-}
-

@@ -47,7 +47,8 @@ namespace Hassium.CodeGen
         Jump_If_False,
         Push_Frame,
         Pop_Frame,
-        Return
+        Return,
+        Import_Attributes
     }
 }
 

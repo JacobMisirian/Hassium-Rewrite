@@ -28,6 +28,7 @@ namespace Hassium.Parser
         void Accept(StatementNode node);
         void Accept(StringNode node);
         void Accept(ThisNode node);
+        void Accept(UseNode node);
         void Accept(UnaryOperationNode node);
         void Accept(WhileNode node);
     }

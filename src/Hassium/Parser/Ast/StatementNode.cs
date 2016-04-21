@@ -26,6 +26,8 @@ namespace Hassium.Parser
                 return PropertyNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "return"))
                 return ReturnNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "use"))
+                return UseNode.Parse(parser);
             else
                 return ExpressionNode.Parse(parser);
         }

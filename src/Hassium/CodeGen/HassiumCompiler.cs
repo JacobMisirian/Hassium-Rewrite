@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Hassium.Parser;
 using Hassium.Runtime.StandardLibrary;
+using Hassium.Runtime.StandardLibrary.Types;
 
 namespace Hassium.CodeGen
 {
@@ -25,9 +26,20 @@ namespace Hassium.CodeGen
                     module.Attributes.Add(currentMethod.Name, currentMethod);
                 }
                 else if (child is ClassNode)
-                {
                     child.Visit(this);
+                else if (child is UseNode)
+                {
+                    UseNode use = child as UseNode;
+                    if (use.Target is IdentifierNode)
+                    {
+                        string identifier = ((IdentifierNode)use.Target).Identifier;
+                        foreach (InternalModule internalModule in InternalModule.InternalModules)
+                            if (internalModule.Name.ToLower() == identifier.ToLower())
+                                foreach (KeyValuePair<string, HassiumObject> attribute in internalModule.Attributes)
+                                    module.Attributes.Add(attribute.Key, attribute.Value);
+                    }
                 }
+
             }
             return module;
         }
@@ -304,6 +316,9 @@ namespace Hassium.CodeGen
             currentMethod.Emit(InstructionType.Self_Reference, findIndex(currentMethod.Name));
         }
         public void Accept(UnaryOperationNode node)
+        {
+        }
+        public void Accept(UseNode node)
         {
         }
         public void Accept(WhileNode node)
