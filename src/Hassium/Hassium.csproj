@@ -92,6 +92,7 @@
     <Compile Include="Runtime\StandardLibrary\IO\HassiumIOModule.cs" />
     <Compile Include="Runtime\StandardLibrary\IO\HassiumFile.cs" />
     <Compile Include="Parser\Ast\UseNode.cs" />
+    <Compile Include="HassiumExecuter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

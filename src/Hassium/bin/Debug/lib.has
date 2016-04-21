@@ -1,0 +1,10 @@
+class MyClass {
+	func new (a, b) {
+		this.a = a;
+		this.b = b;
+	}
+
+	func add () {
+		return this.a + this.b;
+	}
+}

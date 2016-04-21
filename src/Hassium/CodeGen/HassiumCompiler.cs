@@ -38,8 +38,14 @@ namespace Hassium.CodeGen
                                 foreach (KeyValuePair<string, HassiumObject> attribute in internalModule.Attributes)
                                     module.Attributes.Add(attribute.Key, attribute.Value);
                     }
+                    else if (use.Target is StringNode)
+                    {
+                        string path = ((StringNode)use.Target).String;
+                        HassiumModule compiledModule = HassiumExecuter.FromFilePath(path, false);
+                        foreach (KeyValuePair<string, HassiumObject> attribute in compiledModule.Attributes)
+                            module.Attributes.Add(attribute.Key, attribute.Value);
+                    }
                 }
-
             }
             return module;
         }
