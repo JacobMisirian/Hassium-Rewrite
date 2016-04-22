@@ -173,21 +173,13 @@ namespace Hassium.Parser
 
         private static AstNode parseAttributeAccess(Parser parser)
         {
-            AstNode left = parseTerm(parser);
-            while (parser.MatchToken(TokenType.BinaryOperation))
-            {
-                switch (parser.GetToken().Value)
-                {
-                    case ".":
-                        parser.ExpectToken(TokenType.BinaryOperation);
-                        left = new AttributeAccessNode(left, parser.ExpectToken(TokenType.Identifier).Value);
-                        continue;
-                    default:
-                        break;
-                }
-                break;
-            }
-            return left;
+            return parseAttributeAccess(parser, parseTerm(parser));
+        }
+        private static AstNode parseAttributeAccess(Parser parser, AstNode left)
+        {
+            parser.ExpectToken(TokenType.BinaryOperation, ".");
+            if (parser.MatchToken(TokenType.BinaryOperation, "."))
+
         }
 
         private static AstNode parseTerm(Parser parser)

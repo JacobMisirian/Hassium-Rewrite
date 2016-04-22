@@ -1,11 +1,3 @@
-use IO;
-use "lib.has"
-
 func main () {
-	println(File.currentDirectory);
-	File.currentDirectory = "/";
-	println(File.currentDirectory);
-
-	c = new MyClass(4, 5);
-	println(a.add());
+	a = "hai".toLower().toUpper();
 }

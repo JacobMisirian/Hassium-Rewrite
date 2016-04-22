@@ -27,6 +27,13 @@ namespace Hassium.CodeGen
                 }
                 else if (child is ClassNode)
                     child.Visit(this);
+                else if (child is EnumNode)
+                {
+                    HassiumObject enumerator = new HassiumObject();
+                    for (int i = 0; i < child.Children.Count; i++)
+                        enumerator.Attributes.Add(((IdentifierNode)child.Children[i]).Identifier, new HassiumDouble(i));
+                    module.Attributes.Add(((EnumNode)child).Name, enumerator);
+                }
                 else if (child is UseNode)
                 {
                     UseNode use = child as UseNode;
@@ -231,6 +238,9 @@ namespace Hassium.CodeGen
         public void Accept(ContinueNode node)
         {
             currentMethod.Emit(InstructionType.Jump, currentMethod.ContinueLabels.Pop());
+        }
+        public void Accept(EnumNode node)
+        {
         }
         public void Accept(ExpressionNode node)
         {

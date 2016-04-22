@@ -1,0 +1,16 @@
+class Token {
+	func new (tokenType, val) {
+		this.TokenType = tokenType;
+		this.Value = val;
+	}
+}
+
+enum TokenType {
+	Identifier,
+	Comma,
+	Dot,
+	Semicolon,
+	LeftParentheses,
+	RightParentheses,
+	String
+}

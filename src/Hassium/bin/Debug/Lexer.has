@@ -1,0 +1,8 @@
+class Lexer {
+	func new (source) {
+		this.code = source;
+		this.position = 0;
+	}
+
+	func peekChar () {
+		if (

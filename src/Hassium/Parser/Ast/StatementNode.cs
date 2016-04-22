@@ -28,6 +28,8 @@ namespace Hassium.Parser
                 return ReturnNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "use"))
                 return UseNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "enum"))
+                return EnumNode.Parse(parser);
             else
                 return ExpressionNode.Parse(parser);
         }
