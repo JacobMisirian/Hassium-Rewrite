@@ -109,34 +109,34 @@ namespace Hassium.Parser
 
         private static AstNode parseComparison(Parser parser)
         {
-            AstNode left = parsePostUnary(parser);
+            AstNode left = parseAccess(parser);
             while (parser.MatchToken(TokenType.Comparison))
             {
                 switch (parser.GetToken().Value)
                 {
                     case ">":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.GreaterThan, left, parsePostUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.GreaterThan, left, parseAccess(parser));
                         continue;
                     case "<":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.LesserThan, left, parsePostUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.LesserThan, left, parseAccess(parser));
                         continue;
                     case ">=":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.GreaterThanOrEqual, left, parsePostUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.GreaterThanOrEqual, left, parseAccess(parser));
                         continue;
                     case "<=":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.LesserThanOrEqual, left, parsePostUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.LesserThanOrEqual, left, parseAccess(parser));
                         continue;
                     case "!=":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.NotEqualTo, left, parsePostUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.NotEqualTo, left, parseAccess(parser));
                         continue;
                     case "==":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.EqualTo, left, parsePostUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.EqualTo, left, parseAccess(parser));
                         continue;
                     default:
                         break;
@@ -146,46 +146,33 @@ namespace Hassium.Parser
             return left;
         }
 
-        private static AstNode parsePostUnary(Parser parser)
+        private static AstNode parseAccess(Parser parser)
         {
-            AstNode left = parseFunctionCall(parser);
-            if (parser.AcceptToken(TokenType.LeftSquare))
+            return parseAccess(parser, parseTerm(parser));
+        }
+        private static AstNode parseAccess(Parser parser, AstNode left)
+        {
+            if (parser.MatchToken(TokenType.LeftParentheses))
+                return parseAccess(parser, new FunctionCallNode(left, ArgListNode.Parse(parser)));
+            else if (parser.AcceptToken(TokenType.LeftSquare))
             {
-                AstNode arrayAccess = new ArrayAccessNode(left, Parse(parser));
-                parser.ExpectToken(TokenType.RightSquare);
-                return arrayAccess;
+                AstNode expression = Parse(parser);
+                parser.ExpectToken(TokenType.RightBrace);
+                return parseAccess(parser, new ArrayAccessNode(left, expression));
+            }
+            else if (parser.AcceptToken(TokenType.BinaryOperation, "."))
+            {
+                string identifier = parser.ExpectToken(TokenType.Identifier).Value;
+                return parseAccess(parser, new AttributeAccessNode(left, identifier));
             }
             else
                 return left;
         }
 
-        private static AstNode parseFunctionCall(Parser parser)
-        {
-            return parseFunctionCall(parser, parseAttributeAccess(parser));
-        }
-        private static AstNode parseFunctionCall(Parser parser, AstNode left)
-        {
-            if (parser.MatchToken(TokenType.LeftParentheses))
-                return parseFunctionCall(parser, new FunctionCallNode(left, ArgListNode.Parse(parser)));
-            else
-                return left;
-        }
-
-        private static AstNode parseAttributeAccess(Parser parser)
-        {
-            return parseAttributeAccess(parser, parseTerm(parser));
-        }
-        private static AstNode parseAttributeAccess(Parser parser, AstNode left)
-        {
-            parser.ExpectToken(TokenType.BinaryOperation, ".");
-            if (parser.MatchToken(TokenType.BinaryOperation, "."))
-
-        }
-
         private static AstNode parseTerm(Parser parser)
         {
             if (parser.AcceptToken(TokenType.Identifier, "new"))
-                return new NewNode((FunctionCallNode)parseFunctionCall(parser));
+                return new NewNode((FunctionCallNode)parseAccess(parser));
             else if (parser.AcceptToken(TokenType.Identifier, "this"))
                 return new ThisNode();
             else if (parser.MatchToken(TokenType.Identifier, "true") || parser.MatchToken(TokenType.Identifier, "false"))
