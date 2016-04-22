@@ -1,4 +1,7 @@
 class Token {
+	TokenType { get { return this.TokenType; } set { this.TokenType = value; } }
+	Value { get { return this.Value; } set { this.Value = value; } }
+
 	func new (tokenType, val) {
 		this.TokenType = tokenType;
 		this.Value = val;

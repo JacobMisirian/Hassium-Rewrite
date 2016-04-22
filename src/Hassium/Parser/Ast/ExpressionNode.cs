@@ -157,7 +157,7 @@ namespace Hassium.Parser
             else if (parser.AcceptToken(TokenType.LeftSquare))
             {
                 AstNode expression = Parse(parser);
-                parser.ExpectToken(TokenType.RightBrace);
+                parser.ExpectToken(TokenType.RightSquare);
                 return parseAccess(parser, new ArrayAccessNode(left, expression));
             }
             else if (parser.AcceptToken(TokenType.BinaryOperation, "."))

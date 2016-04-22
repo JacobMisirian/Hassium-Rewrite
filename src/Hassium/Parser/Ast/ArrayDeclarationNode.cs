@@ -10,6 +10,8 @@ namespace Hassium.Parser
         {
             ArrayDeclarationNode ret = new ArrayDeclarationNode();
             parser.ExpectToken(TokenType.LeftSquare);
+            if (parser.AcceptToken(TokenType.RightSquare))
+                return ret;
             ret.Children.Add(ExpressionNode.Parse(parser));
             while (parser.AcceptToken(TokenType.Comma))
                 ret.Children.Add(ExpressionNode.Parse(parser));

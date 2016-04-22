@@ -272,7 +272,7 @@ namespace Hassium.CodeGen
             currentMethod.Emit(InstructionType.Push_Frame);
             table.EnterScope();
 
-            for (int i = node.Parameters.Count - 1; i >= 0; i--)
+            for (int i = 0; i < node.Parameters.Count; i++)
             {
                 table.AddSymbol(node.Parameters[i]);
                 currentMethod.Parameters.Add(node.Parameters[i], table.GetIndex(node.Parameters[i]));

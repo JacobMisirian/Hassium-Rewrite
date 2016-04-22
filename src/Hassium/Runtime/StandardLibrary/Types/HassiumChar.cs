@@ -16,6 +16,12 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumChar(char value)
         {
             Value = value;
+            Attributes.Add("isDigit", new HassiumFunction(isDigit, 0));
+            Attributes.Add("isLetter", new HassiumFunction(isLetter, 0));
+            Attributes.Add("isLetterOrDigit", new HassiumFunction(isLetterOrDigit, 0));
+            Attributes.Add("isLower", new HassiumFunction(isLower, 0));
+            Attributes.Add("isUpper", new HassiumFunction(isUpper, 0));
+            Attributes.Add("isWhitespace", new HassiumFunction(isWhitespace, 0));
             Attributes.Add("toBool", new HassiumFunction(toBool, 0));
             Attributes.Add("toChar", new HassiumFunction(toChar, 0));
             Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
@@ -33,6 +39,30 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(this.GetType().Name);
         }
 
+        private HassiumBool isDigit(HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsDigit(Value));
+        }
+        private HassiumBool isLetter(HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsLetter(Value));
+        }
+        private HassiumBool isLower(HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsLower(Value));
+        }
+        private HassiumBool isLetterOrDigit(HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsLetterOrDigit(Value));
+        }
+        private HassiumBool isUpper(HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsUpper(Value));
+        }
+        private HassiumBool isWhitespace(HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsWhiteSpace(Value));
+        }
         private HassiumBool toBool(HassiumObject[] args)
         {
             switch ((int)Value)
