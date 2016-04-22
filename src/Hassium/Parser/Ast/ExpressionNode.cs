@@ -6,6 +6,11 @@ namespace Hassium.Parser
 {
     public class ExpressionNode: AstNode
     {
+        public ExpressionNode(SourceLocation location)
+        {
+            this.SourceLocation = location;
+        }
+
         public static AstNode Parse(Parser parser)
         {
             return parseAssignment(parser);
@@ -16,7 +21,7 @@ namespace Hassium.Parser
             AstNode left = parseAdditive(parser);
 
             if (parser.AcceptToken(TokenType.Assignment))
-                return new BinaryOperationNode(BinaryOperation.Assignment, left, parseAssignment(parser));
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, parseAssignment(parser), parser.Location);
             else
                 return left;
         }
@@ -30,11 +35,11 @@ namespace Hassium.Parser
                 {
                     case "+":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.Addition, left, parseMultiplicitive(parser));
+                        left = new BinaryOperationNode(BinaryOperation.Addition, left, parseMultiplicitive(parser), parser.Location);
                         continue;
                     case "-":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.Subtraction, left, parseMultiplicitive(parser));
+                        left = new BinaryOperationNode(BinaryOperation.Subtraction, left, parseMultiplicitive(parser), parser.Location);
                         continue;
                     default:
                         break;
@@ -53,31 +58,31 @@ namespace Hassium.Parser
                 {
                     case "*":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.Multiplication, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.Multiplication, left, parseUnary(parser), parser.Location);
                         continue;
                     case "/":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.Division, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.Division, left, parseUnary(parser), parser.Location);
                         continue;
                     case "%":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.Modulus, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.Modulus, left, parseUnary(parser), parser.Location);
                         continue;
                     case "^":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.XOR, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.XOR, left, parseUnary(parser), parser.Location);
                         continue;
                     case "|":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.OR, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.OR, left, parseUnary(parser), parser.Location);
                         continue;
                     case "&":
                         parser.AcceptToken(TokenType.BinaryOperation);
-                        left = new BinaryOperationNode(BinaryOperation.XAnd, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.XAnd, left, parseUnary(parser), parser.Location);
                         continue;
                     case "=":
                         parser.AcceptToken(TokenType.Assignment);
-                        left = new BinaryOperationNode(BinaryOperation.Assignment, left, parseUnary(parser));
+                        left = new BinaryOperationNode(BinaryOperation.Assignment, left, parseUnary(parser), parser.Location);
                         continue;
                      default:
                         break;
@@ -95,13 +100,13 @@ namespace Hassium.Parser
                 {
                     case "!":
                         parser.ExpectToken(TokenType.UnaryOperation);
-                        return new UnaryOperationNode(UnaryOperation.Not, parseUnary(parser));
+                        return new UnaryOperationNode(UnaryOperation.Not, parseUnary(parser), parser.Location);
                     case "++":
                         parser.ExpectToken(TokenType.UnaryOperation);
-                        return new UnaryOperationNode(UnaryOperation.Increment, parseUnary(parser));
+                        return new UnaryOperationNode(UnaryOperation.Increment, parseUnary(parser), parser.Location);
                     case "--":
                         parser.ExpectToken(TokenType.UnaryOperation);
-                        return new UnaryOperationNode(UnaryOperation.Decrement, parseUnary(parser));
+                        return new UnaryOperationNode(UnaryOperation.Decrement, parseUnary(parser), parser.Location);
                 }
             }
             return parseComparison(parser);
@@ -116,27 +121,27 @@ namespace Hassium.Parser
                 {
                     case ">":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.GreaterThan, left, parseAccess(parser));
+                        left = new BinaryOperationNode(BinaryOperation.GreaterThan, left, parseAccess(parser), parser.Location);
                         continue;
                     case "<":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.LesserThan, left, parseAccess(parser));
+                        left = new BinaryOperationNode(BinaryOperation.LesserThan, left, parseAccess(parser), parser.Location);
                         continue;
                     case ">=":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.GreaterThanOrEqual, left, parseAccess(parser));
+                        left = new BinaryOperationNode(BinaryOperation.GreaterThanOrEqual, left, parseAccess(parser), parser.Location);
                         continue;
                     case "<=":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.LesserThanOrEqual, left, parseAccess(parser));
+                        left = new BinaryOperationNode(BinaryOperation.LesserThanOrEqual, left, parseAccess(parser), parser.Location);
                         continue;
                     case "!=":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.NotEqualTo, left, parseAccess(parser));
+                        left = new BinaryOperationNode(BinaryOperation.NotEqualTo, left, parseAccess(parser), parser.Location);
                         continue;
                     case "==":
                         parser.AcceptToken(TokenType.Comparison);
-                        left = new BinaryOperationNode(BinaryOperation.EqualTo, left, parseAccess(parser));
+                        left = new BinaryOperationNode(BinaryOperation.EqualTo, left, parseAccess(parser), parser.Location);
                         continue;
                     default:
                         break;
@@ -153,17 +158,17 @@ namespace Hassium.Parser
         private static AstNode parseAccess(Parser parser, AstNode left)
         {
             if (parser.MatchToken(TokenType.LeftParentheses))
-                return parseAccess(parser, new FunctionCallNode(left, ArgListNode.Parse(parser)));
+                return parseAccess(parser, new FunctionCallNode(left, ArgListNode.Parse(parser), parser.Location));
             else if (parser.AcceptToken(TokenType.LeftSquare))
             {
                 AstNode expression = Parse(parser);
                 parser.ExpectToken(TokenType.RightSquare);
-                return parseAccess(parser, new ArrayAccessNode(left, expression));
+                return parseAccess(parser, new ArrayAccessNode(left, expression, parser.Location));
             }
             else if (parser.AcceptToken(TokenType.BinaryOperation, "."))
             {
                 string identifier = parser.ExpectToken(TokenType.Identifier).Value;
-                return parseAccess(parser, new AttributeAccessNode(left, identifier));
+                return parseAccess(parser, new AttributeAccessNode(left, identifier, parser.Location));
             }
             else
                 return left;
@@ -172,19 +177,19 @@ namespace Hassium.Parser
         private static AstNode parseTerm(Parser parser)
         {
             if (parser.AcceptToken(TokenType.Identifier, "new"))
-                return new NewNode((FunctionCallNode)parseAccess(parser));
+                return new NewNode((FunctionCallNode)parseAccess(parser), parser.Location);
             else if (parser.AcceptToken(TokenType.Identifier, "this"))
-                return new ThisNode();
+                return new ThisNode(parser.Location);
             else if (parser.MatchToken(TokenType.Identifier, "true") || parser.MatchToken(TokenType.Identifier, "false"))
-                return new BoolNode(parser.ExpectToken(TokenType.Identifier).Value);
+                return new BoolNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location);
             else if (parser.MatchToken(TokenType.Identifier))
-                return new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value);
+                return new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location);
             else if (parser.MatchToken(TokenType.Number))
-                return new NumberNode(parser.ExpectToken(TokenType.Number).Value);
+                return new NumberNode(parser.ExpectToken(TokenType.Number).Value, parser.Location);
             else if (parser.MatchToken(TokenType.String))
-                return new StringNode(parser.ExpectToken(TokenType.String).Value);
+                return new StringNode(parser.ExpectToken(TokenType.String).Value, parser.Location);
             else if (parser.MatchToken(TokenType.Char))
-                return new CharNode(parser.ExpectToken(TokenType.Char).Value);
+                return new CharNode(parser.ExpectToken(TokenType.Char).Value, parser.Location);
             else if (parser.AcceptToken(TokenType.LeftParentheses))
             {
                 AstNode expression = Parse(parser);
@@ -193,7 +198,7 @@ namespace Hassium.Parser
             }
             else if (parser.AcceptToken(TokenType.LeftBrace))
             {
-                CodeBlockNode block = new CodeBlockNode();
+                CodeBlockNode block = new CodeBlockNode(parser.Location);
                 while (!parser.AcceptToken(TokenType.RightBrace))
                 {
                     block.Children.Add(StatementNode.Parse(parser));
@@ -204,7 +209,7 @@ namespace Hassium.Parser
             else if (parser.MatchToken(TokenType.LeftSquare))
                 return ArrayDeclarationNode.Parse(parser);
             else if (parser.AcceptToken(TokenType.Semicolon))
-                return new StatementNode();
+                return new StatementNode(parser.Location);
             else
                 throw new Exception(string.Format("Unexpected type {0} with value {1} encountered in parser!", parser.GetToken().TokenType, parser.GetToken().Value));
         }

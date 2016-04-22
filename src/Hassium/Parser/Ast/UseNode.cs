@@ -7,7 +7,7 @@ namespace Hassium.Parser
     public class UseNode: AstNode
     {
         public AstNode Target { get { return Children[0]; } }
-        public UseNode(AstNode target)
+        public UseNode(AstNode target, SourceLocation location)
         {
             Children.Add(target);
         }
@@ -17,7 +17,7 @@ namespace Hassium.Parser
             parser.ExpectToken(TokenType.Identifier, "use");
             AstNode target = ExpressionNode.Parse(parser);
 
-            return new UseNode(target);
+            return new UseNode(target, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

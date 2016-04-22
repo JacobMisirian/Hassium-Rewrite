@@ -6,9 +6,10 @@ namespace Hassium.Parser
     {
         public string String { get; private set; }
 
-        public StringNode(string value)
+        public StringNode(string value, SourceLocation location)
         {
             String = value;
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

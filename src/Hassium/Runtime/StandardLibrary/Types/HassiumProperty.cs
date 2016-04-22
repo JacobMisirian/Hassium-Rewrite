@@ -13,13 +13,13 @@ namespace Hassium.Runtime.StandardLibrary.Types
             SetValue = setValue;
         }
 
-        public HassiumObject Invoke(HassiumObject[] args)
+        public new HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
-            return GetValue.Invoke(args);
+            return GetValue.Invoke(vm, args);
         }
-        public HassiumObject Set(HassiumObject[] args)
+        public HassiumObject Set(VirtualMachine vm, HassiumObject[] args)
         {
-            return SetValue.Invoke(args);
+            return SetValue.Invoke(vm, args);
         }
     }
 }

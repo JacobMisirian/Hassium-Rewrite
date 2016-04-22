@@ -64,19 +64,19 @@ namespace Hassium.CodeGen
         public void Accept(ArrayAccessNode node)
         {
             node.VisitChildren(this);
-            currentMethod.Emit(InstructionType.Load_List_Element);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Load_List_Element);
         }
         public void Accept(ArrayDeclarationNode node)
         {
             node.VisitChildren(this);
-            currentMethod.Emit(InstructionType.Create_List, node.Children.Count);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Create_List, node.Children.Count);
         }
         public void Accept(AttributeAccessNode node)
         {
             node.Left.Visit(this);
             if (!module.ConstantPool.Contains(node.Right))
                 module.ConstantPool.Add(node.Right);
-            currentMethod.Emit(InstructionType.Load_Attribute, findIndex(node.Right));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Load_Attribute, findIndex(node.Right));
         }
         public void Accept(BinaryOperationNode node)
         {
@@ -94,8 +94,8 @@ namespace Hassium.CodeGen
                         string identifier = ((IdentifierNode)node.Left).Identifier;
                         if (!table.FindSymbol(identifier))
                             table.AddSymbol(identifier);
-                        currentMethod.Emit(InstructionType.Store_Local, table.GetIndex(identifier));
-                        currentMethod.Emit(InstructionType.Load_Local, table.GetIndex(identifier));
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, table.GetIndex(identifier));
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, table.GetIndex(identifier));
                     }
                     else if (node.Left is AttributeAccessNode)
                     {
@@ -103,7 +103,7 @@ namespace Hassium.CodeGen
                         accessor.Left.Visit(this);
                         if (!module.ConstantPool.Contains(accessor.Right))
                             module.ConstantPool.Add(accessor.Right);
-                        currentMethod.Emit(InstructionType.Store_Attribute, findIndex(accessor.Right));
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Store_Attribute, findIndex(accessor.Right));
                         accessor.Left.Visit(this);
                     }
                     else if (node.Left is ArrayAccessNode)
@@ -111,64 +111,64 @@ namespace Hassium.CodeGen
                         ArrayAccessNode access = node.Left as ArrayAccessNode;
                         access.Target.Visit(this);
                         access.Expression.Visit(this);
-                        currentMethod.Emit(InstructionType.Store_List_Element);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Store_List_Element);
                     }
                     break;
                 case BinaryOperation.Addition:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 0);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 0);
                     break;
                 case BinaryOperation.Subtraction:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 1);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 1);
                     break;
                 case BinaryOperation.Multiplication:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 2);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 2);
                     break;
                 case BinaryOperation.Division:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 3);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 3);
                     break;
                 case BinaryOperation.Modulus:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 4);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 4);
                     break;
                 case BinaryOperation.XOR:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 5);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 5);
                     break;
                 case BinaryOperation.OR:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 6);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 6);
                     break;
                 case BinaryOperation.XAnd:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 7);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 7);
                     break;
                 case BinaryOperation.EqualTo:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 8);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 8);
                     break;
                 case BinaryOperation.NotEqualTo:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 9);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 9);
                     break;
                 case BinaryOperation.GreaterThan:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 10);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 10);
                     break;
                 case BinaryOperation.GreaterThanOrEqual:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 11);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 11);
                     break;
                 case BinaryOperation.LesserThan:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 12);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 12);
                     break;
                 case BinaryOperation.LesserThanOrEqual:
-                    currentMethod.Emit(InstructionType.Binary_Operation, 13);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 13);
                     break;
             }
         }
         public void Accept(BoolNode node)
         {
-            currentMethod.Emit(InstructionType.Push_Bool, node.Value ? 1 : 0);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Bool, node.Value ? 1 : 0);
         }
         public void Accept(BreakNode node)
         {
-            currentMethod.Emit(InstructionType.Jump, currentMethod.BreakLabels.Pop());
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, currentMethod.BreakLabels.Pop());
         }
         public void Accept(CharNode node)
         {
-            currentMethod.Emit(InstructionType.Push_Char, node.Char);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Char, node.Char);
         }
         public void Accept(ClassNode node)
         {
@@ -192,10 +192,10 @@ namespace Hassium.CodeGen
                     currentMethod = new MethodBuilder();
                     currentMethod.Name =  "__get__" + propNode.Identifier;
                     currentMethod.Parent = clazz;
-                    currentMethod.Emit(InstructionType.Push_Frame);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
                     table.EnterScope();
                     propNode.GetBody.Visit(this);
-                    currentMethod.Emit(InstructionType.Pop_Frame);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
                     table.PopScope();
                     property.GetMethod = currentMethod;
 
@@ -204,13 +204,13 @@ namespace Hassium.CodeGen
                         currentMethod = new MethodBuilder();
                         currentMethod.Name = "__set__" + propNode.Identifier;
                         currentMethod.Parent = clazz;
-                        currentMethod.Emit(InstructionType.Push_Frame);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
                         table.EnterScope();
                         if (!table.FindSymbol("value"))
                             table.AddSymbol("value");
                         currentMethod.Parameters.Add("value", table.GetIndex("value"));
                         propNode.SetBody.Visit(this);
-                        currentMethod.Emit(InstructionType.Pop_Frame);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
                         table.PopScope();
                         property.SetMethod = currentMethod;
                     }
@@ -221,23 +221,23 @@ namespace Hassium.CodeGen
         }
         public void Accept(CodeBlockNode node)
         {
-            currentMethod.Emit(InstructionType.Push_Frame);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             node.VisitChildren(this);
-            currentMethod.Emit(InstructionType.Pop_Frame);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
         }
         public void Accept(ConditionalNode node)
         {
             double endLabel = generateSymbol();
             node.Predicate.Visit(this);
-            currentMethod.Emit(InstructionType.Jump_If_False, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_False, endLabel);
             node.Body.Visit(this);
-            currentMethod.Emit(InstructionType.Label, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
             if (node.Children.Count > 2)
                 node.ElseBody.Visit(this);
         }
         public void Accept(ContinueNode node)
         {
-            currentMethod.Emit(InstructionType.Jump, currentMethod.ContinueLabels.Pop());
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, currentMethod.ContinueLabels.Pop());
         }
         public void Accept(EnumNode node)
         {
@@ -253,13 +253,13 @@ namespace Hassium.CodeGen
             currentMethod.ContinueLabels.Push(forLabel);
             currentMethod.BreakLabels.Push(endLabel);
             node.SingleStatement.Visit(this);
-            currentMethod.Emit(InstructionType.Label, forLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, forLabel);
             node.Predicate.Visit(this);
-            currentMethod.Emit(InstructionType.Jump_If_False, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_False, endLabel);
             node.Body.Visit(this);
             node.RepeatStatement.Visit(this);
-            currentMethod.Emit(InstructionType.Jump, forLabel);
-            currentMethod.Emit(InstructionType.Label, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, forLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
         }
         public void Accept(FuncNode node)
         {
@@ -269,7 +269,7 @@ namespace Hassium.CodeGen
             currentMethod = new MethodBuilder();
             currentMethod.Name = node.Name;
 
-            currentMethod.Emit(InstructionType.Push_Frame);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             table.EnterScope();
 
             for (int i = 0; i < node.Parameters.Count; i++)
@@ -281,14 +281,14 @@ namespace Hassium.CodeGen
             node.Children[0].VisitChildren(this);
 
             table.PopScope();
-            currentMethod.Emit(InstructionType.Pop_Frame);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
         }
         public void Accept(FunctionCallNode node)
         {
             for (int i = node.Arguments.Children.Count - 1; i >= 0; i--)
                 node.Arguments.Children[i].Visit(this);
             node.Target.Visit(this);
-            currentMethod.Emit(InstructionType.Call, node.Arguments.Children.Count);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Call, node.Arguments.Children.Count);
         }
         public void Accept(IdentifierNode node)
         {
@@ -296,10 +296,10 @@ namespace Hassium.CodeGen
             {
                 if (!module.ConstantPool.Contains(node.Identifier))
                     module.ConstantPool.Add(node.Identifier);
-                currentMethod.Emit(InstructionType.Load_Global, findIndex(node.Identifier));
+                currentMethod.Emit(node.SourceLocation, InstructionType.Load_Global, findIndex(node.Identifier));
             }
             else
-                currentMethod.Emit(InstructionType.Load_Local, table.GetIndex(node.Identifier));
+                currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, table.GetIndex(node.Identifier));
         }
         public void Accept(NewNode node)
         {
@@ -308,7 +308,7 @@ namespace Hassium.CodeGen
         }
         public void Accept(NumberNode node)
         {
-            currentMethod.Emit(InstructionType.Push, node.Number);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push, node.Number);
         }
         public void Accept(PropertyNode node)
         {
@@ -316,7 +316,7 @@ namespace Hassium.CodeGen
         public void Accept(ReturnNode node)
         {
             node.VisitChildren(this);
-            currentMethod.Emit(InstructionType.Return);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Return);
         }
         public void Accept(StatementNode node)
         {
@@ -325,11 +325,11 @@ namespace Hassium.CodeGen
         {
             if (!module.ConstantPool.Contains(node.String))
                 module.ConstantPool.Add(node.String);
-            currentMethod.Emit(InstructionType.Push_String, findIndex(node.String));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_String, findIndex(node.String));
         }
         public void Accept(ThisNode node)
         {
-            currentMethod.Emit(InstructionType.Self_Reference, findIndex(currentMethod.Name));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Self_Reference, findIndex(currentMethod.Name));
         }
         public void Accept(UnaryOperationNode node)
         {
@@ -343,12 +343,12 @@ namespace Hassium.CodeGen
             double endLabel = generateSymbol();
             currentMethod.ContinueLabels.Push(whileLabel);
             currentMethod.BreakLabels.Push(endLabel);
-            currentMethod.Emit(InstructionType.Label, whileLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, whileLabel);
             node.Predicate.Visit(this);
-            currentMethod.Emit(InstructionType.Jump_If_False, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_False, endLabel);
             node.Body.Visit(this);
-            currentMethod.Emit(InstructionType.Jump, whileLabel);
-            currentMethod.Emit(InstructionType.Label, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, whileLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
         }
 
         private int findIndex(string constant)

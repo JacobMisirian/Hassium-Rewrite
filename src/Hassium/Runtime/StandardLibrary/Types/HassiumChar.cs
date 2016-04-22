@@ -9,7 +9,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumChar Create(HassiumObject obj)
         {
             if (!(obj is HassiumChar))
-                throw new Exception(string.Format("Cannot convert from {0} to HassiumChar!", obj.GetType()));
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumChar!", obj.GetType()));
             return (HassiumChar)obj;
         }
 
@@ -39,31 +39,31 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(this.GetType().Name);
         }
 
-        private HassiumBool isDigit(HassiumObject[] args)
+        private HassiumBool isDigit(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(char.IsDigit(Value));
         }
-        private HassiumBool isLetter(HassiumObject[] args)
+        private HassiumBool isLetter(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(char.IsLetter(Value));
         }
-        private HassiumBool isLower(HassiumObject[] args)
+        private HassiumBool isLower(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(char.IsLower(Value));
         }
-        private HassiumBool isLetterOrDigit(HassiumObject[] args)
+        private HassiumBool isLetterOrDigit(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(char.IsLetterOrDigit(Value));
         }
-        private HassiumBool isUpper(HassiumObject[] args)
+        private HassiumBool isUpper(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(char.IsUpper(Value));
         }
-        private HassiumBool isWhitespace(HassiumObject[] args)
+        private HassiumBool isWhitespace(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(char.IsWhiteSpace(Value));
         }
-        private HassiumBool toBool(HassiumObject[] args)
+        private HassiumBool toBool(VirtualMachine vm, HassiumObject[] args)
         {
             switch ((int)Value)
             {
@@ -75,16 +75,16 @@ namespace Hassium.Runtime.StandardLibrary.Types
                     throw new Exception("Cannot convert char to boolean!");
             }
         }
-        private HassiumChar toChar(HassiumObject[] args)
+        private HassiumChar toChar(VirtualMachine vm, HassiumObject[] args)
         {
             return this;
         }
-        private HassiumDouble toDouble(HassiumObject[] args)
+        private HassiumDouble toDouble(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Convert.ToDouble(Value));
         }
 
-        private HassiumObject __add__ (HassiumObject[] args)
+        private HassiumObject __add__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -93,7 +93,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this + (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __sub__ (HassiumObject[] args)
+        private HassiumObject __sub__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -102,7 +102,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this - (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __mul__ (HassiumObject[] args)
+        private HassiumObject __mul__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -111,7 +111,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this * (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __div__ (HassiumObject[] args)
+        private HassiumObject __div__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -120,7 +120,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this / (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __mod__ (HassiumObject[] args)
+        private HassiumObject __mod__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -129,7 +129,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this % (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __xor__ (HassiumObject[] args)
+        private HassiumObject __xor__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -138,7 +138,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this ^ (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __or__ (HassiumObject[] args)
+        private HassiumObject __or__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -147,7 +147,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this | (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __xand__ (HassiumObject[] args)
+        private HassiumObject __xand__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -156,7 +156,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this & (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __equals__ (HassiumObject[] args)
+        private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -165,7 +165,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return Value == (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __notequals__ (HassiumObject[] args)
+        private HassiumObject __notequals__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -174,7 +174,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return Value != (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __greater__ (HassiumObject[] args)
+        private HassiumObject __greater__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -183,7 +183,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this > (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __lesser__ (HassiumObject[] args)
+        private HassiumObject __lesser__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -192,7 +192,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this < (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __greaterorequal__ (HassiumObject[] args)
+        private HassiumObject __greaterorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -201,7 +201,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this >= (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumObject __lesserorequal__ (HassiumObject[] args)
+        private HassiumObject __lesserorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
@@ -210,7 +210,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return this <= (HassiumDouble)obj;
             throw new Exception("Cannot operate char on " + obj);
         }
-        private HassiumString __tostring__ (HassiumObject[] args)
+        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ToString());
         }

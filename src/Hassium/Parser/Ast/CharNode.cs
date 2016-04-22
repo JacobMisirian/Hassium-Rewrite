@@ -5,9 +5,10 @@ namespace Hassium.Parser
     public class CharNode: AstNode
     {
         public Char Char { get; private set; }
-        public CharNode(string ch)
+        public CharNode(string ch, SourceLocation location)
         {
             Char = Convert.ToChar(ch);
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

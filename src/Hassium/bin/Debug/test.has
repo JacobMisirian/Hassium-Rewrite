@@ -1,0 +1,11 @@
+func main () {
+	one ();
+}
+
+func one () {
+	two ();
+}
+
+func two () {
+	a = 3 / "4";
+}

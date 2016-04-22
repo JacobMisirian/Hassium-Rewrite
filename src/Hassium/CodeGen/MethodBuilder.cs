@@ -21,6 +21,7 @@ namespace Hassium.CodeGen
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
+            vm.CallStack.Push(Name);
             vm.StackFrame.EnterFrame();
             foreach (int param in Parameters.Values)
                 vm.StackFrame.Add(param, args[param]);
@@ -36,6 +37,7 @@ namespace Hassium.CodeGen
                         ((MethodBuilder)obj).Parent = ret;
                 return ret;
             }
+            vm.CallStack.Pop();
             return returnValue;
         }
 
@@ -52,9 +54,9 @@ namespace Hassium.CodeGen
         }
 
 
-        public void Emit(InstructionType instructionType, double value = 0)
+        public void Emit(SourceLocation location, InstructionType instructionType, double value = 0)
         {
-            Instructions.Add(new Instruction(instructionType, value));
+            Instructions.Add(new Instruction(instructionType, value, location));
         }
     }
 }

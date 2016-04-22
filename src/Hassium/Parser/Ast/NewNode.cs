@@ -7,9 +7,10 @@ namespace Hassium.Parser
     public class NewNode: AstNode
     {
         public FunctionCallNode Call { get { return (FunctionCallNode)Children[0]; } }
-        public NewNode(FunctionCallNode call)
+        public NewNode(FunctionCallNode call, SourceLocation location)
         {
             Children.Add(call);
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

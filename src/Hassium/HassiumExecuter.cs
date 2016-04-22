@@ -18,22 +18,37 @@ namespace Hassium
 
         public static HassiumModule FromString(string source, bool executeVM = true)
         {
-            Lexer.Lexer lexer = new Lexer.Lexer();
-            Parser.Parser parser = new Parser.Parser();
-            SemanticAnalyzer analyzer = new SemanticAnalyzer();
-            HassiumCompiler compiler = new HassiumCompiler();
-            var tokens = lexer.Scan(source);
-            var ast = parser.Parse(tokens);
-            var table = analyzer.Analyze(ast);
-            var module = compiler.Compile(ast, table, "MainModule");
-            if (executeVM)
+            HassiumModule module = null;
+            try
             {
-                VirtualMachine vm = new VirtualMachine();
-                vm.Execute(module);
+                Lexer.Lexer lexer = new Lexer.Lexer();
+                Parser.Parser parser = new Parser.Parser();
+                SemanticAnalyzer analyzer = new SemanticAnalyzer();
+                HassiumCompiler compiler = new HassiumCompiler();
+                var tokens = lexer.Scan(source);
+                var ast = parser.Parse(tokens);
+                var table = analyzer.Analyze(ast);
+                module = compiler.Compile(ast, table, "MainModule");
+                if (executeVM)
+                {
+                    VirtualMachine vm = new VirtualMachine();
+                    try
+                    {
+                        vm.Execute(module);
+                    }
+                    catch (RuntimeException ex)
+                    {
+                        Console.WriteLine("Hassium Runtime Exception! Message {0} at {1}", ex.Message, ex.SourceLocation.ToString());
+                        for (int i = 0; i <= vm.CallStack.Count; i++)
+                            Console.WriteLine("At {0}() -> ", vm.CallStack.Pop());
+                    }
+                }
             }
-
+            catch (ParserException ex)
+            {
+                Console.WriteLine("Compiler error! " + ex.SourceLocation.ToString());
+            }
             return module;
         }
     }
 }
-

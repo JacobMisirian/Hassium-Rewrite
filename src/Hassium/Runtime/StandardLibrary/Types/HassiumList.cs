@@ -12,7 +12,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumList Create(HassiumObject obj)
         {
             if (!(obj is HassiumList))
-                throw new Exception(string.Format("Cannot convert from {0} to HassiumList!", obj.GetType()));
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumList!", obj.GetType()));
             return (HassiumList)obj;
         }
 
@@ -34,51 +34,51 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(GetType().Name);
         }
 
-        private HassiumObject _add(HassiumObject[] args)
+        private HassiumObject _add(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
                 Value.Add(obj);
             return HassiumObject.Null;
         }
-        private HassiumBool contains(HassiumObject[] args)
+        private HassiumBool contains(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
-                if (!Value.Any(x => x.Equals(args[0]).Value))
+                if (!Value.Any(x => x.Equals(vm, args[0]).Value))
                     return new HassiumBool(false);
             return new HassiumBool(true);
         }
-        private HassiumDouble indexOf(HassiumObject[] args)
+        private HassiumDouble indexOf(VirtualMachine vm, HassiumObject[] args)
         {
             for (int i = 0; i < Value.Count; i++)
-                if (Value[i].Equals(args[0]).Value)
+                if (Value[i].Equals(vm, args[0]).Value)
                     return new HassiumDouble(i);
             return new HassiumDouble(-1);
         }
-        private HassiumDouble lastIndexOf(HassiumObject[] args)
+        private HassiumDouble lastIndexOf(VirtualMachine vm, HassiumObject[] args)
         {
             for (int i = Value.Count - 1; i >= 0; i--)
-                if (Value[i].Equals(args[0]).Value)
+                if (Value[i].Equals(vm, args[0]).Value)
                     return new HassiumDouble(i);
             return new HassiumDouble(-1);
         }
-        private HassiumDouble get_Length(HassiumObject[] args)
+        private HassiumDouble get_Length(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Value.Count);
         }
-        private HassiumNull remove(HassiumObject[] args)
+        private HassiumNull remove(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
                 Value.Remove(obj);
             return HassiumObject.Null;
         }
-        private HassiumList reverse(HassiumObject[] args)
+        private HassiumList reverse(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject[] elements = new HassiumObject[Value.Count];
             for (int i = 0; i < elements.Length; i++)
                 elements[i] = Value[Value.Count - (i + 1)];
             return new HassiumList(elements);
         }
-        private HassiumString __tostring__ (HassiumObject[] args)
+        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();
             foreach (HassiumObject obj in Value)
@@ -86,20 +86,20 @@ namespace Hassium.Runtime.StandardLibrary.Types
             return new HassiumString(sb.ToString());
         }
 
-        private HassiumObject __index__ (HassiumObject[] args)
+        private HassiumObject __index__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumDouble)
                 return Value[((HassiumDouble)obj).ValueInt];
-            throw new Exception("Cannot index list with " + obj);
+            throw new InternalException("Cannot index list with " + obj);
         }
-        private HassiumObject __storeindex__ (HassiumObject[] args)
+        private HassiumObject __storeindex__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject index = args[0];
             if (index is HassiumDouble)
                 Value[((HassiumDouble)index).ValueInt] = args[1];
             else
-                throw new Exception("Cannot index with " + index);
+                throw new InternalException("Cannot index with " + index);
             return args[1];
         }
     }

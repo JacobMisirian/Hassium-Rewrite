@@ -8,10 +8,11 @@ namespace Hassium.Parser
     {
         public string Name { get; private set; }
         public AstNode Body { get { return Children[0]; } }
-        public ClassNode(string name, AstNode body)
+        public ClassNode(string name, AstNode body, SourceLocation location)
         {
             Name = name;
             Children.Add(body);
+            this.SourceLocation = location;
         }
 
         public static ClassNode Parse(Parser parser)
@@ -20,7 +21,7 @@ namespace Hassium.Parser
             string name = parser.ExpectToken(TokenType.Identifier).Value;
             AstNode body = StatementNode.Parse(parser);
 
-            return new ClassNode(name, body);
+            return new ClassNode(name, body, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

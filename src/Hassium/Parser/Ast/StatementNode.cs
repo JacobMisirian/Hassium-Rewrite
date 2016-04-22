@@ -6,6 +6,11 @@ namespace Hassium.Parser
 {
     public class StatementNode: AstNode
     {
+        public StatementNode(SourceLocation location)
+        {
+            this.SourceLocation = location;
+        }
+
         public static AstNode Parse(Parser parser)
         {
             if (parser.MatchToken(TokenType.Identifier, "func"))
@@ -19,9 +24,9 @@ namespace Hassium.Parser
             else if (parser.MatchToken(TokenType.Identifier, "for"))
                 return ForNode.Parse(parser);
             else if (parser.AcceptToken(TokenType.Identifier, "break"))
-                return new BreakNode();
+                return new BreakNode(parser.Location);
             else if (parser.AcceptToken(TokenType.Identifier, "continue"))
-                return new ContinueNode();
+                return new ContinueNode(parser.Location);
             else if (parser.MatchToken(TokenType.Identifier) && parser.GetToken(1).TokenType == TokenType.LeftBrace)
                 return PropertyNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "return"))

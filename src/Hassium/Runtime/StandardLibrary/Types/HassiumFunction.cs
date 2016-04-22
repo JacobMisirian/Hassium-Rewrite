@@ -4,7 +4,7 @@ using Hassium.Runtime;
 
 namespace Hassium.Runtime.StandardLibrary.Types
 {
-    public delegate HassiumObject HassiumFunctionDelegate(params HassiumObject[] args);
+    public delegate HassiumObject HassiumFunctionDelegate(VirtualMachine vm, params HassiumObject[] args);
     public class HassiumFunction: HassiumObject
     {
         private HassiumFunctionDelegate target;
@@ -25,15 +25,22 @@ namespace Hassium.Runtime.StandardLibrary.Types
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
+            vm.CallStack.Push(target.Method.Name);
             if (ParamLengths[0] != -1)
             {
                 foreach (int i in ParamLengths)
                     if (i == args.Length)
-                        return target(args);
-                throw new Exception(string.Format("Expected argument length of {0}, got {1}", ParamLengths[0], args.Length));
+                    {
+                        vm.CallStack.Pop();
+                        return target(vm, args);
+                    }
+                throw new InternalException(string.Format("Expected argument length of {0}, got {1}", ParamLengths[0], args.Length));
             }
             else
-                return target(args);
+            {
+                vm.CallStack.Pop();
+                return target(vm, args);
+            }
         }
 
         private HassiumString __tostring__ (HassiumObject[] args)

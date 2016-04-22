@@ -16,31 +16,31 @@ namespace Hassium.Runtime.StandardLibrary
             { "type", new HassiumFunction(type, 1) },
             { "types", new HassiumFunction(types, -1) }
         };
-        private static HassiumString input(HassiumObject[] args)
+        private static HassiumString input(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Console.ReadLine());
         }
-        private static HassiumChar inputChar(HassiumObject[] args)
+        private static HassiumChar inputChar(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumChar(Convert.ToChar(Console.Read()));
         }
-        private static HassiumObject print(HassiumObject[] args)
+        private static HassiumObject print(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
                 Console.Write(obj.ToString());
             return HassiumObject.Null;
         }
-        private static HassiumObject println(HassiumObject[] args)
+        private static HassiumObject println(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
                 Console.WriteLine(obj.ToString());
             return HassiumObject.Null;
         }
-        private static HassiumObject type(HassiumObject[] args)
+        private static HassiumObject type(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(args[0].Types[args[0].Types.Count - 1]);
         }
-        private static HassiumObject types(HassiumObject[] args)
+        private static HassiumObject types(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject[] elements = new HassiumObject[args[0].Types.Count];
             for (int i = 0; i < elements.Length; i++)

@@ -9,12 +9,13 @@ namespace Hassium.Parser
         public AstNode Predicate { get { return Children[0]; } }
         public AstNode Body { get { return Children[1]; } } 
         public AstNode ElseBody { get { return Children[2]; } }
-        public ConditionalNode(AstNode predicate, AstNode body, AstNode elseBody = null)
+        public ConditionalNode(AstNode predicate, AstNode body, SourceLocation location, AstNode elseBody = null)
         {
             Children.Add(predicate);
             Children.Add(body);
             if (elseBody != null)
                 Children.Add(elseBody);
+            this.SourceLocation = location;
         }
 
         public static ConditionalNode Parse(Parser parser)
@@ -28,7 +29,7 @@ namespace Hassium.Parser
             if (parser.AcceptToken(TokenType.Identifier, "else"))
                 elseBody = StatementNode.Parse(parser);
 
-            return new ConditionalNode(predicate, body, elseBody);
+            return new ConditionalNode(predicate, body, parser.Location, elseBody);
         }
 
         public override void Visit(IVisitor visitor)

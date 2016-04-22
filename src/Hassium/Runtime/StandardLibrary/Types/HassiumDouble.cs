@@ -10,7 +10,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumDouble Create(HassiumObject obj)
         {
             if (!(obj is HassiumDouble))
-                throw new Exception(string.Format("Cannot convert from {0} to HassiumDouble!", obj.GetType()));
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumDouble!", obj.GetType()));
             return (HassiumDouble)obj;
         }
 
@@ -35,63 +35,63 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(this.GetType().Name);
         }
 
-        private HassiumObject __add__ (HassiumObject[] args)
+        private HassiumObject __add__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this + Create(args[0]);
         }
-        private HassiumObject __sub__ (HassiumObject[] args)
+        private HassiumObject __sub__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this - Create(args[0]);
         }
-        private HassiumObject __mul__ (HassiumObject[] args)
+        private HassiumObject __mul__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this * Create(args[0]);
         }
-        private HassiumObject __div__ (HassiumObject[] args)
+        private HassiumObject __div__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this / Create(args[0]);
         }
-        private HassiumObject __mod__ (HassiumObject[] args)
+        private HassiumObject __mod__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this % Create(args[0]);
         }
-        private HassiumObject __xor__ (HassiumObject[] args)
+        private HassiumObject __xor__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this ^ Create(args[0]);
         }
-        private HassiumObject __or__ (HassiumObject[] args)
+        private HassiumObject __or__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this | Create(args[0]);
         }
-        private HassiumObject __xand__ (HassiumObject[] args)
+        private HassiumObject __xand__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this & Create(args[0]);
         }
-        private HassiumObject __equals__ (HassiumObject[] args)
+        private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this == Create(args[0]);
         }
-        private HassiumObject __notequal__ (HassiumObject[] args)
+        private HassiumObject __notequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this != Create(args[0]);
         }
-        private HassiumObject __greater__ (HassiumObject[] args)
+        private HassiumObject __greater__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this > Create(args[0]);
         }
-        private HassiumObject __greaterorequal__ (HassiumObject[] args)
+        private HassiumObject __greaterorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this >= Create(args[0]);
         }
-        private HassiumObject __lesser__ (HassiumObject[] args)
+        private HassiumObject __lesser__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this < Create(args[0]);
         }
-        private HassiumObject __lesserorequal__ (HassiumObject[] args)
+        private HassiumObject __lesserorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this <= Create(args[0]);
         }
-        private HassiumString __tostring__ (HassiumObject[] args)
+        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ToString());
         }

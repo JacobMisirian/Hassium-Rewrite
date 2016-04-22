@@ -14,7 +14,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
             Attributes.Add(HassiumObject.INVOKE_FUNCTION, new HassiumFunction(_new, 1));
         }
 
-        private HassiumFileReader _new(HassiumObject[] args)
+        private HassiumFileReader _new(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumFileReader hassiumFileReader = new HassiumFileReader();
 
@@ -30,35 +30,35 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return hassiumFileReader;
         }
-        public HassiumBool get_EndOfFile(HassiumObject[] args)
+        public HassiumBool get_EndOfFile(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(Value.BaseStream.Position < Value.BaseStream.Length);
         }
-        public HassiumDouble get_Length(HassiumObject[] args)
+        public HassiumDouble get_Length(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Value.BaseStream.Length);
         }
-        public HassiumDouble get_Position(HassiumObject[] args)
+        public HassiumDouble get_Position(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Value.BaseStream.Position);
         }
-        public HassiumBool readBool(HassiumObject[] args)
+        public HassiumBool readBool(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(Value.ReadBoolean());
         }
-        public HassiumChar readByte(HassiumObject[] args)
+        public HassiumChar readByte(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumChar(Convert.ToChar(Value.ReadByte()));
         }
-        public HassiumChar readChar(HassiumObject[] args)
+        public HassiumChar readChar(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumChar(Value.ReadChar());
         }
-        public HassiumDouble readDouble(HassiumObject[] args)
+        public HassiumDouble readDouble(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Value.ReadDouble());
         }
-        public HassiumString readString(HassiumObject[] args)
+        public HassiumString readString(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ReadString());
         }

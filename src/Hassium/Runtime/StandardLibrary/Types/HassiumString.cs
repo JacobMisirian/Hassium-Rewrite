@@ -11,7 +11,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumString Create(HassiumObject obj)
         {
             if (!(obj is HassiumString))
-                throw new Exception(string.Format("Cannot convert from {0} to HassiumString!", obj.GetType()));
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumString!", obj.GetType()));
             return (HassiumString)obj;
         }
 
@@ -41,22 +41,22 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(this.GetType().Name);
         }
 
-        private HassiumBool contains(HassiumObject[] args)
+        private HassiumBool contains(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(Value.Contains(HassiumString.Create(args[0]).Value));
         }
-        private HassiumDouble get_Length(HassiumObject[] args)
+        private HassiumDouble get_Length(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Value.Length);
         }
-        private HassiumString reverse(HassiumObject[] args)
+        private HassiumString reverse(VirtualMachine vm, HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = Value.Length - 1; i >= 0; i--)
                 sb.Append(Value[i]);
             return new HassiumString(sb.ToString());
         }
-        private HassiumList split(HassiumObject[] args)
+        private HassiumList split(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumChar c = HassiumChar.Create(args[0]);
             string[] strings = Value.Split(c.Value);
@@ -65,7 +65,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 elements[i] = new HassiumString(strings[i]);
             return new HassiumList(elements);
         }
-        private HassiumString stripChars(HassiumObject[] args)
+        private HassiumString stripChars(VirtualMachine vm, HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();
             if (args[0] is HassiumList)
@@ -87,7 +87,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             }
             return new HassiumString(sb.ToString());
         }
-        private HassiumString substring(HassiumObject[] args)
+        private HassiumString substring(VirtualMachine vm, HassiumObject[] args)
         {
             switch (args.Length)
             {
@@ -98,7 +98,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             }
             return null;
         }
-        private HassiumBool toBool(HassiumObject[] args)
+        private HassiumBool toBool(VirtualMachine vm, HassiumObject[] args)
         {
             switch (Value.ToLower())
             {
@@ -107,76 +107,76 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 case "true":
                     return new HassiumBool(true);
                 default:
-                    throw new Exception("Cannot convert string to bool!");
+                    throw new InternalException("Cannot convert string to bool!");
             }
         }
-        private HassiumChar toChar(HassiumObject[] args)
+        private HassiumChar toChar(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumChar(Convert.ToChar(Value));
         }
-        private HassiumDouble toDouble(HassiumObject[] args)
+        private HassiumDouble toDouble(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Convert.ToDouble(Value));
         }
-        private HassiumList toList(HassiumObject[] args)
+        private HassiumList toList(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject[] items = new HassiumObject[Value.Length];
             for (int i = 0; i < items.Length; i++)
                 items[i] = new HassiumChar(Value[i]);
             return new HassiumList(items);
         }
-        private HassiumString toLower(HassiumObject[] args)
+        private HassiumString toLower(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ToLower());
         }
-        private HassiumString toUpper(HassiumObject[] args)
+        private HassiumString toUpper(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ToUpper());
         }
-        private HassiumString trim(HassiumObject[] args)
+        private HassiumString trim(VirtualMachine vm, HassiumObject[] args)
         {
-            return trimRight(new HassiumObject[] { trimLeft(args) });
+            return trimRight(vm, new HassiumObject[] { trimLeft(vm, args) });
         }
-        private HassiumString trimLeft(HassiumObject[] args)
+        private HassiumString trimLeft(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.TrimStart());
         }
-        private HassiumString trimRight(HassiumObject[] args)
+        private HassiumString trimRight(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.TrimEnd());
         }
-        private HassiumString __tostring__ (HassiumObject[] args)
+        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
             return this;
         }
 
-        private HassiumObject __add__ (HassiumObject[] args)
+        private HassiumObject __add__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumString)
                 return this + (HassiumString)obj;
-            throw new Exception("Cannot operate string on " + obj);
+            throw new InternalException("Cannot operate string on " + obj);
         }
-        private HassiumObject __equals__ (HassiumObject[] args)
+        private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumString)
                 return this == (HassiumString)obj;
-            throw new Exception("Cannot compare string to " + obj);
+            throw new InternalException("Cannot compare string to " + obj);
         }
-        private HassiumObject __notequal__ (HassiumObject[] args)
+        private HassiumObject __notequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumString)
                 return this != (HassiumString)obj;
-            throw new Exception("Cannot compare string to " + obj);
+            throw new InternalException("Cannot compare string to " + obj);
         }
-        private HassiumObject __index__ (HassiumObject[] args)
+        private HassiumObject __index__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumDouble)
                 return new HassiumChar(Value[((HassiumDouble)obj).ValueInt]);
-            throw new Exception("Cannot index string with " + obj);
+            throw new InternalException("Cannot index string with " + obj);
         }
 
         public static HassiumString operator + (HassiumString left, HassiumString right)

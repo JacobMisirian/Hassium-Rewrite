@@ -6,10 +6,11 @@ namespace Hassium.Parser
     {
         public AstNode Target { get { return Children[0]; } }
         public AstNode Expression { get { return Children[1]; } }
-        public ArrayAccessNode(AstNode target, AstNode expression)
+        public ArrayAccessNode(AstNode target, AstNode expression, SourceLocation location)
         {
             Children.Add(target);
             Children.Add(expression);
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

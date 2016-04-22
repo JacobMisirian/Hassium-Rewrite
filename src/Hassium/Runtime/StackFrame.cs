@@ -68,7 +68,7 @@ namespace Hassium.Runtime
             foreach (Frame frame in Frames)
                 if (frame.ContainsVariable(index))
                     return frame.GetVariable(index);
-            throw new Exception("Variable was not found inside the stack frame! Index " + index);
+            throw new InternalException("Variable was not found inside the stack frame! Index " + index);
         }
     }
 }

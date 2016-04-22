@@ -6,11 +6,13 @@ namespace Hassium.CodeGen
     {
         public InstructionType InstructionType { get; private set; }
         public double Argument { get; private set; }
+        public SourceLocation SourceLocation { get; private set; }
 
-        public Instruction(InstructionType instructionType, double argument)
+        public Instruction(InstructionType instructionType, double argument, SourceLocation location)
         {
             InstructionType = instructionType;
             Argument = argument;
+            SourceLocation = location;
         }
     }
 

@@ -5,9 +5,10 @@ namespace Hassium.Parser
     public class NumberNode: AstNode
     {
         public Double Number { get; private set; }
-        public NumberNode(string value)
+        public NumberNode(string value, SourceLocation location)
         {
             Number = Convert.ToDouble(value);
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

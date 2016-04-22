@@ -8,11 +8,12 @@ namespace Hassium.Parser
     public class EnumNode: AstNode
     {
         public string Name { get; private set; }
-        public EnumNode(string name, List<IdentifierNode> members)
+        public EnumNode(string name, List<IdentifierNode> members, SourceLocation location)
         {
             Name = name;
             foreach (IdentifierNode child in members)
                 Children.Add(child);
+            this.SourceLocation = location;
         }
 
         public static EnumNode Parse(Parser parser)
@@ -23,13 +24,13 @@ namespace Hassium.Parser
             List<IdentifierNode> members = new List<IdentifierNode>();
             while (parser.MatchToken(TokenType.Identifier))
             {
-                members.Add(new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value));
+                members.Add(new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location));
                 if (!parser.AcceptToken(TokenType.Comma))
                     break;
             }
             parser.ExpectToken(TokenType.RightBrace);
 
-            return new EnumNode(name, members);
+            return new EnumNode(name, members, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

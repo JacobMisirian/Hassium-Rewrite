@@ -9,12 +9,13 @@ namespace Hassium.Parser
     {
         public int Position { get; set; }
         public List<Token> Tokens { get; private set; }
+        public SourceLocation Location { get { return Position < Tokens.Count ? Tokens[Position].SourceLocation : new SourceLocation(0, 0); } }
 
         public AstNode Parse(List<Token> tokens)
         {
             Position = 0;
             Tokens = tokens;
-            CodeBlockNode ast = new CodeBlockNode();
+            CodeBlockNode ast = new CodeBlockNode(Location);
             while (Position < Tokens.Count)
                 ast.Children.Add(StatementNode.Parse(this));
             return ast;
@@ -48,14 +49,14 @@ namespace Hassium.Parser
         {
             bool matches = MatchToken(tokenType);
             if (!matches)
-                throw new Exception(tokenType + " was expected in parser! Instead got " + GetToken().TokenType + " with value " + GetToken().Value);
+                throw new ParserException(tokenType + " was expected in parser! Instead got " + GetToken().TokenType + " with value " + GetToken().Value, Location);
             return Tokens[Position++];
         }
         public Token ExpectToken(TokenType tokenType, string value)
         {
             bool matches = MatchToken(tokenType);
             if (!matches)
-                throw new Exception(tokenType + " of value " + value + " was expected in parser!");
+                throw new ParserException(tokenType + " of value " + value + " was expected in parser!", Location);
             return Tokens[Position++];
         }
 

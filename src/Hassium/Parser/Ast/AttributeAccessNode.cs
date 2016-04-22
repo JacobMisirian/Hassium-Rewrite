@@ -7,10 +7,11 @@ namespace Hassium.Parser
         public AstNode Left { get { return Children[0]; } }
         public string Right { get; private set; }
 
-        public AttributeAccessNode(AstNode left, string right)
+        public AttributeAccessNode(AstNode left, string right, SourceLocation location)
         {
             Children.Add(left);
             Right = right;
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

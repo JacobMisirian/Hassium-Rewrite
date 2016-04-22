@@ -8,10 +8,11 @@ namespace Hassium.Parser
     {
         public AstNode Predicate { get { return Children[0]; } }
         public AstNode Body { get { return Children[1]; } }
-        public WhileNode(AstNode predicate, AstNode body)
+        public WhileNode(AstNode predicate, AstNode body, SourceLocation location)
         {
             Children.Add(predicate);
             Children.Add(body);
+            this.SourceLocation = location;
         }
 
         public static WhileNode Parse(Parser parser)
@@ -22,7 +23,7 @@ namespace Hassium.Parser
             parser.ExpectToken(TokenType.RightParentheses);
             AstNode body = StatementNode.Parse(parser);
 
-            return new WhileNode(predicate, body);
+            return new WhileNode(predicate, body, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

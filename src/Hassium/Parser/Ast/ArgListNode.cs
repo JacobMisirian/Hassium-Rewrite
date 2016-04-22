@@ -7,13 +7,14 @@ namespace Hassium.Parser
 {
     public class ArgListNode: AstNode
     {
-        public ArgListNode()
+        public ArgListNode(SourceLocation location)
         {
+            this.SourceLocation = location;
         }
 
         public static ArgListNode Parse(Parser parser)
         {
-            ArgListNode ret = new ArgListNode();
+            ArgListNode ret = new ArgListNode(parser.Location);
             parser.ExpectToken(TokenType.LeftParentheses);
 
             while (!parser.MatchToken(TokenType.RightParentheses))

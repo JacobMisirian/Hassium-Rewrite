@@ -94,6 +94,10 @@
     <Compile Include="Parser\Ast\UseNode.cs" />
     <Compile Include="HassiumExecuter.cs" />
     <Compile Include="Parser\Ast\EnumNode.cs" />
+    <Compile Include="Runtime\RuntimeException.cs" />
+    <Compile Include="SourceLocation.cs" />
+    <Compile Include="Parser\ParserException.cs" />
+    <Compile Include="Runtime\StandardLibrary\InternalException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

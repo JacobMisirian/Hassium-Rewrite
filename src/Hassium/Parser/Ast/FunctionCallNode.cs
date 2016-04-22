@@ -8,10 +8,11 @@ namespace Hassium.Parser
         public AstNode Arguments { get { return Children[1]; } }
         public bool IsConstructorCall { get; set; }
 
-        public FunctionCallNode(AstNode target, ArgListNode arguments)
+        public FunctionCallNode(AstNode target, ArgListNode arguments, SourceLocation location)
         {
             Children.Add(target);
             Children.Add(arguments);
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

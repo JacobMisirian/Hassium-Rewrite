@@ -21,17 +21,17 @@ namespace Hassium.Runtime.StandardLibrary.IO
             Attributes.Add("writeText", new HassiumFunction(writeText, 2));
         }
 
-        private HassiumString get_CurrentDirectory(HassiumObject[] args)
+        private HassiumString get_CurrentDirectory(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Directory.GetCurrentDirectory());
         }
-        private HassiumNull set_CurrentDirectory(HassiumObject[] args)
+        private HassiumNull set_CurrentDirectory(VirtualMachine vm, HassiumObject[] args)
         {
             Directory.SetCurrentDirectory(HassiumString.Create(args[0]).Value);
 
             return HassiumObject.Null;
         }
-        private HassiumList getDirectories(HassiumObject[] args)
+        private HassiumList getDirectories(VirtualMachine vm, HassiumObject[] args)
         {
             string[] dirs = Directory.GetDirectories(HassiumString.Create(args[0]).Value);
             HassiumString[] elements = new HassiumString[dirs.Length];
@@ -40,7 +40,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return new HassiumList(elements);
         }
-        private HassiumList getFiles(HassiumObject[] args)
+        private HassiumList getFiles(VirtualMachine vm, HassiumObject[] args)
         {
             string[] files = Directory.GetFiles(HassiumString.Create(args[0]).Value);
             HassiumString[] elements = new HassiumString[files.Length];
@@ -49,7 +49,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return new HassiumList(elements);
         }
-        private HassiumList readBytes(HassiumObject[] args)
+        private HassiumList readBytes(VirtualMachine vm, HassiumObject[] args)
         {
             BinaryReader reader = new BinaryReader(new StreamReader(HassiumString.Create(args[0]).Value).BaseStream);
             List<HassiumChar> bytes = new List<HassiumChar>();
@@ -58,7 +58,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return new HassiumList(bytes.ToArray());
         }
-        private HassiumList readLines(HassiumObject[] args)
+        private HassiumList readLines(VirtualMachine vm, HassiumObject[] args)
         {
             StreamReader reader = new StreamReader(HassiumString.Create(args[0]).Value);
             List<HassiumString> strings = new List<HassiumString>();
@@ -67,11 +67,11 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return new HassiumList(strings.ToArray());
         }
-        private HassiumString readText(HassiumObject[] args)
+        private HassiumString readText(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(File.ReadAllText(HassiumString.Create(args[0]).Value));
         }
-        private HassiumNull writeBytes(HassiumObject[] args)
+        private HassiumNull writeBytes(VirtualMachine vm, HassiumObject[] args)
         {
             BinaryWriter writer = new BinaryWriter(new StreamWriter(HassiumString.Create(args[0]).Value).BaseStream);
             HassiumList chars = HassiumList.Create(args[1]);
@@ -82,7 +82,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return HassiumObject.Null;
         }
-        private HassiumNull writeLines(HassiumObject[] args)
+        private HassiumNull writeLines(VirtualMachine vm, HassiumObject[] args)
         {
             StreamWriter writer = new StreamWriter(HassiumString.Create(args[0]).Value);
             HassiumList strings = HassiumList.Create(args[1]);
@@ -93,7 +93,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
 
             return HassiumObject.Null;
         }
-        private HassiumNull writeText(HassiumObject[] args)
+        private HassiumNull writeText(VirtualMachine vm, HassiumObject[] args)
         {
             File.WriteAllText(HassiumString.Create(args[0]).Value, HassiumString.Create(args[1]).Value);
 

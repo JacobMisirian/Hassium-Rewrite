@@ -4,6 +4,10 @@ namespace Hassium.Parser
 {
     public class CodeBlockNode: AstNode
     {
+        public CodeBlockNode(SourceLocation location)
+        {
+            this.SourceLocation = location;
+        }
         public override void Visit(IVisitor visitor)
         {
             visitor.Accept(this);

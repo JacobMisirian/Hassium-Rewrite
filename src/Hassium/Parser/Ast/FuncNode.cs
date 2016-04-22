@@ -10,11 +10,12 @@ namespace Hassium.Parser
         public string Name { get; private set; }
         public List<string> Parameters { get; private set; }
 
-        public FuncNode(string name, List<string> parameters, AstNode body)
+        public FuncNode(string name, List<string> parameters, AstNode body, SourceLocation location)
         {
             Name = name;
             Parameters = parameters;
             Children.Add(body);
+            this.SourceLocation = location;
         }
 
         public static FuncNode Parse(Parser parser)
@@ -27,7 +28,7 @@ namespace Hassium.Parser
                 parameters.Add(((IdentifierNode)child).Identifier);
             AstNode body = StatementNode.Parse(parser);
 
-            return new FuncNode(name, parameters, body);
+            return new FuncNode(name, parameters, body, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

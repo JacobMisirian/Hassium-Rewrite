@@ -6,10 +6,11 @@ namespace Hassium.Parser
     {
         public UnaryOperation UnaryOperation { get; private set; }
         public AstNode Body { get { return Children[0]; } }
-        public UnaryOperationNode(UnaryOperation unaryOperation, AstNode body)
+        public UnaryOperationNode(UnaryOperation unaryOperation, AstNode body, SourceLocation location)
         {
             UnaryOperation = unaryOperation;
             Children.Add(body);
+            this.SourceLocation = location;
         }
 
         public override void Visit(IVisitor visitor)

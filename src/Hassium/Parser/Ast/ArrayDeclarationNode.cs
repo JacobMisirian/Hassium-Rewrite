@@ -6,9 +6,14 @@ namespace Hassium.Parser
 {
     public class ArrayDeclarationNode: AstNode
     {
+        public ArrayDeclarationNode(SourceLocation location)
+        {
+            this.SourceLocation = location;
+        }
+
         public static ArrayDeclarationNode Parse(Parser parser)
         {
-            ArrayDeclarationNode ret = new ArrayDeclarationNode();
+            ArrayDeclarationNode ret = new ArrayDeclarationNode(parser.Location);
             parser.ExpectToken(TokenType.LeftSquare);
             if (parser.AcceptToken(TokenType.RightSquare))
                 return ret;

@@ -17,28 +17,28 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Types.Add(this.GetType().Name);
         }
 
-        private HassiumBool toBool(HassiumObject[] args)
+        private HassiumBool toBool(VirtualMachine vm, HassiumObject[] args)
         {
             return this;
         }
-        private HassiumChar toChar(HassiumObject[] args)
+        private HassiumChar toChar(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumChar((char)(Value ? 1 : 0));
         }
-        private HassiumDouble toDouble(HassiumObject[] args)
+        private HassiumDouble toDouble(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Value ? 1 : 0);
         }
 
-        private HassiumObject __equals__ (HassiumObject[] args)
+        private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {
             return Value == (HassiumBool)args[0];
         }
-        private HassiumObject __notequals__ (HassiumObject[] args)
+        private HassiumObject __notequals__ (VirtualMachine vm, HassiumObject[] args)
         {
             return Value != (HassiumBool)args[0];
         }
-        private HassiumString __tostring__ (HassiumObject[] args)
+        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ToString());
         }

@@ -10,12 +10,13 @@ namespace Hassium.Parser
         public AstNode Predicate { get { return Children[1]; } }
         public AstNode RepeatStatement { get { return Children[2]; } }
         public AstNode Body { get { return Children[3]; } }
-        public ForNode(AstNode singleStatement, AstNode predicate, AstNode repeatStatement, AstNode body)
+        public ForNode(AstNode singleStatement, AstNode predicate, AstNode repeatStatement, AstNode body, SourceLocation location)
         {
             Children.Add(singleStatement);
             Children.Add(predicate);
             Children.Add(repeatStatement);
             Children.Add(body);
+            this.SourceLocation = location;
         }
 
         public static ForNode Parse(Parser parser)
@@ -30,7 +31,7 @@ namespace Hassium.Parser
             parser.ExpectToken(TokenType.RightParentheses);
             AstNode body = StatementNode.Parse(parser);
 
-            return new ForNode(singleStatement, predicate, repeatStatement, body);
+            return new ForNode(singleStatement, predicate, repeatStatement, body, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)
