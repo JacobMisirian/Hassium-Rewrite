@@ -27,7 +27,9 @@ namespace Hassium.Runtime
             this.module = module;
             gatherGlobals(module.ConstantPool);
 
+            callStack.Push("main");
             ExecuteMethod((MethodBuilder)module.Attributes["main"]);
+            callStack.Pop();
         }
 
         public HassiumObject ExecuteMethod(MethodBuilder method)
@@ -35,7 +37,7 @@ namespace Hassium.Runtime
             gatherLabels(method);
             for (int position = 0; position < method.Instructions.Count; position++)
             {
-                HassiumObject left, right, value, list, index;
+                HassiumObject left, right, value, list, index, location;
                 double argument = method.Instructions[position].Argument;
                 int argumentInt = Convert.ToInt32(argument);
                 SourceLocation sourceLocation = method.Instructions[position].SourceLocation;
@@ -60,7 +62,7 @@ namespace Hassium.Runtime
                             stack.Push(new HassiumDouble(argument));
                             break;
                         case InstructionType.Push_String:
-                            stack.Push(new HassiumString(module.ConstantPool[Convert.ToInt32(argument)]));
+                            stack.Push(new HassiumString(module.ConstantPool[argumentInt]));
                             break;
                         case InstructionType.Push_Char:
                             stack.Push(new HassiumChar((char)argumentInt));
@@ -76,9 +78,8 @@ namespace Hassium.Runtime
                                 stackFrame.Add(argumentInt, value);
                             break;
                         case InstructionType.Store_Attribute:
-                            HassiumObject location = stack.Pop();
+                            location = stack.Pop();
                             attribute = module.ConstantPool[argumentInt];
-                            callStack.Push(attribute);
                             if (location is HassiumProperty)
                             {
                                 HassiumProperty builtinProp = location as HassiumProperty;
@@ -90,19 +91,40 @@ namespace Hassium.Runtime
                                 userProp.SetMethod.Invoke(this, new HassiumObject[] { stack.Pop() });
                             }
                             else
-                                location.Attributes[attribute] = stack.Pop();
+                                try
+                                {
+                                    location.Attributes[attribute] = stack.Pop();
+                                }
+                                catch (KeyNotFoundException)
+                                {
+                                    throw new RuntimeException(location + " does not contain a definition for " + attribute, sourceLocation);
+                                }
                             break;
                         case InstructionType.Load_Local:
                             stack.Push(stackFrame.GetVariable(argumentInt));
                             break;
                         case InstructionType.Load_Global:
-                            stack.Push(globals[argument]);
-                            stack.Push(globals[argument]);
+                            try
+                            {
+                                stack.Push(globals[argument]);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new RuntimeException("Cannot find global identifier!", sourceLocation);
+                            }
                             break;
                         case InstructionType.Load_Attribute:
                             attribute = module.ConstantPool[argumentInt];
-                            callStack.Push(attribute);
-                            HassiumObject attrib = stack.Pop().Attributes[attribute];
+                            location = stack.Pop();
+                            HassiumObject attrib = null;
+                            try
+                            {
+                                attrib = location.Attributes[attribute];
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new RuntimeException(location + " does not contain a definition for " + attribute, sourceLocation);
+                            }
                             if (attrib is HassiumProperty)
                                 stack.Push(((HassiumProperty)attrib).GetValue(this, new HassiumObject[] { }));
                             else if (attrib is UserDefinedProperty)
@@ -155,6 +177,10 @@ namespace Hassium.Runtime
                 catch (InternalException ex)
                 {
                     throw new RuntimeException(ex.Message, sourceLocation);
+                }
+                catch (DivideByZeroException)
+                {
+                    throw new RuntimeException("Divide by zero!", sourceLocation);
                 }
             }
             return HassiumObject.Null;

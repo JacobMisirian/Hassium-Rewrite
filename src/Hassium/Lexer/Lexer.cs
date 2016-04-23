@@ -15,7 +15,7 @@ namespace Hassium.Lexer
             result = new List<Token>();
             position = 0;
             code = source;
-            location = new SourceLocation(0, 0);
+            location = new SourceLocation(1, 0);
 
             whiteSpace();
             while (position < code.Length)

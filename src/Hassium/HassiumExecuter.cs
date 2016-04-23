@@ -39,8 +39,8 @@ namespace Hassium
                     catch (RuntimeException ex)
                     {
                         Console.WriteLine("Hassium Runtime Exception! Message {0} at {1}", ex.Message, ex.SourceLocation.ToString());
-                        for (int i = 0; i <= vm.CallStack.Count; i++)
-                            Console.WriteLine("At {0}() -> ", vm.CallStack.Pop());
+                        foreach (string str in vm.CallStack)
+                            Console.WriteLine("At {0}() -> ", str);
                     }
                 }
             }
