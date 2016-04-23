@@ -261,6 +261,30 @@ namespace Hassium.CodeGen
             currentMethod.Emit(node.SourceLocation, InstructionType.Jump, forLabel);
             currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
         }
+        public void Accept(ForeachNode node)
+        {
+            double foreachLabel = generateSymbol();
+            double endLabel = generateSymbol();
+            currentMethod.ContinueLabels.Push(foreachLabel);
+            currentMethod.BreakLabels.Push(endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, foreachLabel);
+            node.Expression.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Full);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_True, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
+            table.EnterScope();
+            table.AddSymbol(node.Identifier);
+            node.Expression.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Next);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, table.GetIndex(node.Identifier));
+            node.Body.Visit(this);
+            table.PopScope();
+            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, foreachLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
+            node.Expression.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Reset);
+        }
         public void Accept(FuncNode node)
         {
             if (!module.ConstantPool.Contains(node.Name))

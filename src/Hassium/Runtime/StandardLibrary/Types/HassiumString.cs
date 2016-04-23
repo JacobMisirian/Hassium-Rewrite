@@ -38,6 +38,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
             Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(__index__, 1));
+            Attributes.Add(HassiumObject.ENUMERABLE_FULL, new HassiumFunction(__enumerablefull__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_NEXT, new HassiumFunction(__enumerablenext__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_RESET, new HassiumFunction(__enumerablereset__, 0));
             Types.Add(this.GetType().Name);
         }
 
@@ -177,6 +180,20 @@ namespace Hassium.Runtime.StandardLibrary.Types
             if (obj is HassiumDouble)
                 return new HassiumChar(Value[((HassiumDouble)obj).ValueInt]);
             throw new InternalException("Cannot index string with " + obj);
+        }
+        private int enumerableIndex = 0;
+        private HassiumBool __enumerablefull__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(enumerableIndex >= Value.Length);
+        }
+        private HassiumChar __enumerablenext__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumChar(Value[enumerableIndex++]);
+        }
+        private HassiumNull __enumerablereset__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            enumerableIndex = 0;
+            return HassiumObject.Null;
         }
 
         public static HassiumString operator + (HassiumString left, HassiumString right)

@@ -23,6 +23,8 @@ namespace Hassium.Parser
                 return WhileNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "for"))
                 return ForNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "foreach"))
+                return ForeachNode.Parse(parser);
             else if (parser.AcceptToken(TokenType.Identifier, "break"))
                 return new BreakNode(parser.Location);
             else if (parser.AcceptToken(TokenType.Identifier, "continue"))

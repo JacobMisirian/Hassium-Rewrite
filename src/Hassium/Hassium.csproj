@@ -98,6 +98,7 @@
     <Compile Include="SourceLocation.cs" />
     <Compile Include="Parser\ParserException.cs" />
     <Compile Include="Runtime\StandardLibrary\InternalException.cs" />
+    <Compile Include="Parser\Ast\ForeachNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

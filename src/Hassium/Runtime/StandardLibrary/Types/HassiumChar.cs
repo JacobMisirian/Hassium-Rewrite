@@ -81,7 +81,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         }
         private HassiumDouble toDouble(VirtualMachine vm, HassiumObject[] args)
         {
-            return new HassiumDouble(Convert.ToDouble(Value));
+            return new HassiumDouble(Convert.ToDouble(Convert.ToInt32(Value)));
         }
 
         private HassiumObject __add__ (VirtualMachine vm, HassiumObject[] args)

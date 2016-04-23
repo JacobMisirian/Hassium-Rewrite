@@ -172,6 +172,15 @@ namespace Hassium.Runtime
                             break;
                         case InstructionType.Return:
                             return stack.Pop();
+                        case InstructionType.Enumerable_Full:
+                            stack.Push(stack.Pop().EnumerableFull(this));
+                            break;
+                        case InstructionType.Enumerable_Next:
+                            stack.Push(stack.Pop().EnumerableNext(this));
+                            break;
+                        case InstructionType.Enumerable_Reset:
+                            stack.Pop().EnumerableReset(this);
+                            break;
                     }
                 }
                 catch (InternalException ex)

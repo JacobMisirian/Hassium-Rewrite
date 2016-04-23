@@ -23,6 +23,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public const string INVOKE_FUNCTION =           "__invoke__";
         public const string INDEX_FUNCTION =            "__index__";
         public const string STORE_INDEX_FUNCTION =      "__storeindex__";
+        public const string ENUMERABLE_FULL =           "__enumerablefull__";
+        public const string ENUMERABLE_NEXT =           "__enumerablenext__";
+        public const string ENUMERABLE_RESET =          "__enumerableReset__";
         public const string TOSTRING_FUNCTION =         "toString";
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
@@ -102,6 +105,18 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public virtual HassiumObject StoreIndex(VirtualMachine vm, HassiumObject index, HassiumObject value)
         {
             return ((HassiumFunction)Attributes[STORE_INDEX_FUNCTION]).Invoke(vm, new HassiumObject[] { index, value });
+        }
+        public virtual HassiumObject EnumerableFull(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[ENUMERABLE_FULL]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject EnumerableNext(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[ENUMERABLE_NEXT]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject EnumerableReset(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[ENUMERABLE_RESET]).Invoke(vm, new HassiumObject[0]);
         }
 
         public string ToString(VirtualMachine vm)

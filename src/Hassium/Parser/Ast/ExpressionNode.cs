@@ -211,7 +211,7 @@ namespace Hassium.Parser
             else if (parser.AcceptToken(TokenType.Semicolon))
                 return new StatementNode(parser.Location);
             else
-                throw new Exception(string.Format("Unexpected type {0} with value {1} encountered in parser!", parser.GetToken().TokenType, parser.GetToken().Value));
+                throw new ParserException(string.Format("Unexpected type {0} with value {1} encountered in parser!", parser.GetToken().TokenType, parser.GetToken().Value), parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

@@ -31,6 +31,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(__index__, 1));
             Attributes.Add(HassiumObject.STORE_INDEX_FUNCTION, new HassiumFunction(__storeindex__, 2));
+            Attributes.Add(HassiumObject.ENUMERABLE_FULL, new HassiumFunction(__enumerablefull__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_NEXT, new HassiumFunction(__enumerablenext__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_RESET, new HassiumFunction(__enumerablereset__, 0));
             Types.Add(GetType().Name);
         }
 
@@ -101,6 +104,20 @@ namespace Hassium.Runtime.StandardLibrary.Types
             else
                 throw new InternalException("Cannot index with " + index);
             return args[1];
+        }
+        private int enumerableIndex = 0;
+        private HassiumObject __enumerablefull__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(enumerableIndex >= Value.Count);
+        }
+        private HassiumObject __enumerablenext__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return Value[enumerableIndex++];
+        }
+        private HassiumObject __enumerablereset__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            enumerableIndex = 0;
+            return HassiumObject.Null;
         }
     }
 }

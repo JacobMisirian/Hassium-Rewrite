@@ -50,7 +50,10 @@ namespace Hassium.CodeGen
         Push_Frame,
         Pop_Frame,
         Return,
-        Import_Attributes
+        Import_Attributes,
+        Enumerable_Full,
+        Enumerable_Next,
+        Enumerable_Reset
     }
 }
 
