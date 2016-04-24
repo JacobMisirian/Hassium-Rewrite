@@ -1,5 +1,8 @@
+use IO;
+
 func main () {
-	str = "Hello, World!";
-	foreach (c in str)
-		println(c.toDouble());
+	fileReader = new FileReader("Lexer.has");
+	println(fileReader.endOfFile);
+	while (fileReader.endOfFile == false)
+		println(fileReader.readLine());
 }
