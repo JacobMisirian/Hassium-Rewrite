@@ -1,7 +1,10 @@
-use IO;
+use Text;
 
 func main () {
-	str = "";
-	str = str + "He";
-	println(str;
+	sb = new StringBuilder();
+	sb = sb + "Hello, ";
+	sb = sb + "World!";
+
+	println(sb.toString());
+	println(sb[1]);
 }

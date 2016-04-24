@@ -102,6 +102,8 @@
     <Compile Include="Parser\Ast\DoubleNode.cs" />
     <Compile Include="Parser\Ast\Int64Node.cs" />
     <Compile Include="Runtime\StandardLibrary\IO\HassiumFileWriter.cs" />
+    <Compile Include="Runtime\StandardLibrary\Text\HassiumTextModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\Text\HassiumStringBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -114,5 +116,6 @@
     <Folder Include="Runtime\StandardLibrary\Types\" />
     <Folder Include="CodeGen\" />
     <Folder Include="Runtime\StandardLibrary\IO\" />
+    <Folder Include="Runtime\StandardLibrary\Text\" />
   </ItemGroup>
 </Project>
