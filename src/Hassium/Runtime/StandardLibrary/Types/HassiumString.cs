@@ -179,6 +179,8 @@ namespace Hassium.Runtime.StandardLibrary.Types
             HassiumObject obj = args[0];
             if (obj is HassiumDouble)
                 return new HassiumChar(Value[((HassiumDouble)obj).ValueInt]);
+            else if (obj is HassiumInt)
+                return new HassiumChar(Value[(int)((HassiumInt)obj).Value]);
             throw new InternalException("Cannot index string with " + obj);
         }
         private int enumerableIndex = 0;

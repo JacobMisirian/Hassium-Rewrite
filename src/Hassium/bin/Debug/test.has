@@ -1,8 +1,7 @@
 use IO;
 
 func main () {
-	fileReader = new FileReader("Lexer.has");
-	println(fileReader.endOfFile);
-	while (fileReader.endOfFile == false)
-		println(fileReader.readLine());
+	str = "";
+	str = str + "He";
+	println(str;
 }

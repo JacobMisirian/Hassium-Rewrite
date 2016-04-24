@@ -38,6 +38,8 @@ namespace Hassium.Runtime.StandardLibrary.Types
 
         public virtual HassiumObject Add(VirtualMachine vm, HassiumObject obj)
         {
+            if (!Attributes.ContainsKey(ADD_FUNCTION))
+                throw new InternalException("Object " + GetType().Name + " does not support adding!");
             return ((HassiumFunction)Attributes[ADD_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject Sub(VirtualMachine vm, HassiumObject obj)

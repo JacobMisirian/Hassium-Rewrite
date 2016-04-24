@@ -101,6 +101,7 @@
     <Compile Include="Runtime\StandardLibrary\Types\HassiumInt.cs" />
     <Compile Include="Parser\Ast\DoubleNode.cs" />
     <Compile Include="Parser\Ast\Int64Node.cs" />
+    <Compile Include="Runtime\StandardLibrary\IO\HassiumFileWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

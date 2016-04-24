@@ -9,7 +9,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumChar Create(HassiumObject obj)
         {
             if (!(obj is HassiumChar))
-                throw new InternalException(string.Format("Cannot convert from {0} to HassiumChar!", obj.GetType()));
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumChar!", obj.GetType().Name));
             return (HassiumChar)obj;
         }
 
@@ -73,7 +73,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 case 1:
                     return new HassiumBool(true);
                 default:
-                    throw new Exception("Cannot convert char to boolean!");
+                    throw new InternalException("Cannot convert char to boolean!");
             }
         }
         private HassiumChar toChar(VirtualMachine vm, HassiumObject[] args)
@@ -94,126 +94,126 @@ namespace Hassium.Runtime.StandardLibrary.Types
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this + (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this + (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this + (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __sub__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this - (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this - (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this - (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __mul__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this * (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this * (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this * (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __div__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this / (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this / (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this / (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __mod__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this % (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this % (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this % (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __xor__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this ^ (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this ^ (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this ^ (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __or__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this | (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this | (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this | (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __xand__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this & (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this & (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this & (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this == (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return new HassiumBool(Value == ((HassiumDouble)obj).ValueInt);
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return new HassiumBool(Value == ((HassiumInt)obj).Value);
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __notequals__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this != (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return new HassiumBool(Value != ((HassiumDouble)obj).ValueInt);
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return new HassiumBool(Value != ((HassiumInt)obj).Value);
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __greater__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this > (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this > (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this > (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __lesser__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this < (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this < (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this < (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __greaterorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this >= (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this >= (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this >= (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name);
         }
         private HassiumObject __lesserorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
             if (obj is HassiumChar)
                 return this <= (HassiumChar)obj;
-            else if (obj is HassiumDouble)
-                return this <= (HassiumDouble)obj;
-            throw new Exception("Cannot operate char on " + obj);
+            else if (obj is HassiumInt)
+                return this <= (HassiumInt)obj;
+            throw new InternalException("Cannot operate char on " + obj.GetType().Name.GetType().Name);
         }
         private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -224,95 +224,95 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             return new HassiumChar((char)(left.Value + right.Value));
         }
-        public static HassiumChar operator + (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator + (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value + right.ValueInt));
+            return new HassiumChar((char)(left.Value + right.Value));
         }
         public static HassiumChar operator - (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value - right.Value));
         }
-        public static HassiumChar operator - (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator - (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value - right.ValueInt));
+            return new HassiumChar((char)(left.Value - right.Value));
         }
         public static HassiumChar operator * (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value * right.Value));
         }
-        public static HassiumChar operator * (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator * (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value * right.ValueInt));
+            return new HassiumChar((char)(left.Value * right.Value));
         }
         public static HassiumChar operator / (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value / right.Value));
         }
-        public static HassiumChar operator / (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator / (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value / right.ValueInt));
+            return new HassiumChar((char)(left.Value / right.Value));
         }
         public static HassiumChar operator % (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value % right.Value));
         }
-        public static HassiumChar operator % (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator % (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value % right.ValueInt));
+            return new HassiumChar((char)(left.Value % right.Value));
         }
         public static HassiumChar operator ^ (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value ^ right.Value));
         }
-        public static HassiumChar operator ^ (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator ^ (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value ^ right.ValueInt));
+            return new HassiumChar((char)(left.Value ^ right.Value));
         }
         public static HassiumChar operator | (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value | right.Value));
         }
-        public static HassiumChar operator | (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator | (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value | right.ValueInt));
+            return new HassiumChar((char)(left.Value | right.Value));
         }
         public static HassiumChar operator & (HassiumChar left, HassiumChar right)
         {
             return new HassiumChar((char)(left.Value & right.Value));
         }
-        public static HassiumChar operator & (HassiumChar left, HassiumDouble right)
+        public static HassiumChar operator & (HassiumChar left, HassiumInt right)
         {
-            return new HassiumChar((char)(left.Value & right.ValueInt));
+            return new HassiumChar((char)(left.Value & right.Value));
         }
         public static HassiumBool operator == (HassiumChar left, HassiumChar right)
         {
             return new HassiumBool(left.Value == right.Value);
         }
-        public static HassiumBool operator == (HassiumChar left, HassiumDouble right)
+        public static HassiumBool operator == (HassiumChar left, HassiumInt right)
         {
-            return new HassiumBool((int)left.Value == right.ValueInt);
+            return new HassiumBool((int)left.Value == right.Value);
         }
         public static HassiumBool operator != (HassiumChar left, HassiumChar right)
         {
             return new HassiumBool(left.Value != right.Value);
         }
-        public static HassiumBool operator != (HassiumChar left, HassiumDouble right)
+        public static HassiumBool operator != (HassiumChar left, HassiumInt right)
         {
-            return new HassiumBool((int)left.Value != right.ValueInt);
+            return new HassiumBool((int)left.Value != right.Value);
         }
         public static HassiumBool operator > (HassiumChar left, HassiumChar right)
         {
             return new HassiumBool(left.Value > right.Value);
         }
-        public static HassiumBool operator > (HassiumChar left, HassiumDouble right)
+        public static HassiumBool operator > (HassiumChar left, HassiumInt right)
         {
-            return new HassiumBool((int)left.Value > right.ValueInt);
+            return new HassiumBool((int)left.Value > right.Value);
         }
         public static HassiumBool operator < (HassiumChar left, HassiumChar right)
         {
             return new HassiumBool(left.Value < right.Value);
         }
-        public static HassiumBool operator < (HassiumChar left, HassiumDouble right)
+        public static HassiumBool operator < (HassiumChar left, HassiumInt right)
         {
             return new HassiumBool((int)left.Value < right.Value);
         }
@@ -320,17 +320,17 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             return new HassiumBool(left.Value >= right.Value);
         }
-        public static HassiumBool operator >= (HassiumChar left, HassiumDouble right)
+        public static HassiumBool operator >= (HassiumChar left, HassiumInt right)
         {
-            return new HassiumBool((int)left.Value >= right.ValueInt);
+            return new HassiumBool((int)left.Value >= right.Value);
         }
         public static HassiumBool operator <= (HassiumChar left, HassiumChar right)
         {
             return new HassiumBool(left.Value <= right.Value);
         }
-        public static HassiumBool operator <= (HassiumChar left, HassiumDouble right)
+        public static HassiumBool operator <= (HassiumChar left, HassiumInt right)
         {
-            return new HassiumBool((int)left.Value <= right.ValueInt);
+            return new HassiumBool((int)left.Value <= right.Value);
         }
 
         public override bool Equals(object obj)

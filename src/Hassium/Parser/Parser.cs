@@ -9,7 +9,7 @@ namespace Hassium.Parser
     {
         public int Position { get; set; }
         public List<Token> Tokens { get; private set; }
-        public SourceLocation Location { get { return Position < Tokens.Count ? Tokens[Position].SourceLocation : new SourceLocation(0, 0); } }
+        public SourceLocation Location { get { return Position < Tokens.Count ? Tokens[Position].SourceLocation : Tokens[Position - 1].SourceLocation; } }
 
         public AstNode Parse(List<Token> tokens)
         {
@@ -62,7 +62,10 @@ namespace Hassium.Parser
 
         public Token GetToken(int n = 0)
         {
-            return Tokens[Position + n];
+            if (Position < Tokens.Count)
+                return Tokens[Position + n];
+            else
+                return Tokens[Position + n - 1];
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Hassium
                     }
                     catch (RuntimeException ex)
                     {
-                        Console.WriteLine("Hassium Runtime Exception! Message {0} at {1}", ex.Message, ex.SourceLocation.ToString());
+                        Console.WriteLine("Hassium Runtime Exception! Message: {0} at {1}", ex.Message, ex.SourceLocation.ToString());
                         foreach (string str in vm.CallStack)
                             Console.WriteLine("At {0}() -> ", str);
                     }
@@ -46,7 +46,7 @@ namespace Hassium
             }
             catch (ParserException ex)
             {
-                Console.WriteLine("Compiler error! " + ex.SourceLocation.ToString());
+                Console.WriteLine("Compiler error! Message: {0} at {1}", ex.Message, ex.SourceLocation.ToString());
             }
             return module;
         }

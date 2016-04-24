@@ -5,6 +5,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
     public class HassiumBool: HassiumObject
     {
         public new bool Value { get; private set; }
+
+        public static HassiumBool Create(HassiumObject obj)
+        {
+            if (!(obj is HassiumBool))
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumBool!", obj.GetType().Name));
+            return (HassiumBool)obj;
+        }
+
         public HassiumBool(bool value)
         {
             Value = value;

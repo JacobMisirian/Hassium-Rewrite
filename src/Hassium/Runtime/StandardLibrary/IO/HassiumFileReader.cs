@@ -9,7 +9,6 @@ namespace Hassium.Runtime.StandardLibrary.IO
     public class HassiumFileReader: HassiumObject
     {
         public BinaryReader BinaryReader { get; set; }
-
         public HassiumFileReader()
         {
             Attributes.Add(HassiumObject.INVOKE_FUNCTION, new HassiumFunction(_new, 1));
@@ -39,13 +38,13 @@ namespace Hassium.Runtime.StandardLibrary.IO
         {
             return new HassiumBool(BinaryReader.BaseStream.Position >= BinaryReader.BaseStream.Length);
         }
-        public HassiumDouble get_Length(VirtualMachine vm, HassiumObject[] args)
+        public HassiumInt get_Length(VirtualMachine vm, HassiumObject[] args)
         {
-            return new HassiumDouble(BinaryReader.BaseStream.Length);
+            return new HassiumInt(BinaryReader.BaseStream.Length);
         }
-        public HassiumDouble get_Position(VirtualMachine vm, HassiumObject[] args)
+        public HassiumInt get_Position(VirtualMachine vm, HassiumObject[] args)
         {
-            return new HassiumDouble(BinaryReader.BaseStream.Position);
+            return new HassiumInt(BinaryReader.BaseStream.Position);
         }
         public HassiumBool readBool(VirtualMachine vm, HassiumObject[] args)
         {

@@ -94,6 +94,8 @@ namespace Hassium.Runtime.StandardLibrary.Types
             HassiumObject obj = args[0];
             if (obj is HassiumDouble)
                 return Value[((HassiumDouble)obj).ValueInt];
+            else if (obj is HassiumInt)
+                return Value[(int)((HassiumInt)obj).Value];
             throw new InternalException("Cannot index list with " + obj);
         }
         private HassiumObject __storeindex__ (VirtualMachine vm, HassiumObject[] args)
@@ -101,8 +103,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
             HassiumObject index = args[0];
             if (index is HassiumDouble)
                 Value[((HassiumDouble)index).ValueInt] = args[1];
+            else if (index is HassiumInt)
+                Value[(int)((HassiumInt)index).Value] = args[1];
             else
-                throw new InternalException("Cannot index with " + index);
+                throw new InternalException("Cannot index list with " + index);
             return args[1];
         }
         private int enumerableIndex = 0;
