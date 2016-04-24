@@ -42,14 +42,15 @@ namespace Hassium.SemanticAnalysis
             result.PopScope();
         }
         public void Accept(ContinueNode node) {}
+        public void Accept(DoubleNode node) {}
         public void Accept(FuncNode node)
         {
             node.VisitChildren(this);
         }
         public void Accept(UnaryOperationNode node) {}
         public void Accept(IdentifierNode node) {}
+        public void Accept(Int64Node node) {}
         public void Accept(NewNode node) {}
-        public void Accept(NumberNode node) {}
         public void Accept(CharNode node) {}
         public void Accept(ConditionalNode node)
         {

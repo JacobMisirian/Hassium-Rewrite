@@ -35,6 +35,7 @@ namespace Hassium.CodeGen
         Push_String,
         Push_Char,
         Push_Bool,
+        Push_Int64,
         Create_List,
         Push_List,
         Load_List_Element,

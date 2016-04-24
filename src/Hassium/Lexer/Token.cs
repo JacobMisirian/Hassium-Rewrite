@@ -20,7 +20,8 @@ namespace Hassium.Lexer
     {
         Assignment,
         Identifier,
-        Number,
+        Int64,
+        Double,
         String,
         Char,
         Comma,

@@ -2,12 +2,12 @@ using System;
 
 namespace Hassium.Parser
 {
-    public class NumberNode: AstNode
+    public class Int64Node: AstNode
     {
-        public Double Number { get; private set; }
-        public NumberNode(string value, SourceLocation location)
+        public Int64 Number { get; private set; }
+        public Int64Node(Int64 number, SourceLocation location)
         {
-            Number = Convert.ToDouble(value);
+            Number = number;
             this.SourceLocation = location;
         }
 

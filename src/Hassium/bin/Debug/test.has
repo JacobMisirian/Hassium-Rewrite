@@ -1,5 +1,5 @@
 func main () {
-	str = "hello, world";
+	str = "Hello, World!";
 	foreach (c in str)
 		println(c.toDouble());
 }

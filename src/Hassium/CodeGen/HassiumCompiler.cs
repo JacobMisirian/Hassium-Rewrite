@@ -239,6 +239,10 @@ namespace Hassium.CodeGen
         {
             currentMethod.Emit(node.SourceLocation, InstructionType.Jump, currentMethod.ContinueLabels.Pop());
         }
+        public void Accept(DoubleNode node)
+        {
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push, node.Number);
+        }
         public void Accept(EnumNode node)
         {
         }
@@ -325,14 +329,16 @@ namespace Hassium.CodeGen
             else
                 currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, table.GetIndex(node.Identifier));
         }
+        public void Accept(Int64Node node)
+        {
+            if (!module.Int64Pool.Contains(node.Number))
+                module.Int64Pool.Add(node.Number);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Int64, findInt64Index(node.Number));
+        }
         public void Accept(NewNode node)
         {
             node.Call.IsConstructorCall = true;
             node.Call.Visit(this);
-        }
-        public void Accept(NumberNode node)
-        {
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push, node.Number);
         }
         public void Accept(PropertyNode node)
         {
@@ -379,6 +385,13 @@ namespace Hassium.CodeGen
         {
             for (int i = 0; i < module.ConstantPool.Count; i++)
                 if (module.ConstantPool[i] == constant)
+                    return i;
+            return -1;
+        }
+        private int findInt64Index(Int64 constant)
+        {
+            for (int i = 0; i < module.Int64Pool.Count; i++)
+                if (module.Int64Pool[i] == constant)
                     return i;
             return -1;
         }

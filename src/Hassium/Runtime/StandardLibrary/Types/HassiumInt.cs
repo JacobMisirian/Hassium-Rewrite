@@ -2,19 +2,18 @@ using System;
 
 namespace Hassium.Runtime.StandardLibrary.Types
 {
-    public class HassiumDouble: HassiumObject
+    public class HassiumInt: HassiumObject
     {
-        public new double Value { get; private set; }
-        public int ValueInt { get { return Convert.ToInt32(Value); } }
+        public new Int64 Value { get; private set; }
 
-        public static HassiumDouble Create(HassiumObject obj)
+        public static HassiumInt Create(HassiumObject obj)
         {
-            if (!(obj is HassiumDouble))
-                throw new InternalException(string.Format("Cannot convert from {0} to HassiumDouble!", obj.GetType().Name));
-            return (HassiumDouble)obj;
+            if (!(obj is HassiumInt))
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumInt!", obj.GetType().Name));
+            return (HassiumInt)obj;
         }
 
-        public HassiumDouble(double value)
+        public HassiumInt(Int64 value)
         {
             Value = value;
             Attributes.Add("toBool", new HassiumFunction(toBool, 0));
@@ -26,6 +25,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.MUL_FUNCTION, new HassiumFunction(__mul__, 1));
             Attributes.Add(HassiumObject.DIV_FUNCTION, new HassiumFunction(__div__, 1));
             Attributes.Add(HassiumObject.MOD_FUNCTION, new HassiumFunction(__mod__, 1));
+            Attributes.Add(HassiumObject.XOR_FUNCTION, new HassiumFunction(__xor__, 1));
+            Attributes.Add(HassiumObject.OR_FUNCTION, new HassiumFunction(__or__, 1));
+            Attributes.Add(HassiumObject.XAND_FUNCTION, new HassiumFunction(__xand__, 1));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequal__, 1));
             Attributes.Add(HassiumObject.GREATER_FUNCTION, new HassiumFunction(__greater__, 1));
@@ -42,15 +44,15 @@ namespace Hassium.Runtime.StandardLibrary.Types
         }
         private HassiumChar toChar(VirtualMachine vm, HassiumObject[] args)
         {
-            return new HassiumChar(Convert.ToChar(Convert.ToInt32(Value)));
+            return new HassiumChar(Convert.ToChar(Value));
         }
         private HassiumDouble toDouble(VirtualMachine vm, HassiumObject[] args)
         {
-            return this;
+            return new HassiumDouble(Value);
         }
         private HassiumInt toInt(VirtualMachine vm, HassiumObject[] args)
         {
-            return new HassiumInt(ValueInt);
+            return this;
         }
 
         private HassiumObject __add__ (VirtualMachine vm, HassiumObject[] args)
@@ -58,40 +60,52 @@ namespace Hassium.Runtime.StandardLibrary.Types
             if (args[0] is HassiumDouble)
                 return new HassiumDouble(Value + ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
-                return new HassiumDouble(Value + ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+                return new HassiumInt(Value + ((HassiumInt)args[0]).Value);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __sub__ (VirtualMachine vm, HassiumObject[] args)
         {
             if (args[0] is HassiumDouble)
                 return new HassiumDouble(Value - ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
-                return new HassiumDouble(Value - ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+                return new HassiumInt(Value - ((HassiumInt)args[0]).Value);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __mul__ (VirtualMachine vm, HassiumObject[] args)
         {
             if (args[0] is HassiumDouble)
                 return new HassiumDouble(Value * ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
-                return new HassiumDouble(Value * ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+                return new HassiumInt(Value * ((HassiumInt)args[0]).Value);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __div__ (VirtualMachine vm, HassiumObject[] args)
         {
             if (args[0] is HassiumDouble)
                 return new HassiumDouble(Value / ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
-                return new HassiumDouble(Value / ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+                return new HassiumInt(Value / ((HassiumInt)args[0]).Value);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __mod__ (VirtualMachine vm, HassiumObject[] args)
         {
             if (args[0] is HassiumDouble)
                 return new HassiumDouble(Value % ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
-                return new HassiumDouble(Value % ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+                return new HassiumInt(Value % ((HassiumInt)args[0]).Value);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
+        }
+        private HassiumObject __xor__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumInt(Value ^ HassiumInt.Create(args[0]).Value);
+        }
+        private HassiumObject __or__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumInt(Value | HassiumInt.Create(args[0]).Value);
+        }
+        private HassiumObject __xand__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumInt(Value & HassiumInt.Create(args[0]).Value);
         }
         private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -99,7 +113,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumBool(Value == ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value == ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __notequal__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -107,7 +121,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumBool(Value != ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value != ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __greater__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -115,7 +129,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumBool(Value > ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value > ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __greaterorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -123,7 +137,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumBool(Value >= ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value >= ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __lesser__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -131,7 +145,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumBool(Value < ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value < ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumObject __lesserorequal__ (VirtualMachine vm, HassiumObject[] args)
         {
@@ -139,25 +153,11 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumBool(Value <= ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value <= ((HassiumInt)args[0]).Value);
-            throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
+            throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
         }
         private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Value.ToString());
         }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
     }
 }
-

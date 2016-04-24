@@ -184,8 +184,10 @@ namespace Hassium.Parser
                 return new BoolNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location);
             else if (parser.MatchToken(TokenType.Identifier))
                 return new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location);
-            else if (parser.MatchToken(TokenType.Number))
-                return new NumberNode(parser.ExpectToken(TokenType.Number).Value, parser.Location);
+            else if (parser.MatchToken(TokenType.Double))
+                return new DoubleNode(Convert.ToDouble(parser.ExpectToken(TokenType.Double).Value), parser.Location);
+            else if (parser.MatchToken(TokenType.Int64))
+                return new Int64Node(Convert.ToInt64(parser.ExpectToken(TokenType.Int64).Value), parser.Location);
             else if (parser.MatchToken(TokenType.String))
                 return new StringNode(parser.ExpectToken(TokenType.String).Value, parser.Location);
             else if (parser.MatchToken(TokenType.Char))

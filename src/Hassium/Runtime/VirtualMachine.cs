@@ -70,6 +70,9 @@ namespace Hassium.Runtime
                         case InstructionType.Push_Bool:
                             stack.Push(new HassiumBool(argument == 1));
                             break;
+                        case InstructionType.Push_Int64:
+                            stack.Push(new HassiumInt(module.Int64Pool[argumentInt]));
+                            break;
                         case InstructionType.Store_Local:
                             value = stack.Pop();
                             if (stackFrame.Contains(argumentInt))

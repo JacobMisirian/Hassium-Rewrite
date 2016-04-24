@@ -20,8 +20,10 @@ namespace Hassium.Lexer
             whiteSpace();
             while (position < code.Length)
             {
-                if (char.IsLetterOrDigit((char)peekChar()))
-                    result.Add(scanData());
+                if (char.IsLetter((char)peekChar()))
+                    result.Add(scanIdentifier());
+                else if (char.IsDigit((char)peekChar()))
+                    result.Add(scanNumber());
                 else
                 {
                     switch ((char)peekChar())
@@ -146,18 +148,26 @@ namespace Hassium.Lexer
                 readChar();
         }
 
-        private Token scanData()
+        private Token scanIdentifier()
+        {
+            string str = "";
+            while (char.IsLetterOrDigit((char)peekChar()) || (char)peekChar() == '_' && peekChar() != -1)
+                str += (char)readChar();
+            return new Token(TokenType.Identifier, str, location);
+        }
+
+        private Token scanNumber()
         {
             string data = "";
-            while (char.IsLetterOrDigit((char)peekChar()) && peekChar() != -1)
+            while (char.IsDigit((char)peekChar()) || (char)peekChar() == '.' && peekChar() != -1)
                 data += (char)readChar();
             try
             {
-                return new Token(TokenType.Number, Convert.ToDouble(data).ToString(), location);
+                return new Token(TokenType.Int64, Convert.ToInt64(data).ToString(), location);
             }
             catch
             {
-                return new Token(TokenType.Identifier, data, location);
+                return new Token(TokenType.Double, Convert.ToDouble(data).ToString(), location);
             }
         }
 
