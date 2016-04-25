@@ -19,6 +19,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             Value = value;
             Attributes.Add("contains", new HassiumFunction(contains, 1));
+            Attributes.Add("getBytes", new HassiumFunction(getBytes, 0));
             Attributes.Add("length", new HassiumProperty(get_Length));
             Attributes.Add("reverse", new HassiumFunction(reverse, 0));
             Attributes.Add("split", new HassiumFunction(split, 1));
@@ -47,6 +48,15 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumBool contains(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumBool(Value.Contains(HassiumString.Create(args[0]).Value));
+        }
+        private HassiumList getBytes(VirtualMachine vm, HassiumObject[] args)
+        {
+            byte[] bytes = Encoding.ASCII.GetBytes(Value);
+            HassiumChar[] elements = new HassiumChar[bytes.Length];
+            for (int i = 0; i < elements.Length; i++)
+                elements[i] = new HassiumChar((char)bytes[i]);
+
+            return new HassiumList(elements);
         }
         private HassiumDouble get_Length(VirtualMachine vm, HassiumObject[] args)
         {

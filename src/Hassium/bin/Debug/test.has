@@ -1,0 +1,14 @@
+func main () {
+	list = [ 1, 2, 3 ];
+	map(list, increment);
+	println(list);
+	map(list, increment);
+}
+
+func increment (i) {
+	return i + 1;
+}
+
+func isEven (i) {
+	return (i % 2) == 0;
+}

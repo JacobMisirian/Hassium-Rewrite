@@ -12,7 +12,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public static HassiumList Create(HassiumObject obj)
         {
             if (!(obj is HassiumList))
-                throw new InternalException(string.Format("Cannot convert from {0} to HassiumList!", obj.GetType()));
+                throw new InternalException(string.Format("Cannot convert from {0} to HassiumList!", obj.GetType().Name));
             return (HassiumList)obj;
         }
 
@@ -85,7 +85,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             StringBuilder sb = new StringBuilder();
             foreach (HassiumObject obj in Value)
-                sb.Append(obj.ToString() + " ");
+                sb.Append(obj.ToString(vm) + " ");
             return new HassiumString(sb.ToString());
         }
 
@@ -109,18 +109,18 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 throw new InternalException("Cannot index list with " + index);
             return args[1];
         }
-        private int enumerableIndex = 0;
+        public int EnumerableIndex = 0;
         private HassiumObject __enumerablefull__ (VirtualMachine vm, HassiumObject[] args)
         {
-            return new HassiumBool(enumerableIndex >= Value.Count);
+            return new HassiumBool(EnumerableIndex >= Value.Count);
         }
         private HassiumObject __enumerablenext__ (VirtualMachine vm, HassiumObject[] args)
         {
-            return Value[enumerableIndex++];
+            return Value[EnumerableIndex++];
         }
         private HassiumObject __enumerablereset__ (VirtualMachine vm, HassiumObject[] args)
         {
-            enumerableIndex = 0;
+            EnumerableIndex = 0;
             return HassiumObject.Null;
         }
     }
