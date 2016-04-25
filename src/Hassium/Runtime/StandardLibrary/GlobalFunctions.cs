@@ -27,13 +27,13 @@ namespace Hassium.Runtime.StandardLibrary
         private static HassiumObject print(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
-                Console.Write(obj.ToString());
+                Console.Write(obj.ToString(vm));
             return HassiumObject.Null;
         }
         private static HassiumObject println(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
-                Console.WriteLine(obj.ToString());
+                Console.WriteLine(obj.ToString(vm));
             return HassiumObject.Null;
         }
         private static HassiumObject type(VirtualMachine vm, HassiumObject[] args)

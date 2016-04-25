@@ -156,6 +156,12 @@ namespace Hassium.CodeGen
                 case BinaryOperation.LesserThanOrEqual:
                     currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 13);
                     break;
+                case BinaryOperation.LogicalOr:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 14);
+                    break;
+                case BinaryOperation.LogicalAnd:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 15);
+                    break;
             }
         }
         public void Accept(BoolNode node)
@@ -227,13 +233,16 @@ namespace Hassium.CodeGen
         }
         public void Accept(ConditionalNode node)
         {
+            double elseLabel = generateSymbol();
             double endLabel = generateSymbol();
             node.Predicate.Visit(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_False, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_False, elseLabel);
             node.Body.Visit(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, elseLabel);
             if (node.Children.Count > 2)
                 node.ElseBody.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
         }
         public void Accept(ContinueNode node)
         {

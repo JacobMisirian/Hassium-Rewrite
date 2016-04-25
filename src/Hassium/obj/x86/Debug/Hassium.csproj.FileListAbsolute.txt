@@ -1,0 +1,5 @@
+C:\Users\misiriaj\Hassium-Rewrite\src\Hassium\obj\x86\Debug\Hassium.exe
+C:\Users\misiriaj\Hassium-Rewrite\src\Hassium\bin\Debug\Hassium.exe
+C:\Users\misiriaj\Hassium-Rewrite\src\Hassium\bin\Debug\Hassium.pdb
+C:\Users\misiriaj\Hassium-Rewrite\src\Hassium\obj\x86\Debug\Hassium.csprojResolveAssemblyReference.cache
+C:\Users\misiriaj\Hassium-Rewrite\src\Hassium\obj\x86\Debug\Hassium.pdb

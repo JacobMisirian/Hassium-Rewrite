@@ -42,7 +42,7 @@ namespace Hassium.Runtime
                 int argumentInt = Convert.ToInt32(argument);
                 SourceLocation sourceLocation = method.Instructions[position].SourceLocation;
                 string attribute;
-  //             Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+          //     Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 try
                 {
                     switch (method.Instructions[position].InstructionType)
@@ -244,8 +244,13 @@ namespace Hassium.Runtime
                 case 13:
                     stack.Push(left.LesserThanOrEqual(this, right));
                     break;
+                case 14:
+                    stack.Push(new HassiumBool(HassiumBool.Create(left).Value || HassiumBool.Create(right).Value));
+                    break;
+                case 15:
+                    stack.Push(new HassiumBool(HassiumBool.Create(left).Value && HassiumBool.Create(right).Value));
+                    break;
             }
-
         }
 
         private void gatherLabels(MethodBuilder method)

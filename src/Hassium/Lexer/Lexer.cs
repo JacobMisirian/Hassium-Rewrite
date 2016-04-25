@@ -80,9 +80,23 @@ namespace Hassium.Lexer
                         case '/':
                         case '%':
                         case '^':
-                        case '|':
-                        case '&':
                             result.Add(new Token(TokenType.BinaryOperation, ((char)readChar()).ToString(), location));
+                            break;
+                        case '|':
+                            position++;
+                            if ((char)peekChar() == '|')
+                            {
+                                position++;
+                                result.Add(new Token(TokenType.BinaryOperation, "||", location));
+                            }
+                            break;
+                        case '&':
+                            position++;
+                            if ((char)peekChar() == '&')
+                            {
+                                position++;
+                                result.Add(new Token(TokenType.BinaryOperation, "&&", location));
+                            }
                             break;
                         case '=':
                             position++;
@@ -119,10 +133,10 @@ namespace Hassium.Lexer
                             if ((char)peekChar() == '=')
                             {
                                 position++;
-                                result.Add(new Token(TokenType.Comparison, ">", location));
+                                result.Add(new Token(TokenType.Comparison, ">=", location));
                             }
                             else
-                                result.Add(new Token(TokenType.Comparison, ">=", location));
+                                result.Add(new Token(TokenType.Comparison, ">", location));
                             break;
                         case '[':
                             position++;

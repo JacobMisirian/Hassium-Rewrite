@@ -80,6 +80,14 @@ namespace Hassium.Parser
                         parser.AcceptToken(TokenType.BinaryOperation);
                         left = new BinaryOperationNode(BinaryOperation.XAnd, left, parseUnary(parser), parser.Location);
                         continue;
+                    case "||":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.LogicalOr, left, parseUnary(parser), parser.Location);
+                        continue;
+                    case "&&":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.LogicalAnd, left, parseUnary(parser), parser.Location);
+                        continue;
                     case "=":
                         parser.AcceptToken(TokenType.Assignment);
                         left = new BinaryOperationNode(BinaryOperation.Assignment, left, parseUnary(parser), parser.Location);

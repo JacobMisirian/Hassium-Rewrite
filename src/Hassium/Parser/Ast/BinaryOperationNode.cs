@@ -43,7 +43,9 @@ namespace Hassium.Parser
         LesserThanOrEqual,
         OR,
         XOR,
-        XAnd
+        XAnd,
+        LogicalOr,
+        LogicalAnd
     }
 }
 
