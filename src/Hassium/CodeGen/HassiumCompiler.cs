@@ -178,6 +178,9 @@ namespace Hassium.CodeGen
         {
             currentMethod.Emit(node.SourceLocation, InstructionType.Jump, currentMethod.BreakLabels.Pop());
         }
+        public void Accept(CaseNode node)
+        {
+        }
         public void Accept(CharNode node)
         {
             currentMethod.Emit(node.SourceLocation, InstructionType.Push_Char, node.Char);
@@ -377,6 +380,32 @@ namespace Hassium.CodeGen
             if (!module.ConstantPool.Contains(node.String))
                 module.ConstantPool.Add(node.String);
             currentMethod.Emit(node.SourceLocation, InstructionType.Push_String, findIndex(node.String));
+        }
+        public void Accept(SwitchNode node)
+        {
+            node.Predicate.Visit(this);
+            table.EnterScope();
+            table.AddSymbol("__tmp__");
+            int tmp = table.GetIndex("__tmp__");
+            currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, tmp);
+            foreach (AstNode child in node.Children)
+            {
+                CaseNode cas = child as CaseNode;
+                double caseLabel = generateSymbol();
+                double endCase = generateSymbol();
+                currentMethod.BreakLabels.Push(endCase);
+                foreach (AstNode predicate in cas.Children)
+                {
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, tmp);
+                    predicate.Visit(this);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 8);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_True, caseLabel);
+                }
+                currentMethod.Emit(node.SourceLocation, InstructionType.Jump, endCase);
+                currentMethod.Emit(node.SourceLocation, InstructionType.Label, caseLabel);
+                cas.Body.Visit(this);
+                currentMethod.Emit(node.SourceLocation, InstructionType.Label, endCase);
+            }
         }
         public void Accept(ThisNode node)
         {

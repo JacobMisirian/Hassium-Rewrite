@@ -37,6 +37,8 @@ namespace Hassium.Parser
                 return UseNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "enum"))
                 return EnumNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "switch"))
+                return SwitchNode.Parse(parser);
             else
                 return ExpressionNode.Parse(parser);
         }

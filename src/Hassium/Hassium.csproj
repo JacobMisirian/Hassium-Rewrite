@@ -105,6 +105,8 @@
     <Compile Include="Runtime\StandardLibrary\Text\HassiumTextModule.cs" />
     <Compile Include="Runtime\StandardLibrary\Text\HassiumStringBuilder.cs" />
     <Compile Include="Runtime\StandardLibrary\Text\HassiumEncoding.cs" />
+    <Compile Include="Parser\Ast\SwitchNode.cs" />
+    <Compile Include="Parser\Ast\CaseNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

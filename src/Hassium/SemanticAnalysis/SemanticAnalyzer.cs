@@ -31,6 +31,10 @@ namespace Hassium.SemanticAnalysis
         }
         public void Accept(BoolNode node) {}
         public void Accept(BreakNode node) {}
+        public void Accept(CaseNode node)
+        {
+            node.VisitChildren(this);
+        }
         public void Accept(ClassNode node)
         {
             node.VisitChildren(this);
@@ -74,6 +78,10 @@ namespace Hassium.SemanticAnalysis
         public void Accept(ReturnNode node) {}
         public void Accept(StatementNode node) {}
         public void Accept(StringNode node) {}
+        public void Accept(SwitchNode node)
+        {
+            node.VisitChildren(this);
+        }     
         public void Accept(ThisNode node) {}
         public void Accept(UseNode node) {}
         public void Accept(WhileNode node)

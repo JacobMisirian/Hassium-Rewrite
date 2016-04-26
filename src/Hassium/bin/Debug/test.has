@@ -1,0 +1,18 @@
+func main () {
+	while (true) {
+		switch (input()).toInt() {
+			case "1" {
+				println("one");
+			}
+			case "2" {
+				println("two");
+			}
+			case "3" {
+				println("three");
+			}
+			case "4" {
+				println("four");
+			}
+		}
+	}
+}
