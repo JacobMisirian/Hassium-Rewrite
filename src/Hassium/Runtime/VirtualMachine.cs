@@ -42,7 +42,7 @@ namespace Hassium.Runtime
                 int argumentInt = Convert.ToInt32(argument);
                 SourceLocation sourceLocation = method.Instructions[position].SourceLocation;
                 string attribute;
-               Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+         //     Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 try
                 {
                     switch (method.Instructions[position].InstructionType)

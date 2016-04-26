@@ -51,6 +51,12 @@ namespace Hassium.CodeGen
                         HassiumModule compiledModule = HassiumExecuter.FromFilePath(path, false);
                         foreach (KeyValuePair<string, HassiumObject> attribute in compiledModule.Attributes)
                             module.Attributes.Add(attribute.Key, attribute.Value);
+                        foreach (string constant in compiledModule.ConstantPool)
+                            if (!module.ConstantPool.Contains(constant))
+                                module.ConstantPool.Add(constant);
+                        foreach (Int64 constant in compiledModule.Int64Pool)
+                            if (!module.Int64Pool.Contains(constant))
+                                module.Int64Pool.Add(constant);
                     }
                 }
             }
