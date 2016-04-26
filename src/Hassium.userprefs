@@ -2,11 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/Types/HassiumChar.cs">
     <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="183" Column="35" />
-      <File FileName="Hassium/Runtime/StandardLibrary/HassiumObject.cs" Line="111" Column="100" />
-      <File FileName="Hassium/Parser/Ast/ForeachNode.cs" Line="24" Column="79" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs" Line="43" Column="105" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumChar.cs" Line="84" Column="77" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/StandardLibrary/HassiumObject.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Parser/Ast/ForeachNode.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumString.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/StandardLibrary/Types/HassiumChar.cs" Line="84" Column="10" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

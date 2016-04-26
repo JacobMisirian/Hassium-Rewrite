@@ -280,23 +280,25 @@ namespace Hassium.CodeGen
             double endLabel = generateSymbol();
             currentMethod.ContinueLabels.Push(foreachLabel);
             currentMethod.BreakLabels.Push(endLabel);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Label, foreachLabel);
-            node.Expression.Visit(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Full);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_True, endLabel);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             table.EnterScope();
             table.AddSymbol(node.Identifier);
+            table.AddSymbol("__tmp__");
+            int tmp = table.GetIndex("__tmp__");
             node.Expression.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, tmp);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, foreachLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, tmp);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Full);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_True, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, tmp);
             currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Next);
             currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, table.GetIndex(node.Identifier));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             node.Body.Visit(this);
-            table.PopScope();
             currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
             currentMethod.Emit(node.SourceLocation, InstructionType.Jump, foreachLabel);
             currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
-            node.Expression.Visit(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Reset);
+            table.PopScope();
         }
         public void Accept(FuncNode node)
         {
@@ -325,7 +327,11 @@ namespace Hassium.CodeGen
             for (int i = node.Arguments.Children.Count - 1; i >= 0; i--)
                 node.Arguments.Children[i].Visit(this);
             node.Target.Visit(this);
+            table.EnterScope();
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             currentMethod.Emit(node.SourceLocation, InstructionType.Call, node.Arguments.Children.Count);
+            table.PopScope();
+            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
         }
         public void Accept(IdentifierNode node)
         {

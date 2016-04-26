@@ -11,7 +11,6 @@ namespace Hassium.Runtime.StandardLibrary
         {
             { "input", new HassiumFunction(input, 0) },
             { "inputChar", new HassiumFunction(inputChar, 0) },
-            { "map", new HassiumFunction(map, new int[] { 2, 3 }) },
             { "print", new HassiumFunction(print, -1) },
             { "println", new HassiumFunction(println, -1) },
             { "type", new HassiumFunction(type, 1) },
@@ -24,18 +23,6 @@ namespace Hassium.Runtime.StandardLibrary
         private static HassiumChar inputChar(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumChar(Convert.ToChar(Console.Read()));
-        }
-        private static HassiumList map(VirtualMachine vm, HassiumObject[] args)
-        {
-            HassiumList list = HassiumList.Create(args[0]);
-            HassiumList ret = new HassiumList(new HassiumObject[0]);
-
-            list.EnumerableReset(vm);
-            while (!HassiumBool.Create(list.EnumerableFull(vm)).Value)
-                ret.Value.Add(args[1].Invoke(vm, new HassiumObject[] { list.EnumerableNext(vm) }));
-            list.EnumerableReset(vm);
-
-            return ret;
         }
         private static HassiumObject print(VirtualMachine vm, HassiumObject[] args)
         {

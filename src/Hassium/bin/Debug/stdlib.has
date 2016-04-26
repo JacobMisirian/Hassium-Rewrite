@@ -1,0 +1,20 @@
+func rangeWhere (lower, upper, function) {
+        result = [];
+        while (lower < upper) {
+                if (function(lower))
+                        result.add(lower);
+                lower = lower + 1;
+        }
+
+        return result;
+}
+
+func range (lower, upper) {
+	result = [];
+	while (lower < upper) {
+		result.add(lower);
+		lower = lower + 1;
+	}
+
+	return result;
+}
