@@ -24,6 +24,17 @@ namespace Hassium.Runtime.StandardLibrary
         {
             return new HassiumChar(Convert.ToChar(Console.Read()));
         }
+        private static HassiumList map(VirtualMachine vm, HassiumObject[] args)
+        {
+            HassiumList list = args[0] as HassiumList;
+            HassiumList result = new HassiumList(new HassiumObject[0]);
+            list.EnumerableReset(vm);
+            while (!HassiumBool.Create(list.EnumerableFull(vm)).Value)
+                result.Value.Add(args[1].Invoke(vm, new HassiumObject[] { list.EnumerableNext(vm) }));
+            list.EnumerableReset(vm);
+
+            return result;
+        }
         private static HassiumObject print(VirtualMachine vm, HassiumObject[] args)
         {
             foreach (HassiumObject obj in args)
