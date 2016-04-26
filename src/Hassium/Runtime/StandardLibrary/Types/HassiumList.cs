@@ -23,6 +23,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 Value.Add(obj);
             Attributes.Add("add", new HassiumFunction(_add, -1));
             Attributes.Add("contains", new HassiumFunction(contains, -1));
+            Attributes.Add("getString", new HassiumFunction(getString, 0));
             Attributes.Add("indexOf", new HassiumFunction(indexOf, 1));
             Attributes.Add("lastIndexOf", new HassiumFunction(lastIndexOf, 1));
             Attributes.Add("length", new HassiumProperty(get_Length));
@@ -49,6 +50,13 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 if (!Value.Any(x => x.Equals(vm, args[0]).Value))
                     return new HassiumBool(false);
             return new HassiumBool(true);
+        }
+        private HassiumString getString(VirtualMachine vm, HassiumObject[] args)
+        {
+            byte[] bytes = new byte[Value.Count];
+            for (int i = 0; i < bytes.Length; i++)
+                bytes[i] = (byte)HassiumChar.Create(Value[i]).Value;
+            return new HassiumString(ASCIIEncoding.ASCII.GetString(bytes));
         }
         private HassiumDouble indexOf(VirtualMachine vm, HassiumObject[] args)
         {

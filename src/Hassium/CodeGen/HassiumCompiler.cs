@@ -384,6 +384,25 @@ namespace Hassium.CodeGen
         }
         public void Accept(UnaryOperationNode node)
         {
+            node.Body.Visit(this);
+            switch (node.UnaryOperation)
+            {
+                case UnaryOperation.Not:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.UnaryOperation, 0);
+                    break;
+                case UnaryOperation.PostDecrement:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.UnaryOperation, 1);
+                    break;
+                case UnaryOperation.PostIncrement:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.UnaryOperation, 2);
+                    break;
+                case UnaryOperation.PreDecrement:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.UnaryOperation, 3);
+                    break;
+                case UnaryOperation.PreIncrement:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.UnaryOperation, 4);
+                    break;
+            }
         }
         public void Accept(UseNode node)
         {

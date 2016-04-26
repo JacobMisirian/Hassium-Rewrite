@@ -58,6 +58,9 @@ namespace Hassium.Runtime
                             left = stack.Pop();
                             executeBinaryOperation(left, right, argumentInt);
                             break;
+                        case InstructionType.UnaryOperation:
+                            executeUnaryOperation(stack.Pop(), argumentInt);
+                            break;
                         case InstructionType.Push:
                             stack.Push(new HassiumDouble(argument));
                             break;
@@ -249,6 +252,28 @@ namespace Hassium.Runtime
                     break;
                 case 15:
                     stack.Push(new HassiumBool(HassiumBool.Create(left).Value && HassiumBool.Create(right).Value));
+                    break;
+            }
+        }
+
+        private void executeUnaryOperation(HassiumObject target, int argument)
+        {
+            switch (argument)
+            {
+                case 0:
+                    stack.Push(target.Not(this));
+                    break;
+                case 1:
+                    stack.Push(target.PostDecrement(this));
+                    break;
+                case 2:
+                    stack.Push(target.PostIncrement(this));
+                    break;
+                case 3:
+                    stack.Push(target.PreDecrement(this));
+                    break;
+                case 4:
+                    stack.Push(target.PreIncrement(this));
                     break;
             }
         }

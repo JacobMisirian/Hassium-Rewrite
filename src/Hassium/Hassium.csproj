@@ -104,6 +104,7 @@
     <Compile Include="Runtime\StandardLibrary\IO\HassiumFileWriter.cs" />
     <Compile Include="Runtime\StandardLibrary\Text\HassiumTextModule.cs" />
     <Compile Include="Runtime\StandardLibrary\Text\HassiumStringBuilder.cs" />
+    <Compile Include="Runtime\StandardLibrary\Text\HassiumEncoding.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

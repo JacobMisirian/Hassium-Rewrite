@@ -22,6 +22,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add("toInt", new HassiumFunction(toInt, 0));
             Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
             Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequals__, 1));
+            Attributes.Add(HassiumObject.NOT, new HassiumFunction(__not__, 0));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Types.Add(this.GetType().Name);
         }
@@ -50,6 +51,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumObject __notequals__ (VirtualMachine vm, HassiumObject[] args)
         {
             return Value != (HassiumBool)args[0];
+        }
+        private HassiumBool __not__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(!Value);
         }
         private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {

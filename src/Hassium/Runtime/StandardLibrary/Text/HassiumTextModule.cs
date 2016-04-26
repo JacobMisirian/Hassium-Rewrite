@@ -6,6 +6,7 @@ namespace Hassium.Runtime.StandardLibrary.Text
     {
         public HassiumTextModule() : base("Text")
         {
+            Attributes.Add("Encoding", new HassiumEncoding());
             Attributes.Add("StringBuilder", new HassiumStringBuilder());
         }
     }

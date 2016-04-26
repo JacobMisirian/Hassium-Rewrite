@@ -19,6 +19,7 @@ namespace Hassium.CodeGen
     public enum InstructionType
     {
         Binary_Operation,
+        UnaryOperation,
         Greater_Than,
         Lesser_Than,
         Greater_Than_Or_Equal,

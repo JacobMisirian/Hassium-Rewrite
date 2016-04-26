@@ -26,6 +26,11 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public const string ENUMERABLE_FULL =           "__enumerablefull__";
         public const string ENUMERABLE_NEXT =           "__enumerablenext__";
         public const string ENUMERABLE_RESET =          "__enumerableReset__";
+        public const string NOT =                       "__not__";
+        public const string POST_INCREMENT =            "__postincrement__";
+        public const string POST_DECREMENT =            "__postdecrement__";
+        public const string PRE_INCREMENT =             "__preincrement__";
+        public const string PRE_DECREMENT =             "__predecrement__";
         public const string TOSTRING_FUNCTION =         "toString";
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
@@ -119,6 +124,26 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public virtual HassiumObject EnumerableReset(VirtualMachine vm)
         {
             return ((HassiumFunction)Attributes[ENUMERABLE_RESET]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject Not(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[NOT]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject PostIncrement(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[POST_INCREMENT]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject PostDecrement(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[POST_DECREMENT]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject PreIncrement(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[PRE_INCREMENT]).Invoke(vm, new HassiumObject[0]);
+        }
+        public virtual HassiumObject PreDecrement(VirtualMachine vm)
+        {
+            return ((HassiumFunction)Attributes[PRE_DECREMENT]).Invoke(vm, new HassiumObject[0]);
         }
 
         public string ToString(VirtualMachine vm)
