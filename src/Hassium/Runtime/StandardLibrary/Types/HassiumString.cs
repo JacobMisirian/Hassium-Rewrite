@@ -28,6 +28,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add("toBool", new HassiumFunction(toBool, 0));
             Attributes.Add("toChar", new HassiumFunction(toChar, 0));
             Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
+            Attributes.Add("toInt", new HassiumFunction(toInt, 0));
             Attributes.Add("toList", new HassiumFunction(toList, 0));
             Attributes.Add("toLower", new HassiumFunction(toLower, 0));
             Attributes.Add("toUpper", new HassiumFunction(toUpper, 0));
@@ -130,6 +131,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumDouble toDouble(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumDouble(Convert.ToDouble(Value));
+        }
+        private HassiumInt toInt(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumInt(Convert.ToInt32(Value));
         }
         private HassiumList toList(VirtualMachine vm, HassiumObject[] args)
         {

@@ -19,7 +19,9 @@ namespace Hassium.Parser
         public static SwitchNode Parse(Parser parser)
         {
             parser.ExpectToken(TokenType.Identifier, "switch");
+            parser.ExpectToken(TokenType.LeftParentheses);
             AstNode predicate = ExpressionNode.Parse(parser);
+            parser.ExpectToken(TokenType.RightParentheses);
             List<CaseNode> cases = new List<CaseNode>();
             parser.ExpectToken(TokenType.LeftBrace);
             while (parser.MatchToken(TokenType.Identifier, "case"))
