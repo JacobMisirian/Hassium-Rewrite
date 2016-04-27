@@ -63,6 +63,8 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return new HassiumDouble(Value + ((HassiumDouble)args[0]).Value);
             else if (args[0] is HassiumInt)
                 return new HassiumDouble(Value + ((HassiumInt)args[0]).Value);
+            else if (args[0] is HassiumString)
+                return new HassiumString(Value + args[0].ToString(vm));
             throw new InternalException("Cannot operate HassiumDouble on " + args[0].GetType().Name);
         }
         private HassiumObject __sub__ (VirtualMachine vm, HassiumObject[] args)
