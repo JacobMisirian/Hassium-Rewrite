@@ -13,7 +13,15 @@ namespace Hassium.Parser
 
         public static AstNode Parse(Parser parser)
         {
-            return parseAssignment(parser);
+            AstNode expression = parseAssignment(parser);
+            if (parser.AcceptToken(TokenType.Question))
+            {
+                AstNode terenaryTrue = Parse(parser);
+                parser.ExpectToken(TokenType.Colon);
+                AstNode terenaryFalse = Parse(parser);
+                expression = new TerenaryOperationNode(expression, terenaryTrue, terenaryFalse, parser.Location);
+            }
+            return expression;
         }
 
         private static AstNode parseAssignment(Parser parser)
@@ -52,7 +60,7 @@ namespace Hassium.Parser
         private static AstNode parseMultiplicitive(Parser parser)
         {
             AstNode left = parseUnary(parser);
-            while (parser.MatchToken(TokenType.BinaryOperation))
+            while (parser.MatchToken(TokenType.BinaryOperation) || parser.MatchToken(TokenType.Question))
             {
                 switch (parser.GetToken().Value)
                 {

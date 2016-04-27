@@ -13,6 +13,7 @@ namespace Hassium.Runtime.StandardLibrary
             { "inputChar", new HassiumFunction(inputChar, 0) },
             { "print", new HassiumFunction(print, -1) },
             { "println", new HassiumFunction(println, -1) },
+            { "range", new HassiumFunction(range, 2) },
             { "type", new HassiumFunction(type, 1) },
             { "types", new HassiumFunction(types, -1) }
         };
@@ -46,6 +47,15 @@ namespace Hassium.Runtime.StandardLibrary
             foreach (HassiumObject obj in args)
                 Console.WriteLine(obj.ToString(vm));
             return HassiumObject.Null;
+        }
+        private static HassiumObject range(VirtualMachine vm, HassiumObject[] args)
+        {
+            int max = (int)HassiumInt.Create(args[1]).Value;
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+            for (int i = (int)HassiumInt.Create(args[0]).Value; i < max; i++)
+                list.Value.Add(new HassiumInt(i));
+
+            return list;
         }
         private static HassiumObject type(VirtualMachine vm, HassiumObject[] args)
         {

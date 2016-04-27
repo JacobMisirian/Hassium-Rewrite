@@ -170,10 +170,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
 
         private HassiumObject __add__ (VirtualMachine vm, HassiumObject[] args)
         {
-            HassiumObject obj = args[0];
-            if (obj is HassiumString)
-                return this + (HassiumString)obj;
-            throw new InternalException("Cannot operate string on " + obj);
+            return this + new HassiumString(args[0].ToString(vm));
         }
         private HassiumObject __equals__ (VirtualMachine vm, HassiumObject[] args)
         {

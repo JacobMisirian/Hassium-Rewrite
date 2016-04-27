@@ -407,6 +407,18 @@ namespace Hassium.CodeGen
                 currentMethod.Emit(node.SourceLocation, InstructionType.Label, endCase);
             }
         }
+        public void Accept(TerenaryOperationNode node)
+        {
+            double falseLabel = generateSymbol();
+            double endLabel = generateSymbol();
+            node.Predicate.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump_If_False, falseLabel);
+            node.TrueBody.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Jump, endLabel);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, falseLabel);
+            node.ElseBody.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
+        }
         public void Accept(ThisNode node)
         {
             currentMethod.Emit(node.SourceLocation, InstructionType.Self_Reference, findIndex(currentMethod.Name));

@@ -19,24 +19,25 @@ namespace Hassium.Lexer
     public enum TokenType
     {
         Assignment,
+        BinaryOperation,
+        Char,
+        Colon,
+        Comma,
+        Comparison,
+        Dot,
+        Double,
         Identifier,
         Int64,
-        Double,
-        String,
-        Char,
-        Comma,
-        Dot,
         LeftBrace,
-        RightBrace,
         LeftParentheses,
-        RightParentheses,
         LeftSquare,
+        Question,
+        RightBrace,
+        RightParentheses,
         RightSquare,
         Semicolon,
-        Colon,
-        BinaryOperation,
-        UnaryOperation,
-        Comparison
+        String,
+        UnaryOperation
     }
 }
 

@@ -68,6 +68,10 @@ namespace Hassium.Lexer
                             result.Add(new Token(TokenType.BinaryOperation, ".", location));
                             position++;
                             break;
+                        case '?':
+                            result.Add(new Token(TokenType.Question, "?", location));
+                            position++;
+                            break;
                         case '+':
                         case '-':
                             char orig = (char)readChar();
