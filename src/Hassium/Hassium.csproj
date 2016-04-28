@@ -108,6 +108,7 @@
     <Compile Include="Parser\Ast\SwitchNode.cs" />
     <Compile Include="Parser\Ast\CaseNode.cs" />
     <Compile Include="Parser\Ast\TerenaryOperationNode.cs" />
+    <Compile Include="Parser\Ast\ExpressionStatementNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

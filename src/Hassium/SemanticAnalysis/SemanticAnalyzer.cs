@@ -70,6 +70,7 @@ namespace Hassium.SemanticAnalysis
         }
         public void Accept(FunctionCallNode node) {}
         public void Accept(ExpressionNode node) {}
+        public void Accept(ExpressionStatementNode node) {}
         public void Accept(EnumNode node)
         {
             node.VisitChildren(this);

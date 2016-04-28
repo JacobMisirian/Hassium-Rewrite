@@ -20,6 +20,7 @@ namespace Hassium.Parser
         void Accept(CodeBlockNode node);
         void Accept(EnumNode node);
         void Accept(ExpressionNode node);
+        void Accept(ExpressionStatementNode node);
         void Accept(ForNode node);
         void Accept(ForeachNode node);
         void Accept(FuncNode node);

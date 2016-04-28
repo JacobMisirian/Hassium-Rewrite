@@ -42,13 +42,16 @@ namespace Hassium.Runtime
                 int argumentInt = Convert.ToInt32(argument);
                 SourceLocation sourceLocation = method.Instructions[position].SourceLocation;
                 string attribute;
-         //     Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
+        //      Console.WriteLine("{0}\t{1}", method.Instructions[position].InstructionType, argument);
                 try
                 {
                     switch (method.Instructions[position].InstructionType)
                     {
                         case InstructionType.Push_Frame:
                             stackFrame.EnterFrame();
+                            break;
+                        case InstructionType.Pop:
+                            stack.Pop();
                             break;
                         case InstructionType.Pop_Frame:
                             stackFrame.PopFrame();
@@ -280,15 +283,10 @@ namespace Hassium.Runtime
 
         private void gatherLabels(MethodBuilder method)
         {
+            method.Labels = new Dictionary<double, int>();
             for (int i = 0; i < method.Instructions.Count; i++)
-            {
                 if (method.Instructions[i].InstructionType == InstructionType.Label)
-                {
-                    if (method.Labels.ContainsKey(method.Instructions[i].Argument))
-                        method.Labels.Remove(method.Instructions[i].Argument);
                     method.Labels.Add(method.Instructions[i].Argument, i);
-                }
-            }
         }
 
         private void gatherGlobals(List<string> constantPool)

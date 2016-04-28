@@ -40,7 +40,7 @@ namespace Hassium.Parser
             else if (parser.MatchToken(TokenType.Identifier, "switch"))
                 return SwitchNode.Parse(parser);
             else
-                return ExpressionNode.Parse(parser);
+                return ExpressionStatementNode.Parse(parser);
         }
 
         public override void Visit(IVisitor visitor)

@@ -268,6 +268,11 @@ namespace Hassium.CodeGen
         {
             node.VisitChildren(this);
         }
+        public void Accept(ExpressionStatementNode node)
+        {
+            node.VisitChildren(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Pop);
+        }
         public void Accept(ForNode node)
         {
             double forLabel = generateSymbol();
@@ -370,6 +375,7 @@ namespace Hassium.CodeGen
         public void Accept(ReturnNode node)
         {
             node.VisitChildren(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
             currentMethod.Emit(node.SourceLocation, InstructionType.Return);
         }
         public void Accept(StatementNode node)

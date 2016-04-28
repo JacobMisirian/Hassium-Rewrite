@@ -1,4 +1,3 @@
 func main () {
-	while (true)
-		println (input() == "hai" ? "Said Hello" : "Didn't say hai");
+	
 }
