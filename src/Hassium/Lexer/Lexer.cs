@@ -93,6 +93,7 @@ namespace Hassium.Lexer
                                 position++;
                                 result.Add(new Token(TokenType.BinaryOperation, "||", location));
                             }
+                            result.Add(new Token(TokenType.BinaryOperation, "|", location));
                             break;
                         case '&':
                             position++;
@@ -101,6 +102,7 @@ namespace Hassium.Lexer
                                 position++;
                                 result.Add(new Token(TokenType.BinaryOperation, "&&", location));
                             }
+                            result.Add(new Token(TokenType.BinaryOperation, "&", location));
                             break;
                         case '=':
                             position++;
