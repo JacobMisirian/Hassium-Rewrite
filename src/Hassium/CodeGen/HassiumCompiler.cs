@@ -322,7 +322,6 @@ namespace Hassium.CodeGen
             currentMethod = new MethodBuilder();
             currentMethod.Name = node.Name;
 
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             table.EnterScope();
 
             for (int i = 0; i < node.Parameters.Count; i++)
@@ -334,7 +333,6 @@ namespace Hassium.CodeGen
             node.Children[0].VisitChildren(this);
 
             table.PopScope();
-            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
         }
         public void Accept(FunctionCallNode node)
         {

@@ -23,11 +23,11 @@ namespace Hassium.Parser
         {
             parser.ExpectToken(TokenType.Identifier, "for");
             parser.ExpectToken(TokenType.LeftParentheses);
-            AstNode singleStatement = ExpressionNode.Parse(parser);
+            AstNode singleStatement = ExpressionStatementNode.Parse(parser);
             parser.AcceptToken(TokenType.Semicolon);
             AstNode predicate = ExpressionNode.Parse(parser);
             parser.AcceptToken(TokenType.Semicolon);
-            AstNode repeatStatement = ExpressionNode.Parse(parser);
+            AstNode repeatStatement = ExpressionStatementNode.Parse(parser);
             parser.ExpectToken(TokenType.RightParentheses);
             AstNode body = StatementNode.Parse(parser);
 

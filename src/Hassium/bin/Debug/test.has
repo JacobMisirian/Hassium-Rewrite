@@ -1,3 +1,23 @@
+func println (arg) {
+    print (arg);
+}
+
+func getprimes () {
+    for (i = 0; i < 1000; i = i + 1) {
+        isPrime = true;
+        for (p = 2; p < i; p = p + 1) {
+            if ((i % p) == 0) {
+                isPrime = false;
+                break;
+            }
+        }
+        
+        if (isPrime == true) {
+            println (i);
+        }
+    }
+}
+
 func main () {
-	println(21 * 9);
+    getprimes ();
 }
