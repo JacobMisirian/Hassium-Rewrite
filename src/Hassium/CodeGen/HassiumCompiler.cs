@@ -330,7 +330,7 @@ namespace Hassium.CodeGen
                 currentMethod.Parameters.Add(node.Parameters[i], table.GetIndex(node.Parameters[i]));
             }
 
-            node.Children[0].VisitChildren(this);
+            node.Children[0].Visit(this);
 
             table.PopScope();
         }
@@ -339,11 +339,7 @@ namespace Hassium.CodeGen
             for (int i = node.Arguments.Children.Count - 1; i >= 0; i--)
                 node.Arguments.Children[i].Visit(this);
             node.Target.Visit(this);
-            table.EnterScope();
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             currentMethod.Emit(node.SourceLocation, InstructionType.Call, node.Arguments.Children.Count);
-            table.PopScope();
-            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
         }
         public void Accept(IdentifierNode node)
         {
