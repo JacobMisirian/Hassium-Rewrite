@@ -20,6 +20,7 @@ namespace Hassium.Lexer
             whiteSpace();
             while (position < code.Length)
             {
+                char orig;
                 if (char.IsLetter((char)peekChar()))
                     result.Add(scanIdentifier());
                 else if (char.IsDigit((char)peekChar()))
@@ -74,9 +75,11 @@ namespace Hassium.Lexer
                             break;
                         case '+':
                         case '-':
-                            char orig = (char)readChar();
+                            orig = (char)readChar();
                             if ((char)peekChar() == orig)
                                 result.Add(new Token(TokenType.UnaryOperation, orig.ToString() + ((char)readChar()).ToString(), location));
+                            else if ((char)peekChar() == '=')
+                                result.Add(new Token(TokenType.Assignment, orig.ToString() + ((char)readChar()).ToString(), location));
                             else
                                 result.Add(new Token(TokenType.BinaryOperation, orig.ToString(), location));
                             break;
@@ -84,7 +87,11 @@ namespace Hassium.Lexer
                         case '/':
                         case '%':
                         case '^':
-                            result.Add(new Token(TokenType.BinaryOperation, ((char)readChar()).ToString(), location));
+                            orig = (char)readChar();
+                            if ((char)peekChar() == '=')
+                                result.Add(new Token(TokenType.Assignment, orig.ToString() + ((char)readChar()).ToString(), location));
+                            else
+                                result.Add(new Token(TokenType.BinaryOperation, orig.ToString(), location));
                             break;
                         case '|':
                             readChar();
@@ -92,6 +99,11 @@ namespace Hassium.Lexer
                             {
                                 readChar();
                                 result.Add(new Token(TokenType.BinaryOperation, "||", location));
+                            }
+                            else if ((char)peekChar() == '=')
+                            {
+                                readChar();
+                                result.Add(new Token(TokenType.Assignment, "|=", location));
                             }
                             else
                                 result.Add(new Token(TokenType.BinaryOperation, "|", location));
@@ -102,6 +114,11 @@ namespace Hassium.Lexer
                             {
                                 readChar();
                                 result.Add(new Token(TokenType.BinaryOperation, "&&", location));
+                            }
+                            else if ((char)peekChar() == '=')
+                            {
+                                readChar();
+                                result.Add(new Token(TokenType.Assignment, "&=", location));
                             }
                             else
                                 result.Add(new Token(TokenType.BinaryOperation, "&", location));

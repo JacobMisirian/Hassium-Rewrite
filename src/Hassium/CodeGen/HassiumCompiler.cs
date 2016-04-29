@@ -77,6 +77,14 @@ namespace Hassium.CodeGen
                                 newMethod.Parent = module.Attributes[clazz.Name] as HassiumClass;
                                 module.Attributes[clazz.Name].Attributes.Add(attribute.Key, newMethod);
                             }
+                            if (attribute.Value is UserDefinedProperty)
+                            {
+                                UserDefinedProperty property = attribute.Value as UserDefinedProperty;
+                                property.GetMethod.Parent = module.Attributes[clazz.Name] as HassiumClass;
+                                if (property.SetMethod != null)
+                                    property.SetMethod.Parent = module.Attributes[clazz.Name] as HassiumClass;
+                                module.Attributes[clazz.Name].Attributes.Add(attribute.Key, property);
+                            }
                         }
                     }
                 }

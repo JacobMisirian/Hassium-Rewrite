@@ -28,8 +28,24 @@ namespace Hassium.Parser
         {
             AstNode left = parseAndOr(parser);
 
-            if (parser.AcceptToken(TokenType.Assignment))
+            if (parser.AcceptToken(TokenType.Assignment, "="))
                 return new BinaryOperationNode(BinaryOperation.Assignment, left, parseAssignment(parser), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "+="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.Addition, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "-="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.Subtraction, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "*="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.Multiplication, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "/="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.Division, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "%="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.Modulus, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "^="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.XOR, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "|="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.OR, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.Assignment, "&="))
+                return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.XAnd, left, parseAssignment(parser), parser.Location), parser.Location);
             else
                 return left;
         }
