@@ -177,12 +177,6 @@ namespace Hassium.Parser
                     case "!":
                         parser.ExpectToken(TokenType.UnaryOperation);
                         return new UnaryOperationNode(UnaryOperation.Not, parseUnary(parser), parser.Location);
-                    case "++":
-                        parser.ExpectToken(TokenType.UnaryOperation);
-                        return new UnaryOperationNode(UnaryOperation.PreIncrement, parseUnary(parser), parser.Location);
-                    case "--":
-                        parser.ExpectToken(TokenType.UnaryOperation);
-                        return new UnaryOperationNode(UnaryOperation.PreDecrement, parseUnary(parser), parser.Location);
                 }
             }
             return parseAccess(parser);
@@ -207,10 +201,6 @@ namespace Hassium.Parser
                 string identifier = parser.ExpectToken(TokenType.Identifier).Value;
                 return parseAccess(parser, new AttributeAccessNode(left, identifier, parser.Location));
             }
-            else if (parser.AcceptToken(TokenType.UnaryOperation, "++"))
-                return new UnaryOperationNode(UnaryOperation.PostIncrement, left, parser.Location);
-            else if (parser.AcceptToken(TokenType.UnaryOperation, "--"))
-                return new UnaryOperationNode(UnaryOperation.PostDecrement, left, parser.Location);
             else
                 return left;
         }

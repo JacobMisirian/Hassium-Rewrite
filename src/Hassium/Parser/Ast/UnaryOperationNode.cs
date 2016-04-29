@@ -26,10 +26,6 @@ namespace Hassium.Parser
 
     public enum UnaryOperation
     {
-        PostDecrement,
-        PostIncrement,
-        PreDecrement,
-        PreIncrement,
         Not
     }
 }
