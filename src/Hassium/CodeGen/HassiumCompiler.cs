@@ -60,6 +60,22 @@ namespace Hassium.CodeGen
                     }
                 }
             }
+            foreach (AstNode child in ast.Children)
+            {
+                if (child is ClassNode)
+                {
+                    ClassNode clazz = child as ClassNode;
+                    foreach (string inherit in clazz.Inherits)
+                    {
+                        foreach (KeyValuePair<string, HassiumObject> attribute in module.Attributes[inherit].Attributes)
+                        {
+                            if (module.Attributes[clazz.Name].Attributes.ContainsKey(attribute.Key))
+                                module.Attributes[clazz.Name].Attributes.Remove(attribute.Key);
+                            module.Attributes[clazz.Name].Attributes.Add(attribute.Key, attribute.Value);
+                        }
+                    }
+                }
+            }
             return module;
         }
 

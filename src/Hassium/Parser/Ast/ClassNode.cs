@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Hassium.Lexer;
 
@@ -8,10 +9,12 @@ namespace Hassium.Parser
     {
         public string Name { get; private set; }
         public AstNode Body { get { return Children[0]; } }
-        public ClassNode(string name, AstNode body, SourceLocation location)
+        public List<string> Inherits { get; private set; }
+        public ClassNode(string name, AstNode body, List<string> inherits, SourceLocation location)
         {
             Name = name;
             Children.Add(body);
+            Inherits = inherits;
             this.SourceLocation = location;
         }
 
@@ -19,9 +22,16 @@ namespace Hassium.Parser
         {
             parser.ExpectToken(TokenType.Identifier, "class");
             string name = parser.ExpectToken(TokenType.Identifier).Value;
+            List<string> inherits = new List<string>();
+            if (parser.AcceptToken(TokenType.Colon))
+            {
+                inherits.Add(parser.ExpectToken(TokenType.Identifier).Value);
+                while (parser.AcceptToken(TokenType.Comma))
+                    inherits.Add(parser.ExpectToken(TokenType.Identifier).Value);
+            }
             AstNode body = StatementNode.Parse(parser);
 
-            return new ClassNode(name, body, parser.Location);
+            return new ClassNode(name, body, inherits, parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

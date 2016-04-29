@@ -32,45 +32,45 @@ namespace Hassium.Lexer
                             result.Add(scanString());
                             break;
                         case '\'':
-                            position++;
+                            readChar();
                             result.Add(new Token(TokenType.Char, ((char)readChar()).ToString(), location));
-                            position++;
+                            readChar();
                             break;
                         case ';':
                             result.Add(new Token(TokenType.Semicolon, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case ':':
                             result.Add(new Token(TokenType.Colon, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case ',':
                             result.Add(new Token(TokenType.Comma, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case '(':
                             result.Add(new Token(TokenType.LeftParentheses, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case ')':
                             result.Add(new Token(TokenType.RightParentheses, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case '{':
                             result.Add(new Token(TokenType.LeftBrace, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case '}':
                             result.Add(new Token(TokenType.RightBrace, string.Empty, location));
-                            position++;
+                            readChar();
                             break;
                         case '.':
                             result.Add(new Token(TokenType.BinaryOperation, ".", location));
-                            position++;
+                            readChar();
                             break;
                         case '?':
                             result.Add(new Token(TokenType.Question, "?", location));
-                            position++;
+                            readChar();
                             break;
                         case '+':
                         case '-':
@@ -87,72 +87,75 @@ namespace Hassium.Lexer
                             result.Add(new Token(TokenType.BinaryOperation, ((char)readChar()).ToString(), location));
                             break;
                         case '|':
-                            position++;
+                            readChar();
                             if ((char)peekChar() == '|')
                             {
-                                position++;
+                                readChar();
                                 result.Add(new Token(TokenType.BinaryOperation, "||", location));
                             }
                             else
                                 result.Add(new Token(TokenType.BinaryOperation, "|", location));
                             break;
                         case '&':
-                            position++;
+                            readChar();
                             if ((char)peekChar() == '&')
                             {
-                                position++;
+                                readChar();
                                 result.Add(new Token(TokenType.BinaryOperation, "&&", location));
                             }
                             else
                                 result.Add(new Token(TokenType.BinaryOperation, "&", location));
                             break;
                         case '=':
-                            position++;
+                            readChar();
                             if ((char)peekChar() == '=')
                             {
-                                position++;
+                                readChar();
                                 result.Add(new Token(TokenType.Comparison, "==", location));
                             }
                             else
                                 result.Add(new Token(TokenType.Assignment, "=", location));
                             break;
                         case '!':
-                            position++;
+                            readChar();
                             if ((char)peekChar() == '=')
                             {
-                                position++;
+                                readChar();
                                 result.Add(new Token(TokenType.Comparison, "!=", location));
                             }
                             else
                                 result.Add(new Token(TokenType.UnaryOperation, "!", location));
                             break;
                         case '<':
-                            position++;
+                            readChar();
                             if ((char)peekChar() == '=')
                             {
-                                position++;
+                                readChar();
                                 result.Add(new Token(TokenType.Comparison, "<=", location));
                             }
                             else
                                 result.Add(new Token(TokenType.Comparison, "<", location));
                             break;
                         case '>':
-                            position++;
+                            readChar();
                             if ((char)peekChar() == '=')
                             {
-                                position++;
+                                readChar();
                                 result.Add(new Token(TokenType.Comparison, ">=", location));
                             }
                             else
                                 result.Add(new Token(TokenType.Comparison, ">", location));
                             break;
                         case '[':
-                            position++;
+                            readChar();
                             result.Add(new Token(TokenType.LeftSquare, "[", location));
                             break;
                         case ']':
-                            position++;
+                            readChar();
                             result.Add(new Token(TokenType.RightSquare, "]", location));
+                            break;
+                        case '#':
+                            scanSingleComment();
                             break;
                         default:
                             throw new Exception("Caught unknown char in lexer: " + readChar());
@@ -196,12 +199,19 @@ namespace Hassium.Lexer
         private Token scanString()
         {
             string str = "";
-            position++;
+            readChar();
             while ((char)peekChar() != '\"' && peekChar() != -1)
                 str += (char)readChar();
-            position++;
+            readChar();
 
             return new Token(TokenType.String, str, location);
+        }
+
+        private void scanSingleComment()
+        {
+            readChar();
+            while (peekChar() != -1 && peekChar() != '\n')
+                readChar();
         }
 
         private int peekChar(int n = 0)

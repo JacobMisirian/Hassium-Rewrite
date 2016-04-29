@@ -1,0 +1,29 @@
+class Dog {
+	func new(name) {
+		this.Name = name;
+	}
+
+	func showName() {
+		println(this.Name);
+	}
+
+	func bark() {
+		println("Woof!");
+	}
+}
+
+class BigDog : Dog {
+	func growl() {
+		println("GRRRR");
+	}
+}
+
+func main() {
+	fiddo = new Dog("Fiddo");
+	fiddo.showName();
+	fiddo.bark();
+	bigDog = new BigDog("Charlie");
+	bigDog.showName();
+	bigDog.bark();
+	bigDog.growl();
+}
