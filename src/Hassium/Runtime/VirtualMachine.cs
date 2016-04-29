@@ -261,13 +261,14 @@ namespace Hassium.Runtime
 
         private void executeUnaryOperation(HassiumObject target, int argument)
         {
+            /*
             switch (argument)
             {
                 case 0:
                     stack.Push(target.Not(this));
                     break;
                 case 1:
-                    stack.Push(target.PostDecrement(this));
+                    stack.Push(target.Add(this, new HassiumInt(1));
                     break;
                 case 2:
                     stack.Push(target.PostIncrement(this));
@@ -278,7 +279,7 @@ namespace Hassium.Runtime
                 case 4:
                     stack.Push(target.PreIncrement(this));
                     break;
-            }
+            }*/
         }
 
         private void gatherLabels(MethodBuilder method)

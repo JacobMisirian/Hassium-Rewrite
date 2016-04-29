@@ -2,9 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/HassiumCompiler.cs">
     <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="121" Column="35" />
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="408" Column="14" />
-      <File FileName="Hassium/Parser/Ast/CaseNode.cs" Line="1" Column="1" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="88" Column="35" />
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="76" Column="22" />
+      <File FileName="Hassium/Parser/Ast/ClassNode.cs" Line="34" Column="55" />
+      <File FileName="Hassium/Lexer/Lexer.cs" Line="159" Column="35" />
+      <File FileName="Hassium/Parser/Ast/FuncNode.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -13,6 +15,7 @@
             <Node name="CodeGen" expanded="True">
               <Node name="HassiumCompiler.cs" selected="True" />
             </Node>
+            <Node name="Lexer" expanded="True" />
             <Node name="Parser" expanded="True">
               <Node name="Ast" expanded="True" />
             </Node>
