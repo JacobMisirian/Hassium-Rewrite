@@ -30,7 +30,7 @@ namespace Hassium.CodeGen
             if (IsConstructor)
             {
                 HassiumClass ret = new HassiumClass();
-                ret.Attributes = cloneDictionary(Parent.Attributes);
+                ret.Attributes = CloneDictionary(Parent.Attributes);
                 ret.Types.Add(Name);
                 foreach (HassiumObject obj in ret.Attributes.Values)
                     if (obj is MethodBuilder)
@@ -41,7 +41,7 @@ namespace Hassium.CodeGen
             return returnValue;
         }
 
-        private Dictionary<TKey, TValue> cloneDictionary<TKey, TValue>
+        public static Dictionary<TKey, TValue> CloneDictionary<TKey, TValue>
             (Dictionary<TKey, TValue> original) where TValue : ICloneable
         {
             Dictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>(original.Count,

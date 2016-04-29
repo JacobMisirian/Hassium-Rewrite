@@ -16,12 +16,17 @@ class BigDog : Dog {
 	func growl() {
 		println("GRRRR");
 	}
+	func bark() {
+		println("Big dog bark");
+	}
 }
 
 func main() {
+	println("Fiddo:");
 	fiddo = new Dog("Fiddo");
 	fiddo.showName();
 	fiddo.bark();
+	println("Charlie:");
 	bigDog = new BigDog("Charlie");
 	bigDog.showName();
 	bigDog.bark();

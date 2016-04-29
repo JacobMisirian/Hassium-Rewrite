@@ -67,11 +67,16 @@ namespace Hassium.CodeGen
                     ClassNode clazz = child as ClassNode;
                     foreach (string inherit in clazz.Inherits)
                     {
-                        foreach (KeyValuePair<string, HassiumObject> attribute in module.Attributes[inherit].Attributes)
+                        Dictionary<string, HassiumObject> inheritedAttributes = MethodBuilder.CloneDictionary(module.Attributes[inherit].Attributes);
+                        foreach (KeyValuePair<string, HassiumObject> attribute in inheritedAttributes)
                         {
-                            if (module.Attributes[clazz.Name].Attributes.ContainsKey(attribute.Key))
-                                module.Attributes[clazz.Name].Attributes.Remove(attribute.Key);
-                            module.Attributes[clazz.Name].Attributes.Add(attribute.Key, attribute.Value);
+                            if (!module.Attributes[clazz.Name].Attributes.ContainsKey(attribute.Key))
+                            if (attribute.Value is MethodBuilder)
+                            {
+                                MethodBuilder newMethod = ((MethodBuilder)attribute.Value);
+                                newMethod.Parent = module.Attributes[clazz.Name] as HassiumClass;
+                                module.Attributes[clazz.Name].Attributes.Add(attribute.Key, newMethod);
+                            }
                         }
                     }
                 }
