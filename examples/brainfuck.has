@@ -5,7 +5,7 @@ func main () {
 
 class Brainfuck {
 	func new () {
-		this.ram = this.fillzero(1000);
+		this.ram = this.fillzero(20000);
 	}
 	func fillzero (amount) {
 		res = [];
