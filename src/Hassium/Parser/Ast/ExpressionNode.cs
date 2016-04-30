@@ -229,6 +229,8 @@ namespace Hassium.Parser
                 return new ThisNode(parser.Location);
             else if (parser.MatchToken(TokenType.Identifier, "true") || parser.MatchToken(TokenType.Identifier, "false"))
                 return new BoolNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location);
+            else if (parser.MatchToken(TokenType.Identifier, "lambda"))
+                return LambdaNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier))
                 return new IdentifierNode(parser.ExpectToken(TokenType.Identifier).Value, parser.Location);
             else if (parser.MatchToken(TokenType.Double))

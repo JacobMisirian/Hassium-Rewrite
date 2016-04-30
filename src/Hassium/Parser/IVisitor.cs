@@ -27,6 +27,7 @@ namespace Hassium.Parser
         void Accept(FunctionCallNode node);
         void Accept(IdentifierNode node);
         void Accept(Int64Node node);
+        void Accept(LambdaNode node);
         void Accept(NewNode node);
         void Accept(PropertyNode node);
         void Accept(ReturnNode node);

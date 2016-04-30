@@ -25,12 +25,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
+            if (vm != null)
             vm.CallStack.Push(target.Method.Name);
             if (ParamLengths[0] != -1)
             {
                 foreach (int i in ParamLengths)
                     if (i == args.Length)
                     {
+                        if (vm != null)
                         vm.CallStack.Pop();
                         return target(vm, args);
                     }
@@ -38,6 +40,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             }
             else
             {
+                if (vm != null)
                 vm.CallStack.Pop();
                 return target(vm, args);
             }

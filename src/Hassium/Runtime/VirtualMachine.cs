@@ -67,17 +67,11 @@ namespace Hassium.Runtime
                         case InstructionType.Push:
                             stack.Push(new HassiumDouble(argument));
                             break;
-                        case InstructionType.Push_String:
-                            stack.Push(new HassiumString(module.ConstantPool[argumentInt]));
-                            break;
-                        case InstructionType.Push_Char:
-                            stack.Push(new HassiumChar((char)argumentInt));
-                            break;
                         case InstructionType.Push_Bool:
                             stack.Push(new HassiumBool(argument == 1));
                             break;
-                        case InstructionType.Push_Int64:
-                            stack.Push(new HassiumInt(module.Int64Pool[argumentInt]));
+                        case InstructionType.Push_Object:
+                            stack.Push(module.ConstantPool[argumentInt]);
                             break;
                         case InstructionType.Store_Local:
                             value = stack.Pop();
@@ -88,7 +82,7 @@ namespace Hassium.Runtime
                             break;
                         case InstructionType.Store_Attribute:
                             location = stack.Pop();
-                            attribute = module.ConstantPool[argumentInt];
+                            attribute = module.ConstantPool[argumentInt].ToString(this);
                             if (location is HassiumProperty)
                             {
                                 HassiumProperty builtinProp = location as HassiumProperty;
@@ -123,7 +117,7 @@ namespace Hassium.Runtime
                             }
                             break;
                         case InstructionType.Load_Attribute:
-                            attribute = module.ConstantPool[argumentInt];
+                            attribute = module.ConstantPool[argumentInt].ToString(this);
                             location = stack.Pop();
                             HassiumObject attrib = null;
                             try
@@ -290,13 +284,13 @@ namespace Hassium.Runtime
                     method.Labels.Add(method.Instructions[i].Argument, i);
         }
 
-        private void gatherGlobals(List<string> constantPool)
+        private void gatherGlobals(List<HassiumObject> constantPool)
         {
             for (int i = 0; i < constantPool.Count; i++)
-                if (GlobalFunctions.FunctionList.ContainsKey(constantPool[i]))
-                    globals.Add(Convert.ToDouble(i), GlobalFunctions.FunctionList[constantPool[i]]);
-                else if (module.Attributes.ContainsKey(constantPool[i]))
-                    globals.Add(i, module.Attributes[constantPool[i]]);
+                if (GlobalFunctions.FunctionList.ContainsKey(constantPool[i].ToString(this)))
+                    globals.Add(Convert.ToDouble(i), GlobalFunctions.FunctionList[constantPool[i].ToString(this)]);
+                else if (module.Attributes.ContainsKey(constantPool[i].ToString(this)))
+                    globals.Add(i, module.Attributes[constantPool[i].ToString(this)]);
         }
     }
 }

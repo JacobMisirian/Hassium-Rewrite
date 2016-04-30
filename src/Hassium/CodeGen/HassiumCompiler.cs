@@ -51,12 +51,9 @@ namespace Hassium.CodeGen
                         HassiumModule compiledModule = HassiumExecuter.FromFilePath(path, false);
                         foreach (KeyValuePair<string, HassiumObject> attribute in compiledModule.Attributes)
                             module.Attributes.Add(attribute.Key, attribute.Value);
-                        foreach (string constant in compiledModule.ConstantPool)
+                        foreach (HassiumObject constant in compiledModule.ConstantPool)
                             if (!module.ConstantPool.Contains(constant))
                                 module.ConstantPool.Add(constant);
-                        foreach (Int64 constant in compiledModule.Int64Pool)
-                            if (!module.Int64Pool.Contains(constant))
-                                module.Int64Pool.Add(constant);
                     }
                 }
             }
@@ -109,8 +106,8 @@ namespace Hassium.CodeGen
         public void Accept(AttributeAccessNode node)
         {
             node.Left.Visit(this);
-            if (!module.ConstantPool.Contains(node.Right))
-                module.ConstantPool.Add(node.Right);
+            if (!containsConstant(node.Right))
+                module.ConstantPool.Add(new HassiumString(node.Right));
             currentMethod.Emit(node.SourceLocation, InstructionType.Load_Attribute, findIndex(node.Right));
         }
         public void Accept(BinaryOperationNode node)
@@ -136,8 +133,8 @@ namespace Hassium.CodeGen
                     {
                         AttributeAccessNode accessor = node.Left as AttributeAccessNode;
                         accessor.Left.Visit(this);
-                        if (!module.ConstantPool.Contains(accessor.Right))
-                            module.ConstantPool.Add(accessor.Right);
+                        if (!containsConstant(accessor.Right))
+                            module.ConstantPool.Add(new HassiumString(accessor.Right));
                         currentMethod.Emit(node.SourceLocation, InstructionType.Store_Attribute, findIndex(accessor.Right));
                         accessor.Left.Visit(this);
                     }
@@ -212,12 +209,14 @@ namespace Hassium.CodeGen
         }
         public void Accept(CharNode node)
         {
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Char, node.Char);
+            if (!containsConstant(node.Char.ToString()))
+                module.ConstantPool.Add(new HassiumChar(node.Char));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Object, findIndex(node.Char.ToString()));
         }
         public void Accept(ClassNode node)
         {
-            if (!module.ConstantPool.Contains(node.Name))
-                module.ConstantPool.Add(node.Name);
+            if (!containsConstant(node.Name))
+                module.ConstantPool.Add(new HassiumString(node.Name));
             HassiumClass clazz = new HassiumClass();
             foreach (AstNode child in node.Body.Children)
             {
@@ -230,8 +229,8 @@ namespace Hassium.CodeGen
                 if (child is PropertyNode)
                 {
                     PropertyNode propNode = child as PropertyNode;
-                    if (!module.ConstantPool.Contains(propNode.Identifier))
-                        module.ConstantPool.Add(propNode.Identifier);
+                    if (!containsConstant(propNode.Identifier))
+                        module.ConstantPool.Add(new HassiumString(propNode.Identifier));
                     UserDefinedProperty property = new UserDefinedProperty(propNode.Identifier);
                     currentMethod = new MethodBuilder();
                     currentMethod.Name =  "__get__" + propNode.Identifier;
@@ -345,8 +344,8 @@ namespace Hassium.CodeGen
         }
         public void Accept(FuncNode node)
         {
-            if (!module.ConstantPool.Contains(node.Name))
-                module.ConstantPool.Add(node.Name);
+            if (!containsConstant(node.Name))
+                module.ConstantPool.Add(new HassiumString(node.Name));
 
             currentMethod = new MethodBuilder();
             currentMethod.Name = node.Name;
@@ -374,8 +373,8 @@ namespace Hassium.CodeGen
         {
             if (!table.FindSymbol(node.Identifier))
             {
-                if (!module.ConstantPool.Contains(node.Identifier))
-                    module.ConstantPool.Add(node.Identifier);
+                if (!containsConstant(node.Identifier))
+                    module.ConstantPool.Add(new HassiumString(node.Identifier));
                 currentMethod.Emit(node.SourceLocation, InstructionType.Load_Global, findIndex(node.Identifier));
             }
             else
@@ -383,9 +382,32 @@ namespace Hassium.CodeGen
         }
         public void Accept(Int64Node node)
         {
-            if (!module.Int64Pool.Contains(node.Number))
-                module.Int64Pool.Add(node.Number);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Int64, findInt64Index(node.Number));
+            if (!containsConstant(node.Number.ToString()))
+                module.ConstantPool.Add(new HassiumInt(node.Number));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Object, findIndex(node.Number.ToString()));
+        }
+        public void Accept(LambdaNode node)
+        {
+            MethodBuilder previousMethod = currentMethod;
+            currentMethod = new MethodBuilder();
+            currentMethod.Name = "__lambda__";
+            table.EnterScope();
+
+            for (int i = 0; i < node.Parameters.Count; i++)
+            {
+                table.AddSymbol(node.Parameters[i]);
+                currentMethod.Parameters.Add(node.Parameters[i], table.GetIndex(node.Parameters[i]));
+            }
+
+            node.Children[0].Visit(this);
+
+            table.PopScope();
+            // Swap from the lambda method to the current method
+            MethodBuilder lambda = currentMethod;
+            currentMethod = previousMethod;
+            module.ConstantPool.Add(lambda);
+
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Object, findIndex(lambda));
         }
         public void Accept(NewNode node)
         {
@@ -406,9 +428,9 @@ namespace Hassium.CodeGen
         }
         public void Accept(StringNode node)
         {
-            if (!module.ConstantPool.Contains(node.String))
-                module.ConstantPool.Add(node.String);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_String, findIndex(node.String));
+            if (!containsConstant(node.String))
+                module.ConstantPool.Add(new HassiumString(node.String));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Object, findIndex(node.String));
         }
         public void Accept(SwitchNode node)
         {
@@ -479,19 +501,27 @@ namespace Hassium.CodeGen
             currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
         }
 
-        private int findIndex(string constant)
+        private int findIndex(HassiumObject constant)
         {
             for (int i = 0; i < module.ConstantPool.Count; i++)
                 if (module.ConstantPool[i] == constant)
                     return i;
             return -1;
         }
-        private int findInt64Index(Int64 constant)
+        private int findIndex(string constant)
         {
-            for (int i = 0; i < module.Int64Pool.Count; i++)
-                if (module.Int64Pool[i] == constant)
+            for (int i = 0; i < module.ConstantPool.Count; i++)
+                if (module.ConstantPool[i].ToString(null) == constant)
                     return i;
             return -1;
+        }
+
+        private bool containsConstant(string constant)
+        {
+            foreach (HassiumObject obj in module.ConstantPool)
+                if (obj.ToString(null) == constant)
+                    return true;
+            return false;
         }
 
         private double nextSymbol = 0;
