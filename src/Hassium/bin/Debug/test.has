@@ -2,6 +2,3 @@ func main () {
 	
 }
 
-class Brainfuck {
-
-}

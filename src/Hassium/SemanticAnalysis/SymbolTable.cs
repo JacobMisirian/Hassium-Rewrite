@@ -9,7 +9,7 @@ namespace Hassium
     {
         public class Scope
         {
-            private Dictionary<string, int> symbols = new Dictionary<string, int>();
+            public Dictionary<string, int> symbols = new Dictionary<string, int>();
             public bool Contains(string symbol)
             {
                 return symbols.ContainsKey(symbol);
@@ -28,6 +28,7 @@ namespace Hassium
 
         public Stack<Scope> Scopes { get; private set; }
         public Scope GlobalScope { get; private set; }
+        public int CurrentIndex { get { return currentIndex; } set { currentIndex = value; } }
         private int currentIndex = 0;
 
         public SymbolTable()

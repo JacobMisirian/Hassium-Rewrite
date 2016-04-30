@@ -392,6 +392,7 @@ namespace Hassium.CodeGen
             currentMethod = new MethodBuilder();
             currentMethod.Name = "__lambda__";
             table.EnterScope();
+            table.CurrentIndex = 0;
 
             for (int i = 0; i < node.Parameters.Count; i++)
             {
