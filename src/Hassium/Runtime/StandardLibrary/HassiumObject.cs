@@ -41,59 +41,59 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             if (!Attributes.ContainsKey(ADD_FUNCTION))
                 throw new InternalException("Object " + GetType().Name + " does not support adding!");
-            return ((HassiumFunction)Attributes[ADD_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[ADD_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject Sub(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[SUB_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[SUB_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject Mul(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[MUL_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[MUL_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject Div(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[DIV_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[DIV_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject Mod(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[MOD_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[MOD_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject XOR(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[XOR_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[XOR_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject OR(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[OR_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[OR_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject Xand(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[XAND_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[XAND_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumBool Equals(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumBool)((HassiumFunction)Attributes[EQUALS_FUNCTION]).Invoke(vm, new HassiumObject[] { obj }));
+            return ((HassiumBool)Attributes[EQUALS_FUNCTION].Invoke(vm, new HassiumObject[] { obj }));
         }
         public virtual HassiumBool NotEquals(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumBool)((HassiumFunction)Attributes[NOT_EQUAL_FUNCTION]).Invoke(vm, new HassiumObject[] { obj }));
+            return ((HassiumBool)Attributes[NOT_EQUAL_FUNCTION].Invoke(vm, new HassiumObject[] { obj }));
         }
         public virtual HassiumBool GreaterThan(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumBool)((HassiumFunction)Attributes[GREATER_FUNCTION]).Invoke(vm, new HassiumObject[] { obj }));
+            return ((HassiumBool)Attributes[GREATER_FUNCTION].Invoke(vm, new HassiumObject[] { obj }));
         }
         public virtual HassiumBool GreaterThanOrEqual(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumBool)((HassiumFunction)Attributes[GREATER_OR_EQUAL_FUNCTION]).Invoke(vm, new HassiumObject[] { obj }));
+            return ((HassiumBool)Attributes[GREATER_OR_EQUAL_FUNCTION].Invoke(vm, new HassiumObject[] { obj }));
         }
         public virtual HassiumBool LesserThan(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumBool)((HassiumFunction)Attributes[LESSER_FUNCTION]).Invoke(vm, new HassiumObject[] { obj }));
+            return ((HassiumBool)Attributes[LESSER_FUNCTION].Invoke(vm, new HassiumObject[] { obj }));
         }
         public virtual HassiumBool LesserThanOrEqual(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumBool)((HassiumFunction)Attributes[LESSER_OR_EQUAL_FUNCTION]).Invoke(vm, new HassiumObject[] { obj }));
+            return ((HassiumBool)Attributes[LESSER_OR_EQUAL_FUNCTION].Invoke(vm, new HassiumObject[] { obj }));
         }
         public virtual HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
@@ -103,27 +103,27 @@ namespace Hassium.Runtime.StandardLibrary.Types
         }
         public virtual HassiumObject Index(VirtualMachine vm, HassiumObject obj)
         {
-            return ((HassiumFunction)Attributes[INDEX_FUNCTION]).Invoke(vm, new HassiumObject[] { obj });
+            return Attributes[INDEX_FUNCTION].Invoke(vm, new HassiumObject[] { obj });
         }
         public virtual HassiumObject StoreIndex(VirtualMachine vm, HassiumObject index, HassiumObject value)
         {
-            return ((HassiumFunction)Attributes[STORE_INDEX_FUNCTION]).Invoke(vm, new HassiumObject[] { index, value });
+            return Attributes[STORE_INDEX_FUNCTION].Invoke(vm, new HassiumObject[] { index, value });
         }
         public virtual HassiumObject EnumerableFull(VirtualMachine vm)
         {
-            return ((HassiumFunction)Attributes[ENUMERABLE_FULL]).Invoke(vm, new HassiumObject[0]);
+            return Attributes[ENUMERABLE_FULL].Invoke(vm, new HassiumObject[0]);
         }
         public virtual HassiumObject EnumerableNext(VirtualMachine vm)
         {
-            return ((HassiumFunction)Attributes[ENUMERABLE_NEXT]).Invoke(vm, new HassiumObject[0]);
+            return Attributes[ENUMERABLE_NEXT].Invoke(vm, new HassiumObject[0]);
         }
         public virtual HassiumObject EnumerableReset(VirtualMachine vm)
         {
-            return ((HassiumFunction)Attributes[ENUMERABLE_RESET]).Invoke(vm, new HassiumObject[0]);
+            return Attributes[ENUMERABLE_RESET].Invoke(vm, new HassiumObject[0]);
         }
         public virtual HassiumObject Not(VirtualMachine vm)
         {
-            return ((HassiumFunction)Attributes[NOT]).Invoke(vm, new HassiumObject[0]);
+            return Attributes[NOT].Invoke(vm, new HassiumObject[0]);
         }
 
         public string ToString(VirtualMachine vm)

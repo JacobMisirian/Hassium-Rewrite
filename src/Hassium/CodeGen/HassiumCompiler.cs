@@ -235,10 +235,8 @@ namespace Hassium.CodeGen
                     currentMethod = new MethodBuilder();
                     currentMethod.Name =  "__get__" + propNode.Identifier;
                     currentMethod.Parent = clazz;
-                    currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
                     table.EnterScope();
                     propNode.GetBody.Visit(this);
-                    currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
                     table.PopScope();
                     property.GetMethod = currentMethod;
 
@@ -247,13 +245,11 @@ namespace Hassium.CodeGen
                         currentMethod = new MethodBuilder();
                         currentMethod.Name = "__set__" + propNode.Identifier;
                         currentMethod.Parent = clazz;
-                        currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
                         table.EnterScope();
                         if (!table.FindSymbol("value"))
                             table.AddSymbol("value");
                         currentMethod.Parameters.Add("value", table.GetIndex("value"));
                         propNode.SetBody.Visit(this);
-                        currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
                         table.PopScope();
                         property.SetMethod = currentMethod;
                     }
@@ -264,9 +260,9 @@ namespace Hassium.CodeGen
         }
         public void Accept(CodeBlockNode node)
         {
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
+            table.EnterScope();
             node.VisitChildren(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
+            table.PopScope();
         }
         public void Accept(ConditionalNode node)
         {
@@ -335,9 +331,7 @@ namespace Hassium.CodeGen
             currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, tmp);
             currentMethod.Emit(node.SourceLocation, InstructionType.Enumerable_Next);
             currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, table.GetIndex(node.Identifier));
-            currentMethod.Emit(node.SourceLocation, InstructionType.Push_Frame);
             node.Body.Visit(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
             currentMethod.Emit(node.SourceLocation, InstructionType.Jump, foreachLabel);
             currentMethod.Emit(node.SourceLocation, InstructionType.Label, endLabel);
             table.PopScope();
@@ -358,8 +352,7 @@ namespace Hassium.CodeGen
                 currentMethod.Parameters.Add(node.Parameters[i], table.GetIndex(node.Parameters[i]));
             }
 
-            node.Children[0].Visit(this);
-
+            node.Children[0].VisitChildren(this);
             table.PopScope();
         }
         public void Accept(FunctionCallNode node)
@@ -392,7 +385,6 @@ namespace Hassium.CodeGen
             currentMethod = new MethodBuilder();
             currentMethod.Name = "__lambda__";
             table.EnterScope();
-            table.CurrentIndex = 0;
 
             for (int i = 0; i < node.Parameters.Count; i++)
             {
@@ -421,7 +413,6 @@ namespace Hassium.CodeGen
         public void Accept(ReturnNode node)
         {
             node.VisitChildren(this);
-            currentMethod.Emit(node.SourceLocation, InstructionType.Pop_Frame);
             currentMethod.Emit(node.SourceLocation, InstructionType.Return);
         }
         public void Accept(StatementNode node)

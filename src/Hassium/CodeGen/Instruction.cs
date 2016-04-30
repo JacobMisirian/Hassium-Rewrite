@@ -47,8 +47,6 @@ namespace Hassium.CodeGen
         Jump,
         Jump_If_True,
         Jump_If_False,
-        Push_Frame,
-        Pop_Frame,
         Return,
         Import_Attributes,
         Enumerable_Full,

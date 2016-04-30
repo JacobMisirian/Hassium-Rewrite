@@ -21,7 +21,7 @@ namespace Hassium.Lexer
             while (position < code.Length)
             {
                 char orig;
-                if (char.IsLetter((char)peekChar()))
+                if (char.IsLetter((char)peekChar()) || (char)peekChar() == '_')
                     result.Add(scanIdentifier());
                 else if (char.IsDigit((char)peekChar()))
                     result.Add(scanNumber());

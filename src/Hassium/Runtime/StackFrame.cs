@@ -54,20 +54,12 @@ namespace Hassium.Runtime
         }
         public void Modify(int index, HassiumObject value)
         {
-            foreach (Frame frame in Frames)
-            {
-                if (frame.ContainsVariable(index))
-                {
-                    frame.Modify(index, value);
-                    return;
-                }
-            }
+            Frames.Peek().Modify(index, value);
         }
         public HassiumObject GetVariable(int index)
         {
-            foreach (Frame frame in Frames)
-                if (frame.ContainsVariable(index))
-                    return frame.GetVariable(index);
+            if (Frames.Peek().ContainsVariable(index))
+                return Frames.Peek().GetVariable(index);
             throw new InternalException("Variable was not found inside the stack frame! Index " + index);
         }
     }

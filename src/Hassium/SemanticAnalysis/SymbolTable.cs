@@ -7,82 +7,69 @@ namespace Hassium
 {
     public class SymbolTable
     {
-        public class Scope
+        class Scope
         {
-            public Dictionary<string, int> symbols = new Dictionary<string, int>();
-            public bool Contains(string symbol)
+            private Dictionary<string, int> symbols = new Dictionary<string, int>();
+
+            public int GetSymbol(string name)
             {
-                return symbols.ContainsKey(symbol);
+                return symbols[name];
             }
 
-            public void Add(string symbol, int index)
+            public bool FindSymbol(string name)
             {
-                symbols.Add(symbol, index);
+                return symbols.ContainsKey(name);
             }
 
-            public int GetIndex(string symbol)
+            public void AddSymbol(string name, int index)
             {
-                return symbols[symbol];
+                symbols[name] = index;
             }
         }
 
-        public Stack<Scope> Scopes { get; private set; }
-        public Scope GlobalScope { get; private set; }
-        public int CurrentIndex { get { return currentIndex; } set { currentIndex = value; } }
-        private int currentIndex = 0;
+        private Stack<Scope> scopes = new Stack<Scope> ();
+        private Scope globalScope = new Scope();
+        private int nextIndex = 0;
+
+        public bool InGlobalScope { get { return scopes.Peek() == globalScope; } }
 
         public SymbolTable()
         {
-            Scopes = new Stack<Scope>();
-            GlobalScope = new Scope();
-            Scopes.Push(GlobalScope);
+            scopes.Push(globalScope);
         }
 
         public void EnterScope()
         {
-            Scopes.Push(new Scope());
-        }
-
-        public bool FindSymbol(string symbol)
-        {
-            foreach (Scope scope in Scopes)
-                if (scope.Contains(symbol))
-                    return true;
-            return false;
+            scopes.Push(new Scope());
         }
 
         public void PopScope()
         {
-            Scopes.Pop();
-            if (Scopes.Count <= 2)
-                currentIndex = 0;
-        }
-        public void PopScope(string name)
-        {
-            Scopes.Pop();
-            if (Scopes.Count <= 2)
-            {
-                GlobalScope.Add(name, currentIndex);
-                currentIndex = 0;
-            }
+            scopes.Pop();
+            if (scopes.Count == 2)
+                nextIndex = 0;
         }
 
-        public void AddSymbol(string symbol)
+        public int GetIndex(string name)
         {
-            Scopes.Peek().Add(symbol, currentIndex++);
+            foreach (Scope scope in scopes)
+                if (scope.FindSymbol(name))
+                    return scope.GetSymbol(name);
+            return -1;
         }
 
-        public int GetIndex(string symbol)
+        public bool FindSymbol(string name)
         {
-            foreach (Scope scope in Scopes)
-                if (scope.Contains(symbol))
-                    return scope.GetIndex(symbol);
-            throw new Exception(string.Format("{0} does not exist in the current scope!", symbol));
+            foreach (Scope scope in scopes)
+                if (scope.FindSymbol(name))
+                    return true;
+            return false;
         }
 
-        public int GetGlobalIndex(string symbol)
+        public int AddSymbol(string name)
         {
-            return GlobalScope.GetIndex(symbol);
+            scopes.Peek().AddSymbol(name, nextIndex);
+            return nextIndex++;
         }
     }
 }

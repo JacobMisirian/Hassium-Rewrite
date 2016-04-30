@@ -28,7 +28,9 @@ namespace Hassium.Runtime
             gatherGlobals(module.ConstantPool);
 
             callStack.Push("main");
+            stackFrame.EnterFrame();
             ExecuteMethod((MethodBuilder)module.Attributes["main"]);
+            stackFrame.PopFrame();
             callStack.Pop();
         }
 
@@ -42,19 +44,13 @@ namespace Hassium.Runtime
                 int argumentInt = Convert.ToInt32(argument);
                 SourceLocation sourceLocation = method.Instructions[position].SourceLocation;
                 string attribute;
-         //       Console.WriteLine("{0}\t{1}\t\t{2}", method.Instructions[position].InstructionType, argument, stack.Count);
+              //  Console.WriteLine("{0}\t{1}\t\t{2}", method.Instructions[position].InstructionType, argument, stackFrame.Frames.Count);
                 try
                 {
                     switch (method.Instructions[position].InstructionType)
                     {
-                        case InstructionType.Push_Frame:
-                            stackFrame.EnterFrame();
-                            break;
                         case InstructionType.Pop:
                             stack.Pop();
-                            break;
-                        case InstructionType.Pop_Frame:
-                            stackFrame.PopFrame();
                             break;
                         case InstructionType.Binary_Operation:
                             right = stack.Pop();
