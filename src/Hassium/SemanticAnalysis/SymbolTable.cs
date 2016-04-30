@@ -27,7 +27,7 @@ namespace Hassium
             }
         }
 
-        private Stack<Scope> scopes = new Stack<Scope> ();
+        private Stack<Scope> scopes = new Stack<Scope>();
         private Scope globalScope = new Scope();
         private int nextIndex = 0;
 

@@ -21,6 +21,11 @@ namespace Hassium.Parser
                 if (((BinaryOperationNode)expression).BinaryOperation == BinaryOperation.Assignment)
                     return new ExpressionStatementNode(expression, parser.Location);
             }
+            else if (expression is UnaryOperationNode)
+            {
+                if (((UnaryOperationNode)expression).UnaryOperation != UnaryOperation.Not)
+                    return new ExpressionStatementNode(expression, parser.Location);
+            }
             return expression;
         }
 

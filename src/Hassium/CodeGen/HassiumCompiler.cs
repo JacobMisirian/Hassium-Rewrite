@@ -468,11 +468,31 @@ namespace Hassium.CodeGen
         }
         public void Accept(UnaryOperationNode node)
         {
-            node.Body.Visit(this);
             switch (node.UnaryOperation)
             {
                 case UnaryOperation.Not:
-                    currentMethod.Emit(node.SourceLocation, InstructionType.UnaryOperation, 0);
+                    node.Body.Visit(this);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Unary_Operation, 0);
+                    break;
+                case UnaryOperation.PostDecrement:
+                case UnaryOperation.PostIncrement:
+                case UnaryOperation.PreDecrement:
+                case UnaryOperation.PreIncrement:
+                    if (node.Body is IdentifierNode)
+                    {
+                        string identifier = ((IdentifierNode)node.Body).Identifier;
+                        if (!table.FindSymbol(identifier))
+                            table.AddSymbol(identifier);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, table.GetIndex(identifier));
+                        if (node.UnaryOperation == UnaryOperation.PostDecrement || node.UnaryOperation == UnaryOperation.PostIncrement)
+                            currentMethod.Emit(node.SourceLocation, InstructionType.Dup);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Push, 1);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 
+                                           (node.UnaryOperation == UnaryOperation.PostIncrement || node.UnaryOperation == UnaryOperation.PreIncrement) ? 0 : 1);
+                        currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, table.GetIndex(identifier));
+                        if (node.UnaryOperation == UnaryOperation.PreDecrement || node.UnaryOperation == UnaryOperation.PreIncrement)
+                            currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, table.GetIndex(identifier));
+                    }
                     break;
             }
         }

@@ -49,68 +49,46 @@ namespace Hassium.Runtime
                 {
                     switch (method.Instructions[position].InstructionType)
                     {
-                        case InstructionType.Pop:
-                            stack.Pop();
-                            break;
                         case InstructionType.Binary_Operation:
                             right = stack.Pop();
                             left = stack.Pop();
                             executeBinaryOperation(left, right, argumentInt);
                             break;
-                        case InstructionType.UnaryOperation:
-                            executeUnaryOperation(stack.Pop(), argumentInt);
+                        case InstructionType.Call:
+                            HassiumObject target = stack.Pop();
+                            HassiumObject[] args = new HassiumObject[argumentInt];
+                            for (int i = 0; i < args.Length; i++)
+                                args[i] = stack.Pop();
+                            stack.Push(target.Invoke(this, args));
                             break;
-                        case InstructionType.Push:
-                            stack.Push(new HassiumDouble(argument));
+                        case InstructionType.Create_List:
+                            HassiumObject[] elements = new HassiumObject[argumentInt];
+                            for (int i = argumentInt - 1; i >= 0; i--)
+                                elements[i] = stack.Pop();
+                            stack.Push(new HassiumList(elements));
                             break;
-                        case InstructionType.Push_Bool:
-                            stack.Push(new HassiumBool(argument == 1));
+                        case InstructionType.Dup:
+                            stack.Push(stack.Peek());
                             break;
-                        case InstructionType.Push_Object:
-                            stack.Push(module.ConstantPool[argumentInt]);
+                        case InstructionType.Enumerable_Full:
+                            stack.Push(stack.Pop().EnumerableFull(this));
                             break;
-                        case InstructionType.Store_Local:
-                            value = stack.Pop();
-                            if (stackFrame.Contains(argumentInt))
-                                stackFrame.Modify(argumentInt, value);
-                            else
-                                stackFrame.Add(argumentInt, value);
+                        case InstructionType.Enumerable_Next:
+                            stack.Push(stack.Pop().EnumerableNext(this));
                             break;
-                        case InstructionType.Store_Attribute:
-                            location = stack.Pop();
-                            attribute = module.ConstantPool[argumentInt].ToString(this);
-                            if (location is HassiumProperty)
-                            {
-                                HassiumProperty builtinProp = location as HassiumProperty;
-                                builtinProp.Invoke(this, new HassiumObject[] { stack.Pop() });
-                            }
-                            else if (location is UserDefinedProperty)
-                            {
-                                UserDefinedProperty userProp = location as UserDefinedProperty;
-                                userProp.SetMethod.Invoke(this, new HassiumObject[] { stack.Pop() });
-                            }
-                            else
-                                try
-                                {
-                                    location.Attributes[attribute] = stack.Pop();
-                                }
-                                catch (KeyNotFoundException)
-                                {
-                                    throw new RuntimeException(location + " does not contain a definition for " + attribute, sourceLocation);
-                                }
+                        case InstructionType.Enumerable_Reset:
+                            stack.Pop().EnumerableReset(this);
                             break;
-                        case InstructionType.Load_Local:
-                            stack.Push(stackFrame.GetVariable(argumentInt));
+                        case InstructionType.Jump:
+                            position = method.Labels[argument];
                             break;
-                        case InstructionType.Load_Global:
-                            try
-                            {
-                                stack.Push(globals[argument]);
-                            }
-                            catch (KeyNotFoundException)
-                            {
-                                throw new RuntimeException("Cannot find global identifier!", sourceLocation);
-                            }
+                        case InstructionType.Jump_If_True:
+                            if (((HassiumBool)stack.Pop()).Value)
+                                position = method.Labels[argument];
+                            break;
+                        case InstructionType.Jump_If_False:
+                            if (!((HassiumBool)stack.Pop()).Value)
+                                position = method.Labels[argument];
                             break;
                         case InstructionType.Load_Attribute:
                             attribute = module.ConstantPool[argumentInt].ToString(this);
@@ -131,16 +109,63 @@ namespace Hassium.Runtime
                             else
                                 stack.Push(attrib);
                             break;
-                        case InstructionType.Create_List:
-                            HassiumObject[] elements = new HassiumObject[argumentInt];
-                            for (int i = argumentInt - 1; i >= 0; i--)
-                                elements[i] = stack.Pop();
-                            stack.Push(new HassiumList(elements));
+                        case InstructionType.Load_Global:
+                            try
+                            {
+                                stack.Push(globals[argument]);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new RuntimeException("Cannot find global identifier!", sourceLocation);
+                            }
                             break;
                         case InstructionType.Load_List_Element:
                             index = stack.Pop();
                             list = stack.Pop();
                             stack.Push(list.Index(this, index));
+                            break;
+                        case InstructionType.Load_Local:
+                            stack.Push(stackFrame.GetVariable(argumentInt));
+                            break;
+                        case InstructionType.Pop:
+                            stack.Pop();
+                            break;
+                        case InstructionType.Push:
+                            stack.Push(new HassiumInt(argumentInt));
+                            break;
+                        case InstructionType.Push_Bool:
+                            stack.Push(new HassiumBool(argument == 1));
+                            break;
+                        case InstructionType.Push_Object:
+                            stack.Push(module.ConstantPool[argumentInt]);
+                            break;
+                        case InstructionType.Return:
+                            return stack.Pop();
+                        case InstructionType.Self_Reference:
+                            stack.Push(method.Parent);
+                            break;
+                        case InstructionType.Store_Attribute:
+                            location = stack.Pop();
+                            attribute = module.ConstantPool[argumentInt].ToString(this);
+                            if (location is HassiumProperty)
+                            {
+                                HassiumProperty builtinProp = location as HassiumProperty;
+                                builtinProp.Invoke(this, new HassiumObject[] { stack.Pop() });
+                            }
+                            else if (location is UserDefinedProperty)
+                            {
+                                UserDefinedProperty userProp = location as UserDefinedProperty;
+                                userProp.SetMethod.Invoke(this, new HassiumObject[] { stack.Pop() });
+                            }
+                            else
+                                try
+                            {
+                                location.Attributes[attribute] = stack.Pop();
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new RuntimeException(location + " does not contain a definition for " + attribute, sourceLocation);
+                            }
                             break;
                         case InstructionType.Store_List_Element:
                             index = stack.Pop();
@@ -148,37 +173,15 @@ namespace Hassium.Runtime
                             value = stack.Pop();
                             stack.Push(list.StoreIndex(this, index, value));
                             break;
-                        case InstructionType.Self_Reference:
-                            stack.Push(method.Parent);
+                        case InstructionType.Store_Local:
+                            value = stack.Pop();
+                            if (stackFrame.Contains(argumentInt))
+                                stackFrame.Modify(argumentInt, value);
+                            else
+                                stackFrame.Add(argumentInt, value);
                             break;
-                        case InstructionType.Call:
-                            HassiumObject target = stack.Pop();
-                            HassiumObject[] args = new HassiumObject[argumentInt];
-                            for (int i = 0; i < args.Length; i++)
-                                 args[i] = stack.Pop();
-                            stack.Push(target.Invoke(this, args));
-                            break;
-                        case InstructionType.Jump:
-                            position = method.Labels[argument];
-                            break;
-                        case InstructionType.Jump_If_True:
-                            if (((HassiumBool)stack.Pop()).Value)
-                                position = method.Labels[argument];
-                            break;
-                        case InstructionType.Jump_If_False:
-                            if (!((HassiumBool)stack.Pop()).Value)
-                                position = method.Labels[argument];
-                            break;
-                        case InstructionType.Return:
-                            return stack.Pop();
-                        case InstructionType.Enumerable_Full:
-                            stack.Push(stack.Pop().EnumerableFull(this));
-                            break;
-                        case InstructionType.Enumerable_Next:
-                            stack.Push(stack.Pop().EnumerableNext(this));
-                            break;
-                        case InstructionType.Enumerable_Reset:
-                            stack.Pop().EnumerableReset(this);
+                        case InstructionType.Unary_Operation:
+                            executeUnaryOperation(stack.Pop(), argumentInt);
                             break;
                     }
                 }
@@ -251,25 +254,12 @@ namespace Hassium.Runtime
 
         private void executeUnaryOperation(HassiumObject target, int argument)
         {
-            /*
             switch (argument)
             {
                 case 0:
                     stack.Push(target.Not(this));
                     break;
-                case 1:
-                    stack.Push(target.Add(this, new HassiumInt(1));
-                    break;
-                case 2:
-                    stack.Push(target.PostIncrement(this));
-                    break;
-                case 3:
-                    stack.Push(target.PreDecrement(this));
-                    break;
-                case 4:
-                    stack.Push(target.PreIncrement(this));
-                    break;
-            }*/
+            }
         }
 
         private void gatherLabels(MethodBuilder method)
