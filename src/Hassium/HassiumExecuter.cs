@@ -40,7 +40,7 @@ namespace Hassium
                     {
                         Console.WriteLine("Hassium Runtime Exception! Message: {0} at {1}", ex.Message, ex.SourceLocation.ToString());
                         foreach (string str in vm.CallStack)
-                            Console.WriteLine("At {0}() -> ", str);
+                            Console.WriteLine("At {0} -> ", str);
                     }
                 }
             }

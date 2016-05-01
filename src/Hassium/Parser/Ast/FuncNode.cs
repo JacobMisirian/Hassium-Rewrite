@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Hassium.Lexer;
 
@@ -9,12 +10,14 @@ namespace Hassium.Parser
     {
         public string Name { get; private set; }
         public List<string> Parameters { get; private set; }
+        public string SourceRepresentation { get; private set; }
 
-        public FuncNode(string name, List<string> parameters, AstNode body, SourceLocation location)
+        public FuncNode(string name, List<string> parameters, AstNode body, string sourceRepresentation, SourceLocation location)
         {
             Name = name;
             Parameters = parameters;
             Children.Add(body);
+            SourceRepresentation = sourceRepresentation;
             this.SourceLocation = location;
         }
 
@@ -27,8 +30,12 @@ namespace Hassium.Parser
             foreach (AstNode child in args.Children)
                 parameters.Add(((IdentifierNode)child).Identifier);
             AstNode body = StatementNode.Parse(parser);
+            StringBuilder sourceRepresentation = new StringBuilder(string.Format("func {0} ({1}", name, parameters.Count != 0 ? parameters[0] : ""));
+            for (int i = 1; i < parameters.Count; i++)
+                sourceRepresentation.Append(", " + parameters[i]);
+            sourceRepresentation.Append(")");
 
-            return new FuncNode(name, parameters, body, parser.Location);
+            return new FuncNode(name, parameters, body, sourceRepresentation.ToString(), parser.Location);
         }
 
         public override void Visit(IVisitor visitor)

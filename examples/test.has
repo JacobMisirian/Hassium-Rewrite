@@ -1,9 +1,0 @@
-func main () {
-	x = 1;
-	test(x);
-	x = 
-}
-
-func test (x) {
-	println (x);
-}

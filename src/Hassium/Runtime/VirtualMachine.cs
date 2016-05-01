@@ -27,7 +27,7 @@ namespace Hassium.Runtime
             this.module = module;
             gatherGlobals(module.ConstantPool);
 
-            callStack.Push("main");
+            callStack.Push("func main ()");
             stackFrame.EnterFrame();
             ExecuteMethod((MethodBuilder)module.Attributes["main"]);
             stackFrame.PopFrame();

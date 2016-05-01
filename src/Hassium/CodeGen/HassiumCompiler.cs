@@ -17,7 +17,8 @@ namespace Hassium.CodeGen
         {
             this.table = table;
             module = new HassiumModule(name);
-           
+            module.Attributes.Add("Event", new HassiumEvent());
+
             foreach (AstNode child in ast.Children)
             {
                 if (child is FuncNode)
@@ -343,6 +344,7 @@ namespace Hassium.CodeGen
 
             currentMethod = new MethodBuilder();
             currentMethod.Name = node.Name;
+            currentMethod.SourceRepresentation = node.SourceRepresentation;
 
             table.EnterScope();
 

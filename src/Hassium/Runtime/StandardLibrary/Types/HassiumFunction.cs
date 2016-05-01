@@ -26,7 +26,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
             if (vm != null)
-            vm.CallStack.Push(target.Method.Name);
+                vm.CallStack.Push(string.Format("func {0} ({1})", target.Method.Name, ParamLengths[ParamLengths.Length - 1]));
             if (ParamLengths[0] != -1)
             {
                 foreach (int i in ParamLengths)

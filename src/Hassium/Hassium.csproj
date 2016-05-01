@@ -110,6 +110,7 @@
     <Compile Include="Parser\Ast\TerenaryOperationNode.cs" />
     <Compile Include="Parser\Ast\ExpressionStatementNode.cs" />
     <Compile Include="Parser\Ast\LambdaNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

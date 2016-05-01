@@ -11,6 +11,7 @@ namespace Hassium.CodeGen
     {
         public string Name { get { return name; } set { name = value; Types.Add("HassiumFunction"); } }
         private string name = "";
+        public string SourceRepresentation { get; set; }
         public bool IsConstructor { get { return Name == "new"; } }
         public HassiumClass Parent { get; set; }
         public Dictionary<string, int> Parameters = new Dictionary<string, int>();
@@ -21,7 +22,7 @@ namespace Hassium.CodeGen
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
-            vm.CallStack.Push(Name);
+            vm.CallStack.Push(SourceRepresentation != null ? SourceRepresentation : Name);
             vm.StackFrame.EnterFrame();
             foreach (int param in Parameters.Values)
                 vm.StackFrame.Add(param, args[param]);
