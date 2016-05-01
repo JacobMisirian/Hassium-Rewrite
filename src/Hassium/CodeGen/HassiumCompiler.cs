@@ -395,7 +395,6 @@ namespace Hassium.CodeGen
             }
 
             node.Children[0].Visit(this);
-
             table.PopScope();
             // Swap from the lambda method to the current method
             MethodBuilder lambda = currentMethod;

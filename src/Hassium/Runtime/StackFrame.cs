@@ -9,7 +9,7 @@ namespace Hassium.Runtime
     {
         public class Frame
         {
-            private Dictionary<int, HassiumObject> variables = new Dictionary<int, HassiumObject>();
+            public Dictionary<int, HassiumObject> variables = new Dictionary<int, HassiumObject>();
             public void Add(int index, HassiumObject value)
             {
                 variables.Add(index, value);

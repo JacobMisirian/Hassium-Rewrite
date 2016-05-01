@@ -29,6 +29,7 @@ namespace Hassium
 
         private Stack<Scope> scopes = new Stack<Scope>();
         private Scope globalScope = new Scope();
+        public int NextIndex { get { return nextIndex; } set { nextIndex = value; } }
         private int nextIndex = 0;
 
         public bool InGlobalScope { get { return scopes.Peek() == globalScope; } }
