@@ -21,6 +21,8 @@ namespace Hassium.Parser
                 return ConditionalNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "while"))
                 return WhileNode.Parse(parser);
+            else if (parser.MatchToken(TokenType.Identifier, "until"))
+                return WhileNode.Parse(parser, true);
             else if (parser.MatchToken(TokenType.Identifier, "for"))
                 return ForNode.Parse(parser);
             else if (parser.MatchToken(TokenType.Identifier, "foreach"))

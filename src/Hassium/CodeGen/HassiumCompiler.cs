@@ -18,6 +18,7 @@ namespace Hassium.CodeGen
             this.table = table;
             module = new HassiumModule(name);
             module.Attributes.Add("Event", new HassiumEvent());
+            module.Attributes.Add("Thread", new HassiumThread());
 
             foreach (AstNode child in ast.Children)
             {
@@ -51,6 +52,7 @@ namespace Hassium.CodeGen
                         string path = ((StringNode)use.Target).String;
                         HassiumModule compiledModule = HassiumExecuter.FromFilePath(path, false);
                         foreach (KeyValuePair<string, HassiumObject> attribute in compiledModule.Attributes)
+                            if (!module.Attributes.ContainsKey(attribute.Key))
                             module.Attributes.Add(attribute.Key, attribute.Value);
                         foreach (HassiumObject constant in compiledModule.ConstantPool)
                             if (!module.ConstantPool.Contains(constant))

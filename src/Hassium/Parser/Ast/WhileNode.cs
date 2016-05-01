@@ -15,11 +15,11 @@ namespace Hassium.Parser
             this.SourceLocation = location;
         }
 
-        public static WhileNode Parse(Parser parser)
+        public static WhileNode Parse(Parser parser, bool until = false)
         {
-            parser.ExpectToken(TokenType.Identifier, "while");
+            parser.ExpectToken(TokenType.Identifier);
             parser.ExpectToken(TokenType.LeftParentheses);
-            AstNode predicate = ExpressionNode.Parse(parser);
+            AstNode predicate = until ? new UnaryOperationNode(UnaryOperation.Not, ExpressionNode.Parse(parser), parser.Location) : ExpressionNode.Parse(parser);
             parser.ExpectToken(TokenType.RightParentheses);
             AstNode body = StatementNode.Parse(parser);
 

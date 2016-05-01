@@ -113,6 +113,7 @@
     <Compile Include="Runtime\StandardLibrary\Types\HassiumEvent.cs" />
     <Compile Include="Runtime\StandardLibrary\Net\HassiumNetModule.cs" />
     <Compile Include="Runtime\StandardLibrary\Net\HassiumNetConnection.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumThread.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
