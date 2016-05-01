@@ -55,13 +55,11 @@ namespace Hassium.Runtime
                             executeBinaryOperation(left, right, argumentInt);
                             break;
                         case InstructionType.Call:
-                            stackFrame.EnterFrame();
                             HassiumObject target = stack.Pop();
                             HassiumObject[] args = new HassiumObject[argumentInt];
                             for (int i = 0; i < args.Length; i++)
                                 args[i] = stack.Pop();
                             stack.Push(target.Invoke(this, args));
-                            stackFrame.PopFrame();
                             break;
                         case InstructionType.Create_List:
                             HassiumObject[] elements = new HassiumObject[argumentInt];

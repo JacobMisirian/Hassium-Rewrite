@@ -22,11 +22,13 @@ namespace Hassium.CodeGen
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
+            vm.StackFrame.EnterFrame();
             vm.CallStack.Push(SourceRepresentation != null ? SourceRepresentation : Name);
             int counter = 0;
             foreach (int param in Parameters.Values)
                 vm.StackFrame.Add(param, args[counter++]);
             HassiumObject returnValue = vm.ExecuteMethod(this);
+            vm.StackFrame.PopFrame();
             if (IsConstructor)
             {
                 HassiumClass ret = new HassiumClass();

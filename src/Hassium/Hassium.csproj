@@ -111,6 +111,8 @@
     <Compile Include="Parser\Ast\ExpressionStatementNode.cs" />
     <Compile Include="Parser\Ast\LambdaNode.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumEvent.cs" />
+    <Compile Include="Runtime\StandardLibrary\Net\HassiumNetModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\Net\HassiumNetConnection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -124,5 +126,6 @@
     <Folder Include="CodeGen\" />
     <Folder Include="Runtime\StandardLibrary\IO\" />
     <Folder Include="Runtime\StandardLibrary\Text\" />
+    <Folder Include="Runtime\StandardLibrary\Net\" />
   </ItemGroup>
 </Project>

@@ -1,23 +1,24 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/SemanticAnalysis/SymbolTable.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/MethodBuilder.cs">
     <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="1" Column="1" />
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="401" Column="13" />
-      <File FileName="Hassium/Parser/Ast/ClassNode.cs" Line="1" Column="1" />
-      <File FileName="Hassium/Lexer/Lexer.cs" Line="201" Column="1" />
-      <File FileName="Hassium/Parser/Ast/FuncNode.cs" Line="1" Column="1" />
-      <File FileName="Hassium/Parser/Ast/ExpressionNode.cs" Line="1" Column="1" />
-      <File FileName="Hassium/CodeGen/MethodBuilder.cs" Line="25" Column="40" />
-      <File FileName="Hassium/SemanticAnalysis/SymbolTable.cs" Line="56" Column="34" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="62" Column="67" />
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="389" Column="13" />
+      <File FileName="Hassium/CodeGen/MethodBuilder.cs" Line="24" Column="10" />
+      <File FileName="Hassium/Runtime/StandardLibrary/Net/HassiumNetConnection.cs" Line="71" Column="39" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Hassium" expanded="True">
-            <Node name="CodeGen" expanded="True" />
-            <Node name="SemanticAnalysis" expanded="True">
-              <Node name="SymbolTable.cs" selected="True" />
+            <Node name="CodeGen" expanded="True">
+              <Node name="MethodBuilder.cs" selected="True" />
+            </Node>
+            <Node name="Runtime" expanded="True">
+              <Node name="StandardLibrary" expanded="True">
+                <Node name="IO" expanded="True" />
+                <Node name="Net" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
