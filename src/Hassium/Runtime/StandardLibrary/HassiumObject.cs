@@ -35,7 +35,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             "HassiumObject"
         };
 
-        public object Value { get; private set; }
+        public object Value { get; set; }
 
         public virtual HassiumObject Add(VirtualMachine vm, HassiumObject obj)
         {

@@ -11,6 +11,7 @@ namespace Hassium.Runtime.StandardLibrary.Net
             Attributes.Add("ConnectionListener", new HassiumConnectionListener());
             Attributes.Add("Dns", new HassiumDns());
             Attributes.Add("NetConnection", new HassiumNetConnection());
+            Attributes.Add("Socket", new HassiumSocket());
         }
     }
 }
