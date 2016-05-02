@@ -23,12 +23,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 Value.Add(obj);
             Attributes.Add("add", new HassiumFunction(_add, -1));
             Attributes.Add("contains", new HassiumFunction(contains, -1));
+            Attributes.Add("copy", new HassiumFunction(copy, 1));
             Attributes.Add("getString", new HassiumFunction(getString, 0));
             Attributes.Add("indexOf", new HassiumFunction(indexOf, 1));
             Attributes.Add("lastIndexOf", new HassiumFunction(lastIndexOf, 1));
             Attributes.Add("length", new HassiumProperty(get_Length));
             Attributes.Add("remove", new HassiumFunction(remove, -1));
             Attributes.Add("reverse", new HassiumFunction(reverse, 0));
+            Attributes.Add("split", new HassiumFunction(split, new int[] { 1, 2 }));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(__index__, 1));
             Attributes.Add(HassiumObject.STORE_INDEX_FUNCTION, new HassiumFunction(__storeindex__, 2));
@@ -50,6 +52,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 if (!Value.Any(x => x.Equals(vm, args[0]).Value))
                     return new HassiumBool(false);
             return new HassiumBool(true);
+        }
+        private HassiumNull copy(VirtualMachine vm, HassiumObject[] args)
+        {
+            HassiumList list = HassiumList.Create(args[0]);
+            foreach (HassiumObject obj in Value)
+                list.Add(vm, obj);
+
+            return HassiumObject.Null;
         }
         private HassiumString getString(VirtualMachine vm, HassiumObject[] args)
         {
@@ -89,7 +99,16 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 elements[i] = Value[Value.Count - (i + 1)];
             return new HassiumList(elements);
         }
-        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
+        private HassiumList split(VirtualMachine vm, HassiumObject[] args)
+        {
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+
+            int max = args.Length == 2 ? (int)HassiumInt.Create(args[1]).Value : list.Value.Count;
+            for (int i = (int)HassiumInt.Create(args[0]).Value; i < max; i++)
+                list.Add(vm, Value[i]);
+            return list;
+        }
+        private HassiumString __tostring__(VirtualMachine vm, HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();
             foreach (HassiumObject obj in Value)

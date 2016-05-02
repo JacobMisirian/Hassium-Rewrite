@@ -1,4 +1,5 @@
 func main () {
-	
+	foreach (x in 10)
+		println(x);
 }
 

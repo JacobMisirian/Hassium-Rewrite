@@ -34,6 +34,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.GREATER_OR_EQUAL_FUNCTION, new HassiumFunction(__greaterorequal__, 1));
             Attributes.Add(HassiumObject.LESSER_FUNCTION, new HassiumFunction(__lesser__, 1));
             Attributes.Add(HassiumObject.LESSER_OR_EQUAL_FUNCTION, new HassiumFunction(__lesserorequal__, 1));
+            Attributes.Add(HassiumObject.ENUMERABLE_FULL, new HassiumFunction(__enumerablefull__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_NEXT, new HassiumFunction(__enumerablenext__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_RESET, new HassiumFunction(__enumerablereset__, 0));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Types.Add(this.GetType().Name);
         }
@@ -156,6 +159,20 @@ namespace Hassium.Runtime.StandardLibrary.Types
             else if (args[0] is HassiumInt)
                 return new HassiumBool(Value <= ((HassiumInt)args[0]).Value);
             throw new InternalException("Cannot operate HassiumInt on " + args[0].GetType().Name);
+        }
+        private int enumerableIndex = 0;
+        private HassiumBool __enumerablefull__(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(enumerableIndex >= Value);
+        }
+        private HassiumInt __enumerablenext__(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumInt(enumerableIndex++);
+        }
+        private HassiumNull __enumerablereset__(VirtualMachine vm, HassiumObject[] args)
+        {
+            enumerableIndex = 0;
+            return HassiumObject.Null;
         }
         private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
         {
