@@ -9,6 +9,7 @@ namespace Hassium.Runtime.StandardLibrary.Net
         public HassiumNetModule() : base("Net")
         {
             Attributes.Add("NetConnection", new HassiumNetConnection());
+            Attributes.Add("Dns", new HassiumDns());
         }
     }
 }

@@ -18,7 +18,10 @@ namespace Hassium.Runtime.StandardLibrary.IO
         {
             HassiumFileWriter hassiumFileWriter = new HassiumFileWriter();
 
-            hassiumFileWriter.BinaryWriter = new BinaryWriter(new StreamWriter(HassiumString.Create(args[0]).Value).BaseStream);
+            if (args[0] is HassiumString)
+                hassiumFileWriter.BinaryWriter = new BinaryWriter(new StreamWriter(HassiumString.Create(args[0]).Value).BaseStream);
+            else if (args[0] is HassiumStream)
+                hassiumFileWriter.BinaryWriter = new BinaryWriter(((HassiumStream)args[0]).Stream);
             hassiumFileWriter.Attributes.Add("position", new HassiumProperty(hassiumFileWriter.get_Position));
             hassiumFileWriter.Attributes.Add("write", new HassiumFunction(hassiumFileWriter.write, 1));
             hassiumFileWriter.Attributes.Add("writeBool", new HassiumFunction(hassiumFileWriter.writeBool, 1));

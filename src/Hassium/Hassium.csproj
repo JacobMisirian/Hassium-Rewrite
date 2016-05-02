@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -52,6 +52,7 @@
     <Compile Include="Parser\Ast\ArgListNode.cs" />
     <Compile Include="Parser\Ast\CharNode.cs" />
     <Compile Include="Parser\Ast\FunctionCallNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\IO\HassiumStream.cs" />
     <Compile Include="SemanticAnalysis\SemanticAnalyzer.cs" />
     <Compile Include="SemanticAnalysis\SymbolTable.cs" />
     <Compile Include="Parser\Ast\ConditionalNode.cs" />
@@ -116,17 +117,5 @@
     <Compile Include="Runtime\StandardLibrary\Types\HassiumThread.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Lexer\" />
-    <Folder Include="Parser\" />
-    <Folder Include="Parser\Ast\" />
-    <Folder Include="SemanticAnalysis\" />
-    <Folder Include="Runtime\" />
-    <Folder Include="Runtime\StandardLibrary\" />
-    <Folder Include="Runtime\StandardLibrary\Types\" />
-    <Folder Include="CodeGen\" />
-    <Folder Include="Runtime\StandardLibrary\IO\" />
-    <Folder Include="Runtime\StandardLibrary\Text\" />
-    <Folder Include="Runtime\StandardLibrary\Net\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

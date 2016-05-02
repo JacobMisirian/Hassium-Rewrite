@@ -18,7 +18,10 @@ namespace Hassium.Runtime.StandardLibrary.IO
         {
             HassiumFileReader hassiumFileReader = new HassiumFileReader();
 
-            hassiumFileReader.BinaryReader = new BinaryReader(new StreamReader(HassiumString.Create(args[0]).Value).BaseStream);
+            if (args[0] is HassiumString)
+                hassiumFileReader.BinaryReader = new BinaryReader(new StreamReader(HassiumString.Create(args[0]).Value).BaseStream);
+            else if (args[0] is HassiumStream)
+                hassiumFileReader.BinaryReader = new BinaryReader(((HassiumStream)args[0]).Stream);
             hassiumFileReader.Attributes.Add("endOfFile", new HassiumProperty(hassiumFileReader.get_EndOfFile));
             hassiumFileReader.Attributes.Add("length", new HassiumProperty(hassiumFileReader.get_Length));
             hassiumFileReader.Attributes.Add("position", new HassiumProperty(hassiumFileReader.get_Position));
