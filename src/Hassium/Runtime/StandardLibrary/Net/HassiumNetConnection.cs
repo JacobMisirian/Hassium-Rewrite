@@ -18,6 +18,18 @@ namespace Hassium.Runtime.StandardLibrary.Net
             Attributes.Add(HassiumObject.INVOKE_FUNCTION, new HassiumFunction(_new, 2));
         }
 
+        public static HassiumNetConnection CreateFromTcpClient(TcpClient client)
+        {
+            HassiumNetConnection hassiumNetConnection = new HassiumNetConnection();
+
+            hassiumNetConnection.TcpClient = client;
+            hassiumNetConnection.Attributes.Add("close", new HassiumFunction(hassiumNetConnection.close, 0));
+            hassiumNetConnection.Attributes.Add("connected", new HassiumProperty(hassiumNetConnection.connected));
+            hassiumNetConnection.Attributes.Add("getStream", new HassiumFunction(hassiumNetConnection.getStream, 0));
+
+            return hassiumNetConnection;
+        }
+
         private HassiumNetConnection _new(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumNetConnection hassiumNetConnection = new HassiumNetConnection();

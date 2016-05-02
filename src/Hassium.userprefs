@@ -1,22 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/MethodBuilder.cs">
-    <Files>
-      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="62" Column="67" />
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="389" Column="13" />
-      <File FileName="Hassium/CodeGen/MethodBuilder.cs" Line="24" Column="10" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Net/HassiumNetConnection.cs" Line="71" Column="39" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Hassium" expanded="True">
-            <Node name="CodeGen" expanded="True">
-              <Node name="MethodBuilder.cs" selected="True" />
-            </Node>
             <Node name="Runtime" expanded="True">
               <Node name="StandardLibrary" expanded="True">
-                <Node name="IO" expanded="True" />
                 <Node name="Net" expanded="True" />
               </Node>
             </Node>
