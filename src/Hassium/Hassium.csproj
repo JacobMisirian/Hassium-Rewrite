@@ -53,6 +53,7 @@
     <Compile Include="Parser\Ast\CharNode.cs" />
     <Compile Include="Parser\Ast\FunctionCallNode.cs" />
     <Compile Include="Runtime\StandardLibrary\IO\HassiumStream.cs" />
+    <Compile Include="Runtime\StandardLibrary\Net\HassiumDns.cs" />
     <Compile Include="SemanticAnalysis\SemanticAnalyzer.cs" />
     <Compile Include="SemanticAnalysis\SymbolTable.cs" />
     <Compile Include="Parser\Ast\ConditionalNode.cs" />

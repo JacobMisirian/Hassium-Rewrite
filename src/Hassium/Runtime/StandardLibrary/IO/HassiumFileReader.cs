@@ -82,11 +82,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
             StringBuilder sb = new StringBuilder();
             while (true)
             {
-                if (get_EndOfFile(vm, args).Value)
-                    return new HassiumString(sb.ToString());
                 char one = readChar(vm, args).Value;
-                if (get_EndOfFile(vm, args).Value)
-                    return new HassiumString(sb.ToString());
                 char two = readChar(vm, args).Value;
                 if (one == '\r' && two == '\n')
                     return new HassiumString(sb.ToString() + "\n");

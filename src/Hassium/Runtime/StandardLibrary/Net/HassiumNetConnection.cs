@@ -23,8 +23,9 @@ namespace Hassium.Runtime.StandardLibrary.Net
             HassiumNetConnection hassiumNetConnection = new HassiumNetConnection();
 
             hassiumNetConnection.TcpClient = new TcpClient(HassiumString.Create(args[0]).Value, (int)HassiumInt.Create(args[1]).Value);
-            hassiumNetConnection.Attributes.Add("close", new HassiumFunction(close, 0));
-            hassiumNetConnection.Attributes.Add("getStream", new HassiumFunction(getStream, 0));
+            hassiumNetConnection.Attributes.Add("close", new HassiumFunction(hassiumNetConnection.close, 0));
+            hassiumNetConnection.Attributes.Add("connected", new HassiumProperty(hassiumNetConnection.connected));
+            hassiumNetConnection.Attributes.Add("getStream", new HassiumFunction(hassiumNetConnection.getStream, 0));
 
             return hassiumNetConnection;
         }
@@ -33,6 +34,10 @@ namespace Hassium.Runtime.StandardLibrary.Net
         {
             TcpClient.Close();
             return HassiumObject.Null;
+        }
+        public HassiumBool connected(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(TcpClient.Connected);
         }
         public HassiumStream getStream(VirtualMachine vm, HassiumObject[] args)
         {
