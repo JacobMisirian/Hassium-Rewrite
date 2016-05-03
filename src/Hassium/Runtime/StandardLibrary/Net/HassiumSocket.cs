@@ -23,15 +23,15 @@ namespace Hassium.Runtime.StandardLibrary.Net
             ProtocolType protocolType = parseEnum<ProtocolType>(HassiumString.Create(args[2]).Value);
 
             hassiumSocket.Socket = new Socket(addressFamily, socketType, protocolType);
-            hassiumSocket.Attributes.Add("available", new HassiumProperty(hassiumSocket.get_Available));
-            hassiumSocket.Attributes.Add("blocking", new HassiumProperty(hassiumSocket.get_Blocking, hassiumSocket.set_Blocking));
-            hassiumSocket.Attributes.Add("connected", new HassiumProperty(hassiumSocket.get_Connected));
-            hassiumSocket.Attributes.Add("noDelay", new HassiumProperty(hassiumSocket.get_NoDelay, hassiumSocket.set_NoDelay));
-            hassiumSocket.Attributes.Add("close", new HassiumFunction(hassiumSocket.close, 0));
-            hassiumSocket.Attributes.Add("connect", new HassiumFunction(hassiumSocket.connect, 2));
-            hassiumSocket.Attributes.Add("listen", new HassiumFunction(hassiumSocket.listen, 1));
-            hassiumSocket.Attributes.Add("send", new HassiumFunction(hassiumSocket.send, 1));
-            hassiumSocket.Attributes.Add("sendFile", new HassiumFunction(hassiumSocket.sendFile, 1));
+            hassiumSocket.Attributes.Add("available",   new HassiumProperty(hassiumSocket.get_Available));
+            hassiumSocket.Attributes.Add("blocking",    new HassiumProperty(hassiumSocket.get_Blocking, hassiumSocket.set_Blocking));
+            hassiumSocket.Attributes.Add("connected",   new HassiumProperty(hassiumSocket.get_Connected));
+            hassiumSocket.Attributes.Add("noDelay",     new HassiumProperty(hassiumSocket.get_NoDelay, hassiumSocket.set_NoDelay));
+            hassiumSocket.Attributes.Add("close",       new HassiumFunction(hassiumSocket.close, 0));
+            hassiumSocket.Attributes.Add("connect",     new HassiumFunction(hassiumSocket.connect, 2));
+            hassiumSocket.Attributes.Add("listen",      new HassiumFunction(hassiumSocket.listen, 1));
+            hassiumSocket.Attributes.Add("send",        new HassiumFunction(hassiumSocket.send, 1));
+            hassiumSocket.Attributes.Add("sendFile",    new HassiumFunction(hassiumSocket.sendFile, 1));
 
             return hassiumSocket;
         }

@@ -19,10 +19,10 @@ namespace Hassium.Runtime.StandardLibrary.Net
             HassiumConnectionListener hassiumConnectionListener = new HassiumConnectionListener();
 
             hassiumConnectionListener.TcpListener = new TcpListener(IPAddress.Parse(HassiumString.Create(args[0]).Value), (int)HassiumInt.Create(args[1]).Value);
-            hassiumConnectionListener.Attributes.Add("acceptConnection", new HassiumFunction(hassiumConnectionListener.acceptConnection, 0));
-            hassiumConnectionListener.Attributes.Add("pending", new HassiumFunction(hassiumConnectionListener.pending, 0));
-            hassiumConnectionListener.Attributes.Add("start", new HassiumFunction(hassiumConnectionListener.start, 0));
-            hassiumConnectionListener.Attributes.Add("stop", new HassiumFunction(hassiumConnectionListener.stop, 0));
+            hassiumConnectionListener.Attributes.Add("acceptConnection",    new HassiumFunction(hassiumConnectionListener.acceptConnection, 0));
+            hassiumConnectionListener.Attributes.Add("pending",             new HassiumFunction(hassiumConnectionListener.pending, 0));
+            hassiumConnectionListener.Attributes.Add("start",               new HassiumFunction(hassiumConnectionListener.start, 0));
+            hassiumConnectionListener.Attributes.Add("stop",                new HassiumFunction(hassiumConnectionListener.stop, 0));
 
             return hassiumConnectionListener;
         }

@@ -8,10 +8,11 @@ namespace Hassium.Runtime.StandardLibrary.Net
     {
         public HassiumNetModule() : base("Net")
         {
-            Attributes.Add("ConnectionListener", new HassiumConnectionListener());
-            Attributes.Add("Dns", new HassiumDns());
-            Attributes.Add("NetConnection", new HassiumNetConnection());
-            Attributes.Add("Socket", new HassiumSocket());
+            Attributes.Add("ConnectionListener",    new HassiumConnectionListener());
+            Attributes.Add("Dns",                   new HassiumDns());
+            Attributes.Add("NetConnection",         new HassiumNetConnection());
+            Attributes.Add("Socket",                new HassiumSocket());
+            Attributes.Add("WebClient",             new HassiumWebClient());
         }
     }
 }

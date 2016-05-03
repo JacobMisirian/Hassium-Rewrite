@@ -18,10 +18,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             HassiumEvent hassiumEvent = new HassiumEvent();
 
-            hassiumEvent.Handlers = args.Length == 0 ? new HassiumList(new HassiumObject[0]) : HassiumList.Create(args[0]);
-            hassiumEvent.Attributes.Add("add", new HassiumFunction(hassiumEvent.add, -1));
-            hassiumEvent.Attributes.Add("handle", new HassiumFunction(hassiumEvent.handle, -1));
-            hassiumEvent.Attributes.Add("remove", new HassiumFunction(hassiumEvent.handle, -1));
+            hassiumEvent.Handlers = args.Length == 0 ?  new HassiumList(new HassiumObject[0]) : HassiumList.Create(args[0]);
+            hassiumEvent.Attributes.Add("add",          new HassiumFunction(hassiumEvent.add, -1));
+            hassiumEvent.Attributes.Add("handle",       new HassiumFunction(hassiumEvent.handle, -1));
+            hassiumEvent.Attributes.Add("remove",       new HassiumFunction(hassiumEvent.handle, -1));
 
             return hassiumEvent;
         }

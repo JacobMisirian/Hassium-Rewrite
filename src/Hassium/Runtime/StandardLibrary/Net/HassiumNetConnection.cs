@@ -23,9 +23,9 @@ namespace Hassium.Runtime.StandardLibrary.Net
             HassiumNetConnection hassiumNetConnection = new HassiumNetConnection();
 
             hassiumNetConnection.TcpClient = client;
-            hassiumNetConnection.Attributes.Add("close", new HassiumFunction(hassiumNetConnection.close, 0));
-            hassiumNetConnection.Attributes.Add("connected", new HassiumProperty(hassiumNetConnection.connected));
-            hassiumNetConnection.Attributes.Add("getStream", new HassiumFunction(hassiumNetConnection.getStream, 0));
+            hassiumNetConnection.Attributes.Add("close",        new HassiumFunction(hassiumNetConnection.close, 0));
+            hassiumNetConnection.Attributes.Add("connected",    new HassiumProperty(hassiumNetConnection.connected));
+            hassiumNetConnection.Attributes.Add("getStream",    new HassiumFunction(hassiumNetConnection.getStream, 0));
 
             return hassiumNetConnection;
         }

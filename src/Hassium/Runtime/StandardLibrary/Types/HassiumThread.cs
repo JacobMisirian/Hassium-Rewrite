@@ -17,9 +17,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             HassiumThread hassiumThread = new HassiumThread();
 
             hassiumThread.Thread = new Thread(() => args[0].Invoke(vm, HassiumList.Create(args[1]).Value.ToArray()));
-            hassiumThread.Attributes.Add("sleep", new HassiumFunction(hassiumThread.sleep, 1));
-            hassiumThread.Attributes.Add("start", new HassiumFunction(hassiumThread.start, 0));
-            hassiumThread.Attributes.Add("stop", new HassiumFunction(hassiumThread.stop, 0));
+            hassiumThread.Attributes.Add("sleep",   new HassiumFunction(hassiumThread.sleep, 1));
+            hassiumThread.Attributes.Add("start",   new HassiumFunction(hassiumThread.start, 0));
+            hassiumThread.Attributes.Add("stop",    new HassiumFunction(hassiumThread.stop, 0));
 
             return hassiumThread;
         }

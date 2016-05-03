@@ -9,10 +9,10 @@ namespace Hassium.Runtime.StandardLibrary.Net
     {
         public HassiumDns()
         {
-            Attributes.Add("resolveAddress", new HassiumFunction(resolveAddress, 1));
-            Attributes.Add("resolveAddresses", new HassiumFunction(resolveAddresses, 1));
-            Attributes.Add("resolveHost", new HassiumFunction(resolveHost, 1));
-            Attributes.Add("resolveHosts", new HassiumFunction(resolveHosts, 1));
+            Attributes.Add("resolveAddress",    new HassiumFunction(resolveAddress, 1));
+            Attributes.Add("resolveAddresses",  new HassiumFunction(resolveAddresses, 1));
+            Attributes.Add("resolveHost",       new HassiumFunction(resolveHost, 1));
+            Attributes.Add("resolveHosts",      new HassiumFunction(resolveHosts, 1));
         }
 
         private HassiumString resolveAddress(VirtualMachine vm, HassiumObject[] args)

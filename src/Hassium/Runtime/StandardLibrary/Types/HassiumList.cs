@@ -21,22 +21,22 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Value = new List<HassiumObject>();
             foreach (HassiumObject obj in initial)
                 Value.Add(obj);
-            Attributes.Add("add", new HassiumFunction(_add, -1));
-            Attributes.Add("contains", new HassiumFunction(contains, -1));
-            Attributes.Add("copy", new HassiumFunction(copy, 1));
-            Attributes.Add("getString", new HassiumFunction(getString, 0));
-            Attributes.Add("indexOf", new HassiumFunction(indexOf, 1));
-            Attributes.Add("lastIndexOf", new HassiumFunction(lastIndexOf, 1));
-            Attributes.Add("length", new HassiumProperty(get_Length));
-            Attributes.Add("remove", new HassiumFunction(remove, -1));
-            Attributes.Add("reverse", new HassiumFunction(reverse, 0));
-            Attributes.Add("split", new HassiumFunction(split, new int[] { 1, 2 }));
-            Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
-            Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(__index__, 1));
-            Attributes.Add(HassiumObject.STORE_INDEX_FUNCTION, new HassiumFunction(__storeindex__, 2));
-            Attributes.Add(HassiumObject.ENUMERABLE_FULL, new HassiumFunction(__enumerablefull__, 0));
-            Attributes.Add(HassiumObject.ENUMERABLE_NEXT, new HassiumFunction(__enumerablenext__, 0));
-            Attributes.Add(HassiumObject.ENUMERABLE_RESET, new HassiumFunction(__enumerablereset__, 0));
+            Attributes.Add("add",           new HassiumFunction(_add, -1));
+            Attributes.Add("contains",      new HassiumFunction(contains, -1));
+            Attributes.Add("copy",          new HassiumFunction(copy, 1));
+            Attributes.Add("getString",     new HassiumFunction(getString, 0));
+            Attributes.Add("indexOf",       new HassiumFunction(indexOf, 1));
+            Attributes.Add("lastIndexOf",   new HassiumFunction(lastIndexOf, 1));
+            Attributes.Add("length",        new HassiumProperty(get_Length));
+            Attributes.Add("remove",        new HassiumFunction(remove, -1));
+            Attributes.Add("reverse",       new HassiumFunction(reverse, 0));
+            Attributes.Add("split",         new HassiumFunction(split, new int[] { 1, 2 }));
+            Attributes.Add(HassiumObject.TOSTRING_FUNCTION,     new HassiumFunction(__tostring__, 0));
+            Attributes.Add(HassiumObject.INDEX_FUNCTION,        new HassiumFunction(__index__, 1));
+            Attributes.Add(HassiumObject.STORE_INDEX_FUNCTION,  new HassiumFunction(__storeindex__, 2));
+            Attributes.Add(HassiumObject.ENUMERABLE_FULL,       new HassiumFunction(__enumerablefull__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_NEXT,       new HassiumFunction(__enumerablenext__, 0));
+            Attributes.Add(HassiumObject.ENUMERABLE_RESET,      new HassiumFunction(__enumerablereset__, 0));
             Types.Add(GetType().Name);
         }
 

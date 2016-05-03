@@ -16,26 +16,26 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumChar(char value)
         {
             Value = value;
-            Attributes.Add("isDigit", new HassiumFunction(isDigit, 0));
-            Attributes.Add("isLetter", new HassiumFunction(isLetter, 0));
-            Attributes.Add("isLetterOrDigit", new HassiumFunction(isLetterOrDigit, 0));
-            Attributes.Add("isLower", new HassiumFunction(isLower, 0));
-            Attributes.Add("isUpper", new HassiumFunction(isUpper, 0));
-            Attributes.Add("isWhitespace", new HassiumFunction(isWhitespace, 0));
-            Attributes.Add("toBool", new HassiumFunction(toBool, 0));
-            Attributes.Add("toChar", new HassiumFunction(toChar, 0));
-            Attributes.Add("toDouble", new HassiumFunction(toDouble, 0));
-            Attributes.Add("toInt", new HassiumFunction(toInt, 0));
-            Attributes.Add(HassiumObject.ADD_FUNCTION, new HassiumFunction(__add__, 1));
-            Attributes.Add(HassiumObject.SUB_FUNCTION, new HassiumFunction(__sub__, 1));
-            Attributes.Add(HassiumObject.MUL_FUNCTION, new HassiumFunction(__mul__, 1));
-            Attributes.Add(HassiumObject.DIV_FUNCTION, new HassiumFunction(__div__, 1));
-            Attributes.Add(HassiumObject.MOD_FUNCTION, new HassiumFunction(__mod__, 1));
-            Attributes.Add(HassiumObject.XOR_FUNCTION, new HassiumFunction(__xor__, 1));
-            Attributes.Add(HassiumObject.OR_FUNCTION, new HassiumFunction(__or__, 1));
-            Attributes.Add(HassiumObject.XAND_FUNCTION, new HassiumFunction(__xand__, 1));
-            Attributes.Add(HassiumObject.EQUALS_FUNCTION, new HassiumFunction(__equals__, 1));
-            Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION, new HassiumFunction(__notequals__, 1));
+            Attributes.Add("isDigit",           new HassiumFunction(isDigit, 0));
+            Attributes.Add("isLetter",          new HassiumFunction(isLetter, 0));
+            Attributes.Add("isLetterOrDigit",   new HassiumFunction(isLetterOrDigit, 0));
+            Attributes.Add("isLower",           new HassiumFunction(isLower, 0));
+            Attributes.Add("isUpper",           new HassiumFunction(isUpper, 0));
+            Attributes.Add("isWhitespace",      new HassiumFunction(isWhitespace, 0));
+            Attributes.Add("toBool",            new HassiumFunction(toBool, 0));
+            Attributes.Add("toChar",            new HassiumFunction(toChar, 0));
+            Attributes.Add("toDouble",          new HassiumFunction(toDouble, 0));
+            Attributes.Add("toInt",             new HassiumFunction(toInt, 0));
+            Attributes.Add(HassiumObject.ADD_FUNCTION,      new HassiumFunction(__add__, 1));
+            Attributes.Add(HassiumObject.SUB_FUNCTION,      new HassiumFunction(__sub__, 1));
+            Attributes.Add(HassiumObject.MUL_FUNCTION,      new HassiumFunction(__mul__, 1));
+            Attributes.Add(HassiumObject.DIV_FUNCTION,      new HassiumFunction(__div__, 1));
+            Attributes.Add(HassiumObject.MOD_FUNCTION,      new HassiumFunction(__mod__, 1));
+            Attributes.Add(HassiumObject.XOR_FUNCTION,      new HassiumFunction(__xor__, 1));
+            Attributes.Add(HassiumObject.OR_FUNCTION,       new HassiumFunction(__or__, 1));
+            Attributes.Add(HassiumObject.XAND_FUNCTION,     new HassiumFunction(__xand__, 1));
+            Attributes.Add(HassiumObject.EQUALS_FUNCTION,   new HassiumFunction(__equals__, 1));
+            Attributes.Add(HassiumObject.NOT_EQUAL_FUNCTION,new HassiumFunction(__notequals__, 1));
             Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Types.Add(this.GetType().Name);
         }

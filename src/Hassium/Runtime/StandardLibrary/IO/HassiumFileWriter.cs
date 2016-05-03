@@ -22,16 +22,16 @@ namespace Hassium.Runtime.StandardLibrary.IO
                 hassiumFileWriter.BinaryWriter = new BinaryWriter(new StreamWriter(HassiumString.Create(args[0]).Value).BaseStream);
             else if (args[0] is HassiumStream)
                 hassiumFileWriter.BinaryWriter = new BinaryWriter(((HassiumStream)args[0]).Stream);
-            hassiumFileWriter.Attributes.Add("position", new HassiumProperty(hassiumFileWriter.get_Position));
-            hassiumFileWriter.Attributes.Add("write", new HassiumFunction(hassiumFileWriter.write, 1));
-            hassiumFileWriter.Attributes.Add("writeBool", new HassiumFunction(hassiumFileWriter.writeBool, 1));
-            hassiumFileWriter.Attributes.Add("writeChar", new HassiumFunction(hassiumFileWriter.writeChar, 1));
+            hassiumFileWriter.Attributes.Add("position",    new HassiumProperty(hassiumFileWriter.get_Position));
+            hassiumFileWriter.Attributes.Add("write",       new HassiumFunction(hassiumFileWriter.write, 1));
+            hassiumFileWriter.Attributes.Add("writeBool",   new HassiumFunction(hassiumFileWriter.writeBool, 1));
+            hassiumFileWriter.Attributes.Add("writeChar",   new HassiumFunction(hassiumFileWriter.writeChar, 1));
             hassiumFileWriter.Attributes.Add("writeDouble", new HassiumFunction(hassiumFileWriter.writeDouble, 1));
-            hassiumFileWriter.Attributes.Add("writeInt16", new HassiumFunction(hassiumFileWriter.writeInt16, 1));
-            hassiumFileWriter.Attributes.Add("writeInt32", new HassiumFunction(hassiumFileWriter.writeInt32, 1));
-            hassiumFileWriter.Attributes.Add("writeInt64", new HassiumFunction(hassiumFileWriter.writeInt64, 1));
-            hassiumFileWriter.Attributes.Add("writeLine", new HassiumFunction(hassiumFileWriter.writeLine, 1));
-            hassiumFileWriter.Attributes.Add("writeList", new HassiumFunction(hassiumFileWriter.writeList, 1));
+            hassiumFileWriter.Attributes.Add("writeInt16",  new HassiumFunction(hassiumFileWriter.writeInt16, 1));
+            hassiumFileWriter.Attributes.Add("writeInt32",  new HassiumFunction(hassiumFileWriter.writeInt32, 1));
+            hassiumFileWriter.Attributes.Add("writeInt64",  new HassiumFunction(hassiumFileWriter.writeInt64, 1));
+            hassiumFileWriter.Attributes.Add("writeLine",   new HassiumFunction(hassiumFileWriter.writeLine, 1));
+            hassiumFileWriter.Attributes.Add("writeList",   new HassiumFunction(hassiumFileWriter.writeList, 1));
             hassiumFileWriter.Attributes.Add("writeString", new HassiumFunction(hassiumFileWriter.writeString, 1));
 
             return hassiumFileWriter;

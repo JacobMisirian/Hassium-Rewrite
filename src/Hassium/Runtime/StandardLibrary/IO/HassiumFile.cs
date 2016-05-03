@@ -10,15 +10,15 @@ namespace Hassium.Runtime.StandardLibrary.IO
     {
         public HassiumFile()
         {
-            Attributes.Add("currentDirectory", new HassiumProperty(get_CurrentDirectory, set_CurrentDirectory));
-            Attributes.Add("getDirectories", new HassiumFunction(getDirectories, 1));
-            Attributes.Add("getFiles", new HassiumFunction(getFiles, 1));
-            Attributes.Add("readBytes", new HassiumFunction(readBytes, 1));
-            Attributes.Add("readLines", new HassiumFunction(readLines, 1));
-            Attributes.Add("readText", new HassiumFunction(readText, 1));
-            Attributes.Add("writeBytes", new HassiumFunction(writeBytes, 2));
-            Attributes.Add("writeLines", new HassiumFunction(writeLines, 2));
-            Attributes.Add("writeText", new HassiumFunction(writeText, 2));
+            Attributes.Add("currentDirectory",  new HassiumProperty(get_CurrentDirectory, set_CurrentDirectory));
+            Attributes.Add("getDirectories",    new HassiumFunction(getDirectories, 1));
+            Attributes.Add("getFiles",          new HassiumFunction(getFiles, 1));
+            Attributes.Add("readBytes",         new HassiumFunction(readBytes, 1));
+            Attributes.Add("readLines",         new HassiumFunction(readLines, 1));
+            Attributes.Add("readText",          new HassiumFunction(readText, 1));
+            Attributes.Add("writeBytes",        new HassiumFunction(writeBytes, 2));
+            Attributes.Add("writeLines",        new HassiumFunction(writeLines, 2));
+            Attributes.Add("writeText",         new HassiumFunction(writeText, 2));
         }
 
         private HassiumString get_CurrentDirectory(VirtualMachine vm, HassiumObject[] args)

@@ -34,10 +34,10 @@ namespace Hassium.Runtime.StandardLibrary.Text
                     hassiumEncoding.Value = Encoding.ASCII;
                     break;
             }
-            hassiumEncoding.Attributes.Add("bodyName", new HassiumProperty(hassiumEncoding.get_BodyName));
-            hassiumEncoding.Attributes.Add("encodingName", new HassiumProperty(hassiumEncoding.get_EncodingName));
-            hassiumEncoding.Attributes.Add("getBytes", new HassiumFunction(hassiumEncoding.getBytes, 1));
-            hassiumEncoding.Attributes.Add("headerName", new HassiumProperty(hassiumEncoding.get_HeaderName));
+            hassiumEncoding.Attributes.Add("bodyName",      new HassiumProperty(hassiumEncoding.get_BodyName));
+            hassiumEncoding.Attributes.Add("encodingName",  new HassiumProperty(hassiumEncoding.get_EncodingName));
+            hassiumEncoding.Attributes.Add("getBytes",      new HassiumFunction(hassiumEncoding.getBytes, 1));
+            hassiumEncoding.Attributes.Add("headerName",    new HassiumProperty(hassiumEncoding.get_HeaderName));
 
             return hassiumEncoding;
         }

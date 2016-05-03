@@ -8,9 +8,9 @@ namespace Hassium.Runtime.StandardLibrary.IO
     {
         public HassiumIOModule() : base("IO")
         {
-            Attributes.Add("File", new HassiumFile());
-            Attributes.Add("FileReader", new HassiumFileReader());
-            Attributes.Add("FileWriter", new HassiumFileWriter());
+            Attributes.Add("File",          new HassiumFile());
+            Attributes.Add("FileReader",    new HassiumFileReader());
+            Attributes.Add("FileWriter",    new HassiumFileWriter());
         }
     }
 }

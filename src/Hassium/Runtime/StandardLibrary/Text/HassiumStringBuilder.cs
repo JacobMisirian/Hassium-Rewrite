@@ -20,12 +20,12 @@ namespace Hassium.Runtime.StandardLibrary.Text
                 hassiumStringBuilder.StringBuilder = new StringBuilder();
             else
                 hassiumStringBuilder.StringBuilder = new StringBuilder(HassiumString.Create(args[0]).Value);
-            hassiumStringBuilder.Attributes.Add("append", new HassiumFunction(hassiumStringBuilder.append, 1));
-            hassiumStringBuilder.Attributes.Add("appendLine", new HassiumFunction(hassiumStringBuilder.appendLine, 1));
-            hassiumStringBuilder.Attributes.Add("insert", new HassiumFunction(hassiumStringBuilder.insert, 2));
-            hassiumStringBuilder.Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(hassiumStringBuilder.toString, 0));
-            hassiumStringBuilder.Attributes.Add(HassiumObject.ADD_FUNCTION, new HassiumFunction(hassiumStringBuilder.__add__, 1));
-            hassiumStringBuilder.Attributes.Add(HassiumObject.INDEX_FUNCTION, new HassiumFunction(hassiumStringBuilder.__index__, 1));
+            hassiumStringBuilder.Attributes.Add("append",       new HassiumFunction(hassiumStringBuilder.append, 1));
+            hassiumStringBuilder.Attributes.Add("appendLine",   new HassiumFunction(hassiumStringBuilder.appendLine, 1));
+            hassiumStringBuilder.Attributes.Add("insert",       new HassiumFunction(hassiumStringBuilder.insert, 2));
+            hassiumStringBuilder.Attributes.Add(HassiumObject.TOSTRING_FUNCTION,    new HassiumFunction(hassiumStringBuilder.toString, 0));
+            hassiumStringBuilder.Attributes.Add(HassiumObject.ADD_FUNCTION,         new HassiumFunction(hassiumStringBuilder.__add__, 1));
+            hassiumStringBuilder.Attributes.Add(HassiumObject.INDEX_FUNCTION,       new HassiumFunction(hassiumStringBuilder.__index__, 1));
             hassiumStringBuilder.Attributes.Add(HassiumObject.STORE_INDEX_FUNCTION, new HassiumFunction(hassiumStringBuilder.__storeindex__, 2));
 
             return hassiumStringBuilder;
