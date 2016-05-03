@@ -23,6 +23,8 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 Value.Add(obj);
             Attributes.Add("add",           new HassiumFunction(_add, -1));
             Attributes.Add("contains",      new HassiumFunction(contains, -1));
+            Attributes.Add("containsKey",   new HassiumFunction(containsKey, 1));
+            Attributes.Add("containsValue", new HassiumFunction(containsValue, 1));
             Attributes.Add("copy",          new HassiumFunction(copy, 1));
             Attributes.Add("getString",     new HassiumFunction(getString, 0));
             Attributes.Add("indexOf",       new HassiumFunction(indexOf, 1));
@@ -68,7 +70,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
             foreach (HassiumObject obj in Value)
             {
                 if (obj is HassiumKeyValuePair)
-                if (args[0].Equals(vm, ((HassiumKeyValuePair)ob).Value).Value)
+                if (args[0].Equals(vm, ((HassiumKeyValuePair)obj).Value).Value)
                     return new HassiumBool(true);
             }
             return new HassiumBool(false);
@@ -139,6 +141,19 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumObject __index__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject obj = args[0];
+            foreach (HassiumObject entry in Value)
+                if (entry is HassiumKeyValuePair)
+                {
+                    var pair = entry as HassiumKeyValuePair;
+                    try
+                    {
+                        if (pair.Key.Equals(vm, obj).Value)
+                            return pair.Value;
+                    }
+                    catch
+                    {
+                    }
+                }
             if (obj is HassiumDouble)
                 return Value[((HassiumDouble)obj).ValueInt];
             else if (obj is HassiumInt)
@@ -148,6 +163,17 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumObject __storeindex__ (VirtualMachine vm, HassiumObject[] args)
         {
             HassiumObject index = args[0];
+            foreach (HassiumObject entry in Value)
+                if (entry is HassiumKeyValuePair)
+                {
+                    var pair = entry as HassiumKeyValuePair;
+                    if (pair.Key.Equals(vm, index).Value)
+                    {
+                        pair.Value = args[1];
+                        return args[1];
+                    }
+                }
+
             if (index is HassiumDouble)
                 Value[((HassiumDouble)index).ValueInt] = args[1];
             else if (index is HassiumInt)

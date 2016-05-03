@@ -4,8 +4,8 @@ namespace Hassium.Runtime.StandardLibrary.Types
 {
     public class HassiumKeyValuePair: HassiumObject
     {
-        public HassiumObject Key { get; private set; }
-        public new HassiumObject Value { get; private set; }
+        public HassiumObject Key { get; set; }
+        public new HassiumObject Value { get; set; }
         public HassiumKeyValuePair(HassiumObject key, HassiumObject value)
         {
             Key = key;
