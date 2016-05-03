@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Hassium.Runtime.StandardLibrary.Types;
 
@@ -9,14 +10,22 @@ namespace Hassium.Runtime.StandardLibrary
     {
         public static Dictionary<string, HassiumFunction> FunctionList = new Dictionary<string, HassiumFunction>()
         {
-            { "input", new HassiumFunction(input, 0) },
-            { "inputChar", new HassiumFunction(inputChar, 0) },
-            { "print", new HassiumFunction(print, -1) },
-            { "println", new HassiumFunction(println, -1) },
-            { "range", new HassiumFunction(range, 2) },
-            { "type", new HassiumFunction(type, 1) },
-            { "types", new HassiumFunction(types, -1) }
+            { "format",     new HassiumFunction(format, -1) },
+            { "input",      new HassiumFunction(input, 0) },
+            { "inputChar",  new HassiumFunction(inputChar, 0) },
+            { "print",      new HassiumFunction(print, -1) },
+            { "println",    new HassiumFunction(println, -1) },
+            { "range",      new HassiumFunction(range, 2) },
+            { "type",       new HassiumFunction(type, 1) },
+            { "types",      new HassiumFunction(types, -1) }
         };
+        private static HassiumString format(VirtualMachine vm, HassiumObject[] args)
+        {
+            HassiumObject[] objs = new HassiumObject[args.Length - 1];
+            for (int i = 1; i < args.Length; i++)
+                objs[i - 1] = args[i];
+            return new HassiumString(string.Format(HassiumString.Create(args[0]).ToString(), objs));
+        }
         private static HassiumString input(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Console.ReadLine());
