@@ -256,6 +256,8 @@ namespace Hassium.Parser
             else if (parser.AcceptToken(TokenType.LeftParentheses))
             {
                 AstNode expression = Parse(parser);
+                if (parser.AcceptToken(TokenType.Comma))
+                    return TupleNode.Parse(parser, expression);
                 parser.ExpectToken(TokenType.RightParentheses);
                 return expression;
             }

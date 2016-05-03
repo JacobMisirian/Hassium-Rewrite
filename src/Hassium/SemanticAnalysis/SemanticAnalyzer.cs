@@ -93,6 +93,7 @@ namespace Hassium.SemanticAnalysis
         }
         public void Accept(TerenaryOperationNode node) {}
         public void Accept(ThisNode node) {}
+        public void Accept(TupleNode node) {}
         public void Accept(UseNode node) {}
         public void Accept(WhileNode node)
         {

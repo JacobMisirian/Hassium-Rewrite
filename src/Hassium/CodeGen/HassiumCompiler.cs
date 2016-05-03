@@ -475,6 +475,11 @@ namespace Hassium.CodeGen
         {
             currentMethod.Emit(node.SourceLocation, InstructionType.Self_Reference, findIndex(currentMethod.Name));
         }
+        public void Accept(TupleNode node)
+        {
+            node.VisitChildren(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Create_Tuple, node.Children.Count);
+        }
         public void Accept(UnaryOperationNode node)
         {
             switch (node.UnaryOperation)

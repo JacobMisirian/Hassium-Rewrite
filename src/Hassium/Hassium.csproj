@@ -125,6 +125,8 @@
     <Compile Include="Parser\Ast\KeyValuePairNode.cs" />
     <Compile Include="Runtime\StandardLibrary\Math\HassiumMath.cs" />
     <Compile Include="Runtime\StandardLibrary\Math\HassiumMathModule.cs" />
+    <Compile Include="Parser\Ast\TupleNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumTuple.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

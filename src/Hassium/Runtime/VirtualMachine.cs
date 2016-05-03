@@ -62,10 +62,16 @@ namespace Hassium.Runtime
                             stack.Push(target.Invoke(this, args));
                             break;
                         case InstructionType.Create_List:
-                            HassiumObject[] elements = new HassiumObject[argumentInt];
+                            HassiumObject[] listElements = new HassiumObject[argumentInt];
                             for (int i = argumentInt - 1; i >= 0; i--)
-                                elements[i] = stack.Pop();
-                            stack.Push(new HassiumList(elements));
+                                listElements[i] = stack.Pop();
+                            stack.Push(new HassiumList(listElements));
+                            break;
+                        case InstructionType.Create_Tuple:
+                            HassiumObject[] tupleElements = new HassiumObject[argumentInt];
+                            for (int i = argumentInt - 1; i >= 0; i--)
+                                tupleElements[i] = stack.Pop();
+                            stack.Push(new HassiumTuple(tupleElements));
                             break;
                         case InstructionType.Dup:
                             stack.Push(stack.Peek());

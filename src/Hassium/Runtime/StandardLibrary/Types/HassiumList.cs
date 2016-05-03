@@ -158,7 +158,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 return Value[((HassiumDouble)obj).ValueInt];
             else if (obj is HassiumInt)
                 return Value[(int)((HassiumInt)obj).Value];
-            throw new InternalException("Cannot index list with " + obj);
+            throw new InternalException("Cannot index list with " + obj.GetType().Name);
         }
         private HassiumObject __storeindex__ (VirtualMachine vm, HassiumObject[] args)
         {
