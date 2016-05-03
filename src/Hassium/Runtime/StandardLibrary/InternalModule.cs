@@ -15,6 +15,7 @@ namespace Hassium.Runtime.StandardLibrary
 
         public static List<InternalModule> InternalModules = new List<InternalModule>()
         {
+            new Collections.HassiumCollectionsModule(),
             new IO.HassiumIOModule(),
             new Net.HassiumNetModule(),
             new Text.HassiumTextModule()
