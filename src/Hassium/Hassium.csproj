@@ -121,6 +121,8 @@
     <Compile Include="Runtime\StandardLibrary\Net\HassiumWebClient.cs" />
     <Compile Include="Runtime\StandardLibrary\Collections\HassiumStack.cs" />
     <Compile Include="Runtime\StandardLibrary\Collections\HassiumCollectionsModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumKeyValuePair.cs" />
+    <Compile Include="Parser\Ast\KeyValuePairNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

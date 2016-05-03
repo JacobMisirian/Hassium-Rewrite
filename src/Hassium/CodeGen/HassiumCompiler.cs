@@ -383,6 +383,12 @@ namespace Hassium.CodeGen
                 module.ConstantPool.Add(new HassiumInt(node.Number));
             currentMethod.Emit(node.SourceLocation, InstructionType.Push_Object, findIndex(node.Number.ToString()));
         }
+        public void Accept(KeyValuePairNode node)
+        {
+            node.Left.Visit(this);
+            node.Right.Visit(this);
+            currentMethod.Emit(node.SourceLocation, InstructionType.Key_Value_Pair);
+        }
         public void Accept(LambdaNode node)
         {
             MethodBuilder previousMethod = currentMethod;

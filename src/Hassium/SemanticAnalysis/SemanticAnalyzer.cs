@@ -75,6 +75,10 @@ namespace Hassium.SemanticAnalysis
         {
             node.VisitChildren(this);
         }
+        public void Accept(KeyValuePairNode node)
+        {
+            node.VisitChildren(this);
+        }
         public void Accept(LambdaNode node)
         {
             node.VisitChildren(this);

@@ -90,6 +90,11 @@ namespace Hassium.Runtime
                             if (!((HassiumBool)stack.Pop()).Value)
                                 position = method.Labels[argument];
                             break;
+                        case InstructionType.Key_Value_Pair:
+                            HassiumObject value_ = stack.Pop();
+                            HassiumObject key = stack.Pop();
+                            stack.Push(new HassiumKeyValuePair(key, value_));
+                            break;
                         case InstructionType.Load_Attribute:
                             attribute = module.ConstantPool[argumentInt].ToString(this);
                             location = stack.Pop();

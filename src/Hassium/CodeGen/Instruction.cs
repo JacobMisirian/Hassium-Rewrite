@@ -28,6 +28,7 @@ namespace Hassium.CodeGen
         Jump,
         Jump_If_True,
         Jump_If_False,
+        Key_Value_Pair,
         Label,
         Load_Attribute,
         Load_Global,

@@ -53,6 +53,26 @@ namespace Hassium.Runtime.StandardLibrary.Types
                     return new HassiumBool(false);
             return new HassiumBool(true);
         }
+        private HassiumBool containsKey(VirtualMachine vm, HassiumObject[] args)
+        {
+            foreach (HassiumObject obj in Value)
+            {
+                if (obj is HassiumKeyValuePair)
+                if (args[0].Equals(vm, ((HassiumKeyValuePair)obj).Key).Value)
+                    return new HassiumBool(true);
+            }
+            return new HassiumBool(false);
+        }
+        private HassiumBool containsValue(VirtualMachine vm, HassiumObject[] args)
+        {
+            foreach (HassiumObject obj in Value)
+            {
+                if (obj is HassiumKeyValuePair)
+                if (args[0].Equals(vm, ((HassiumKeyValuePair)ob).Value).Value)
+                    return new HassiumBool(true);
+            }
+            return new HassiumBool(false);
+        }
         private HassiumNull copy(VirtualMachine vm, HassiumObject[] args)
         {
             HassiumList list = HassiumList.Create(args[0]);
