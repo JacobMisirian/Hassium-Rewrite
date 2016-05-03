@@ -167,19 +167,29 @@ namespace Hassium.Runtime.StandardLibrary.Types
                 if (entry is HassiumKeyValuePair)
                 {
                     var pair = entry as HassiumKeyValuePair;
-                    if (pair.Key.Equals(vm, index).Value)
+                    try
                     {
-                        pair.Value = args[1];
-                        return args[1];
+                        if (pair.Key.Equals(vm, index).Value)
+                        {
+                            pair.Value = args[1];
+                            return args[1];
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
 
-            if (index is HassiumDouble)
-                Value[((HassiumDouble)index).ValueInt] = args[1];
-            else if (index is HassiumInt)
-                Value[(int)((HassiumInt)index).Value] = args[1];
+            if (index is HassiumInt || index is HassiumDouble)
+            {
+                int indexer = Convert.ToInt32(index.ToString(vm));
+                if (indexer < Value.Count)
+                    Value[indexer] = args[1];
+                else
+                    Value.Add(new HassiumKeyValuePair(index, args[1]));
+            }
             else
-                throw new InternalException("Cannot index list with " + index);
+                Value.Add(new HassiumKeyValuePair(index, args[1]));
             return args[1];
         }
         public int EnumerableIndex = 0;
