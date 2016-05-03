@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace Hassium.Runtime.StandardLibrary.Types
 {
@@ -8,10 +9,24 @@ namespace Hassium.Runtime.StandardLibrary.Types
         public HassiumTuple(HassiumObject[] elements)
         {
             Value = elements;
+
+            Attributes.Add("split", new HassiumFunction(split, 2));
             Attributes.Add(HassiumObject.INDEX_FUNCTION,    new HassiumFunction(__index__, 1));
             Attributes.Add(HassiumObject.ENUMERABLE_FULL,   new HassiumFunction(__enumerablefull__, 0));
+            Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(__tostring__, 0));
             Attributes.Add(HassiumObject.ENUMERABLE_NEXT,   new HassiumFunction(__enumerablenext__, 0));
             Attributes.Add(HassiumObject.ENUMERABLE_RESET,  new HassiumFunction(__enumerablereset__, 0));
+        }
+
+        private HassiumTuple split(VirtualMachine vm, HassiumObject[] args)
+        {
+            HassiumObject[] elements = new HassiumObject[Value.Length];
+
+            int max = (int)HassiumInt.Create(args[1]).Value;
+            for (int i = (int)HassiumInt.Create(args[0]).Value; i < max; i++)
+                elements[max - i] = Value[i];
+
+            return new HassiumTuple(elements);
         }
 
         private HassiumObject __index__ (VirtualMachine vm, HassiumObject[] args)
@@ -22,6 +37,14 @@ namespace Hassium.Runtime.StandardLibrary.Types
             else if (obj is HassiumInt)
                 return Value[(int)((HassiumInt)obj).Value];
             throw new InternalException("Cannot index list with " + obj.GetType().Name);
+        }
+        private HassiumString __tostring__ (VirtualMachine vm, HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (HassiumObject obj in Value)
+                sb.Append(obj.ToString(vm));
+
+            return new HassiumString(sb.ToString());
         }
 
         public int EnumerableIndex = 0;
