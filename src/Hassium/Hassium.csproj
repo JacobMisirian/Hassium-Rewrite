@@ -119,7 +119,12 @@
     <Compile Include="Runtime\StandardLibrary\Net\HassiumConnectionListener.cs" />
     <Compile Include="Runtime\StandardLibrary\Net\HassiumSocket.cs" />
     <Compile Include="Runtime\StandardLibrary\Net\HassiumWebClient.cs" />
+    <Compile Include="Runtime\StandardLibrary\Collections\CollectionsModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\Collections\HassiumStack.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Runtime\StandardLibrary\Collections\" />
+  </ItemGroup>
 </Project>
