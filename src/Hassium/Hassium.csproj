@@ -123,10 +123,13 @@
     <Compile Include="Runtime\StandardLibrary\Collections\HassiumCollectionsModule.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumKeyValuePair.cs" />
     <Compile Include="Parser\Ast\KeyValuePairNode.cs" />
+    <Compile Include="Runtime\StandardLibrary\Math\HassiumMath.cs" />
+    <Compile Include="Runtime\StandardLibrary\Math\HassiumMathModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Runtime\StandardLibrary\Collections\" />
+    <Folder Include="Runtime\StandardLibrary\Math\" />
   </ItemGroup>
 </Project>

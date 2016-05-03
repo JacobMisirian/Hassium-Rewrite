@@ -1,9 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/Collections/HassiumStack.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/GlobalFunctions.cs">
     <Files>
-      <File FileName="Hassium/Runtime/StandardLibrary/Collections/CollectionsModule.cs" Line="1" Column="14" />
-      <File FileName="Hassium/Runtime/StandardLibrary/Collections/HassiumStack.cs" Line="49" Column="37" />
+      <File FileName="Hassium/Runtime/StandardLibrary/GlobalFunctions.cs" Line="27" Column="98" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -11,7 +10,7 @@
           <Node name="Hassium" expanded="True">
             <Node name="Runtime" expanded="True">
               <Node name="StandardLibrary" expanded="True">
-                <Node name="Collections" expanded="True" selected="True" />
+                <Node name="GlobalFunctions.cs" selected="True" />
               </Node>
             </Node>
           </Node>

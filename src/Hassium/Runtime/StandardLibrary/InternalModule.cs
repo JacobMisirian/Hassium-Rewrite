@@ -17,6 +17,7 @@ namespace Hassium.Runtime.StandardLibrary
         {
             new Collections.HassiumCollectionsModule(),
             new IO.HassiumIOModule(),
+            new Math.HassiumMathModule(),
             new Net.HassiumNetModule(),
             new Text.HassiumTextModule()
         };
