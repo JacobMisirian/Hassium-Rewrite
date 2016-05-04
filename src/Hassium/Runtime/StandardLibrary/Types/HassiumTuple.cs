@@ -10,6 +10,7 @@ namespace Hassium.Runtime.StandardLibrary.Types
         {
             Value = elements;
 
+            Attributes.Add("length", new HassiumProperty(get_Length));
             Attributes.Add("split", new HassiumFunction(split, 2));
             Attributes.Add(HassiumObject.INDEX_FUNCTION,    new HassiumFunction(__index__, 1));
             Attributes.Add(HassiumObject.ENUMERABLE_FULL,   new HassiumFunction(__enumerablefull__, 0));
@@ -18,13 +19,19 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Attributes.Add(HassiumObject.ENUMERABLE_RESET,  new HassiumFunction(__enumerablereset__, 0));
         }
 
+        private HassiumInt get_Length(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumInt(Value.Length);
+        }
         private HassiumTuple split(VirtualMachine vm, HassiumObject[] args)
         {
-            HassiumObject[] elements = new HassiumObject[Value.Length];
-
+            int min = (int)HassiumInt.Create(args[0]).Value;
             int max = (int)HassiumInt.Create(args[1]).Value;
-            for (int i = (int)HassiumInt.Create(args[0]).Value; i < max; i++)
-                elements[max - i] = Value[i];
+
+            HassiumObject[] elements = new HassiumObject[max - min + 1];
+
+            for (int i = 0; i <= max - min; i++)
+                elements[i] = Value[i + min];
 
             return new HassiumTuple(elements);
         }
