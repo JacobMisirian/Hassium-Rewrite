@@ -128,11 +128,14 @@
     <Compile Include="Parser\Ast\TupleNode.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumTuple.cs" />
     <Compile Include="Runtime\StandardLibrary\Math\HassiumRandom.cs" />
+    <Compile Include="Runtime\StandardLibrary\Util\HassiumUtilModule.cs" />
+    <Compile Include="Runtime\StandardLibrary\Util\HassiumStopWatch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Runtime\StandardLibrary\Collections\" />
     <Folder Include="Runtime\StandardLibrary\Math\" />
+    <Folder Include="Runtime\StandardLibrary\Util\" />
   </ItemGroup>
 </Project>
