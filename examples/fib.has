@@ -2,6 +2,7 @@ func main () {
     print (fib (10));
 }
 
+# Recursive fib function
 func fib (n) {
     if (n == 0) {
         return 0;

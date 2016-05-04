@@ -1,10 +1,12 @@
 func main () {
 	bf = new Brainfuck();
+	# Hello, World!
 	bf.execute("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.");
 }
 
 class Brainfuck {
 	func new () {
+		# init ram
 		this.ram = this.fillzero(20000);
 	}
 	func fillzero (amount) {
@@ -16,6 +18,7 @@ class Brainfuck {
 
 	func execute (source) {
 		mp = 0;
+		# iterate and run the code
 		for (ip = 0; ip < source.length; ip = ip + 1) {
 			c = source[ip];
 			if (c == '>')mp = mp + 1;
