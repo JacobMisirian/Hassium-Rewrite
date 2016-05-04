@@ -6,6 +6,7 @@ namespace Hassium.Runtime.StandardLibrary.Util
     {
         public HassiumUtilModule() : base ("Util")
         {
+            Attributes.Add("StopWatch", new HassiumStopWatch());
         }
     }
 }

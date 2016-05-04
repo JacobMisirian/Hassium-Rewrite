@@ -1,7 +1,12 @@
+use Util;
+
 func main () {
+	watch = new StopWatch();
+	watch.start();
 	bf = new Brainfuck();
 	# Hello, World!
 	bf.execute("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.");
+	println(watch.milliseconds);
 }
 
 class Brainfuck {
