@@ -1,0 +1,9 @@
+use Math;
+
+func main () {
+	rng = new Random();
+	while (true) {
+		println(rng.nextInt(0, 20));
+		sleep(100);
+	}
+}

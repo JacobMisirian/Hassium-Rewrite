@@ -7,6 +7,7 @@ namespace Hassium.Runtime.StandardLibrary.Math
         public HassiumMathModule() : base("Math")
         {
             Attributes.Add("Math", new HassiumMath());
+            Attributes.Add("Random", new HassiumRandom());
         }
     }
 }

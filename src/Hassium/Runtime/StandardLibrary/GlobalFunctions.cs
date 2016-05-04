@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 using Hassium.Runtime.StandardLibrary.Types;
 
@@ -16,6 +17,7 @@ namespace Hassium.Runtime.StandardLibrary
             { "print",      new HassiumFunction(print, -1) },
             { "println",    new HassiumFunction(println, -1) },
             { "range",      new HassiumFunction(range, 2) },
+            { "sleep",      new HassiumFunction(sleep, 1) },
             { "type",       new HassiumFunction(type, 1) },
             { "types",      new HassiumFunction(types, -1) }
         };
@@ -65,6 +67,11 @@ namespace Hassium.Runtime.StandardLibrary
                 list.Value.Add(new HassiumInt(i));
 
             return list;
+        }
+        private static HassiumNull sleep(VirtualMachine vm, HassiumObject[] args)
+        {
+            Thread.Sleep((int)HassiumInt.Create(args[0]).Value);
+            return HassiumObject.Null;
         }
         private static HassiumObject type(VirtualMachine vm, HassiumObject[] args)
         {

@@ -127,6 +127,7 @@
     <Compile Include="Runtime\StandardLibrary\Math\HassiumMathModule.cs" />
     <Compile Include="Parser\Ast\TupleNode.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumTuple.cs" />
+    <Compile Include="Runtime\StandardLibrary\Math\HassiumRandom.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

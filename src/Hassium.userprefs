@@ -2,7 +2,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/StandardLibrary/GlobalFunctions.cs">
     <Files>
-      <File FileName="Hassium/Runtime/StandardLibrary/GlobalFunctions.cs" Line="27" Column="98" />
+      <File FileName="Hassium/Runtime/StandardLibrary/GlobalFunctions.cs" Line="27" Column="37" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -10,6 +10,9 @@
           <Node name="Hassium" expanded="True">
             <Node name="Runtime" expanded="True">
               <Node name="StandardLibrary" expanded="True">
+                <Node name="IO" expanded="True" />
+                <Node name="Net" expanded="True" />
+                <Node name="Types" expanded="True" />
                 <Node name="GlobalFunctions.cs" selected="True" />
               </Node>
             </Node>
