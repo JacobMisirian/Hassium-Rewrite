@@ -218,7 +218,13 @@ namespace Hassium.Lexer
             string str = "";
             readChar();
             while ((char)peekChar() != '\"' && peekChar() != -1)
-                str += (char)readChar();
+            {
+                char ch = (char)readChar();
+                if (ch == '\\')
+                    str += scanEscapeCode((char)readChar());
+                else
+                    str += ch;
+            }
             readChar();
 
             return new Token(TokenType.String, str, location);
@@ -229,6 +235,35 @@ namespace Hassium.Lexer
             readChar();
             while (peekChar() != -1 && peekChar() != '\n')
                 readChar();
+        }
+
+        private char scanEscapeCode(char escape)
+        {
+            switch (escape)
+            {
+                case '\\':
+                    return '\\';
+                case '\"':
+                    return '\"';
+                case '\'':
+                    return '\'';
+                case '\a':
+                    return '\a';
+                case '\b':
+                    return '\b';
+                case '\f':
+                    return '\f';
+                case '\n':
+                    return '\n';
+                case '\r':
+                    return '\r';
+                case '\t':
+                    return '\t';
+                case '\v':
+                    return '\v';
+                default:
+                    throw new ParserException("Unknown escape code \\" + escape, location);
+            }
         }
 
         private int peekChar(int n = 0)
