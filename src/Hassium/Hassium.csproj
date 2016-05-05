@@ -81,7 +81,6 @@
     <Compile Include="Parser\Ast\ForNode.cs" />
     <Compile Include="Parser\Ast\ContinueNode.cs" />
     <Compile Include="Parser\Ast\ArrayDeclarationNode.cs" />
-    <Compile Include="Runtime\StandardLibrary\Types\HassiumList.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumNull.cs" />
     <Compile Include="Parser\Ast\ArrayAccessNode.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumProperty.cs" />
@@ -130,6 +129,8 @@
     <Compile Include="Runtime\StandardLibrary\Math\HassiumRandom.cs" />
     <Compile Include="Runtime\StandardLibrary\Util\HassiumUtilModule.cs" />
     <Compile Include="Runtime\StandardLibrary\Util\HassiumStopWatch.cs" />
+    <Compile Include="Runtime\StandardLibrary\IO\HassiumPath.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

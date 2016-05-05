@@ -28,6 +28,7 @@ namespace Hassium.Runtime
             }
         }
         public Stack<Frame> Frames;
+        public Dictionary<int, HassiumObject> Locals { get { return Frames.Peek().variables; } }
         public StackFrame()
         {
             Frames = new Stack<Frame>();
