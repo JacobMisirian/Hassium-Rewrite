@@ -1,6 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/HassiumCompiler.cs">
+    <Files>
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="577" Column="39" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State />

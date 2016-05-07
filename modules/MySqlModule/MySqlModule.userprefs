@@ -1,0 +1,23 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MySqlModule/HassiumMySqlModule.cs">
+    <Files>
+      <File FileName="MySqlModule/HassiumMySqlModule.cs" Line="14" Column="6" />
+      <File FileName="MySqlModule/HassiumMySql.cs" Line="26" Column="53" />
+      <File FileName="MySqlModule/HassiumMySqlDataReader.cs" Line="13" Column="63" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="MySqlModule" expanded="True">
+            <Node name="Properties" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
