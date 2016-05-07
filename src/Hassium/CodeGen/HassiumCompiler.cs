@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Hassium.Parser;
 using Hassium.Runtime.StandardLibrary;
@@ -50,13 +51,24 @@ namespace Hassium.CodeGen
                     else if (use.Target is StringNode)
                     {
                         string path = ((StringNode)use.Target).String;
-                        HassiumModule compiledModule = HassiumExecuter.FromFilePath(path, false);
-                        foreach (KeyValuePair<string, HassiumObject> attribute in compiledModule.Attributes)
-                            if (!module.Attributes.ContainsKey(attribute.Key))
-                            module.Attributes.Add(attribute.Key, attribute.Value);
-                        foreach (HassiumObject constant in compiledModule.ConstantPool)
-                            if (!module.ConstantPool.Contains(constant))
-                                module.ConstantPool.Add(constant);
+                        if (path.EndsWith(".dll"))
+                        {
+                            foreach (InternalModule internalModule in loadModulesFromDLL(path))
+                            {
+                                foreach (KeyValuePair<string, HassiumObject> attribute in internalModule.Attributes)
+                                    module.Attributes.Add(attribute.Key, attribute.Value);
+                            }
+                        }
+                        else
+                        {
+                            HassiumModule compiledModule = HassiumExecuter.FromFilePath(path, false);
+                            foreach (KeyValuePair<string, HassiumObject> attribute in compiledModule.Attributes)
+                                if (!module.Attributes.ContainsKey(attribute.Key))
+                                    module.Attributes.Add(attribute.Key, attribute.Value);
+                            foreach (HassiumObject constant in compiledModule.ConstantPool)
+                                if (!module.ConstantPool.Contains(constant))
+                                    module.ConstantPool.Add(constant);
+                        }
                     }
                 }
             }
@@ -554,6 +566,18 @@ namespace Hassium.CodeGen
         private double generateSymbol()
         {
             return ++nextSymbol;
+        }
+
+        private InternalModule[] loadModulesFromDLL(string path)
+        {
+            List<InternalModule> modules = new List<InternalModule>();
+            Assembly ass = Assembly.LoadFrom(path);
+            foreach (var type in ass.GetTypes())
+            {
+                if (type.IsSubclassOf(typeof(InternalModule)))
+                    modules.Add((InternalModule)Activator.CreateInstance(type));
+            }
+            return modules.ToArray();
         }
     }
 }
