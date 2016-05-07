@@ -19,6 +19,7 @@ namespace Hassium.CodeGen
     public enum InstructionType
     {
         Binary_Operation,
+        Build_Closure,
         Call,
         Create_List,
         Create_Tuple,

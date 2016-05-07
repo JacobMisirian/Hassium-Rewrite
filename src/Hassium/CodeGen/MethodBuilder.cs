@@ -22,6 +22,7 @@ namespace Hassium.CodeGen
 
         public override HassiumObject Invoke(VirtualMachine vm, HassiumObject[] args)
         {
+            if (name != "__lambda__")
             vm.StackFrame.EnterFrame();
 
             vm.CallStack.Push(SourceRepresentation != null ? SourceRepresentation : Name);
@@ -29,7 +30,7 @@ namespace Hassium.CodeGen
             foreach (int param in Parameters.Values)
                 vm.StackFrame.Add(param, args[counter++]);
             HassiumObject returnValue = vm.ExecuteMethod(this);
-
+            if (name != "__lambda__")
             vm.StackFrame.PopFrame();
 
             if (IsConstructor)

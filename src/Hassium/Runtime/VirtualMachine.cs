@@ -54,6 +54,9 @@ namespace Hassium.Runtime
                             left = stack.Pop();
                             executeBinaryOperation(left, right, argumentInt);
                             break;
+                        case InstructionType.Build_Closure:
+                            stack.Push(new HassiumClosure((MethodBuilder)stack.Pop(), StackFrame.Frames.Peek()));
+                            break;
                         case InstructionType.Call:
                             HassiumObject target = stack.Pop();
                             HassiumObject[] args = new HassiumObject[argumentInt];

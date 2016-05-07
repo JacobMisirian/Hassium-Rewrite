@@ -132,6 +132,7 @@
     <Compile Include="Runtime\StandardLibrary\IO\HassiumPath.cs" />
     <Compile Include="Runtime\StandardLibrary\Types\HassiumList.cs" />
     <Compile Include="Runtime\StandardLibrary\IO\HassiumUI.cs" />
+    <Compile Include="Runtime\StandardLibrary\Types\HassiumClosure.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

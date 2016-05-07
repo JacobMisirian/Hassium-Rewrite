@@ -3,6 +3,5 @@ func main () {
 }
 
 func one (x) {
-	println (x);
-	return lambda (y) { return 2 + x };
+	return lambda (y) { return y + x };
 }

@@ -422,6 +422,7 @@ namespace Hassium.CodeGen
             module.ConstantPool.Add(lambda);
 
             currentMethod.Emit(node.SourceLocation, InstructionType.Push_Object, findIndex(lambda));
+            currentMethod.Emit(node.SourceLocation, InstructionType.Build_Closure);
         }
         public void Accept(NewNode node)
         {
