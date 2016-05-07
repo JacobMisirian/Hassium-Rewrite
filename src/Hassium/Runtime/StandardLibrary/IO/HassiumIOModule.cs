@@ -12,6 +12,7 @@ namespace Hassium.Runtime.StandardLibrary.IO
             Attributes.Add("FileReader",    new HassiumFileReader());
             Attributes.Add("FileWriter",    new HassiumFileWriter());
             Attributes.Add("Path",          new HassiumPath());
+            Attributes.Add("ui",            new HassiumUI());
         }
     }
 }
