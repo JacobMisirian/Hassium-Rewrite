@@ -1,5 +1,8 @@
-use Math;
+use Reflection;
 
 func main () {
-	println(Math.sqrt(64));
+	ass = Assembly.createFromFile("mod.has");
+
+	foreach (obj in ass.getClasses())
+		println(obj.function());
 }

@@ -53,7 +53,7 @@ namespace Hassium.CodeGen
                         string path = ((StringNode)use.Target).String;
                         if (path.EndsWith(".dll"))
                         {
-                            foreach (InternalModule internalModule in loadModulesFromDLL(path))
+                            foreach (InternalModule internalModule in LoadModulesFromDLL(path))
                             {
                                 foreach (KeyValuePair<string, HassiumObject> attribute in internalModule.Attributes)
                                     module.Attributes.Add(attribute.Key, attribute.Value);
@@ -569,7 +569,7 @@ namespace Hassium.CodeGen
             return ++nextSymbol;
         }
 
-        private InternalModule[] loadModulesFromDLL(string path)
+        public static InternalModule[] LoadModulesFromDLL(string path)
         {
             List<InternalModule> modules = new List<InternalModule>();
             Assembly ass = Assembly.LoadFrom(path);

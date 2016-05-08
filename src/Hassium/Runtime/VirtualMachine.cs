@@ -12,6 +12,7 @@ namespace Hassium.Runtime
         public StackFrame StackFrame { get { return stackFrame; } }
         public Stack<HassiumObject> Stack { get { return stack; } }
         public Stack<string> CallStack { get { return callStack; } }
+        public HassiumModule CurrentlyExecutingModule { get { return module; } }
         private StackFrame stackFrame;
         private Stack<HassiumObject> stack;
         private Stack<string> callStack = new Stack<string>();

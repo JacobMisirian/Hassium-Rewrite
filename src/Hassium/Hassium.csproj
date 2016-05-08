@@ -32,6 +32,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -54,6 +57,8 @@
     <Compile Include="Parser\Ast\FunctionCallNode.cs" />
     <Compile Include="Runtime\StandardLibrary\IO\HassiumStream.cs" />
     <Compile Include="Runtime\StandardLibrary\Net\HassiumDns.cs" />
+    <Compile Include="Runtime\StandardLibrary\Reflection\HassiumAssembly.cs" />
+    <Compile Include="Runtime\StandardLibrary\Reflection\HassiumReflectionModule.cs" />
     <Compile Include="SemanticAnalysis\SemanticAnalyzer.cs" />
     <Compile Include="SemanticAnalysis\SymbolTable.cs" />
     <Compile Include="Parser\Ast\ConditionalNode.cs" />
@@ -136,9 +141,4 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Runtime\StandardLibrary\Collections\" />
-    <Folder Include="Runtime\StandardLibrary\Math\" />
-    <Folder Include="Runtime\StandardLibrary\Util\" />
-  </ItemGroup>
 </Project>
