@@ -10,7 +10,15 @@ namespace Hassium.Runtime.StandardLibrary.IO
     {
         public HassiumFile()
         {
+            Attributes.Add("createDirectory",   new HassiumFunction(createDirectory, 1));
+            Attributes.Add("createFile",        new HassiumFunction(createFile, 1));
             Attributes.Add("currentDirectory",  new HassiumProperty(get_CurrentDirectory, set_CurrentDirectory));
+            Attributes.Add("delete",            new HassiumFunction(delete, 1));
+            Attributes.Add("deleteDirectory",   new HassiumFunction(deleteDirectory, 1));
+            Attributes.Add("deleteFile",        new HassiumFunction(deleteFile, 1));
+            Attributes.Add("directoryExists",   new HassiumFunction(directoryExists, 1));
+            Attributes.Add("exists",            new HassiumFunction(exists, 1));
+            Attributes.Add("fileExists",        new HassiumFunction(fileExists, 1));
             Attributes.Add("getDirectories",    new HassiumFunction(getDirectories, 1));
             Attributes.Add("getFiles",          new HassiumFunction(getFiles, 1));
             Attributes.Add("readBytes",         new HassiumFunction(readBytes, 1));
@@ -21,6 +29,16 @@ namespace Hassium.Runtime.StandardLibrary.IO
             Attributes.Add("writeText",         new HassiumFunction(writeText, 2));
         }
 
+        private HassiumString createDirectory(VirtualMachine vm, HassiumObject[] args)
+        {
+            Directory.CreateDirectory(args[0].ToString(vm));
+            return HassiumString.Create(args[0]);
+        }
+        private HassiumString createFile(VirtualMachine vm, HassiumObject[] args)
+        {
+            File.Create(args[0].ToString(vm));
+            return HassiumString.Create(args[0]);
+        }
         private HassiumString get_CurrentDirectory(VirtualMachine vm, HassiumObject[] args)
         {
             return new HassiumString(Directory.GetCurrentDirectory());
@@ -30,6 +48,48 @@ namespace Hassium.Runtime.StandardLibrary.IO
             Directory.SetCurrentDirectory(HassiumString.Create(args[0]).Value);
 
             return HassiumObject.Null;
+        }
+        private HassiumString delete(VirtualMachine vm, HassiumObject[] args)
+        {
+            string path = args[0].ToString(vm);
+            if (File.Exists(path))
+                File.Delete(path);
+            else if (Directory.Exists(path))
+                Directory.Delete(path);
+            else
+                throw new InternalException("File does not exist: " + path);
+            return HassiumString.Create(args[0]);
+        }
+        private HassiumString deleteDirectory(VirtualMachine vm, HassiumObject[] args)
+        {
+            string path = args[0].ToString(vm);
+            if (Directory.Exists(path))
+                Directory.Delete(path);
+            else
+                throw new InternalException("Directory does not exist: " + path);
+            return HassiumString.Create(args[0]);
+        }
+        private HassiumString deleteFile(VirtualMachine vm, HassiumObject[] args)
+        {
+            string path = args[0].ToString(vm);
+            if (File.Exists(path))
+                File.Delete(path);
+            else
+                throw new InternalException("File does not exist: " + path);
+            return HassiumString.Create(args[0]);
+        }
+        private HassiumBool directoryExists(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(Directory.Exists(args[0].ToString(vm)));
+        }
+        private HassiumBool exists(VirtualMachine vm, HassiumObject[] args)
+        {
+            string path = args[0].ToString(vm);
+            return new HassiumBool(File.Exists(path) || Directory.Exists(path));
+        }
+        private HassiumBool fileExists(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumBool(File.Exists(args[0].ToString(vm)));
         }
         private HassiumList getDirectories(VirtualMachine vm, HassiumObject[] args)
         {
