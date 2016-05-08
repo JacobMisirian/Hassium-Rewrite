@@ -22,7 +22,8 @@ namespace Hassium.Runtime.StandardLibrary.Reflection
         public HassiumObject Module { get; set; }
         public HassiumAssembly()
         {
-            Attributes.Add("createFromFile",        new HassiumFunction(createFromFile, 1));
+            Attributes.Add("fromFile",        new HassiumFunction(fromFile, 1));
+            Attributes.Add("fromObject",      new HassiumFunction(fromObject, 1));
             Attributes.Add("getCurrentAssembly",    new HassiumFunction(getCurrentAssembly, 0));
         }
         
@@ -32,8 +33,12 @@ namespace Hassium.Runtime.StandardLibrary.Reflection
             foreach (HassiumObject obj in list.Attributes.Values)
                 list.Value.Add(obj);
             return list;
-        }                                                      
-        private HassiumAssembly createFromFile(VirtualMachine vm, HassiumObject[] args)
+        }             
+        private HassiumAssembly fromObject(VirtualMachine vm, HassiumObject[] args)
+        {
+            return create(args[0]);
+        }                                         
+        private HassiumAssembly fromFile(VirtualMachine vm, HassiumObject[] args)
         {
             string path = HassiumString.Create(args[0]).Value;
             HassiumObject module;
