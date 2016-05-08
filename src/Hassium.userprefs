@@ -2,11 +2,20 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/HassiumCompiler.cs">
     <Files>
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="577" Column="39" />
+      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="577" Column="14" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State />
+        <State expanded="True">
+          <Node name="Hassium" expanded="True">
+            <Node name="CodeGen" expanded="True">
+              <Node name="HassiumCompiler.cs" selected="True" />
+            </Node>
+            <Node name="Runtime" expanded="True">
+              <Node name="StandardLibrary" expanded="True" />
+            </Node>
+          </Node>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
