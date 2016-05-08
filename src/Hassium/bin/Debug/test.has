@@ -1,8 +1,8 @@
 use Reflection;
 
 func main () {
-	ass = Assembly.createFromFile("mod.has");
+	ass = Assembly.getCurrentAssembly();
 
-	foreach (obj in ass.getClasses())
-		println(obj.function());
+	foreach (pair in ass.disassemble("main"))
+		println(pair);
 }

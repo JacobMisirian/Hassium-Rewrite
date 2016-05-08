@@ -11,8 +11,9 @@ namespace Hassium.Runtime.StandardLibrary.Types
             Key = key;
             Value = value;
 
-            Attributes.Add("key", new HassiumProperty(get_Key, set_Key));
+            Attributes.Add("key",   new HassiumProperty(get_Key, set_Key));
             Attributes.Add("value", new HassiumProperty(get_Value, set_Value));
+            Attributes.Add(HassiumObject.TOSTRING_FUNCTION, new HassiumFunction(toString, 0));
         }
 
         private HassiumObject get_Key(VirtualMachine vm, HassiumObject[] args)
@@ -36,6 +37,10 @@ namespace Hassium.Runtime.StandardLibrary.Types
         private HassiumObject value(VirtualMachine vm, HassiumObject[] args)
         {
             return Value;
+        }
+        private HassiumString toString(VirtualMachine vm, HassiumObject[] args)
+        {
+            return new HassiumString(Key.ToString(vm) + " : " + Value.ToString(vm));
         }
     }
 }
