@@ -85,6 +85,12 @@ namespace Hassium.Lexer
                             break;
                         case '*':
                         case '/':
+                            orig = (char)readChar();
+                            if ((char)peekChar() == orig)
+                                result.Add(new Token(TokenType.BinaryOperation, orig.ToString() + ((char)readChar()).ToString(), location));
+                            else
+                                result.Add(new Token(TokenType.BinaryOperation, orig.ToString(), location));
+                            break;
                         case '%':
                         case '^':
                             orig = (char)readChar();
@@ -149,6 +155,11 @@ namespace Hassium.Lexer
                             {
                                 readChar();
                                 result.Add(new Token(TokenType.Comparison, "<=", location));
+                            }
+                            else if ((char)peekChar() == '-' && (char)peekChar(1) == '>')
+                            {
+                                readChar();readChar();
+                                result.Add(new Token(TokenType.BinaryOperation, "<->", location));
                             }
                             else
                                 result.Add(new Token(TokenType.Comparison, "<", location));

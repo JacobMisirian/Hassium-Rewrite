@@ -127,7 +127,7 @@ namespace Hassium.CodeGen
         }
         public void Accept(BinaryOperationNode node)
         {
-            if (node.BinaryOperation != BinaryOperation.Assignment)
+            if (node.BinaryOperation != BinaryOperation.Assignment && node.BinaryOperation != BinaryOperation.Swap)
             {
                 node.Left.Visit(this);
                 node.Right.Visit(this);
@@ -208,6 +208,24 @@ namespace Hassium.CodeGen
                     break;
                 case BinaryOperation.LogicalAnd:
                     currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 15);
+                    break;
+                case BinaryOperation.Swap:
+                    table.AddSymbol("__swaptmp__");
+                    int tmp = table.GetIndex("__swaptmp__");
+                    int left = table.GetIndex(((IdentifierNode)node.Left).Identifier);
+                    int right = table.GetIndex(((IdentifierNode)node.Right).Identifier);
+                    node.Left.Visit(this);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, tmp);
+                    node.Right.Visit(this);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, left);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Load_Local, tmp);
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Store_Local, right);
+                    break;
+                case BinaryOperation.Power:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 16);
+                    break;
+                case BinaryOperation.Root:
+                    currentMethod.Emit(node.SourceLocation, InstructionType.Binary_Operation, 17);
                     break;
             }
         }

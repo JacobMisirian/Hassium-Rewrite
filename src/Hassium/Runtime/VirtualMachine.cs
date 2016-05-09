@@ -264,6 +264,12 @@ namespace Hassium.Runtime
                 case 15:
                     stack.Push(new HassiumBool(HassiumBool.Create(left).Value && HassiumBool.Create(right).Value));
                     break;
+                case 16:
+                    stack.Push(new HassiumDouble(Math.Pow(HassiumDouble.Create(left).Value, HassiumDouble.Create(right).Value)));
+                    break;
+                case 17:
+                    stack.Push(new HassiumDouble(Math.Pow(HassiumDouble.Create(left).Value, 1 / (HassiumDouble.Create(right).Value))));
+                    break;
             }
         }
 

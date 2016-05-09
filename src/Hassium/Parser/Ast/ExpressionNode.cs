@@ -48,6 +48,8 @@ namespace Hassium.Parser
                 return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.OR, left, parseAssignment(parser), parser.Location), parser.Location);
             else if (parser.AcceptToken(TokenType.Assignment, "&="))
                 return new BinaryOperationNode(BinaryOperation.Assignment, left, new BinaryOperationNode(BinaryOperation.XAnd, left, parseAssignment(parser), parser.Location), parser.Location);
+            else if (parser.AcceptToken(TokenType.BinaryOperation, "<->"))
+                return new BinaryOperationNode(BinaryOperation.Swap, left, parseAssignment(parser), parser.Location);
             else
                 return left;
         }
@@ -170,9 +172,17 @@ namespace Hassium.Parser
                         parser.AcceptToken(TokenType.BinaryOperation);
                         left = new BinaryOperationNode(BinaryOperation.Multiplication, left, parseMultiplicitive(parser), parser.Location);
                         continue;
+                    case "**":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.Power, left, parseMultiplicitive(parser), parser.Location);
+                        continue;
                     case "/":
                         parser.AcceptToken(TokenType.BinaryOperation);
                         left = new BinaryOperationNode(BinaryOperation.Division, left, parseMultiplicitive(parser), parser.Location);
+                        continue;
+                    case "//":
+                        parser.AcceptToken(TokenType.BinaryOperation);
+                        left = new BinaryOperationNode(BinaryOperation.Root, left, parseMultiplicitive(parser), parser.Location);
                         continue;
                     case "%":
                         parser.AcceptToken(TokenType.BinaryOperation);

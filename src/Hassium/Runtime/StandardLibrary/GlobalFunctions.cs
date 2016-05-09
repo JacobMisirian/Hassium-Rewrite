@@ -26,9 +26,9 @@ namespace Hassium.Runtime.StandardLibrary
         };
         private static HassiumString format(VirtualMachine vm, HassiumObject[] args)
         {
-            HassiumObject[] objs = new HassiumObject[args.Length - 1];
+            string[] objs = new string[args.Length - 1];
             for (int i = 1; i < args.Length; i++)
-                objs[i - 1] = args[i];
+                objs[i - 1] = args[i].ToString(vm);
             return new HassiumString(string.Format(HassiumString.Create(args[0]).ToString(), objs));
         }
         private static HassiumObject getAttribute(VirtualMachine vm, HassiumObject[] args)
