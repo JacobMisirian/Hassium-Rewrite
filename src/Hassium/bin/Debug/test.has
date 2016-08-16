@@ -1,8 +1,0 @@
-use Reflection;
-
-func main () {
-	ass = Assembly.getCurrentAssembly();
-
-	foreach (pair in ass.disassemble("main"))
-		println(pair);
-}

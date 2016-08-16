@@ -1,23 +1,9 @@
-﻿<Properties>
+﻿<Properties StartupItem="Hassium/Hassium.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/CodeGen/HassiumCompiler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Program.cs">
     <Files>
-      <File FileName="Hassium/CodeGen/HassiumCompiler.cs" Line="577" Column="14" />
+      <File FileName="Hassium/Program.cs" Line="13" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Hassium" expanded="True">
-            <Node name="CodeGen" expanded="True">
-              <Node name="HassiumCompiler.cs" selected="True" />
-            </Node>
-            <Node name="Runtime" expanded="True">
-              <Node name="StandardLibrary" expanded="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
