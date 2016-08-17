@@ -14,8 +14,10 @@ namespace Hassium.Compiler.Parser
         public bool EndOfStream { get { return Position >= Tokens.Count; } }
         public SourceLocation Location { get { return Tokens[Position].SourceLocation; } }
 
-        public AstNode Parse()
+        public AstNode Parse(List<Token> tokens)
         {
+            Tokens = tokens;
+            Position = 0;
             CodeBlockNode code = new CodeBlockNode();
             while (!EndOfStream)
                 code.Children.Add(parseStatement());
@@ -24,35 +26,89 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseStatement()
         {
-            if (MatchToken(TokenType.Identifier, "if"))
+            if (MatchToken(TokenType.Identifier, "class"))
+                return parseClass();
+            else if (MatchToken(TokenType.Identifier, "func"))
+                return parseFunc();
+            else if (MatchToken(TokenType.Identifier, "if"))
                 return parseIf();
+            else if (MatchToken(TokenType.Identifier, "while"))
+                return parseWhile();
             else
                 return parseExpression();
-        }
-        private IfNode parseIf()
-        {
-            ExpectToken(TokenType.Identifier, "if");
-            ExpectToken(TokenType.OpenParentheses);
-            AstNode expression = parseExpression();
-            ExpectToken(TokenType.CloseParentheses);
-            AstNode body = parseStatement();
-            AstNode elseBody = null;
-            if (AcceptToken(TokenType.Identifier, "else"))
-                elseBody = parseStatement();
-            return elseBody == null ? new IfNode(Location, expression, body) : new IfNode(Location, expression, body, elseBody);
         }
         private ArgumentListNode parseArgList()
         {
             ExpectToken(TokenType.OpenParentheses);
             List<AstNode> elements = new List<AstNode>();
-            while (true)
+            while (!AcceptToken(TokenType.CloseParentheses))
             {
                 elements.Add(parseExpression());
-                if (!AcceptToken(TokenType.Comma))
-                    break;
+                AcceptToken(TokenType.Comma);
             }
-            ExpectToken(TokenType.CloseParentheses);
             return new ArgumentListNode(Location, elements);
+        }
+        private ClassNode parseClass()
+        {
+            ExpectToken(TokenType.Identifier, "class");
+            string name = ExpectToken(TokenType.Identifier).Value;
+            List<string> inherits = new List<string>();
+            if (AcceptToken(TokenType.Colon))
+            {
+                inherits.Add(ExpectToken(TokenType.Identifier).Value);
+                while (AcceptToken(TokenType.Comma))
+                    inherits.Add(ExpectToken(TokenType.Identifier).Value);
+            }
+            AstNode body = parseStatement();
+
+            return new ClassNode(Location, name, inherits, body);
+        }
+        private FuncNode parseFunc()
+        {
+            ExpectToken(TokenType.Identifier, "func");
+            string name = ExpectToken(TokenType.Identifier).Value;
+            List<FuncParameter> parameters = new List<FuncParameter>();
+            ExpectToken(TokenType.OpenParentheses);
+            while (!AcceptToken(TokenType.CloseParentheses))
+            {
+                parameters.Add(parseParameter());
+                AcceptToken(TokenType.CloseParentheses);
+            }
+            if (AcceptToken(TokenType.Colon))
+            {
+                string returnType = ExpectToken(TokenType.Identifier).Value;
+                return new FuncNode(Location, name, parameters, parseStatement(), returnType);
+            }
+            return new FuncNode(Location, name, parameters, parseStatement());
+        }
+        private IfNode parseIf()
+        {
+            ExpectToken(TokenType.Identifier, "if");
+            ExpectToken(TokenType.OpenParentheses);
+            AstNode predicate = parseExpression();
+            ExpectToken(TokenType.CloseParentheses);
+            AstNode body = parseStatement();
+            if (AcceptToken(TokenType.Identifier, "else"))
+                return new IfNode(Location, predicate, body, parseStatement());
+            return new IfNode(Location, predicate, body);
+        }
+        private FuncParameter parseParameter()
+        {
+            string name = ExpectToken(TokenType.Identifier).Value;
+            if (AcceptToken(TokenType.Colon))
+                return new FuncParameter(name, ExpectToken(TokenType.Identifier).Value);
+            return new FuncParameter(name);
+        }
+        private WhileNode parseWhile()
+        {
+            ExpectToken(TokenType.Identifier, "while");
+            ExpectToken(TokenType.OpenParentheses);
+            AstNode predicate = parseExpression();
+            ExpectToken(TokenType.CloseParentheses);
+            AstNode body = parseStatement();
+            if (AcceptToken(TokenType.Identifier, "else"))
+                return new WhileNode(Location, predicate, body, parseStatement());
+            return new WhileNode(Location, predicate, body);
         }
 
         private AstNode parseExpression()
@@ -271,6 +327,8 @@ namespace Hassium.Compiler.Parser
         {
             if (MatchToken(TokenType.Identifier))
                 return new IdentifierNode(Location, ExpectToken(TokenType.Identifier).Value);
+            else if (MatchToken(TokenType.String))
+                return new StringNode(Location, ExpectToken(TokenType.String).Value);
             else if (MatchToken(TokenType.Integer))
                 return new IntegerNode(Location, Convert.ToInt64(ExpectToken(TokenType.Integer).Value));
             else if (MatchToken(TokenType.Float))
@@ -279,6 +337,13 @@ namespace Hassium.Compiler.Parser
                 return new CharNode(Location, Convert.ToChar(ExpectToken(TokenType.Char).Value));
             else if (AcceptToken(TokenType.Semicolon))
                 return new StatementNode(Location);
+            else if (AcceptToken(TokenType.OpenBracket))
+            {
+                var block = new CodeBlockNode();
+                while (!AcceptToken(TokenType.CloseBracket))
+                    block.Children.Add(parseStatement());
+                return block;
+            }
             else
                 throw new UnexpectedTokenException(Tokens[Position]);
         }

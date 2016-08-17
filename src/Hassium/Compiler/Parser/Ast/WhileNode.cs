@@ -2,19 +2,19 @@
 
 namespace Hassium.Compiler.Parser.Ast
 {
-    public class IfNode: AstNode
+    public class WhileNode: AstNode
     {
         public AstNode Predicate { get { return Children[0]; } }
         public AstNode Body { get { return Children[1]; } }
         public AstNode ElseBody { get { return Children[2]; } }
 
-        public IfNode(SourceLocation location, AstNode predicate, AstNode body)
+        public WhileNode(SourceLocation location, AstNode predicate, AstNode body)
         {
             this.SourceLocation = location;
             Children.Add(predicate);
             Children.Add(body);
         }
-        public IfNode(SourceLocation location, AstNode predicate, AstNode body, AstNode elseBody)
+        public WhileNode(SourceLocation location, AstNode predicate, AstNode body, AstNode elseBody)
         {
             this.SourceLocation = location;
             Children.Add(predicate);

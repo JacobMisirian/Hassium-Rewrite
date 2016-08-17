@@ -58,6 +58,33 @@
     <Compile Include="Compiler\Parser\Ast\FunctionCallNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\AttributeAccessNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\WhileNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\FuncNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ClassNode.cs" />
+    <Compile Include="Compiler\SemanticAnalysis\SemanticAnalyzer.cs" />
+    <Compile Include="Compiler\SemanticAnalysis\SymbolTable.cs" />
+    <Compile Include="Compiler\CodeGen\InstructionType.cs" />
+    <Compile Include="Compiler\Parser\Ast\ExpressionStatementNode.cs" />
+    <Compile Include="Compiler\CodeGen\Instruction.cs" />
+    <Compile Include="Runtime\Objects\HassiumObject.cs" />
+    <Compile Include="Runtime\Objects\HassiumTypeDefinition.cs" />
+    <Compile Include="Runtime\InternalException.cs" />
+    <Compile Include="Runtime\Objects\HassiumModule.cs" />
+    <Compile Include="Runtime\Objects\HassiumMethod.cs" />
+    <Compile Include="Compiler\CodeGen\Compiler.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumChar.cs" />
+    <Compile Include="Runtime\Objects\HassiumClass.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumFloat.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumInt.cs" />
+    <Compile Include="Runtime\VirtualMachine.cs" />
+    <Compile Include="Runtime\StackFrame.cs" />
+    <Compile Include="Runtime\GlobalFunctions.cs" />
+    <Compile Include="Runtime\Objects\HassiumFunction.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumNull.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumString.cs" />
+    <Compile Include="Compiler\Parser\Ast\StringNode.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumBool.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -65,5 +92,10 @@
     <Folder Include="Compiler\Scanner\" />
     <Folder Include="Compiler\Parser\" />
     <Folder Include="Compiler\Parser\Ast\" />
+    <Folder Include="Compiler\SemanticAnalysis\" />
+    <Folder Include="Compiler\CodeGen\" />
+    <Folder Include="Runtime\" />
+    <Folder Include="Runtime\Objects\" />
+    <Folder Include="Runtime\Objects\Types\" />
   </ItemGroup>
 </Project>

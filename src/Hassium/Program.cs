@@ -1,4 +1,12 @@
 ﻿using System;
+using System.IO;
+
+using Hassium.Compiler.Parser;
+using Hassium.Compiler.Parser.Ast;
+using Hassium.Compiler.Scanner;
+using Hassium.Compiler.SemanticAnalysis;
+using Hassium.Compiler.CodeGen;
+using Hassium.Runtime;
 
 namespace Hassium
 {
@@ -6,7 +14,24 @@ namespace Hassium
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var tokens = new Lexer().Scan(File.ReadAllText(args[0]));
+            AstNode ast = null;
+            try
+            {
+                ast = new Parser().Parse(tokens);
+            }
+            catch (ExpectedTokenException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (UnexpectedTokenException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            var table = new SemanticAnalyzer().Analyze(ast);
+            var module = new Compiler.CodeGen.Compiler().Compile(ast, table);
+
+            new VirtualMachine().Execute(module, new System.Collections.Generic.List<string>());
         }
     }
 }
