@@ -14,6 +14,7 @@ namespace Hassium.Compiler.Parser
         void Accept(CodeBlockNode node);
         void Accept(ExpressionStatementNode node);
         void Accept(FloatNode node);
+        void Accept(ForNode node);
         void Accept(FuncNode node);
         void Accept(FunctionCallNode node);
         void Accept(IdentifierNode node);
@@ -21,6 +22,7 @@ namespace Hassium.Compiler.Parser
         void Accept(IntegerNode node);
         void Accept(ListAccessNode node);
         void Accept(ListDeclarationNode node);
+        void Accept(ReturnNode node);
         void Accept(StatementNode node);
         void Accept(StringNode node);
         void Accept(UnaryOperationNode node);

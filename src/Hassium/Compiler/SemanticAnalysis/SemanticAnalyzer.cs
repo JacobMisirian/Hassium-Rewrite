@@ -38,6 +38,7 @@ namespace Hassium.Compiler.SemanticAnalysis
             node.VisitChildren(this);
         }
         public void Accept(FloatNode node) {}
+        public void Accept(ForNode node) {}
         public void Accept(FuncNode node)
         {
             node.VisitChildren(this);
@@ -48,6 +49,7 @@ namespace Hassium.Compiler.SemanticAnalysis
         public void Accept(IntegerNode node) {}
         public void Accept(ListAccessNode node) {}
         public void Accept(ListDeclarationNode node) {}
+        public void Accept(ReturnNode node) {}
         public void Accept(StatementNode node) {}
         public void Accept(StringNode node) {}
         public void Accept(UnaryOperationNode node) {}

@@ -19,6 +19,9 @@ namespace Hassium
             try
             {
                 ast = new Parser().Parse(tokens);
+                var table = new SemanticAnalyzer().Analyze(ast);
+                var module = new Compiler.CodeGen.Compiler().Compile(ast, table);
+                new VirtualMachine().Execute(module, new System.Collections.Generic.List<string>());
             }
             catch (ExpectedTokenException ex)
             {
@@ -28,10 +31,10 @@ namespace Hassium
             {
                 Console.WriteLine(ex.Message);
             }
-            var table = new SemanticAnalyzer().Analyze(ast);
-            var module = new Compiler.CodeGen.Compiler().Compile(ast, table);
-
-            new VirtualMachine().Execute(module, new System.Collections.Generic.List<string>());
+            catch (InternalException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

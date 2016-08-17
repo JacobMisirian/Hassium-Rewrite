@@ -31,7 +31,7 @@ namespace Hassium.Runtime
             StackFrame.PopFrame();
         }
 
-        public void ExecuteMethod(HassiumMethod method)
+        public HassiumObject ExecuteMethod(HassiumMethod method)
         {
             importLabels(method);
             for (int pos = 0; pos < method.Instructions.Count; pos++)
@@ -42,7 +42,7 @@ namespace Hassium.Runtime
 
                 int arg = method.Instructions[pos].Argument;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
-             //   Console.WriteLine(method.Instructions[pos].ToString());
+                //Console.WriteLine(method.Instructions[pos].ToString());
                 try
                 {
                     switch (method.Instructions[pos].InstructionType)
@@ -80,7 +80,15 @@ namespace Hassium.Runtime
                                 pos = method.Labels[arg];
                             break;
                         case InstructionType.LoadAttribute:
-                            Stack.Push(Stack.Pop().Attributes[CurrentModule.ConstantPool[arg]]);
+                            val = Stack.Pop();
+                            try
+                            {
+                                Stack.Push(val.Attributes[CurrentModule.ConstantPool[arg]]);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new InternalException(InternalException.ATTRIBUTE_NOT_FOUND, CurrentModule.ConstantPool[arg], val.Type());
+                            }
                             break;
                         case InstructionType.LoadGlobal:
                             attrib = CurrentModule.ConstantPool[arg];
@@ -90,7 +98,14 @@ namespace Hassium.Runtime
                                 Stack.Push(CurrentMethod.Parent.Attributes[attrib]);
                             break;
                         case InstructionType.LoadGlobalVariable:
-                            Stack.Push(CurrentModule.Globals[arg]);
+                            try
+                            {
+                                Stack.Push(CurrentModule.Globals[arg]);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new InternalException(InternalException.VARIABLE_ERROR, arg);
+                            }
                             break;
                         case InstructionType.LoadListElement:
                             list = Stack.Pop();
@@ -111,10 +126,21 @@ namespace Hassium.Runtime
                         case InstructionType.PushObject:
                             Stack.Push(CurrentModule.ObjectPool[arg]);
                             break;
+                        case InstructionType.Return:
+                            return Stack.Pop();
                         case InstructionType.StoreAttribute:
                             val = Stack.Pop();
                             attrib = CurrentModule.ConstantPool[arg];
-                            val.Attributes[attrib] = Stack.Pop();
+                            try
+                            {
+                                if (val.Attributes.ContainsKey(attrib))
+                                    val.Attributes.Remove(attrib);
+                                val.Attributes.Add(attrib, Stack.Pop());
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                throw new InternalException(InternalException.VARIABLE_ERROR, val.Type());
+                            }
                             break;
                         case InstructionType.StoreGlobalVariable:
                             CurrentModule.Globals[arg] = Stack.Pop();
@@ -129,11 +155,12 @@ namespace Hassium.Runtime
                             
                     }
                 }
-                catch (InternalException)
+                catch (InternalException ex)
                 {
-                    
+                    throw ex;
                 }
             }
+            return HassiumObject.Null;
         }
 
         private void interpretBinaryOperation(HassiumObject left, HassiumObject right, int op)

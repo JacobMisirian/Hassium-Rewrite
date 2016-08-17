@@ -87,7 +87,7 @@ namespace Hassium.Compiler.CodeGen
                         AttributeAccessNode accessor = node.Left as AttributeAccessNode;
                         accessor.Left.Visit(this);
                         if (!module.ConstantPool.ContainsValue(accessor.Right))
-                            module.ConstantPool.Add(accessor.GetHashCode(), accessor.Right);
+                            module.ConstantPool.Add(accessor.Right.GetHashCode(), accessor.Right);
                         method.Emit(node.SourceLocation, InstructionType.StoreAttribute, accessor.Right.GetHashCode());
                         accessor.Left.Visit(this);
                     }
@@ -209,6 +209,20 @@ namespace Hassium.Compiler.CodeGen
                 module.ObjectPool.Add(fl.GetHashCode(), fl);
             method.Emit(node.SourceLocation, InstructionType.PushObject, fl.GetHashCode());
         }
+        public void Accept(ForNode node)
+        {
+            var startLabel = nextLabel();
+            var endLabel = nextLabel();
+
+            node.StartStatement.Visit(this);
+            method.EmitLabel(node.SourceLocation, startLabel);
+            node.Predicate.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.JumpIfFalse, endLabel);
+            node.Body.Visit(this);
+            node.RepeatStatement.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.Jump, startLabel);
+            method.EmitLabel(node.SourceLocation, endLabel);
+        }
         public void Accept(FuncNode node)
         {
             if (!module.ConstantPool.ContainsKey(node.Name.GetHashCode()))
@@ -279,6 +293,11 @@ namespace Hassium.Compiler.CodeGen
             foreach (var val in node.InitialValues)
                 val.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.BuildList, node.InitialValues.Count);
+        }
+        public void Accept(ReturnNode node)
+        {
+            node.Value.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.Return);
         }
         public void Accept(StatementNode node) {}
         public void Accept(StringNode node)

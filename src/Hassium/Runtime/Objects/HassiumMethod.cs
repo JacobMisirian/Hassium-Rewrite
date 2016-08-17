@@ -46,6 +46,51 @@ namespace Hassium.Runtime.Objects
            // Labels.Add(label, Instructions.Count);
             Instructions.Add(new Instruction(locatiom, InstructionType.Label, label));
         }
+
+        public override HassiumObject Invoke(VirtualMachine vm, params HassiumObject[] args)
+        {
+            vm.StackFrame.PushFrame();
+
+            int i = 0;
+            foreach (var param in Parameters)
+            {
+                var arg = args[i++];
+                if (param.Key.IsEnforced)
+                if (!arg.Types.Contains((HassiumTypeDefinition)vm.Globals[param.Key.Type]))
+                    throw new InternalException(InternalException.PARAMETER_ERROR, param.Key.Type, arg.Type());
+                vm.StackFrame.Add(param.Value, arg);
+            }
+            var val = vm.ExecuteMethod(this);
+            if (ReturnType != "")
+            if (val.Type() != vm.Globals[ReturnType])
+                throw new InternalException(InternalException.RETURN_ERROR, ReturnType, val.Type());
+            vm.StackFrame.PopFrame();
+
+            if (IsConstructor)
+            {
+                HassiumClass ret = new HassiumClass();
+                ret.Attributes = CloneDictionary(Parent.Attributes);
+                foreach (var type in Parent.Types)
+                    ret.AddType(type);
+                foreach (var attrib in ret.Attributes.Values)
+                    if (attrib is HassiumMethod)
+                        ((HassiumMethod)attrib).Parent = ret;
+                return ret;
+            }
+            return val;
+        }
+
+        public static Dictionary<TKey, TValue> CloneDictionary<TKey, TValue>
+        (Dictionary<TKey, TValue> original) where TValue : ICloneable
+        {
+            Dictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>(original.Count,
+                original.Comparer);
+            foreach (KeyValuePair<TKey, TValue> entry in original)
+            {
+                ret.Add(entry.Key, (TValue) entry.Value.Clone());
+            }
+            return ret;
+        }
     }
 }
 

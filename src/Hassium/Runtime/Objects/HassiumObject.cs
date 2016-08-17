@@ -5,7 +5,7 @@ using Hassium.Runtime.Objects.Types;
 
 namespace Hassium.Runtime.Objects
 {
-    public class HassiumObject
+    public class HassiumObject : ICloneable
     {
         public static HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("object");
         public static HassiumNull Null = new HassiumNull();
@@ -236,6 +236,11 @@ namespace Hassium.Runtime.Objects
             if (Attributes.ContainsKey(TOSTRING))
                 return HassiumString.Cast(Attributes[TOSTRING].Invoke(vm, args));
             throw new InternalException(InternalException.ATTRIBUTE_NOT_FOUND, TOSTRING, Type());
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

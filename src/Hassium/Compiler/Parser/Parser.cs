@@ -12,7 +12,20 @@ namespace Hassium.Compiler.Parser
         public List<Token> Tokens { get; private set; }
         public int Position { get; set; }
         public bool EndOfStream { get { return Position >= Tokens.Count; } }
-        public SourceLocation Location { get { return Tokens[Position].SourceLocation; } }
+        public SourceLocation Location
+        {
+            get
+            {
+                try
+                {
+                    return Tokens[Position].SourceLocation;
+                }
+                catch
+                {
+                    return Tokens[Position - 1].SourceLocation;
+                }
+            }
+        }
 
         public AstNode Parse(List<Token> tokens)
         {
@@ -28,10 +41,14 @@ namespace Hassium.Compiler.Parser
         {
             if (MatchToken(TokenType.Identifier, "class"))
                 return parseClass();
+            else if (MatchToken(TokenType.Identifier, "for"))
+                return parseFor();
             else if (MatchToken(TokenType.Identifier, "func"))
                 return parseFunc();
             else if (MatchToken(TokenType.Identifier, "if"))
                 return parseIf();
+            else if (AcceptToken(TokenType.Identifier, "return"))
+                return new ReturnNode(Location, parseExpression());
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else
@@ -63,6 +80,20 @@ namespace Hassium.Compiler.Parser
 
             return new ClassNode(Location, name, inherits, body);
         }
+        private ForNode parseFor()
+        {
+            ExpectToken(TokenType.Identifier, "for");
+            ExpectToken(TokenType.OpenParentheses);
+            AstNode startStatement = parseStatement();
+            AcceptToken(TokenType.Semicolon);
+            AstNode predicate = parseExpression();
+            AcceptToken(TokenType.Semicolon);
+            AstNode repeatStatement = parseStatement();
+            ExpectToken(TokenType.CloseParentheses);
+            AstNode body = parseStatement();
+
+            return new ForNode(Location, startStatement, predicate, repeatStatement, body);
+        }
         private FuncNode parseFunc()
         {
             ExpectToken(TokenType.Identifier, "func");
@@ -72,7 +103,7 @@ namespace Hassium.Compiler.Parser
             while (!AcceptToken(TokenType.CloseParentheses))
             {
                 parameters.Add(parseParameter());
-                AcceptToken(TokenType.CloseParentheses);
+                AcceptToken(TokenType.Comma);
             }
             if (AcceptToken(TokenType.Colon))
             {
@@ -362,7 +393,9 @@ namespace Hassium.Compiler.Parser
         }
         private AstNode parseTerm()
         {
-            if (MatchToken(TokenType.Identifier))
+            if (AcceptToken(TokenType.Identifier, "new"))
+                return parseExpression();
+            else if (MatchToken(TokenType.Identifier))
                 return new IdentifierNode(Location, ExpectToken(TokenType.Identifier).Value);
             else if (MatchToken(TokenType.String))
                 return new StringNode(Location, ExpectToken(TokenType.String).Value);

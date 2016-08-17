@@ -1,7 +1,27 @@
 func main () {
-	a = 3;
-	while (a < 10) {
-		println (a);
-		a = a + 1;
+	c = new MyClass ();
+	d = new MyClass ();
+	c.e = 3;
+	println (c.e);
+	c.e = 2;
+	println (c.e);
+	d.e = 1;
+	println (c.e);
+	println (d.e);
+}
+
+class MyClass {
+	func new () {}
+	func add (x, y, z) {
+		print (x);
+		print (y);
+		print (z);
+		return x + y + z;
+	}
+	func sub (x, y, z) {
+		print (x + " ");
+		print (y + " ");
+		print (z + " ");
+		return x - y - z;
 	}
 }

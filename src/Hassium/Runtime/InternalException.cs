@@ -7,6 +7,9 @@ namespace Hassium.Runtime
         public static string ATTRIBUTE_NOT_FOUND =  "Could not find attribute {0} in {1}!";
         public static string CONVERSION_ERROR =     "Could not convert {0} to {1}!";
         public static string OPERATOR_ERROR =       "Could not apply operator {0} to {1}!";
+        public static string PARAMETER_ERROR =      "Expected parameter of type {0}, got {1}!";
+        public static string RETURN_ERROR =         "Expected return type {0}, got {1}!";
+        public static string VARIABLE_ERROR =       "Variable {0} does not exist!";
 
         public new string Message { get; private set; }
 
