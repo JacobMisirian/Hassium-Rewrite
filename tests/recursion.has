@@ -1,0 +1,11 @@
+func main () {
+	count (0);
+}
+
+func count (n) {
+	println (n);
+	if (n > 10) {
+		return n;
+	}
+	return count (n + 1);
+}
