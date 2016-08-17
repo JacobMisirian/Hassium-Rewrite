@@ -26,7 +26,8 @@ namespace Hassium.Compiler.CodeGen
         Duplicate,
         Jump,
         JumpIfTrue,
-        JumpIfFalse
+        JumpIfFalse,
+        Label
     }
 }
 

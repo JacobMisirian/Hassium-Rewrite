@@ -33,6 +33,7 @@ namespace Hassium.Runtime
 
         public void ExecuteMethod(HassiumMethod method)
         {
+            importLabels(method);
             for (int pos = 0; pos < method.Instructions.Count; pos++)
             {
                 HassiumObject left, right, val, list;
@@ -209,12 +210,14 @@ namespace Hassium.Runtime
                     Globals.Add(constant, CurrentModule.Attributes[constant]);
             }
         }
-        /*
+
         private void importLabels(HassiumMethod method)
         {
-            for (int i = 0; i < method
+            for (int i = 0; i < method.Instructions.Count; i++)
+                if (method.Instructions[i].InstructionType == InstructionType.Label)
+                    method.Labels.Add(method.Instructions[i].Argument, i);
         }
-        */
+        
     }
 }
 

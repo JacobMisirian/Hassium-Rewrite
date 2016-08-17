@@ -43,8 +43,8 @@ namespace Hassium.Runtime.Objects
         }
         public void EmitLabel(SourceLocation locatiom, int label)
         {
-            Labels.Add(label, Instructions.Count);
-            //Instructions.Add(new Instruction(locatiom, InstructionType.Label, label));
+           // Labels.Add(label, Instructions.Count);
+            Instructions.Add(new Instruction(locatiom, InstructionType.Label, label));
         }
     }
 }

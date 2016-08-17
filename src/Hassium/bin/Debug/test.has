@@ -1,21 +1,7 @@
 func main () {
-	a = 2;
-	b = 4;
-	c = 2;
-
-	if (a == a) {
-		println ("equals works");
-	} else {
-		println ("equals no work");
-	}
-	if (a == b) {
-		println ("elseequal no work");
-	} else {
-		println ("else works!");
-	}
-	if (a != a) {
-		println ("notequals works");
-	} else {
-		println ("notequal no work");
+	a = 3;
+	while (a < 10) {
+		println (a);
+		a = a + 1;
 	}
 }

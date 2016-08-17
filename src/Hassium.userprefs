@@ -1,9 +1,40 @@
 ﻿<Properties StartupItem="Hassium/Hassium.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Hassium/Runtime/VirtualMachine.cs">
     <Files>
-      <File FileName="Hassium/Program.cs" Line="13" Column="1" />
+      <File FileName="Hassium/Runtime/VirtualMachine.cs" Line="51" Column="48" />
+      <File FileName="Hassium/Compiler/CodeGen/Compiler.cs" Line="348" Column="51" />
+      <File FileName="Hassium/Runtime/Objects/HassiumObject.cs" Line="202" Column="89" />
+      <File FileName="Hassium/Program.cs" Line="2" Column="17" />
+      <File FileName="Hassium/Compiler/Parser/Parser.cs" Line="351" Column="27" />
+      <File FileName="Hassium/Runtime/GlobalFunctions.cs" Line="26" Column="58" />
+      <File FileName="Hassium/Runtime/Objects/HassiumMethod.cs" Line="46" Column="51" />
+      <File FileName="Hassium/Compiler/CodeGen/Instruction.cs" Line="20" Column="73" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Hassium" expanded="True">
+            <Node name="Hassium" expanded="True">
+              <Node name="Compiler" expanded="True">
+                <Node name="CodeGen" expanded="True" />
+                <Node name="Parser" expanded="True">
+                  <Node name="Ast" expanded="True" />
+                </Node>
+                <Node name="Scanner" expanded="True" />
+                <Node name="SemanticAnalysis" expanded="True" />
+              </Node>
+              <Node name="Runtime" expanded="True">
+                <Node name="Objects" expanded="True">
+                  <Node name="Types" expanded="True" />
+                </Node>
+                <Node name="VirtualMachine.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

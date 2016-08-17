@@ -185,7 +185,7 @@ namespace Hassium.Compiler.Parser
         }
         private AstNode parseEquality()
         {
-            AstNode left = parseOr();
+            AstNode left = parseComparison();
             while (MatchToken(TokenType.Comparison))
             {
                 switch (Tokens[Position].Value)
@@ -196,6 +196,32 @@ namespace Hassium.Compiler.Parser
                     case "!=":
                         AcceptToken(TokenType.Comparison);
                         return new BinaryOperationNode(Location, BinaryOperation.NotEqualTo, left, parseEquality());
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
+        }
+        private AstNode parseComparison()
+        {
+            AstNode left = parseOr();
+            while (MatchToken(TokenType.Comparison))
+            {
+                switch (Tokens[Position].Value)
+                {
+                    case ">":
+                        AcceptToken(TokenType.Comparison);
+                        return new BinaryOperationNode(Location, BinaryOperation.GreaterThan, left, parseComparison());
+                    case ">=":
+                        AcceptToken(TokenType.Comparison);
+                        return new BinaryOperationNode(Location, BinaryOperation.GreaterThanOrEqual, left, parseComparison());
+                    case "<":
+                        AcceptToken(TokenType.Comparison);
+                        return new BinaryOperationNode(Location, BinaryOperation.LesserThan, left, parseComparison());
+                    case "<=":
+                        AcceptToken(TokenType.Comparison);
+                        return new BinaryOperationNode(Location, BinaryOperation.LesserThanOrEqual, left, parseComparison());
                     default:
                         break;
                 }
