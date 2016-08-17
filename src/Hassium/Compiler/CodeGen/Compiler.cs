@@ -155,6 +155,13 @@ namespace Hassium.Compiler.CodeGen
                     break;
             }
         }
+        public void Accept(BoolNode node)
+        {
+            var b = new HassiumBool(node.Bool);
+            if (!module.ObjectPool.ContainsKey(b.GetHashCode()))
+                module.ObjectPool.Add(b.GetHashCode(), b);
+            method.Emit(node.SourceLocation, InstructionType.PushObject, b.GetHashCode());
+        }
         public void Accept(CharNode node)
         {
             var ch = new HassiumChar(node.Char);

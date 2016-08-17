@@ -12,6 +12,11 @@ namespace Hassium.Runtime.Objects.Types
         {
             Float = val;
             AddType(TypeDefinition);
+
+            AddAttribute(HassiumObject.TOCHAR,  ToChar,     0);
+            AddAttribute(HassiumObject.TOFLOAT, ToFloat,    0);
+            AddAttribute(HassiumObject.TOINT,   ToInt,      0);
+            AddAttribute(HassiumObject.TOSTRING,ToString,   0);
         }
 
         public override HassiumObject Add(VirtualMachine vm, params HassiumObject[] args)

@@ -7,19 +7,50 @@ namespace Hassium.Runtime.Objects.Types
     {
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("string");
 
-        public static HassiumString Cast(HassiumObject obj)
-        {
-            if (obj is HassiumString)
-                return (HassiumString)obj;
-            throw new InternalException("Could not convert {0} to {1}", obj.Type(), TypeDefinition);
-        }
-
         public string String { get; private set; }
 
         public HassiumString(string val)
         {
             AddType(TypeDefinition);
             String = val;
+
+            AddAttribute("contains",    contains,   1);
+            AddAttribute("endsWith",    endsWith,   1);
+            AddAttribute("indexOf",     indexOf,    1);
+            AddAttribute("insert",      insert,     2);
+
+            AddAttribute(HassiumObject.TOBOOL,  ToBool,     0);
+            AddAttribute(HassiumObject.TOCHAR,  ToChar,     0);
+            AddAttribute(HassiumObject.TOFLOAT, ToFloat,    0);
+            AddAttribute(HassiumObject.TOINT,   ToInt,      0);
+            AddAttribute(HassiumObject.TOLIST,  ToList,     0);
+            AddAttribute(HassiumObject.TOSTRING,ToString,   0);
+        }
+
+        public HassiumBool contains(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(String.Contains(args[0].ToString(vm).String));
+        }
+        public HassiumBool endsWith(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(String.EndsWith(args[0].ToString(vm).String));
+        }
+        public HassiumInt indexOf(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumInt(String.IndexOf(args[0].ToChar(vm).Char));
+        }
+        public HassiumString insert(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.Insert((int)args[0].ToInt(vm).Int, args[1].ToString(vm).String));
+        }
+
+        public HassiumString toLower(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.ToLower());
+        }
+        public HassiumString toUpper(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.ToUpper());
         }
 
         public override HassiumObject Add(VirtualMachine vm, params HassiumObject[] args)

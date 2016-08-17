@@ -11,6 +11,10 @@ namespace Hassium.Runtime.Objects.Types
         {
             AddType(TypeDefinition);
             Bool = val;
+
+            AddAttribute(HassiumObject.TOBOOL, ToBool, 0);
+            AddAttribute(HassiumObject.TOINT, ToInt, 0);
+            AddAttribute(HassiumObject.TOSTRING, ToString, 0);
         }
 
         public override HassiumObject EqualTo(VirtualMachine vm, params HassiumObject[] args)
@@ -39,4 +43,3 @@ namespace Hassium.Runtime.Objects.Types
         }
     }
 }
-

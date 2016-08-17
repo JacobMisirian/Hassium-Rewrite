@@ -145,6 +145,9 @@ namespace Hassium.Runtime
                         case InstructionType.StoreGlobalVariable:
                             CurrentModule.Globals[arg] = Stack.Pop();
                             break;
+                        case InstructionType.StoreListElement:
+                            Stack.Push(Stack.Pop().ToList(this).StoreIndex(this, Stack.Pop(), Stack.Pop()));
+                            break;
                         case InstructionType.StoreLocal:
                             val = Stack.Pop();
                             if (StackFrame.Contains(arg))
@@ -247,4 +250,3 @@ namespace Hassium.Runtime
         
     }
 }
-

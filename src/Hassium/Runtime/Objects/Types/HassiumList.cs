@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Hassium.Runtime.Objects.Types
 {
@@ -13,16 +14,36 @@ namespace Hassium.Runtime.Objects.Types
         {
             AddType(TypeDefinition);
             List = new List<HassiumObject>(elements);
+
+            AddAttribute(HassiumObject.TOLIST, ToList, 0);
+            AddAttribute(HassiumObject.TOSTRING, ToString, 0, 1);
         }
 
         public override HassiumObject Index(VirtualMachine vm, params HassiumObject[] args)
         {
             return List[(int)args[0].ToInt(vm).Int];
         }
+        public override HassiumObject StoreIndex(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return List[(int)args[0].ToInt(vm).Int] = args[1];
+        }
         public override HassiumList ToList(VirtualMachine vm, params HassiumObject[] args)
         {
             return this;
         }
+        public override HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (args.Length == 0)
+                foreach (var obj in List)
+                    sb.Append(obj.ToString(vm).String);
+            else
+            {
+                string seperator = args[0].ToString(vm).String;
+                foreach (var obj in List)
+                    sb.AppendFormat("{0}{1}", obj.ToString(vm).String, seperator);
+            }
+            return new HassiumString(sb.ToString());
+        }
     }
 }
-

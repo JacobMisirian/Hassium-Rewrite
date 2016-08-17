@@ -9,6 +9,7 @@ namespace Hassium.Compiler.Parser
         void Accept(ArgumentListNode node);
         void Accept(AttributeAccessNode node);
         void Accept(BinaryOperationNode node);
+        void Accept(BoolNode node);
         void Accept(CharNode node);
         void Accept(ClassNode node);
         void Accept(CodeBlockNode node);

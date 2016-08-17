@@ -22,6 +22,7 @@ namespace Hassium.Compiler.SemanticAnalysis
         public void Accept(ArgumentListNode node) {}
         public void Accept(AttributeAccessNode node) {}
         public void Accept(BinaryOperationNode node) {}
+        public void Accept(BoolNode node) {}
         public void Accept(CharNode node) {}
         public void Accept(ClassNode node) 
         {

@@ -12,6 +12,62 @@ namespace Hassium.Runtime.Objects.Types
         {
             Char = c;
             AddType(TypeDefinition);
+
+            AddAttribute("isControl",           isControl,          0);
+            AddAttribute("isDigit",             isDigit,            0);
+            AddAttribute("isLetter",            isLetter,           0);
+            AddAttribute("isLetterOrDigit",     isLetterOrDigit,    0);
+            AddAttribute("isLower",             isLower,            0);
+            AddAttribute("isSymbol",            isSymbol,           0);
+            AddAttribute("isUpper",             isUpper,            0);
+            AddAttribute("isWhiteSpace",        isWhiteSpace,       0);
+            AddAttribute("toLower",             toLower,            0);
+            AddAttribute("toUpper",             toUpper,            0);
+            AddAttribute(HassiumObject.TOCHAR,  ToChar,             0);
+            AddAttribute(HassiumObject.TOFLOAT, ToFloat,            0);
+            AddAttribute(HassiumObject.TOINT,   ToInt,              0);
+            AddAttribute(HassiumObject.TOSTRING,ToString,           0);
+        }
+
+        public HassiumBool isControl(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsControl(Char));
+        }
+        public HassiumBool isDigit(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsDigit(Char));
+        }
+        public HassiumBool isLetter(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsLetter(Char));
+        }
+        public HassiumBool isLetterOrDigit(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsLetterOrDigit(Char));
+        }
+        public HassiumBool isLower(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool((int)Char >= 97 && (int)Char <= 122);
+        }
+        public HassiumBool isSymbol(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsSymbol(Char));
+        }
+        public HassiumBool isUpper(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool((int)Char >= 65 && (int)Char <= 90);
+        }
+        public HassiumBool isWhiteSpace(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(char.IsWhiteSpace(Char));
+        }
+        public HassiumChar toLower(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumChar(Char.ToLower(Char));
+        }
+        public HassiumChar toUpper(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumChar(Char.ToUpper(Char));
         }
 
         public override HassiumObject Add(VirtualMachine vm, params HassiumObject[] args)
@@ -82,6 +138,10 @@ namespace Hassium.Runtime.Objects.Types
         {
             return new HassiumChar((char)(Char - (char)args[0].ToInt(vm).Int));
         }
+        public override HassiumObject Power(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return base.Power(vm, args);
+        }
         public override HassiumChar ToChar(VirtualMachine vm, params HassiumObject[] args)
         {
             return this;
@@ -97,10 +157,6 @@ namespace Hassium.Runtime.Objects.Types
         public override HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumString(Char.ToString());
-        }
-        public override HassiumObject Power(VirtualMachine vm, params HassiumObject[] args)
-        {
-            return base.Power(vm, args);
         }
     }
 }

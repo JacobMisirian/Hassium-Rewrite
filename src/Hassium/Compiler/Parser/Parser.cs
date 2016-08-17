@@ -52,7 +52,7 @@ namespace Hassium.Compiler.Parser
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else
-                return parseExpression();
+                return parseExpressionStatement();
         }
         private ArgumentListNode parseArgList()
         {
@@ -153,6 +153,14 @@ namespace Hassium.Compiler.Parser
             return new WhileNode(Location, predicate, body);
         }
 
+        private AstNode parseExpressionStatement()
+        {
+            AstNode expression = parseExpression();
+            AcceptToken(TokenType.Semicolon);
+            if (expression is FunctionCallNode || expression is BinaryOperationNode || expression is UnaryOperationNode)
+                return new ExpressionStatementNode(Location, expression);
+            return expression;
+        }
         private AstNode parseExpression()
         {
             return parseAssignment();
@@ -395,6 +403,8 @@ namespace Hassium.Compiler.Parser
         {
             if (AcceptToken(TokenType.Identifier, "new"))
                 return parseExpression();
+            else if (MatchToken(TokenType.OpenSquare))
+                return parseListDeclaration();
             else if (MatchToken(TokenType.Identifier))
                 return new IdentifierNode(Location, ExpectToken(TokenType.Identifier).Value);
             else if (MatchToken(TokenType.String))
@@ -407,8 +417,6 @@ namespace Hassium.Compiler.Parser
                 return new CharNode(Location, Convert.ToChar(ExpectToken(TokenType.Char).Value));
             else if (AcceptToken(TokenType.Semicolon))
                 return new StatementNode(Location);
-            else if (MatchToken(TokenType.OpenSquare))
-                return parseListDeclaration();
             else if (AcceptToken(TokenType.OpenBracket))
             {
                 var block = new CodeBlockNode();

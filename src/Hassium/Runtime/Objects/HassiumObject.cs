@@ -34,6 +34,7 @@ namespace Hassium.Runtime.Objects
         public static string LOGICALNOT =           "__logicalnot__";
         public static string NEGATE =               "__negate__";
         public static string INDEX =                "__index__";
+        public static string STOREINDEX =          "__storeindex__";
         public static string TOBOOL =               "toBool";
         public static string TOCHAR =               "toChar";
         public static string TOINT =                "toInt";
@@ -52,6 +53,18 @@ namespace Hassium.Runtime.Objects
             return Types[Types.Count - 1];
         }
 
+        public void AddAttribute(string name, HassiumObject value)
+        {
+            Attributes.Add(name, value);
+        }
+        public void AddAttribute(string name, HassiumFunctionDelegate func, params int[] paramLengths)
+        {
+            AddAttribute(name, new HassiumFunction(func, paramLengths));
+        }
+        public void AddAttribute(string name, HassiumFunctionDelegate func, int paramLength = -1)
+        {
+            AddAttribute(name, func, new int[] { paramLength });
+        }
         public void AddType(HassiumTypeDefinition typeDefinition)
         {
             Types.Add(typeDefinition);
@@ -201,6 +214,12 @@ namespace Hassium.Runtime.Objects
                 return Attributes[INDEX].Invoke(vm, args);
             throw new InternalException(InternalException.OPERATOR_ERROR, "[]", Type());
         }
+        public virtual HassiumObject StoreIndex(VirtualMachine vm, params HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(STOREINDEX))
+                return Attributes[STOREINDEX].Invoke(vm, args);
+            throw new InternalException(InternalException.OPERATOR_ERROR, "[n]", Type());
+        }
         public virtual HassiumBool ToBool(VirtualMachine vm, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOBOOL))
@@ -234,7 +253,7 @@ namespace Hassium.Runtime.Objects
         public virtual HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOSTRING))
-                return HassiumString.Cast(Attributes[TOSTRING].Invoke(vm, args));
+                return Attributes[TOSTRING].Invoke(vm, args).ToString(vm, args);
             throw new InternalException(InternalException.ATTRIBUTE_NOT_FOUND, TOSTRING, Type());
         }
 

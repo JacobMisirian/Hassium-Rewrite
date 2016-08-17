@@ -87,6 +87,7 @@
     <Compile Include="Runtime\Objects\Types\HassiumList.cs" />
     <Compile Include="Compiler\Parser\Ast\ForNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ReturnNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\BoolNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
