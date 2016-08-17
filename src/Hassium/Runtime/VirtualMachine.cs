@@ -41,7 +41,7 @@ namespace Hassium.Runtime
 
                 int arg = method.Instructions[pos].Argument;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
-
+             //   Console.WriteLine(method.Instructions[pos].ToString());
                 try
                 {
                     switch (method.Instructions[pos].InstructionType)
@@ -68,15 +68,15 @@ namespace Hassium.Runtime
                             Stack.Push(Stack.Peek());
                             break;
                         case InstructionType.Jump:
-                            pos = arg;
+                            pos = method.Labels[arg];
                             break;
                         case InstructionType.JumpIfFalse:
                             if (!Stack.Pop().ToBool(this).Bool)
-                                pos = arg;
+                                pos = method.Labels[arg];
                             break;
                         case InstructionType.JumpIfTrue:
                             if (Stack.Pop().ToBool(this).Bool)
-                                pos = arg;
+                                pos = method.Labels[arg];
                             break;
                         case InstructionType.LoadAttribute:
                             Stack.Push(Stack.Pop().Attributes[CurrentModule.ConstantPool[arg]]);
@@ -209,6 +209,12 @@ namespace Hassium.Runtime
                     Globals.Add(constant, CurrentModule.Attributes[constant]);
             }
         }
+        /*
+        private void importLabels(HassiumMethod method)
+        {
+            for (int i = 0; i < method
+        }
+        */
     }
 }
 

@@ -14,6 +14,11 @@ namespace Hassium.Compiler.CodeGen
             InstructionType = instructionType;
             Argument = argument;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}\t{1}", InstructionType, Argument);
+        }
     }
 }
 

@@ -256,10 +256,10 @@ namespace Hassium.Compiler.CodeGen
             method.Emit(node.SourceLocation, InstructionType.JumpIfFalse, elseLabel);
             node.Body.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.Jump, endLabel);
-            method.EmitLabel(elseLabel);
+            method.EmitLabel(node.SourceLocation, elseLabel);
             if (node.Children.Count > 2)
                 node.ElseBody.Visit(this);
-            method.EmitLabel(endLabel);
+            method.EmitLabel(node.SourceLocation, endLabel);
         }
         public void Accept(IntegerNode node)
         {
@@ -340,12 +340,12 @@ namespace Hassium.Compiler.CodeGen
             var startLabel = nextLabel();
             var endLabel = nextLabel();
 
-            method.EmitLabel(startLabel);
+            method.EmitLabel(node.SourceLocation, startLabel);
             node.Predicate.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.JumpIfFalse, endLabel);
             node.Body.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.Jump, startLabel);
-            method.EmitLabel(endLabel);
+            method.EmitLabel(node.SourceLocation, endLabel);
         }
     }
 }

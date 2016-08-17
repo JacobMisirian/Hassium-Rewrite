@@ -92,6 +92,17 @@ namespace Hassium.Compiler.Parser
                 return new IfNode(Location, predicate, body, parseStatement());
             return new IfNode(Location, predicate, body);
         }
+        private ListDeclarationNode parseListDeclaration()
+        {
+            ExpectToken(TokenType.OpenSquare);
+            List<AstNode> initial = new List<AstNode>();
+            while (!AcceptToken(TokenType.CloseSquare))
+            {
+                initial.Add(parseExpression());
+                AcceptToken(TokenType.Comma);
+            }
+            return new ListDeclarationNode(Location, initial);
+        }
         private FuncParameter parseParameter()
         {
             string name = ExpectToken(TokenType.Identifier).Value;
@@ -337,6 +348,8 @@ namespace Hassium.Compiler.Parser
                 return new CharNode(Location, Convert.ToChar(ExpectToken(TokenType.Char).Value));
             else if (AcceptToken(TokenType.Semicolon))
                 return new StatementNode(Location);
+            else if (MatchToken(TokenType.OpenSquare))
+                return parseListDeclaration();
             else if (AcceptToken(TokenType.OpenBracket))
             {
                 var block = new CodeBlockNode();

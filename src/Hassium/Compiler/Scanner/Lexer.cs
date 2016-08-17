@@ -120,7 +120,9 @@ namespace Hassium.Compiler.Scanner
                                 add(TokenType.Assignment, "=");
                             break;
                         default:
-                            Console.WriteLine("Unknown char, {0}", (char)readChar());
+                            if (peekChar() == -1)
+                                break;
+                            Console.WriteLine("Unknown char, {0}, {1}!", peekChar(), (char)readChar());
                             break;
                     }
                 }
