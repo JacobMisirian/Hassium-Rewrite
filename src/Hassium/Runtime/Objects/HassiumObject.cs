@@ -45,6 +45,8 @@ namespace Hassium.Runtime.Objects
         public static string TOLIST =               "toList";
         public static string TOSTRING =             "toString";
 
+        public HassiumClass Parent { get; set; }
+
         public List<HassiumTypeDefinition> Types = new List<HassiumTypeDefinition>()
         {
             TypeDefinition

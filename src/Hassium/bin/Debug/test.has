@@ -1,5 +1,13 @@
 func main () {
-	l = [ 1, 3, 4, 5 ];
-	foreach (e in l)
-		println (e);
+	MyClass.a = 4;
+	b = new MyClass ("8");
+	c = new MyClass ("2");
+	MyClass.speak ();
+	c.speak ();
+	b.speak ();
+}
+
+class MyClass {
+	func new (n) { this.a = n; }
+	func speak () { println (this.a); }
 }

@@ -12,7 +12,8 @@ namespace Hassium.Runtime
         {
             { "format", new HassiumFunction(format, -1) },
             { "print", new HassiumFunction(print, -1) },
-            { "println", new HassiumFunction(println, -1) }
+            { "println", new HassiumFunction(println, -1) },
+            { "type", new HassiumFunction(type, 1) }
         };
 
         public static HassiumString format(VirtualMachine vm, params HassiumObject[] args)
@@ -33,6 +34,10 @@ namespace Hassium.Runtime
             foreach (var arg in args)
                 Console.WriteLine(arg.ToString(vm).String);
             return HassiumObject.Null;
+        }
+        public static HassiumTypeDefinition type(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return args[0].Type();
         }
     }
 }

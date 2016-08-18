@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Hassium.Compiler;
 using Hassium.Compiler.CodeGen;
@@ -12,7 +13,6 @@ namespace Hassium.Runtime.Objects
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("func");
 
         public string Name { get; set; }
-        public HassiumClass Parent { get; set; }
 
         public List<Instruction> Instructions { get; private set; }
         public Dictionary<FuncParameter, int> Parameters { get; private set; }
@@ -60,11 +60,6 @@ namespace Hassium.Runtime.Objects
                     throw new InternalException(InternalException.PARAMETER_ERROR, param.Key.Type, arg.Type());
                 vm.StackFrame.Add(param.Value, arg);
             }
-            var val = vm.ExecuteMethod(this);
-            if (ReturnType != "")
-            if (val.Type() != vm.Globals[ReturnType])
-                throw new InternalException(InternalException.RETURN_ERROR, ReturnType, val.Type());
-            vm.StackFrame.PopFrame();
 
             if (IsConstructor)
             {
@@ -73,10 +68,19 @@ namespace Hassium.Runtime.Objects
                 foreach (var type in Parent.Types)
                     ret.AddType(type);
                 foreach (var attrib in ret.Attributes.Values)
-                    if (attrib is HassiumMethod)
-                        ((HassiumMethod)attrib).Parent = ret;
+                    attrib.Parent = ret;
+                vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);
+                vm.StackFrame.PopFrame();
                 return ret;
             }
+
+            var val = vm.ExecuteMethod(this);
+
+            if (ReturnType != "")
+            if (val.Type() != vm.Globals[ReturnType])
+                throw new InternalException(InternalException.RETURN_ERROR, ReturnType, val.Type());
+            vm.StackFrame.PopFrame();
+
             return val;
         }
 

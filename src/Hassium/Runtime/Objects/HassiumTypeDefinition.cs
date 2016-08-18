@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Hassium.Runtime.Objects.Types;
+
 namespace Hassium.Runtime.Objects
 {
     public class HassiumTypeDefinition: HassiumObject
@@ -13,9 +15,9 @@ namespace Hassium.Runtime.Objects
             TypeName = type;
         }
 
-        public override string ToString()
+        public override Hassium.Runtime.Objects.Types.HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
-            return TypeName;
+            return new HassiumString(TypeName);
         }
     }
 }

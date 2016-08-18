@@ -11,8 +11,9 @@ namespace Hassium.Runtime
 {
     public class VirtualMachine
     {
-        public StackFrame StackFrame { get; private set; }
         public Stack<HassiumObject> Stack { get; private set; }
+        public StackFrame StackFrame { get; private set; }
+        public Stack<string> CallStack { get; private set; }
         public Dictionary<string, HassiumObject> Globals { get; private set; }
         public SourceLocation CurrentSourceLocation { get; private set; }
         public HassiumModule CurrentModule { get; private set; }
@@ -20,8 +21,9 @@ namespace Hassium.Runtime
 
         public void Execute(HassiumModule module, List<string> args)
         {
-            StackFrame = new StackFrame();
             Stack = new Stack<HassiumObject>();
+            StackFrame = new StackFrame();
+            CallStack = new Stack<string>();
             Globals = new Dictionary<string, HassiumObject>() { { "true", new HassiumBool(true) }, { "false", new HassiumBool(false) } };
             CurrentModule = module;
             importGlobals();
@@ -42,7 +44,7 @@ namespace Hassium.Runtime
 
                 int arg = method.Instructions[pos].Argument;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
-                //Console.WriteLine(method.Instructions[pos].ToString());
+               // Console.WriteLine(method.Instructions[pos].ToString());
                 try
                 {
                     switch (method.Instructions[pos].InstructionType)
@@ -137,6 +139,9 @@ namespace Hassium.Runtime
                             break;
                         case InstructionType.Return:
                             return Stack.Pop();
+                        case InstructionType.SelfReference:
+                            Stack.Push(method.Parent);
+                            break;
                         case InstructionType.StoreAttribute:
                             val = Stack.Pop();
                             attrib = CurrentModule.ConstantPool[arg];
@@ -164,7 +169,9 @@ namespace Hassium.Runtime
                             else
                                 StackFrame.Add(arg, val);
                             break;
-                            
+                        case InstructionType.UnaryOperation:
+                            interpretUnaryOperation(Stack.Pop(), arg);
+                            break;
                     }
                 }
                 catch (InternalException ex)
@@ -235,6 +242,22 @@ namespace Hassium.Runtime
                     break;
                 case (int)BinaryOperation.Subraction:
                     Stack.Push(left.Subtract(this, right));
+                    break;
+            }
+        }
+
+        private void interpretUnaryOperation(HassiumObject target, int op)
+        {
+            switch (op)
+            {
+                case (int)UnaryOperation.BitwiseNot:
+                    Stack.Push(target.BitwiseNot(this));
+                    break;
+                case (int)UnaryOperation.LogicalNot:
+                    Stack.Push(target.LogicalNot(this));
+                    break;
+                case (int)UnaryOperation.Negate:
+                    Stack.Push(target.Negate(this));
                     break;
             }
         }

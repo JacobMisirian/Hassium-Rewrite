@@ -291,6 +291,11 @@ namespace Hassium.Compiler.CodeGen
         }
         public void Accept(IdentifierNode node)
         {
+            if (node.Identifier == "this")
+            {
+                method.Emit(node.SourceLocation, InstructionType.SelfReference);
+                return;
+            }
             if (table.ContainsGlobalSymbol(node.Identifier))
                 method.Emit(node.SourceLocation, InstructionType.LoadGlobalVariable, table.GetGlobalSymbol(node.Identifier));
             else if (!table.ContainsSymbol(node.Identifier))
