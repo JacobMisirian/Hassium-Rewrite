@@ -275,13 +275,21 @@ namespace Hassium.Runtime
                 else if (CurrentModule.Attributes.ContainsKey(constant))
                     Globals.Add(constant, CurrentModule.Attributes[constant]);
             }
+
+            foreach (var module in InternalModule.InternalModules)
+                foreach (var pair in module.Attributes)
+                    Globals.Add(pair.Key, pair.Value);
         }
 
         private void importLabels(HassiumMethod method)
         {
             for (int i = 0; i < method.Instructions.Count; i++)
                 if (method.Instructions[i].InstructionType == InstructionType.Label)
+                {
+                    if (method.Labels.ContainsKey(method.Instructions[i].Argument))
+                        method.Labels.Remove(method.Instructions[i].Argument);
                     method.Labels.Add(method.Instructions[i].Argument, i);
+                }
         }
         
     }

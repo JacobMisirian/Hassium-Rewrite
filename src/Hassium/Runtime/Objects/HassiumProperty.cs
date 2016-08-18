@@ -4,6 +4,7 @@ namespace Hassium.Runtime.Objects
 {
     public class HassiumProperty: HassiumObject
     {
+        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("property");
         public bool IsReadOnly { get { return Set == null; } }
         public HassiumObject Get { get; private set; }
         public HassiumObject Set { get; private set; }

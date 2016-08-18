@@ -1,3 +1,20 @@
 func main () {
-	printeln ("hai");
+	e = new Event();
+	e.add (sayHello);
+	e.add (sayEven);
+
+	for (i = 0; i < 10; i++) {
+		println (i);
+		if (i % 2 == 0) {
+			e.fire ();
+		}
+	}
+}
+
+func sayHello () {
+	println ("Hello, World!");
+}
+
+func sayEven () {
+	println ("That number was even!");
 }
