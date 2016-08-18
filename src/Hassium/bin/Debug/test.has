@@ -1,6 +1,8 @@
 func main () {
-	println (8 / 2);
-	println (8 / "2");
-	println ("8" / 2);
-	println ("8" / "2");
+	a = 0;
+	while (true) {
+		println (a++);
+		if (a > 10) break;
+	}
+	println ("Done");
 }

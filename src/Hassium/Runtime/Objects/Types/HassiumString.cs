@@ -16,8 +16,13 @@ namespace Hassium.Runtime.Objects.Types
 
             AddAttribute("contains",    contains,   1);
             AddAttribute("endsWith",    endsWith,   1);
+            AddAttribute("format",      format,    -1);
             AddAttribute("indexOf",     indexOf,    1);
             AddAttribute("insert",      insert,     2);
+            AddAttribute("lastIndexOf", lastIndexOf,1);
+            AddAttribute("length",      new HassiumProperty(get_length));
+            AddAttribute("toLower",     toLower,    0);
+            AddAttribute("toUpper",     toUpper,    0);
 
             AddAttribute(HassiumObject.TOBOOL,  ToBool,     0);
             AddAttribute(HassiumObject.TOCHAR,  ToChar,     0);
@@ -35,6 +40,14 @@ namespace Hassium.Runtime.Objects.Types
         {
             return new HassiumBool(String.EndsWith(args[0].ToString(vm).String));
         }
+        public HassiumString format(VirtualMachine vm, params HassiumObject[] args)
+        {
+            HassiumObject[] formatArgs = new HassiumObject[args.Length + 1];
+            formatArgs[0] = this;
+            for (int i = 1; i < formatArgs.Length; i++)
+                formatArgs[i] = args[i - 1];
+            return GlobalFunctions.format(vm, formatArgs);
+        }
         public HassiumInt indexOf(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumInt(String.IndexOf(args[0].ToChar(vm).Char));
@@ -43,7 +56,14 @@ namespace Hassium.Runtime.Objects.Types
         {
             return new HassiumString(String.Insert((int)args[0].ToInt(vm).Int, args[1].ToString(vm).String));
         }
-
+        public HassiumInt lastIndexOf(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumInt(String.LastIndexOf(args[0].ToChar(vm).Char));
+        }
+        public HassiumInt get_length(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumInt(String.Length);
+        }
         public HassiumString toLower(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumString(String.ToLower());

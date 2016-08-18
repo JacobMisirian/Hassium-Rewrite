@@ -155,12 +155,9 @@ namespace Hassium.Compiler.CodeGen
                     break;
             }
         }
-        public void Accept(BoolNode node)
+        public void Accept(BreakNode node)
         {
-            var b = new HassiumBool(node.Bool);
-            if (!module.ObjectPool.ContainsKey(b.GetHashCode()))
-                module.ObjectPool.Add(b.GetHashCode(), b);
-            method.Emit(node.SourceLocation, InstructionType.PushObject, b.GetHashCode());
+            method.Emit(node.SourceLocation, InstructionType.Jump, method.BreakLabels.Pop());
         }
         public void Accept(CharNode node)
         {
@@ -204,6 +201,10 @@ namespace Hassium.Compiler.CodeGen
             node.VisitChildren(this);
             table.PopScope();
         }
+        public void Accept(ContinueNode node)
+        {
+            method.Emit(node.SourceLocation, InstructionType.Jump, method.ContinueLabels.Pop());
+        }
         public void Accept(ExpressionStatementNode node)
         {
             node.VisitChildren(this);
@@ -220,6 +221,8 @@ namespace Hassium.Compiler.CodeGen
         {
             var startLabel = nextLabel();
             var endLabel = nextLabel();
+            method.ContinueLabels.Push(startLabel);
+            method.ContinueLabels.Push(endLabel);
 
             node.StartStatement.Visit(this);
             method.EmitLabel(node.SourceLocation, startLabel);
@@ -365,6 +368,8 @@ namespace Hassium.Compiler.CodeGen
         {
             var startLabel = nextLabel();
             var endLabel = nextLabel();
+            method.ContinueLabels.Push(startLabel);
+            method.BreakLabels.Push(endLabel);
 
             method.EmitLabel(node.SourceLocation, startLabel);
             node.Predicate.Visit(this);

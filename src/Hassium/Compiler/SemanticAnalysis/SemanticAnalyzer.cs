@@ -22,7 +22,7 @@ namespace Hassium.Compiler.SemanticAnalysis
         public void Accept(ArgumentListNode node) {}
         public void Accept(AttributeAccessNode node) {}
         public void Accept(BinaryOperationNode node) {}
-        public void Accept(BoolNode node) {}
+        public void Accept(BreakNode node) {}
         public void Accept(CharNode node) {}
         public void Accept(ClassNode node) 
         {
@@ -34,6 +34,7 @@ namespace Hassium.Compiler.SemanticAnalysis
             node.VisitChildren(this);
             result.PopScope();
         }
+        public void Accept(ContinueNode node) {}
         public void Accept(ExpressionStatementNode node)
         {
             node.VisitChildren(this);

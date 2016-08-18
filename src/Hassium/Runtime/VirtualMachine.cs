@@ -22,7 +22,7 @@ namespace Hassium.Runtime
         {
             StackFrame = new StackFrame();
             Stack = new Stack<HassiumObject>();
-            Globals = new Dictionary<string, HassiumObject>();
+            Globals = new Dictionary<string, HassiumObject>() { { "true", new HassiumBool(true) }, { "false", new HassiumBool(false) } };
             CurrentModule = module;
             importGlobals();
 

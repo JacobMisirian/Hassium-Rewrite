@@ -19,6 +19,19 @@ namespace Hassium.Runtime.Objects.Types
             AddAttribute(HassiumObject.TOSTRING, ToString, 0, 1);
         }
 
+        public HassiumObject add(VirtualMachine vm, params HassiumObject[] args)
+        {
+            foreach (var obj in args)
+                List.Add(obj);
+            return args[0];
+        }
+        public HassiumObject remove(VirtualMachine vm, params HassiumObject[] args)
+        {
+            foreach (var obj in args)
+                List.Remove(args[0]);
+            return args[0];
+        }
+
         public override HassiumObject Index(VirtualMachine vm, params HassiumObject[] args)
         {
             return List[(int)args[0].ToInt(vm).Int];

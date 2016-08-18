@@ -2,14 +2,11 @@
 
 namespace Hassium.Compiler.Parser.Ast
 {
-    public class BoolNode: AstNode
+    public class BreakNode: AstNode
     {
-        public bool Bool { get; private set; }
-
-        public BoolNode(SourceLocation location, bool val)
+        public BreakNode(SourceLocation location)
         {
             this.SourceLocation = location;
-            Bool = val;
         }
 
         public override void Visit(IVisitor visitor)

@@ -39,8 +39,12 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseStatement()
         {
-            if (MatchToken(TokenType.Identifier, "class"))
+            if (AcceptToken(TokenType.Identifier, "break"))
+                return new BreakNode(Location);
+            else if (MatchToken(TokenType.Identifier, "class"))
                 return parseClass();
+            else if (AcceptToken(TokenType.Identifier, "continue"))
+                return new ContinueNode(Location);
             else if (MatchToken(TokenType.Identifier, "for"))
                 return parseFor();
             else if (MatchToken(TokenType.Identifier, "func"))
