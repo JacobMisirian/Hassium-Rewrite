@@ -12,10 +12,12 @@ namespace Hassium.Runtime
         public static string VARIABLE_ERROR =       "Variable {0} does not exist!";
 
         public new string Message { get; private set; }
+        public VirtualMachine VM { get; private set; }
 
-        public InternalException(string messageFormat, params object[] args)
+        public InternalException(VirtualMachine vm, string messageFormat, params object[] args)
         {
             Message = string.Format(messageFormat, args);
+            VM = vm;
         }
     }
 }

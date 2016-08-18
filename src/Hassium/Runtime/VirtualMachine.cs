@@ -29,7 +29,9 @@ namespace Hassium.Runtime
             importGlobals();
 
             StackFrame.PushFrame();
+            CallStack.Push(((HassiumMethod)module.Attributes["main"]).SourceRepresentation);
             ExecuteMethod((HassiumMethod)module.Attributes["main"]);
+            CallStack.Pop();
             StackFrame.PopFrame();
         }
 
@@ -98,15 +100,17 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                throw new InternalException(InternalException.ATTRIBUTE_NOT_FOUND, CurrentModule.ConstantPool[arg], val.Type());
+                                throw new InternalException(this, InternalException.ATTRIBUTE_NOT_FOUND, CurrentModule.ConstantPool[arg], val.Type());
                             }
                             break;
                         case InstructionType.LoadGlobal:
                             attrib = CurrentModule.ConstantPool[arg];
                             if (Globals.ContainsKey(attrib))
                                 Stack.Push(Globals[attrib]);
-                            else if (CurrentMethod.Parent.Attributes.ContainsKey(attrib))
+                            else if (method.Parent.Attributes.ContainsKey(attrib))
                                 Stack.Push(CurrentMethod.Parent.Attributes[attrib]);
+                            else
+                                throw new InternalException(this, InternalException.VARIABLE_ERROR, attrib);
                             break;
                         case InstructionType.LoadGlobalVariable:
                             try
@@ -115,7 +119,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                throw new InternalException(InternalException.VARIABLE_ERROR, arg);
+                                throw new InternalException(this, InternalException.VARIABLE_ERROR, arg);
                             }
                             break;
                         case InstructionType.LoadListElement:
@@ -123,7 +127,7 @@ namespace Hassium.Runtime
                             Stack.Push(list.Index(this, Stack.Pop()));
                             break;
                         case InstructionType.LoadLocal:
-                            Stack.Push(StackFrame.GetVariable(arg));
+                            Stack.Push(StackFrame.GetVariable(this, arg));
                             break;
                         case InstructionType.Pop:
                             Stack.Pop();
@@ -153,7 +157,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                throw new InternalException(InternalException.VARIABLE_ERROR, val.Type());
+                                throw new InternalException(this, InternalException.VARIABLE_ERROR, val.Type());
                             }
                             break;
                         case InstructionType.StoreGlobalVariable:

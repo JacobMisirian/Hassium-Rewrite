@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Hassium.Compiler.Parser.Ast
 {
@@ -29,6 +30,20 @@ namespace Hassium.Compiler.Parser.Ast
             foreach (AstNode child in Children)
                 child.Visit(visitor);
         }
+
+        public string GetSourceRepresentation()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("func {0} (", Name);
+            if (Parameters.Count > 0)
+            {
+                sb.Append(Parameters[0].GetSourceRepresentation());
+                for (int i = 1; i < Parameters.Count; i++)
+                    sb.AppendFormat(", {0}", Parameters[i].GetSourceRepresentation());
+            }
+            sb.Append(")");
+            return sb.ToString();
+        }
     }
 
     public class FuncParameter
@@ -47,6 +62,14 @@ namespace Hassium.Compiler.Parser.Ast
             Name = name;
             Type = type;
         }
+
+        public string GetSourceRepresentation()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name);
+            if (IsEnforced)
+                sb.AppendFormat(" : {0}", Type);
+            return sb.ToString();
+        }
     }
 }
-

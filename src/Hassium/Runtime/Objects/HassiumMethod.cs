@@ -13,6 +13,7 @@ namespace Hassium.Runtime.Objects
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("func");
 
         public string Name { get; set; }
+        public string SourceRepresentation { get; set; }
 
         public List<Instruction> Instructions { get; private set; }
         public Dictionary<FuncParameter, int> Parameters { get; private set; }
@@ -50,6 +51,7 @@ namespace Hassium.Runtime.Objects
         public override HassiumObject Invoke(VirtualMachine vm, params HassiumObject[] args)
         {
             vm.StackFrame.PushFrame();
+            vm.CallStack.Push(SourceRepresentation);
 
             int i = 0;
             foreach (var param in Parameters)
@@ -57,7 +59,7 @@ namespace Hassium.Runtime.Objects
                 var arg = args[i++];
                 if (param.Key.IsEnforced)
                 if (!arg.Types.Contains((HassiumTypeDefinition)vm.Globals[param.Key.Type]))
-                    throw new InternalException(InternalException.PARAMETER_ERROR, param.Key.Type, arg.Type());
+                    throw new InternalException(vm, InternalException.PARAMETER_ERROR, param.Key.Type, arg.Type());
                 vm.StackFrame.Add(param.Value, arg);
             }
 
@@ -71,17 +73,21 @@ namespace Hassium.Runtime.Objects
                     attrib.Parent = ret;
                 vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);
                 vm.StackFrame.PopFrame();
+                vm.CallStack.Pop();
                 return ret;
             }
+            else
+            {
+                var val = vm.ExecuteMethod(this);
 
-            var val = vm.ExecuteMethod(this);
+                if (ReturnType != "")
+                if (val.Type() != vm.Globals[ReturnType])
+                    throw new InternalException(vm, InternalException.RETURN_ERROR, ReturnType, val.Type());
+                vm.StackFrame.PopFrame();
+                vm.CallStack.Pop();
 
-            if (ReturnType != "")
-            if (val.Type() != vm.Globals[ReturnType])
-                throw new InternalException(InternalException.RETURN_ERROR, ReturnType, val.Type());
-            vm.StackFrame.PopFrame();
-
-            return val;
+                return val;
+            }
         }
 
         public static Dictionary<TKey, TValue> CloneDictionary<TKey, TValue>

@@ -102,7 +102,7 @@ namespace Hassium.Runtime.Objects.Types
                 case "false":
                     return new HassiumBool(false);
                 default:
-                    throw new InternalException(InternalException.CONVERSION_ERROR, Type(), HassiumBool.TypeDefinition);
+                    throw new InternalException(vm, InternalException.CONVERSION_ERROR, Type(), HassiumBool.TypeDefinition);
             }
         }
         public override HassiumObject Index(VirtualMachine vm, params HassiumObject[] args)
@@ -112,7 +112,7 @@ namespace Hassium.Runtime.Objects.Types
         public override HassiumChar ToChar(VirtualMachine vm, params HassiumObject[] args)
         {
             if (String.Trim().Length != 1)
-                throw new InternalException(InternalException.CONVERSION_ERROR, Type(), HassiumChar.TypeDefinition);
+                throw new InternalException(vm, InternalException.CONVERSION_ERROR, Type(), HassiumChar.TypeDefinition);
             return new HassiumChar(String[0]);
         }
         public override HassiumFloat ToFloat(VirtualMachine vm, params HassiumObject[] args)

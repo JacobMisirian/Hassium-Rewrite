@@ -33,7 +33,10 @@ namespace Hassium
             }
             catch (InternalException ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("At location {0}:", ex.VM.CurrentSourceLocation);
+                Console.WriteLine("{0} at:", ex.Message);
+                while (ex.VM.CallStack.Count > 0)
+                    Console.WriteLine(ex.VM.CallStack.Pop());
             }
         }
     }

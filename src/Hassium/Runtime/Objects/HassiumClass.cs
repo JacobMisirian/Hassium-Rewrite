@@ -13,7 +13,7 @@ namespace Hassium.Runtime.Objects
                 return Attributes["new"].Invoke(vm, args);
             else if (Attributes.ContainsKey(HassiumObject.INVOKE))
                 return Attributes[HassiumObject.INVOKE].Invoke(vm, args);
-            throw new InternalException(InternalException.OPERATOR_ERROR, "()", TypeDefinition);
+            throw new InternalException(vm, InternalException.OPERATOR_ERROR, "()", TypeDefinition);
         }
     }
 }

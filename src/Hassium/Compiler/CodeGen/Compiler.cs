@@ -26,17 +26,20 @@ namespace Hassium.Compiler.CodeGen
             module = new HassiumModule();
             method = new HassiumMethod();
 
+            var globalParent = new HassiumClass();
+
             foreach (AstNode child in ast.Children)
             {
                 if (child is FuncNode)
                 {
                     child.Visit(this);
-
+                    method.Parent = globalParent;
                     module.Attributes.Add(method.Name, method);
                 }
                 else if (child is ClassNode)
                 {
                     var clazz = compileClass(child as ClassNode);
+                    clazz.Parent = globalParent;
                     module.Attributes.Add(clazz.Name, clazz);
                 }
             }
@@ -272,6 +275,7 @@ namespace Hassium.Compiler.CodeGen
             method = new HassiumMethod();
             method.Parent = new HassiumClass();
             method.Name = node.Name;
+            method.SourceRepresentation = node.GetSourceRepresentation();
             method.ReturnType = node.ReturnType;
 
             table.PushScope();
