@@ -220,6 +220,9 @@ namespace Hassium.Runtime
                 case (int)BinaryOperation.IntegerDivision:
                     Stack.Push(left.IntegerDivision(this, right));
                     break;
+                case (int)BinaryOperation.Is:
+                    Stack.Push(new HassiumBool(left.Types.Contains(right.Type())));
+                    break;
                 case (int)BinaryOperation.LesserThan:
                     Stack.Push(left.LesserThan(this, right));
                     break;

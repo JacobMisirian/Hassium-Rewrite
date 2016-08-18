@@ -20,6 +20,7 @@ namespace Hassium.Runtime.Objects.Types
             hassiumEvent.AddType(TypeDefinition);
             hassiumEvent.Handlers = args.Length == 0 ? new HassiumList(new HassiumObject[0]) : args[0] as HassiumList;
             hassiumEvent.AddAttribute("add",    hassiumEvent.add);
+            hassiumEvent.AddAttribute("clear",  hassiumEvent.clear);
             hassiumEvent.AddAttribute("fire",   hassiumEvent.fire);
             hassiumEvent.AddAttribute("remove", hassiumEvent.remove);
 
@@ -30,6 +31,10 @@ namespace Hassium.Runtime.Objects.Types
             foreach (var obj in args)
                 Handlers.add(vm, obj);
             return args[0];
+        }
+        public HassiumNull clear(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return Handlers.clear(vm, args);
         }
         public HassiumList fire(VirtualMachine vm, params HassiumObject[] args)
         {

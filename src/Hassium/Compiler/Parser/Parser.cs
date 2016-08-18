@@ -362,6 +362,9 @@ namespace Hassium.Compiler.Parser
                     case "//":
                         AcceptToken(TokenType.Operation);
                         return new BinaryOperationNode(Location, BinaryOperation.IntegerDivision, left, parseMultiplicative());
+                    case "is":
+                        AcceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(Location, BinaryOperation.Is, left, parseMultiplicative());
                     default:
                         break;
                 }

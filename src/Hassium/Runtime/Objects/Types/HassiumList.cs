@@ -15,6 +15,9 @@ namespace Hassium.Runtime.Objects.Types
             AddType(TypeDefinition);
             List = new List<HassiumObject>(elements);
 
+            AddAttribute("add",             add);
+            AddAttribute("clear",           clear);
+            AddAttribute("remove",          remove);
             AddAttribute(HassiumObject.TOLIST, ToList, 0);
             AddAttribute(HassiumObject.TOSTRING, ToString, 0, 1);
         }
@@ -24,6 +27,11 @@ namespace Hassium.Runtime.Objects.Types
             foreach (var obj in args)
                 List.Add(obj);
             return args[0];
+        }
+        public HassiumNull clear(VirtualMachine vm, params HassiumObject[] args)
+        {
+            List.Clear();
+            return HassiumObject.Null;
         }
         public HassiumObject remove(VirtualMachine vm, params HassiumObject[] args)
         {

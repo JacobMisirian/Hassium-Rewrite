@@ -60,13 +60,8 @@ namespace Hassium.Compiler.CodeGen
         }
         public void Accept(BinaryOperationNode node)
         {
-            if (node.BinaryOperation != BinaryOperation.Assignment)
-                node.VisitChildren(this);
             switch (node.BinaryOperation)
             {
-                case BinaryOperation.Addition:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.Addition);
-                    break;
                 case BinaryOperation.Assignment:
                     node.Right.Visit(this);
                     if (node.Left is IdentifierNode)
@@ -102,59 +97,9 @@ namespace Hassium.Compiler.CodeGen
                         method.Emit(node.SourceLocation, InstructionType.StoreListElement);
                     }
                     break;
-                case BinaryOperation.BitshiftLeft:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.BitshiftLeft);
-                    break;
-                case BinaryOperation.BitshiftRight:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.BitshiftRight);
-                    break;
-                case BinaryOperation.BitwiseAnd:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.BitwiseAnd);
-                    break;
-                case BinaryOperation.BitwiseOr:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.BitwiseOr);
-                    break;
-                case BinaryOperation.Division:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.Division);
-                    break;
-                case BinaryOperation.EqualTo:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.EqualTo);
-                    break;
-                case BinaryOperation.GreaterThan:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.GreaterThan);
-                    break;
-                case BinaryOperation.GreaterThanOrEqual:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.GreaterThanOrEqual);
-                    break;
-                case BinaryOperation.IntegerDivision:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.IntegerDivision);
-                    break;
-                case BinaryOperation.LesserThan:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.LesserThan);
-                    break;
-                case BinaryOperation.LesserThanOrEqual:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.LesserThanOrEqual);
-                    break;
-                case BinaryOperation.LogicalAnd:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.LogicalAnd);
-                    break;
-                case BinaryOperation.LogicalOr:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.LogicalOr);
-                    break;
-                case BinaryOperation.Modulus:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.Modulus);
-                    break;
-                case BinaryOperation.Multiplication:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.Multiplication);
-                    break;
-                case BinaryOperation.NotEqualTo:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.NotEqualTo);
-                    break;
-                case BinaryOperation.Power:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.Power);
-                    break;
-                case BinaryOperation.Subraction:
-                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.Subraction);
+                default:
+                    node.VisitChildren(this);
+                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)node.BinaryOperation);
                     break;
             }
         }

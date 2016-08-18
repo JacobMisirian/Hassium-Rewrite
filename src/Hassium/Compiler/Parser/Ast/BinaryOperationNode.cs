@@ -29,26 +29,27 @@ namespace Hassium.Compiler.Parser.Ast
 
     public enum BinaryOperation
     {
-        Assignment,
         Addition,
-        Subraction,
-        Multiplication,
-        Division,
-        Modulus,
-        Power,
-        IntegerDivision,
+        Assignment,
         BitshiftLeft,
         BitshiftRight,
+        BitwiseAnd,
+        BitwiseOr,
+        Division,
         EqualTo,
-        NotEqualTo,
         GreaterThan,
         GreaterThanOrEqual,
-        LesserThan,
-        LesserThanOrEqual,
+        IntegerDivision,
+        Is,
         LogicalAnd,
         LogicalOr,
-        BitwiseAnd,
-        BitwiseOr
+        LesserThan,
+        LesserThanOrEqual,
+        Modulus,
+        Multiplication,
+        NotEqualTo,
+        Power,
+        Subraction,
     }
 }
 

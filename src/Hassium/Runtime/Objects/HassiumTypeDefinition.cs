@@ -6,17 +6,15 @@ namespace Hassium.Runtime.Objects
 {
     public class HassiumTypeDefinition: HassiumObject
     {
-        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("TypeDefinition");
-
         public string TypeName { get; private set; }
 
         public HassiumTypeDefinition(string type)
         {
             TypeName = type;
-            AddType(TypeDefinition);
+            AddType(this);
         }
 
-        public override Hassium.Runtime.Objects.Types.HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
+        public override HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumString(TypeName);
         }

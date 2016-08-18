@@ -141,7 +141,7 @@ namespace Hassium.Compiler.Scanner
             }
             catch
             {
-                add(TokenType.Float, Convert.ToInt64(sb.ToString()).ToString());
+                add(TokenType.Float, Convert.ToDouble(sb.ToString()).ToString());
             }
         }
 
@@ -150,7 +150,8 @@ namespace Hassium.Compiler.Scanner
             StringBuilder sb = new StringBuilder();
             while ((char.IsLetterOrDigit((char)peekChar()) || (char)peekChar() == '_') && peekChar() != -1)
                 sb.Append((char)readChar());
-            add(TokenType.Identifier, sb.ToString());
+            string val = sb.ToString();
+            add(val == "is" ? TokenType.Operation : TokenType.Identifier, val);
         }
 
         private void scanString()
