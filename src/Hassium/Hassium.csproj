@@ -90,6 +90,7 @@
     <Compile Include="Runtime\Objects\HassiumProperty.cs" />
     <Compile Include="Compiler\Parser\Ast\BreakNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ContinueNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ForeachNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

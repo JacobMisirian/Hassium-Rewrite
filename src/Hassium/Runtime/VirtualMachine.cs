@@ -68,6 +68,15 @@ namespace Hassium.Runtime
                         case InstructionType.Duplicate:
                             Stack.Push(Stack.Peek());
                             break;
+                        case InstructionType.Iter:
+                            Stack.Push(Stack.Pop().Iter(this));
+                            break;
+                        case InstructionType.IterableFull:
+                            Stack.Push(Stack.Pop().IterableFull(this));
+                            break;
+                        case InstructionType.IterableNext:
+                            Stack.Push(Stack.Pop().IterableNext(this));
+                            break;
                         case InstructionType.Jump:
                             pos = method.Labels[arg];
                             break;

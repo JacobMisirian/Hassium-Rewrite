@@ -233,6 +233,37 @@ namespace Hassium.Compiler.CodeGen
             method.Emit(node.SourceLocation, InstructionType.Jump, startLabel);
             method.EmitLabel(node.SourceLocation, endLabel);
         }
+        public void Accept(ForeachNode node)
+        {
+            var startLabel = nextLabel();
+            var endLabel = nextLabel();
+            method.ContinueLabels.Push(startLabel);
+            method.BreakLabels.Push(endLabel);
+
+            int tmp, variable;
+            if (table.ContainsSymbol("__tmp__"))
+                tmp = table.GetSymbol("__tmp__");
+            else
+                tmp = table.AddSymbol("__tmp__");
+            if (table.ContainsSymbol(node.Variable))
+                variable = table.GetSymbol(node.Variable);
+            else
+                variable = table.AddSymbol(node.Variable);
+            
+            node.Target.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.Iter);
+            method.Emit(node.SourceLocation, InstructionType.StoreLocal, tmp);
+            method.EmitLabel(node.SourceLocation, startLabel);
+            method.Emit(node.SourceLocation, InstructionType.LoadLocal, tmp);
+            method.Emit(node.SourceLocation, InstructionType.IterableFull);
+            method.Emit(node.SourceLocation, InstructionType.JumpIfTrue, endLabel);
+            method.Emit(node.SourceLocation, InstructionType.LoadLocal, tmp);
+            method.Emit(node.SourceLocation, InstructionType.IterableNext);
+            method.Emit(node.SourceLocation, InstructionType.StoreLocal, variable);
+            node.Body.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.Jump, startLabel);
+            method.EmitLabel(node.SourceLocation, endLabel);
+        }
         public void Accept(FuncNode node)
         {
             if (!module.ConstantPool.ContainsKey(node.Name.GetHashCode()))

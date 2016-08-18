@@ -27,7 +27,10 @@ namespace Hassium.Compiler.CodeGen
         Jump,
         JumpIfTrue,
         JumpIfFalse,
-        Label
+        Label,
+        Iter,
+        IterableFull,
+        IterableNext
     }
 }
 

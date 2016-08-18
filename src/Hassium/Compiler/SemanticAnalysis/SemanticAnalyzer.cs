@@ -41,6 +41,7 @@ namespace Hassium.Compiler.SemanticAnalysis
         }
         public void Accept(FloatNode node) {}
         public void Accept(ForNode node) {}
+        public void Accept(ForeachNode node) {}
         public void Accept(FuncNode node)
         {
             node.VisitChildren(this);

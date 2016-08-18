@@ -58,5 +58,20 @@ namespace Hassium.Runtime.Objects.Types
             }
             return new HassiumString(sb.ToString());
         }
+
+        private int iterableIndex = 0;
+        public override HassiumObject Iter(VirtualMachine vm, params HassiumObject[] args)
+        {
+            iterableIndex = 0;
+            return this;
+        }
+        public override HassiumObject IterableFull(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(iterableIndex >= List.Count);
+        }
+        public override HassiumObject IterableNext(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return List[iterableIndex++];
+        }
     }
 }

@@ -47,6 +47,8 @@ namespace Hassium.Compiler.Parser
                 return new ContinueNode(Location);
             else if (MatchToken(TokenType.Identifier, "for"))
                 return parseFor();
+            else if (MatchToken(TokenType.Identifier, "foreach"))
+                return parseForeach();
             else if (MatchToken(TokenType.Identifier, "func"))
                 return parseFunc();
             else if (MatchToken(TokenType.Identifier, "if"))
@@ -97,6 +99,18 @@ namespace Hassium.Compiler.Parser
             AstNode body = parseStatement();
 
             return new ForNode(Location, startStatement, predicate, repeatStatement, body);
+        }
+        private ForeachNode parseForeach()
+        {
+            ExpectToken(TokenType.Identifier, "foreach");
+            ExpectToken(TokenType.OpenParentheses);
+            string variable = ExpectToken(TokenType.Identifier).Value;
+            ExpectToken(TokenType.Identifier, "in");
+            AstNode target = parseExpression();
+            ExpectToken(TokenType.CloseParentheses);
+            AstNode body = parseStatement();
+
+            return new ForeachNode(Location, variable, target, body);
         }
         private FuncNode parseFunc()
         {

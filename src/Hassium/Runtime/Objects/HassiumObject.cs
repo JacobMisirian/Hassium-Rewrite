@@ -34,7 +34,10 @@ namespace Hassium.Runtime.Objects
         public static string LOGICALNOT =           "__logicalnot__";
         public static string NEGATE =               "__negate__";
         public static string INDEX =                "__index__";
-        public static string STOREINDEX =          "__storeindex__";
+        public static string STOREINDEX =           "__storeindex__";
+        public static string ITER =                 "__iter__";
+        public static string ITERABLEFULL =         "__iterablefull__";
+        public static string ITERABLENEXT =         "__iterablenext__";
         public static string TOBOOL =               "toBool";
         public static string TOCHAR =               "toChar";
         public static string TOINT =                "toInt";
@@ -218,7 +221,25 @@ namespace Hassium.Runtime.Objects
         {
             if (Attributes.ContainsKey(STOREINDEX))
                 return Attributes[STOREINDEX].Invoke(vm, args);
-            throw new InternalException(InternalException.OPERATOR_ERROR, "[n]", Type());
+            throw new InternalException(InternalException.OPERATOR_ERROR, "[]=", Type());
+        }
+        public virtual HassiumObject Iter(VirtualMachine vm, params HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(ITER))
+                return Attributes[ITER].Invoke(vm, args);
+            throw new InternalException(InternalException.OPERATOR_ERROR, "foreach", Type());
+        }
+        public virtual HassiumObject IterableFull(VirtualMachine vm, params HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(ITERABLEFULL))
+                return Attributes[ITERABLEFULL].Invoke(vm, args);
+            throw new InternalException(InternalException.OPERATOR_ERROR, "foreach", Type());
+        }
+        public virtual HassiumObject IterableNext(VirtualMachine vm, params HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(ITERABLENEXT))
+                return Attributes[ITERABLENEXT].Invoke(vm, args);
+            throw new InternalException(InternalException.OPERATOR_ERROR, "foreach", Type());
         }
         public virtual HassiumBool ToBool(VirtualMachine vm, params HassiumObject[] args)
         {
