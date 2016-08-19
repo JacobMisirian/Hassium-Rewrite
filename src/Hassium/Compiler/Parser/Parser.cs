@@ -53,12 +53,16 @@ namespace Hassium.Compiler.Parser
                 return parseFunc();
             else if (MatchToken(TokenType.Identifier, "if"))
                 return parseIf();
+            else if (AcceptToken(TokenType.Identifier, "raise"))
+                return new RaiseNode(Location, parseExpression());
             else if (AcceptToken(TokenType.Identifier, "return"))
                 return new ReturnNode(Location, parseExpression());
             else if (MatchToken(TokenType.Identifier, "switch"))
                 return parseSwitch();
             else if (MatchToken(TokenType.Identifier, "trait"))
                 return parseTrait();
+            else if (MatchToken(TokenType.Identifier, "try"))
+                return parseTryCatch();
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else
@@ -210,6 +214,15 @@ namespace Hassium.Compiler.Parser
             }
 
             return new TraitNode(Location, name, traits);
+        }
+        private TryCatchNode parseTryCatch()
+        {
+            ExpectToken(TokenType.Identifier, "try");
+            AstNode tryBody = parseStatement();
+            ExpectToken(TokenType.Identifier, "catch");
+            AstNode catchBody = parseStatement();
+
+            return new TryCatchNode(Location, tryBody, catchBody);
         }
         private WhileNode parseWhile()
         {

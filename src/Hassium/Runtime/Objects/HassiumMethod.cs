@@ -50,9 +50,8 @@ namespace Hassium.Runtime.Objects
 
         public override HassiumObject Invoke(VirtualMachine vm, params HassiumObject[] args)
         {
-            if (Name != "lambda") vm.StackFrame.PushFrame();
+            if (Name != "lambda" && Name != "catch") vm.StackFrame.PushFrame();
             vm.CallStack.Push(SourceRepresentation);
-
             int i = 0;
             foreach (var param in Parameters)
             {
@@ -79,7 +78,11 @@ namespace Hassium.Runtime.Objects
             else
             {
                 var val = vm.ExecuteMethod(this);
-
+                if (Name == "catch")
+                {
+                    vm.CallStack.Pop();
+                    return val;
+                }
                 if (ReturnType != "")
                 if (val.Type() != vm.Globals[ReturnType])
                     throw new InternalException(vm, InternalException.RETURN_ERROR, ReturnType, val.Type());

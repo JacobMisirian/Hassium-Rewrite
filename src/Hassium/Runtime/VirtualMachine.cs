@@ -14,6 +14,8 @@ namespace Hassium.Runtime
         public Stack<HassiumObject> Stack { get; private set; }
         public StackFrame StackFrame { get; private set; }
         public Stack<string> CallStack { get; private set; }
+        public Stack<HassiumExceptionHandler> Handlers { get; private set; }
+        public Dictionary<HassiumMethod, int> ExceptionReturns { get; private set; }
         public Dictionary<string, HassiumObject> Globals { get; private set; }
         public SourceLocation CurrentSourceLocation { get; private set; }
         public HassiumModule CurrentModule { get; private set; }
@@ -24,6 +26,8 @@ namespace Hassium.Runtime
             Stack = new Stack<HassiumObject>();
             StackFrame = new StackFrame();
             CallStack = new Stack<string>();
+            Handlers = new Stack<HassiumExceptionHandler>();
+            ExceptionReturns = new Dictionary<HassiumMethod, int>();
             Globals = new Dictionary<string, HassiumObject>() { { "true", new HassiumBool(true) }, { "false", new HassiumBool(false) } };
             CurrentModule = module;
             importGlobals();
@@ -40,6 +44,12 @@ namespace Hassium.Runtime
             importLabels(method);
             for (int pos = 0; pos < method.Instructions.Count; pos++)
             {
+                if (ExceptionReturns.ContainsKey(method))
+                {
+                    pos = ExceptionReturns[method];
+                    ExceptionReturns.Remove(method);
+                }
+
                 HassiumObject left, right, val, list;
                 HassiumObject[] elements;
                 string attrib;
@@ -135,14 +145,25 @@ namespace Hassium.Runtime
                         case InstructionType.Pop:
                             Stack.Pop();
                             break;
+                        case InstructionType.PopHandler:
+                            Handlers.Pop();
+                            break;
                         case InstructionType.Push:
                             Stack.Push(new HassiumInt(arg));
                             break;
                         case InstructionType.PushConstant:
                             Stack.Push(new HassiumString(CurrentModule.ConstantPool[arg]));
                             break;
+                        case InstructionType.PushHandler:
+                            var handler = CurrentModule.ObjectPool[arg] as HassiumExceptionHandler;
+                            handler.Frame = StackFrame.Frames.Peek();
+                            Handlers.Push(handler);
+                            break;
                         case InstructionType.PushObject:
                             Stack.Push(CurrentModule.ObjectPool[arg]);
+                            break;
+                        case InstructionType.Raise:
+                            RaiseException(Stack.Pop(), method, ref pos);
                             break;
                         case InstructionType.Return:
                             return Stack.Pop();
@@ -183,7 +204,7 @@ namespace Hassium.Runtime
                 }
                 catch (InternalException ex)
                 {
-                    throw ex;
+                    RaiseException(new HassiumString(ex.Message), method, ref pos);
                 }
             }
             return HassiumObject.Null;
@@ -257,6 +278,15 @@ namespace Hassium.Runtime
                     Stack.Push(left.Subtract(this, right));
                     break;
             }
+        }
+
+        public void RaiseException(HassiumObject message, HassiumMethod method, ref int pos)
+        {
+            if (Handlers.Count == 0)
+                throw new InternalException(this, message.ToString());
+            var handler = Handlers.Peek();
+            handler.Invoke(this, message);
+            ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);
         }
 
         private void interpretUnaryOperation(HassiumObject target, int op)

@@ -322,6 +322,11 @@ namespace Hassium.Compiler.CodeGen
                 val.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.BuildList, node.InitialValues.Count);
         }
+        public void Accept(RaiseNode node)
+        {
+            node.Expression.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.Raise);
+        }
         public void Accept(ReturnNode node)
         {
             node.Value.Visit(this);
@@ -370,6 +375,26 @@ namespace Hassium.Compiler.CodeGen
             if (!module.ConstantPool.ContainsKey(hash))
                 module.ConstantPool.Add(hash, node.Name);
             module.Attributes.Add(node.Name, new HassiumTrait(node.Traits));
+        }
+        public void Accept(TryCatchNode node)
+        {
+            var endLabel = nextLabel();
+            var temp = method;
+            method = new HassiumMethod();
+            method.Name = "catch";
+            table.PushScope();
+            if (!table.ContainsSymbol("value"))
+                table.AddSymbol("value");
+            method.Parameters.Add(new FuncParameter("value"), table.GetSymbol("value"));
+            node.CatchBody.VisitChildren(this);
+            var handler = new HassiumExceptionHandler(temp, method, endLabel);
+            if (!module.ObjectPool.ContainsKey(handler.GetHashCode()))
+                module.ObjectPool.Add(handler.GetHashCode(), handler);
+            method = temp;
+            method.Emit(node.SourceLocation, InstructionType.PushHandler, handler.GetHashCode());
+            node.TryBody.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.PopHandler);
+            method.EmitLabel(node.SourceLocation, endLabel);
         }
         public void Accept(UnaryOperationNode node)
         {

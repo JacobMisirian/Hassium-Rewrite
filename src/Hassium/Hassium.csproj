@@ -99,6 +99,9 @@
     <Compile Include="Compiler\Parser\Ast\SwitchNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TraitNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumTrait.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumExceptionHandler.cs" />
+    <Compile Include="Compiler\Parser\Ast\TryCatchNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\RaiseNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

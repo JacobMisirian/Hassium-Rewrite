@@ -1,27 +1,23 @@
-trait Calculator {
-	add : func
-	sub : func
-}
-
 func main () {
-	println (IsCalc is Calculator);
-	println (NotCalc is Calculator);
+	foo ();	
 }
 
-
-class IsCalc {
-	func new () {}
-	func add (x, y) {
-		return x + y;
+func foo () {
+	a = 3;
+	try {
+		bar();
+		println ("You can't see me");
+	} catch {
+		println ("Caught: " + value.toString() + a);
+		println ("My time is now");
 	}
 }
 
-class NotCalc { 
-	func new () {}
-	func add (x, y) {
-		return x + y;
-	}
-	func sub (x, y) {
-		return x - y;
-	}
+func bar () {
+	baz();
+}
+
+func baz () {
+	x = 2;
+	raise x;
 }
