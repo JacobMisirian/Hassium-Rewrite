@@ -1,0 +1,27 @@
+trait Calculator {
+	add : func
+	sub : func
+}
+
+func main () {
+	println (IsCalc is Calculator);
+	println (NotCalc is Calculator);
+}
+
+
+class IsCalc {
+	func new () {}
+	func add (x, y) {
+		return x + y;
+	}
+}
+
+class NotCalc { 
+	func new () {}
+	func add (x, y) {
+		return x + y;
+	}
+	func sub (x, y) {
+		return x - y;
+	}
+}

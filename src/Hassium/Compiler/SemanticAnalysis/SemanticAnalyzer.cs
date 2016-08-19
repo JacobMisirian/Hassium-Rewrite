@@ -35,6 +35,7 @@ namespace Hassium.Compiler.SemanticAnalysis
             result.PopScope();
         }
         public void Accept(ContinueNode node) {}
+        public void Accept(DictionaryDeclarationNode node) {}
         public void Accept(ExpressionStatementNode node)
         {
             node.VisitChildren(this);
@@ -50,6 +51,7 @@ namespace Hassium.Compiler.SemanticAnalysis
         public void Accept(IdentifierNode node) {}
         public void Accept(IfNode node) {}
         public void Accept(IntegerNode node) {}
+        public void Accept(KeyValuePairNode node) {}
         public void Accept(LambdaNode node) {}
         public void Accept(ListAccessNode node) {}
         public void Accept(ListDeclarationNode node) {}

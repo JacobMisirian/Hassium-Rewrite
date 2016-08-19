@@ -155,6 +155,11 @@ namespace Hassium.Compiler.CodeGen
         {
             method.Emit(node.SourceLocation, InstructionType.Jump, method.ContinueLabels.Pop());
         }
+        public void Accept(DictionaryDeclarationNode node)
+        {
+            node.VisitChildren(this);
+            method.Emit(node.SourceLocation, InstructionType.BuildDictionary, node.Children.Count);
+        }
         public void Accept(ExpressionStatementNode node)
         {
             node.VisitChildren(this);
@@ -191,9 +196,9 @@ namespace Hassium.Compiler.CodeGen
             method.BreakLabels.Push(endLabel);
 
             int tmp, variable;
-            if (!table.ContainsSymbol("foreach"))
-                table.AddSymbol("foreach");
-            tmp = table.GetSymbol("foreach");
+            if (!table.ContainsSymbol((++labelIndex).ToString()))
+                table.AddSymbol(labelIndex.ToString());
+            tmp = table.GetSymbol(labelIndex.ToString());
             if (table.ContainsSymbol(node.Variable))
                 variable = table.GetSymbol(node.Variable);
             else
@@ -277,6 +282,12 @@ namespace Hassium.Compiler.CodeGen
             if (!module.ObjectPool.ContainsKey(i.GetHashCode()))
                 module.ObjectPool.Add(i.GetHashCode(), i);
             method.Emit(node.SourceLocation, InstructionType.PushObject, i.GetHashCode());
+        }
+        public void Accept(KeyValuePairNode node)
+        {
+            node.Value.Visit(this);
+            node.Key.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.BuildKeyValuePair);
         }
         public void Accept(LambdaNode node)
         {

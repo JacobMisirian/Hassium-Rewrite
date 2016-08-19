@@ -69,6 +69,15 @@ namespace Hassium.Runtime
                         case InstructionType.BuildClosure:
                             Stack.Push(new HassiumClosure(Stack.Pop() as HassiumMethod, StackFrame.Frames.Peek()));
                             break;
+                        case InstructionType.BuildDictionary:
+                            List<HassiumKeyValuePair> pairs = new List<HassiumKeyValuePair>();
+                            for (int i = 0; i < arg; i++)
+                                pairs.Add(Stack.Pop() as HassiumKeyValuePair);
+                            Stack.Push(new HassiumDictionary(pairs));
+                            break;
+                        case InstructionType.BuildKeyValuePair:
+                            Stack.Push(new HassiumKeyValuePair(Stack.Pop(), Stack.Pop()));
+                            break;
                         case InstructionType.BuildList:
                             elements = new HassiumObject[arg];
                             for (int i = elements.Length - 1; i >= 0; i--)
@@ -283,7 +292,7 @@ namespace Hassium.Runtime
         public void RaiseException(HassiumObject message, HassiumMethod method, ref int pos)
         {
             if (Handlers.Count == 0)
-                throw new InternalException(this, message.ToString());
+                throw new InternalException(this, message.ToString(this).String);
             var handler = Handlers.Peek();
             handler.Invoke(this, message);
             ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);

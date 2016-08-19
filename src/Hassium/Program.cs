@@ -14,14 +14,15 @@ namespace Hassium
     {
         public static void Main(string[] args)
         {
-            var tokens = new Lexer().Scan(File.ReadAllText(args[0]));
+            var vm = new VirtualMachine();
             AstNode ast = null;
             try
             {
+                var tokens = new Lexer().Scan(File.ReadAllText(args[0]));
                 ast = new Parser().Parse(tokens);
                 var table = new SemanticAnalyzer().Analyze(ast);
                 var module = new Compiler.CodeGen.Compiler().Compile(ast, table);
-                new VirtualMachine().Execute(module, new System.Collections.Generic.List<string>());
+                vm.Execute(module, new System.Collections.Generic.List<string>());
             }
             catch (ExpectedTokenException ex)
             {

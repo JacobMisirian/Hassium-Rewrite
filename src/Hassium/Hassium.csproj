@@ -102,6 +102,10 @@
     <Compile Include="Runtime\Objects\Types\HassiumExceptionHandler.cs" />
     <Compile Include="Compiler\Parser\Ast\TryCatchNode.cs" />
     <Compile Include="Compiler\Parser\Ast\RaiseNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\KeyValuePairNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\DictionaryDeclarationNode.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumKeyValuePair.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumDictionary.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

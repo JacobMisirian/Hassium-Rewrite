@@ -1,23 +1,6 @@
 func main () {
-	foo ();	
-}
+	dict = { "America" : "US", "Germany" : "DE" }
 
-func foo () {
-	a = 3;
-	try {
-		bar();
-		println ("You can't see me");
-	} catch {
-		println ("Caught: " + value.toString() + a);
-		println ("My time is now");
-	}
-}
-
-func bar () {
-	baz();
-}
-
-func baz () {
-	x = 2;
-	raise x;
+	println (type (dict));
+	println (dict ["Americ"]);
 }

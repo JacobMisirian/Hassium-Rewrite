@@ -40,6 +40,14 @@ namespace Hassium.Runtime.Objects.Types
             return args[0];
         }
 
+        public override HassiumObject EqualTo(VirtualMachine vm, params HassiumObject[] args)
+        {
+            var list = args[0].ToList(vm);
+            for (int i = 0; i < list.List.Count; i++)
+                if (!list.List[i].EqualTo(vm, List[i]).ToBool(vm).Bool)
+                    return new HassiumBool(false);
+            return new HassiumBool(true);
+        }
         public override HassiumObject Index(VirtualMachine vm, params HassiumObject[] args)
         {
             return List[(int)args[0].ToInt(vm).Int];

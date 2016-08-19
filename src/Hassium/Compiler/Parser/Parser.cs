@@ -65,6 +65,13 @@ namespace Hassium.Compiler.Parser
                 return parseTryCatch();
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
+            else if (AcceptToken(TokenType.OpenBracket))
+            {
+                var block = new CodeBlockNode();
+                while (!AcceptToken(TokenType.CloseBracket))
+                    block.Children.Add(parseStatement());
+                return block;
+            }
             else
                 return parseExpressionStatement();
         }
@@ -148,6 +155,14 @@ namespace Hassium.Compiler.Parser
             if (AcceptToken(TokenType.Identifier, "else"))
                 return new IfNode(Location, predicate, body, parseStatement());
             return new IfNode(Location, predicate, body);
+        }
+        private KeyValuePairNode parseKeyValuePair()
+        {
+            AstNode key = parseExpression();
+            ExpectToken(TokenType.Colon);
+            AstNode value = parseExpression();
+            AcceptToken(TokenType.Comma);
+            return new KeyValuePairNode(Location, key, value);
         }
         private LambdaNode parseLambda()
         {
@@ -493,6 +508,13 @@ namespace Hassium.Compiler.Parser
                 return parseLambda();
             else if (MatchToken(TokenType.OpenSquare))
                 return parseListDeclaration();
+            else if (AcceptToken(TokenType.OpenBracket))
+            {
+                var dict = new DictionaryDeclarationNode(Location);
+                while (!AcceptToken(TokenType.CloseBracket))
+                    dict.Children.Add(parseKeyValuePair());
+                return dict;
+            }
             else if (AcceptToken(TokenType.OpenParentheses))
             {
                 var expr = parseExpression();
@@ -511,13 +533,6 @@ namespace Hassium.Compiler.Parser
                 return new CharNode(Location, Convert.ToChar(ExpectToken(TokenType.Char).Value));
             else if (AcceptToken(TokenType.Semicolon))
                 return new StatementNode(Location);
-            else if (AcceptToken(TokenType.OpenBracket))
-            {
-                var block = new CodeBlockNode();
-                while (!AcceptToken(TokenType.CloseBracket))
-                    block.Children.Add(parseStatement());
-                return block;
-            }
             else
                 throw new UnexpectedTokenException(Tokens[Position]);
         }

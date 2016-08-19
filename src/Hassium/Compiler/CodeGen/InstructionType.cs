@@ -6,6 +6,8 @@ namespace Hassium.Compiler.CodeGen
     {
         BinaryOperation,
         BuildClosure,
+        BuildDictionary,
+        BuildKeyValuePair,
         BuildList,
         Call,
         Duplicate,
