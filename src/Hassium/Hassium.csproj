@@ -97,6 +97,8 @@
     <Compile Include="Compiler\Parser\Ast\LambdaNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumClosure.cs" />
     <Compile Include="Compiler\Parser\Ast\SwitchNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\TraitNode.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumTrait.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

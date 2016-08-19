@@ -57,6 +57,8 @@ namespace Hassium.Compiler.Parser
                 return new ReturnNode(Location, parseExpression());
             else if (MatchToken(TokenType.Identifier, "switch"))
                 return parseSwitch();
+            else if (MatchToken(TokenType.Identifier, "trait"))
+                return parseTrait();
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else
@@ -191,6 +193,23 @@ namespace Hassium.Compiler.Parser
                 cases.Add(new Case(expressions, caseBody));
             }
             return new SwitchNode(Location, expression, cases, new StatementNode(Location));
+        }
+        private TraitNode parseTrait()
+        {
+            ExpectToken(TokenType.Identifier, "trait");
+            string name = ExpectToken(TokenType.Identifier).Value;
+            ExpectToken(TokenType.OpenBracket);
+            List<Trait> traits = new List<Trait>();
+            while (!AcceptToken(TokenType.CloseBracket))
+            {
+                string attribute = ExpectToken(TokenType.Identifier).Value;
+                ExpectToken(TokenType.Colon);
+                string type = ExpectToken(TokenType.Identifier).Value;
+                AcceptToken(TokenType.Comma);
+                traits.Add(new Trait(attribute, type));
+            }
+
+            return new TraitNode(Location, name, traits);
         }
         private WhileNode parseWhile()
         {

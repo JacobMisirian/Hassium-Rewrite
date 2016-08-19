@@ -224,7 +224,10 @@ namespace Hassium.Runtime
                     Stack.Push(left.IntegerDivision(this, right));
                     break;
                 case (int)BinaryOperation.Is:
-                    Stack.Push(new HassiumBool(left.Types.Contains(right.Type())));
+                    if (right is HassiumTrait)
+                        Stack.Push(((HassiumTrait)right).Is(this, left));
+                    else
+                        Stack.Push(new HassiumBool(left.Types.Contains(right.Type())));
                     break;
                 case (int)BinaryOperation.LesserThan:
                     Stack.Push(left.LesserThan(this, right));

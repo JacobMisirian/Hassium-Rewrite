@@ -42,6 +42,8 @@ namespace Hassium.Compiler.CodeGen
                     clazz.Parent = globalParent;
                     module.Attributes.Add(clazz.Name, clazz);
                 }
+                else if (child is TraitNode)
+                    child.Visit(this);
             }
 
             return module;
@@ -361,6 +363,13 @@ namespace Hassium.Compiler.CodeGen
             }
             node.DefaultCase.Visit(this);
             method.EmitLabel(node.SourceLocation, endSwitch);
+        }
+        public void Accept(TraitNode node)
+        {
+            int hash = node.Name.GetHashCode();
+            if (!module.ConstantPool.ContainsKey(hash))
+                module.ConstantPool.Add(hash, node.Name);
+            module.Attributes.Add(node.Name, new HassiumTrait(node.Traits));
         }
         public void Accept(UnaryOperationNode node)
         {
