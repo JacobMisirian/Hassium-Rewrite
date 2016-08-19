@@ -5,6 +5,7 @@ namespace Hassium.Compiler.CodeGen
     public enum InstructionType
     {
         BinaryOperation,
+        BuildClosure,
         BuildList,
         Call,
         Duplicate,

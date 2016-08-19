@@ -14,6 +14,10 @@ namespace Hassium.Runtime.Objects
             AddType(this);
         }
 
+        public override string ToString()
+        {
+            return TypeName;
+        }
         public override HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumString(TypeName);

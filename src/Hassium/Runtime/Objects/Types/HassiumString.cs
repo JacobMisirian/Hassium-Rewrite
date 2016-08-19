@@ -30,6 +30,7 @@ namespace Hassium.Runtime.Objects.Types
             AddAttribute(HassiumObject.TOINT,   ToInt,      0);
             AddAttribute(HassiumObject.TOLIST,  ToList,     0);
             AddAttribute(HassiumObject.TOSTRING,ToString,   0);
+            AddAttribute(HassiumObject.ITER,    Iter,       0);
         }
 
         public HassiumBool contains(VirtualMachine vm, params HassiumObject[] args)
@@ -133,6 +134,10 @@ namespace Hassium.Runtime.Objects.Types
         public override HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
             return this;
+        }
+        public override HassiumObject Iter(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return ToList(vm, args);
         }
     }
 }

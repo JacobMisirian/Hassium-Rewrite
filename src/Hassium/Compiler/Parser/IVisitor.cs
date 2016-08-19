@@ -23,11 +23,13 @@ namespace Hassium.Compiler.Parser
         void Accept(IdentifierNode node);
         void Accept(IfNode node);
         void Accept(IntegerNode node);
+        void Accept(LambdaNode node);
         void Accept(ListAccessNode node);
         void Accept(ListDeclarationNode node);
         void Accept(ReturnNode node);
         void Accept(StatementNode node);
         void Accept(StringNode node);
+        void Accept(SwitchNode node);
         void Accept(UnaryOperationNode node);
         void Accept(WhileNode node);
     }

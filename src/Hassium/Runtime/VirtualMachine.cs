@@ -46,7 +46,7 @@ namespace Hassium.Runtime
 
                 int arg = method.Instructions[pos].Argument;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
-               // Console.WriteLine(method.Instructions[pos].ToString());
+                //Console.WriteLine(method.Instructions[pos].ToString());
                 try
                 {
                     switch (method.Instructions[pos].InstructionType)
@@ -55,6 +55,9 @@ namespace Hassium.Runtime
                             right = Stack.Pop();
                             left = Stack.Pop();
                             interpretBinaryOperation(left, right, arg);
+                            break;
+                        case InstructionType.BuildClosure:
+                            Stack.Push(new HassiumClosure(Stack.Pop() as HassiumMethod, StackFrame.Frames.Peek()));
                             break;
                         case InstructionType.BuildList:
                             elements = new HassiumObject[arg];

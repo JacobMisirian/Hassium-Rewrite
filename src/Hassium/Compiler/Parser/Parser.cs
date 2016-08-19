@@ -55,6 +55,8 @@ namespace Hassium.Compiler.Parser
                 return parseIf();
             else if (AcceptToken(TokenType.Identifier, "return"))
                 return new ReturnNode(Location, parseExpression());
+            else if (MatchToken(TokenType.Identifier, "switch"))
+                return parseSwitch();
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else
@@ -141,6 +143,13 @@ namespace Hassium.Compiler.Parser
                 return new IfNode(Location, predicate, body, parseStatement());
             return new IfNode(Location, predicate, body);
         }
+        private LambdaNode parseLambda()
+        {
+            ExpectToken(TokenType.Identifier, "lambda");
+            ArgumentListNode parameters = parseArgList();
+            AstNode body = parseStatement();
+            return new LambdaNode(Location, parameters, body);
+        }
         private ListDeclarationNode parseListDeclaration()
         {
             ExpectToken(TokenType.OpenSquare);
@@ -158,6 +167,30 @@ namespace Hassium.Compiler.Parser
             if (AcceptToken(TokenType.Colon))
                 return new FuncParameter(name, ExpectToken(TokenType.Identifier).Value);
             return new FuncParameter(name);
+        }
+        private SwitchNode parseSwitch()
+        {
+            ExpectToken(TokenType.Identifier, "switch");
+            AstNode expression = parseExpression();
+            ExpectToken(TokenType.OpenBracket);
+            var cases = new List<Case>();
+            while (!AcceptToken(TokenType.CloseBracket))
+            {
+                if (AcceptToken(TokenType.Identifier, "default"))
+                {
+                    var ret = new SwitchNode(Location, expression, cases, parseStatement());
+                    ExpectToken(TokenType.CloseBracket);
+                    return ret;
+                }
+                ExpectToken(TokenType.Identifier, "case");
+                var expressions = new List<AstNode>();
+                expressions.Add(parseExpression());
+                while (AcceptToken(TokenType.Comma))
+                    expressions.Add(parseExpression());
+                AstNode caseBody = parseStatement();
+                cases.Add(new Case(expressions, caseBody));
+            }
+            return new SwitchNode(Location, expression, cases, new StatementNode(Location));
         }
         private WhileNode parseWhile()
         {
@@ -424,8 +457,16 @@ namespace Hassium.Compiler.Parser
         {
             if (AcceptToken(TokenType.Identifier, "new"))
                 return parseExpression();
+            else if (MatchToken(TokenType.Identifier, "lambda"))
+                return parseLambda();
             else if (MatchToken(TokenType.OpenSquare))
                 return parseListDeclaration();
+            else if (AcceptToken(TokenType.OpenParentheses))
+            {
+                var expr = parseExpression();
+                ExpectToken(TokenType.CloseParentheses);
+                return expr;
+            }
             else if (MatchToken(TokenType.Identifier))
                 return new IdentifierNode(Location, ExpectToken(TokenType.Identifier).Value);
             else if (MatchToken(TokenType.String))

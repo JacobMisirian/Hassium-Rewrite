@@ -49,6 +49,25 @@ namespace Hassium.Runtime.Objects.Types
                 Handlers.remove(vm, obj);
             return HassiumObject.Null;
         }
+
+        public override HassiumObject Add(VirtualMachine vm, params HassiumObject[] args)
+        {
+            add(vm, args);
+            return this;
+        }
+        public override HassiumObject Subtract(VirtualMachine vm, params HassiumObject[] args)
+        {
+            remove(vm, args);
+            return this;
+        }
+        public override HassiumObject Invoke(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return fire(vm, args);
+        }
+        public override HassiumObject Iter(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return Handlers;
+        }
     }
 }
 

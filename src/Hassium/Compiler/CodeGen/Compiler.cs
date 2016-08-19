@@ -189,10 +189,9 @@ namespace Hassium.Compiler.CodeGen
             method.BreakLabels.Push(endLabel);
 
             int tmp, variable;
-            if (table.ContainsSymbol("__tmp__"))
-                tmp = table.GetSymbol("__tmp__");
-            else
-                tmp = table.AddSymbol("__tmp__");
+            if (!table.ContainsSymbol("foreach"))
+                table.AddSymbol("foreach");
+            tmp = table.GetSymbol("foreach");
             if (table.ContainsSymbol(node.Variable))
                 variable = table.GetSymbol(node.Variable);
             else
@@ -277,6 +276,38 @@ namespace Hassium.Compiler.CodeGen
                 module.ObjectPool.Add(i.GetHashCode(), i);
             method.Emit(node.SourceLocation, InstructionType.PushObject, i.GetHashCode());
         }
+        public void Accept(LambdaNode node)
+        {
+            var lambda = compileLambda(node);
+            int hash = lambda.GetHashCode();
+            if (!module.ObjectPool.ContainsKey(hash))
+                module.ObjectPool.Add(hash, lambda);
+            method.Emit(node.SourceLocation, InstructionType.PushObject, hash);
+            method.Emit(node.SourceLocation, InstructionType.BuildClosure);
+        }
+        private HassiumMethod compileLambda(LambdaNode node)
+        {
+            var temp = method;
+            method = new HassiumMethod();
+            method.Name = "lambda";
+            method.Parent = temp.Parent;
+            table.PushScope();
+
+            foreach (AstNode param in node.Parameters.Children)
+            {
+                string name = ((IdentifierNode)param).Identifier;
+                if (!table.ContainsSymbol(name))
+                    table.AddSymbol(name);
+                method.Parameters.Add(new FuncParameter(name), table.GetSymbol(name));
+            }
+
+            node.Body.VisitChildren(this);
+            table.PopScope();
+
+            var ret = method;
+            method = temp;
+            return ret;
+        }
         public void Accept(ListAccessNode node)
         {
             node.Element.Visit(this);
@@ -301,6 +332,35 @@ namespace Hassium.Compiler.CodeGen
             if (!module.ObjectPool.ContainsKey(str.GetHashCode()))
                 module.ObjectPool.Add(str.GetHashCode(), str);
             method.Emit(node.SourceLocation, InstructionType.PushObject, str.GetHashCode());
+        }
+        public void Accept(SwitchNode node)
+        {
+            if (!table.ContainsSymbol((++labelIndex).ToString()))
+                table.AddSymbol(labelIndex.ToString());
+            int tmp = table.GetSymbol(labelIndex.ToString());
+            int endSwitch = nextLabel();
+
+            node.Expression.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.StoreLocal, tmp);
+            foreach (var case_ in node.Cases)
+            {
+                int trueLabel = nextLabel();
+                int falseLabel = nextLabel();
+                foreach (var expression in case_.Expressions)
+                {
+                    method.Emit(node.SourceLocation, InstructionType.LoadLocal, tmp);
+                    expression.Visit(this);
+                    method.Emit(node.SourceLocation, InstructionType.BinaryOperation, (int)BinaryOperation.EqualTo);
+                    method.Emit(node.SourceLocation, InstructionType.JumpIfTrue, trueLabel);
+                }
+                method.Emit(node.SourceLocation, InstructionType.Jump, falseLabel);
+                method.EmitLabel(node.SourceLocation, trueLabel);
+                case_.Body.Visit(this);
+                method.Emit(node.SourceLocation, InstructionType.Jump, endSwitch);
+                method.EmitLabel(node.SourceLocation, falseLabel);
+            }
+            node.DefaultCase.Visit(this);
+            method.EmitLabel(node.SourceLocation, endSwitch);
         }
         public void Accept(UnaryOperationNode node)
         {

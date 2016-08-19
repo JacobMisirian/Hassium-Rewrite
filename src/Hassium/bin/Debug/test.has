@@ -1,3 +1,15 @@
 func main () {
-	println (float is 4.5);
+	switch (1) {
+		case 3, 2 {
+			println ("You can't see me!");
+		}
+		case 4 {
+			println ("Hai!");
+		}
+		case 4, 5 {
+			println ("sup");
+		} default {
+			println ("no one chose me :(");
+		}
+	}
 }
