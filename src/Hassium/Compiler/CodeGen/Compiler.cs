@@ -42,7 +42,7 @@ namespace Hassium.Compiler.CodeGen
                     clazz.Parent = globalParent;
                     module.Attributes.Add(clazz.Name, clazz);
                 }
-                else if (child is TraitNode)
+                else if (child is TraitNode || child is PropertyNode)
                     child.Visit(this);
             }
 
@@ -127,7 +127,7 @@ namespace Hassium.Compiler.CodeGen
             HassiumClass clazz = new HassiumClass();
             clazz.Name = node.Name;
             clazz.TypeDefinition = new HassiumTypeDefinition(clazz.Name);
-            clazz.Types.Add(clazz.TypeDefinition);
+            clazz.AddType(clazz.TypeDefinition);
 
             foreach (AstNode child in node.Body.Children)
             {
@@ -142,6 +142,8 @@ namespace Hassium.Compiler.CodeGen
                 }
                 else if (child is ClassNode)
                     clazz.AddAttribute(((ClassNode)child).Name, compileClass(child as ClassNode));
+                else if (child is PropertyNode)
+                    clazz.AddAttribute(((PropertyNode)child).Variable, compileProperty(child as PropertyNode, clazz));
             }
             return clazz;
         }
@@ -332,6 +334,38 @@ namespace Hassium.Compiler.CodeGen
             foreach (var val in node.InitialValues)
                 val.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.BuildList, node.InitialValues.Count);
+        }
+        public void Accept(PropertyNode node)
+        {
+            module.Attributes.Add(node.Variable, compileProperty(node, method.Parent));
+        }
+        private HassiumProperty compileProperty(PropertyNode node, HassiumClass parent)
+        {
+            var temp = method;
+            method = new HassiumMethod();
+            method.Name = string.Format("get_{0}", node.Variable);
+            table.PushScope();
+            node.GetBody.Visit(this);
+            table.PopScope();
+            HassiumMethod getBody = method;
+            getBody.Parent = parent;
+            getBody.ReturnType = "";
+            method = new HassiumMethod();
+            method.Name = string.Format("set_{0}", node.Variable);
+            table.PushScope();
+            if (!table.ContainsSymbol("value"))
+                table.AddSymbol("value");
+            method.Parameters.Add(new FuncParameter("value"), table.GetSymbol("value"));
+            node.SetBody.Visit(this);
+            table.PopScope();
+            HassiumMethod setBody = method;
+            setBody.Parent = parent;
+            setBody.ReturnType = "";
+            HassiumProperty property = new HassiumProperty(getBody, setBody);
+            property.Parent = parent;
+            method = temp;
+
+            return property;
         }
         public void Accept(RaiseNode node)
         {

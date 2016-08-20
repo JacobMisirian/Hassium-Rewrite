@@ -61,7 +61,6 @@ namespace Hassium.Runtime.Objects
                     throw new InternalException(vm, InternalException.PARAMETER_ERROR, param.Key.Type, arg.Type());
                 vm.StackFrame.Add(param.Value, arg);
             }
-
             if (IsConstructor)
             {
                 HassiumClass ret = new HassiumClass();
@@ -88,7 +87,6 @@ namespace Hassium.Runtime.Objects
                     throw new InternalException(vm, InternalException.RETURN_ERROR, ReturnType, val.Type());
                 if (Name != "lambda") vm.StackFrame.PopFrame();
                 vm.CallStack.Pop();
-
                 return val;
             }
         }

@@ -28,6 +28,7 @@ namespace Hassium.Compiler.Parser
         void Accept(LambdaNode node);
         void Accept(ListAccessNode node);
         void Accept(ListDeclarationNode node);
+        void Accept(PropertyNode node);
         void Accept(RaiseNode node);
         void Accept(ReturnNode node);
         void Accept(StatementNode node);

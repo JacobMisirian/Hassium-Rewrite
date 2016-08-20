@@ -108,6 +108,7 @@
     <Compile Include="Runtime\Objects\Types\HassiumDictionary.cs" />
     <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumTuple.cs" />
+    <Compile Include="Compiler\Parser\Ast\PropertyNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

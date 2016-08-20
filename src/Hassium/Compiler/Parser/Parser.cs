@@ -72,6 +72,8 @@ namespace Hassium.Compiler.Parser
                     block.Children.Add(parseStatement());
                 return block;
             }
+            else if (MatchToken(TokenType.Identifier) && Tokens[Position + 1].TokenType == TokenType.OpenBracket)
+                return parseProperty();
             else
                 return parseExpressionStatement();
         }
@@ -188,6 +190,17 @@ namespace Hassium.Compiler.Parser
             if (AcceptToken(TokenType.Colon))
                 return new FuncParameter(name, ExpectToken(TokenType.Identifier).Value);
             return new FuncParameter(name);
+        }
+        private PropertyNode parseProperty()
+        {
+            string variable = ExpectToken(TokenType.Identifier).Value;
+            ExpectToken(TokenType.OpenBracket);
+            ExpectToken(TokenType.Identifier, "get");
+            AstNode getBody = parseStatement();
+            ExpectToken(TokenType.Identifier, "set");
+            AstNode setBody = parseStatement();
+            ExpectToken(TokenType.CloseBracket);
+            return new PropertyNode(Location, variable, getBody, setBody);
         }
         private SwitchNode parseSwitch()
         {

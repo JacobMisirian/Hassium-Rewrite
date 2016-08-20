@@ -1,7 +1,14 @@
 func main () {
-	t = ( 1, 2, 4 );
+	MyClass.set ("John");
+	println (MyClass.Name);
+	MyClass.Name = "Jane";
+	println (MyClass.Name);
+}
 
-	println (t [2]);
-	t [1] = 3;
-	println (t [1]);
+class MyClass {
+	Name { get { return this.name; } set { this.name = value; } }
+
+	func set (n) {
+		this.name = n;
+	}
 }
