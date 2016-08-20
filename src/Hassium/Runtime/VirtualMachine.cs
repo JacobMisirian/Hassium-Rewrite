@@ -200,7 +200,15 @@ namespace Hassium.Runtime
                             try
                             {
                                 if (val.Attributes.ContainsKey(attrib))
-                                    val.Attributes.Remove(attrib);
+                                {
+                                    if (val.Attributes[attrib] is HassiumProperty)
+                                    {
+                                        ((HassiumProperty)val.Attributes[attrib]).Set.Invoke(this, Stack.Pop());
+                                        break;
+                                    }
+                                    else
+                                        val.Attributes.Remove(attrib);
+                                }
                                 val.Attributes.Add(attrib, Stack.Pop());
                             }
                             catch (KeyNotFoundException)
@@ -354,6 +362,5 @@ namespace Hassium.Runtime
                     method.Labels.Add(method.Instructions[i].Argument, i);
                 }
         }
-        
     }
 }

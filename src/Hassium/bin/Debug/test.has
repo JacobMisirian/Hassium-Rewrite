@@ -1,13 +1,8 @@
 func main () {
-	MyClass.test (3);
-	MyClass.test (3.1);
-}
-class MyClass {
-func test (x : int) {
-	println ("You passed {0} of type int!".format (x));
+	MyClass.Name = "Jake";
+	println (MyClass.Name);
 }
 
-func test (x : float) {
-	println ("You passed {0} of type float!".format (x));
-}
+class MyClass {
+	Name { get { return this.name; } set { println (value); this.name = vaue;} }
 }

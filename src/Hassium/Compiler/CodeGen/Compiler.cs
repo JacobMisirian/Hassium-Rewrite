@@ -361,6 +361,7 @@ namespace Hassium.Compiler.CodeGen
             var temp = method;
             method = new HassiumMethod();
             method.Name = string.Format("get_{0}", node.Variable);
+            method.SourceRepresentation = string.Format("{0} ()", method.Name);
             table.PushScope();
             node.GetBody.Visit(this);
             table.PopScope();
@@ -369,6 +370,7 @@ namespace Hassium.Compiler.CodeGen
             getBody.ReturnType = "";
             method = new HassiumMethod();
             method.Name = string.Format("set_{0}", node.Variable);
+            method.SourceRepresentation = string.Format("{0} (value)", method.Name);
             table.PushScope();
             if (!table.ContainsSymbol("value"))
                 table.AddSymbol("value");
