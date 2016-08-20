@@ -17,12 +17,22 @@ namespace Hassium.Runtime.Objects.Types
             AddAttribute("contains",    contains,   1);
             AddAttribute("endsWith",    endsWith,   1);
             AddAttribute("format",      format,    -1);
+            AddAttribute("getBytes",    ToList,     0);
             AddAttribute("indexOf",     indexOf,    1);
             AddAttribute("insert",      insert,     2);
             AddAttribute("lastIndexOf", lastIndexOf,1);
             AddAttribute("length",      new HassiumProperty(get_length));
+            AddAttribute("remove",      remove,     1);
+            AddAttribute("replace",     replace,    2);
+            AddAttribute("reverse",     reverse,    0);
+            AddAttribute("split",       split,      1);
+            AddAttribute("startsWith",  startsWith, 1);
+            AddAttribute("substring",   substring,  1, 2);
             AddAttribute("toLower",     toLower,    0);
             AddAttribute("toUpper",     toUpper,    0);
+            AddAttribute("trim",        trim,       0);
+            AddAttribute("trimLeft",    trimLeft,   0);
+            AddAttribute("trimRight",   trimRight,  0);
 
             AddAttribute(HassiumObject.TOBOOL,  ToBool,     0);
             AddAttribute(HassiumObject.TOCHAR,  ToChar,     0);
@@ -30,6 +40,7 @@ namespace Hassium.Runtime.Objects.Types
             AddAttribute(HassiumObject.TOINT,   ToInt,      0);
             AddAttribute(HassiumObject.TOLIST,  ToList,     0);
             AddAttribute(HassiumObject.TOSTRING,ToString,   0);
+            AddAttribute(HassiumObject.TOTUPLE, ToTuple,    0);
             AddAttribute(HassiumObject.ITER,    Iter,       0);
         }
 
@@ -65,6 +76,44 @@ namespace Hassium.Runtime.Objects.Types
         {
             return new HassiumInt(String.Length);
         }
+        public HassiumString remove(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.Remove((int)args[0].ToInt(vm).Int, (int)args[1].ToInt(vm).Int));
+        }
+        public HassiumString replace(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.Replace(args[0].ToString(vm).String, args[1].ToString(vm).String));
+        }
+        public HassiumString reverse(VirtualMachine vm, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = String.Length - 1; i >= 0; i--)
+                sb.Append(String[i]);
+            return new HassiumString(sb.ToString());
+        }
+        public HassiumList split(VirtualMachine vm, params HassiumObject[] args)
+        {
+            HassiumList result = new HassiumList(new HassiumObject[0]);
+            foreach (string s in String.Split(args[0].ToChar(vm).Char))
+                result.add(vm, new HassiumString(s));
+            return result;
+        }
+        public HassiumBool startsWith(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(String.StartsWith(args[0].ToString(vm).String));
+        }
+        public HassiumString substring(VirtualMachine vm, params HassiumObject[] args)
+        {
+            switch (args.Length)
+            {
+                case 1:
+                    return new HassiumString(String.Substring((int)args[0].ToInt(vm).Int));
+                case 2:
+                    return new HassiumString(String.Substring((int)args[0].ToInt(vm).Int, (int)args[1].ToInt(vm).Int));
+                default:
+                    return null;
+            }
+        }
         public HassiumString toLower(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumString(String.ToLower());
@@ -72,6 +121,18 @@ namespace Hassium.Runtime.Objects.Types
         public HassiumString toUpper(VirtualMachine vm, params HassiumObject[] args)
         {
             return new HassiumString(String.ToUpper());
+        }
+        public HassiumString trim(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.Trim());
+        }
+        public HassiumString trimLeft(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.TrimStart());
+        }
+        public HassiumString trimRight(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumString(String.TrimEnd());
         }
 
         public override HassiumObject Add(VirtualMachine vm, params HassiumObject[] args)
@@ -134,6 +195,10 @@ namespace Hassium.Runtime.Objects.Types
         public override HassiumString ToString(VirtualMachine vm, params HassiumObject[] args)
         {
             return this;
+        }
+        public override HassiumTuple ToTuple(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return ToList(vm, args).ToTuple(vm, args);
         }
         public override HassiumObject Iter(VirtualMachine vm, params HassiumObject[] args)
         {

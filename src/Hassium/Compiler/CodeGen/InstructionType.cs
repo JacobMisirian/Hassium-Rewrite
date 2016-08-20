@@ -9,6 +9,7 @@ namespace Hassium.Compiler.CodeGen
         BuildDictionary,
         BuildKeyValuePair,
         BuildList,
+        BuildTuple,
         Call,
         Duplicate,
         Iter,

@@ -1,6 +1,7 @@
 func main () {
-	dict = { "America" : "US", "Germany" : "DE" }
+	t = ( 1, 2, 4 );
 
-	println (type (dict));
-	println (dict ["Americ"]);
+	println (t [2]);
+	t [1] = 3;
+	println (t [1]);
 }

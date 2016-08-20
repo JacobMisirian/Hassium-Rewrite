@@ -518,7 +518,19 @@ namespace Hassium.Compiler.Parser
             else if (AcceptToken(TokenType.OpenParentheses))
             {
                 var expr = parseExpression();
-                ExpectToken(TokenType.CloseParentheses);
+                if (AcceptToken(TokenType.Comma))
+                {
+                    TupleNode tuple = new TupleNode(Location);
+                    tuple.Children.Add(expr);
+                    while (!MatchToken(TokenType.CloseParentheses))
+                    {
+                        tuple.Children.Add(parseExpression());
+                        if (!AcceptToken(TokenType.Comma))
+                            break;
+                    }
+                    ExpectToken(TokenType.CloseParentheses);
+                    return tuple;
+                }
                 return expr;
             }
             else if (MatchToken(TokenType.Identifier))

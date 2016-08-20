@@ -84,6 +84,12 @@ namespace Hassium.Runtime
                                 elements[i] = Stack.Pop();
                             Stack.Push(new HassiumList(elements));
                             break;
+                        case InstructionType.BuildTuple:
+                            HassiumObject[] tupleElements = new HassiumObject[arg];
+                            for (int i = 0; i < arg; i++)
+                                tupleElements[i] = Stack.Pop();
+                            Stack.Push(new HassiumTuple(tupleElements));
+                            break;
                         case InstructionType.Call:
                             val = Stack.Pop();
                             elements = new HassiumObject[arg];
@@ -118,7 +124,11 @@ namespace Hassium.Runtime
                             val = Stack.Pop();
                             try
                             {
-                                Stack.Push(val.Attributes[CurrentModule.ConstantPool[arg]]);
+                                var attribute = val.Attributes[CurrentModule.ConstantPool[arg]];
+                                if (attribute is HassiumProperty)
+                                    Stack.Push(((HassiumProperty)attribute).Get.Invoke(this));
+                                else
+                                    Stack.Push(attribute);
                             }
                             catch (KeyNotFoundException)
                             {
@@ -129,8 +139,13 @@ namespace Hassium.Runtime
                             attrib = CurrentModule.ConstantPool[arg];
                             if (Globals.ContainsKey(attrib))
                                 Stack.Push(Globals[attrib]);
-                            else if (method.Parent.Attributes.ContainsKey(attrib))
-                                Stack.Push(CurrentMethod.Parent.Attributes[attrib]);
+                            else if (method.Parent != null)
+                            {
+                                if (method.Parent.Attributes.ContainsKey(attrib))
+                                    Stack.Push(method.Parent.Attributes[attrib]);
+                                else
+                                    throw new InternalException(this, InternalException.VARIABLE_ERROR, attrib);
+                            }
                             else
                                 throw new InternalException(this, InternalException.VARIABLE_ERROR, attrib);
                             break;

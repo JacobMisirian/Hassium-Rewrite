@@ -44,6 +44,7 @@ namespace Hassium.Runtime.Objects
         public static string TOFLOAT =              "toFloat";
         public static string TOLIST =               "toList";
         public static string TOSTRING =             "toString";
+        public static string TOTUPLE =              "toTuple";
 
         public HassiumClass Parent { get; set; }
 
@@ -278,6 +279,12 @@ namespace Hassium.Runtime.Objects
             if (Attributes.ContainsKey(TOSTRING))
                 return Attributes[TOSTRING].Invoke(vm, args).ToString(vm, args);
             throw new InternalException(vm, InternalException.ATTRIBUTE_NOT_FOUND, TOSTRING, Type());
+        }
+        public virtual HassiumTuple ToTuple(VirtualMachine vm, params HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(TOTUPLE))
+                return (HassiumTuple)Attributes[TOTUPLE].Invoke(vm, args);
+            throw new InternalException(vm, InternalException.ATTRIBUTE_NOT_FOUND, TOTUPLE, Type());
         }
 
         public object Clone()

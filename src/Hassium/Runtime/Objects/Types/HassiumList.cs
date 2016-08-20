@@ -17,9 +17,11 @@ namespace Hassium.Runtime.Objects.Types
 
             AddAttribute("add",             add);
             AddAttribute("clear",           clear);
+            AddAttribute("contains",        contains);
             AddAttribute("remove",          remove);
-            AddAttribute(HassiumObject.TOLIST, ToList, 0);
-            AddAttribute(HassiumObject.TOSTRING, ToString, 0, 1);
+            AddAttribute(HassiumObject.TOLIST,      ToList,         0);
+            AddAttribute(HassiumObject.TOSTRING,    ToString,    0, 1);
+            AddAttribute(HassiumObject.TOTUPLE,     ToTuple,        0);
         }
 
         public HassiumObject add(VirtualMachine vm, params HassiumObject[] args)
@@ -32,6 +34,10 @@ namespace Hassium.Runtime.Objects.Types
         {
             List.Clear();
             return HassiumObject.Null;
+        }
+        public HassiumBool contains(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumBool(List.Contains(args[0]));
         }
         public HassiumObject remove(VirtualMachine vm, params HassiumObject[] args)
         {
@@ -73,6 +79,10 @@ namespace Hassium.Runtime.Objects.Types
                     sb.AppendFormat("{0}{1}", obj.ToString(vm).String, seperator);
             }
             return new HassiumString(sb.ToString());
+        }
+        public override HassiumTuple ToTuple(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumTuple(List.ToArray());
         }
 
         private int iterableIndex = 0;

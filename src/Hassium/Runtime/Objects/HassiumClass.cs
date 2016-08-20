@@ -15,6 +15,12 @@ namespace Hassium.Runtime.Objects
                 return Attributes[HassiumObject.INVOKE].Invoke(vm, args);
             throw new InternalException(vm, InternalException.OPERATOR_ERROR, "()", TypeDefinition);
         }
+
+        public new void AddAttribute(string name, HassiumObject obj)
+        {
+            obj.Parent = this;
+            Attributes.Add(name, obj);
+        }
     }
 }
 

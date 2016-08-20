@@ -138,10 +138,10 @@ namespace Hassium.Compiler.CodeGen
                     if (clazz.Attributes.ContainsKey(method.Name))
                         clazz.Attributes[method.Name] = method;
                     else
-                        clazz.Attributes.Add(method.Name, method);
+                        clazz.AddAttribute(method.Name, method);
                 }
                 else if (child is ClassNode)
-                    clazz.Attributes.Add(((ClassNode)child).Name, compileClass(child as ClassNode));
+                    clazz.AddAttribute(((ClassNode)child).Name, compileClass(child as ClassNode));
             }
             return clazz;
         }
@@ -406,6 +406,12 @@ namespace Hassium.Compiler.CodeGen
             node.TryBody.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.PopHandler);
             method.EmitLabel(node.SourceLocation, endLabel);
+        }
+        public void Accept(TupleNode node)
+        {
+            for (int i = node.Children.Count - 1; i >= 0; i--)
+                node.Children[i].Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.BuildTuple, node.Children.Count);
         }
         public void Accept(UnaryOperationNode node)
         {
