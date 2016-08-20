@@ -40,6 +40,7 @@ namespace Hassium.Compiler.SemanticAnalysis
         {
             node.VisitChildren(this);
         }
+        public void Accept(ExtendNode node) {}
         public void Accept(FloatNode node) {}
         public void Accept(ForNode node) {}
         public void Accept(ForeachNode node) {}

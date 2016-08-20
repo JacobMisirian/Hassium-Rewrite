@@ -109,6 +109,8 @@
     <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumTuple.cs" />
     <Compile Include="Compiler\Parser\Ast\PropertyNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ExtendNode.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumMultiFunc.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

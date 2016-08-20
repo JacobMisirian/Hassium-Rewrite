@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Hassium.Compiler.Parser;
 using Hassium.Compiler.Parser.Ast;
@@ -34,7 +35,15 @@ namespace Hassium.Compiler.CodeGen
                 {
                     child.Visit(this);
                     method.Parent = globalParent;
-                    module.Attributes.Add(method.Name, method);
+                    if (module.Attributes.ContainsKey(method.Name))
+                    {
+                        if (module.Attributes[method.Name] is HassiumMultiFunc)
+                            ((HassiumMultiFunc)module.Attributes[method.Name]).Methods.Add(method);
+                        else if (module.Attributes[method.Name] is HassiumMethod)
+                            module.Attributes[method.Name] = new HassiumMultiFunc(new List<HassiumMethod>() { method, (HassiumMethod)module.Attributes[method.Name] });
+                    }
+                    else
+                        module.Attributes.Add(method.Name, method);
                 }
                 else if (child is ClassNode)
                 {
@@ -136,7 +145,12 @@ namespace Hassium.Compiler.CodeGen
                     child.Visit(this);
                     method.Parent = clazz;
                     if (clazz.Attributes.ContainsKey(method.Name))
-                        clazz.Attributes[method.Name] = method;
+                    {
+                        if (clazz.Attributes[method.Name] is HassiumMultiFunc)
+                            ((HassiumMultiFunc)clazz.Attributes[method.Name]).Methods.Add(method);
+                        else if (clazz.Attributes[method.Name] is HassiumMethod)
+                            clazz.Attributes[method.Name] = new HassiumMultiFunc(new List<HassiumMethod>() { method, (HassiumMethod)clazz.Attributes[method.Name] });
+                    }
                     else
                         clazz.AddAttribute(method.Name, method);
                 }
@@ -166,6 +180,9 @@ namespace Hassium.Compiler.CodeGen
         {
             node.VisitChildren(this);
             method.Emit(node.SourceLocation, InstructionType.Pop);
+        }
+        public void Accept(ExtendNode node)
+        {
         }
         public void Accept(FloatNode node)
         {
@@ -508,5 +525,22 @@ namespace Hassium.Compiler.CodeGen
             method.Emit(node.SourceLocation, InstructionType.Jump, startLabel);
             method.EmitLabel(node.SourceLocation, endLabel);
         }
+        /*
+        private void preformExtensions(AstNode ast, HassiumObject compiled)
+        {
+            List<AstNode> children = new List<AstNode>();
+            foreach (AstNode child in ast.Children)
+            {
+                if (!(child is ExtendNode))
+                    children.Add(compiled.Attributes
+            }
+            foreach (AstNode child in ast.Children)
+            {
+                if (child is ExtendNode)
+                {
+                    HassiumClass baseClass;
+                }
+            }
+        }*/
     }
 }

@@ -45,6 +45,8 @@ namespace Hassium.Compiler.Parser
                 return parseClass();
             else if (AcceptToken(TokenType.Identifier, "continue"))
                 return new ContinueNode(Location);
+            else if (MatchToken(TokenType.Identifier, "extend"))
+                return parseExtend();
             else if (MatchToken(TokenType.Identifier, "for"))
                 return parseFor();
             else if (MatchToken(TokenType.Identifier, "foreach"))
@@ -102,6 +104,16 @@ namespace Hassium.Compiler.Parser
             AstNode body = parseStatement();
 
             return new ClassNode(Location, name, inherits, body);
+        }
+        private ExtendNode parseExtend()
+        {
+            ExpectToken(TokenType.Identifier, "extend");
+            string name = ExpectToken(TokenType.Identifier).Value;
+            ExpectToken(TokenType.OpenBracket);
+            ExtendNode node = new ExtendNode(Location, name);
+            while (!AcceptToken(TokenType.CloseBracket))
+                node.Children.Add(parseStatement());
+            return node;
         }
         private ForNode parseFor()
         {
