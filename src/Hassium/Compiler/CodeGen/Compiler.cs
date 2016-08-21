@@ -52,7 +52,7 @@ namespace Hassium.Compiler.CodeGen
                     clazz.Parent = globalParent;
                     module.Attributes.Add(clazz.Name, clazz);
                 }
-                else if (child is TraitNode || child is PropertyNode || child is UseNode)
+                else if (child is TraitNode || child is PropertyNode || child is UseNode || child is EnumNode)
                     child.Visit(this);
             }
 
@@ -157,6 +157,8 @@ namespace Hassium.Compiler.CodeGen
                 }
                 else if (child is ClassNode)
                     clazz.AddAttribute(((ClassNode)child).Name, compileClass(child as ClassNode));
+                else if (child is EnumNode)
+                    clazz.AddAttribute(((EnumNode)child).Name, compileEnum(child as EnumNode));
                 else if (child is PropertyNode)
                     clazz.AddAttribute(((PropertyNode)child).Variable, compileProperty(child as PropertyNode, clazz));
             }
@@ -181,6 +183,20 @@ namespace Hassium.Compiler.CodeGen
         {
             node.VisitChildren(this);
             method.Emit(node.SourceLocation, InstructionType.Pop);
+        }
+        public void Accept(EnumNode node)
+        {
+            module.Attributes.Add(node.Name, compileEnum(node));
+        }
+        private HassiumEnum compileEnum(EnumNode node)
+        {
+            HassiumEnum _enum = new HassiumEnum(node.Name);
+            foreach (AstNode child in node.Children)
+            {
+                var op = child as BinaryOperationNode;
+                _enum.AddAttribute(((StringNode)op.Left).String, new HassiumInt(((IntegerNode)op.Right).Number));
+            }
+            return _enum;
         }
         public void Accept(ExtendNode node)
         {

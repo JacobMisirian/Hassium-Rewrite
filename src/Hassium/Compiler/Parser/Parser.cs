@@ -45,6 +45,8 @@ namespace Hassium.Compiler.Parser
                 return parseClass();
             else if (AcceptToken(TokenType.Identifier, "continue"))
                 return new ContinueNode(Location);
+            else if (MatchToken(TokenType.Identifier, "enum"))
+                return parseEnum();
             else if (MatchToken(TokenType.Identifier, "extend"))
                 return parseExtend();
             else if (MatchToken(TokenType.Identifier, "for"))
@@ -106,6 +108,22 @@ namespace Hassium.Compiler.Parser
             AstNode body = parseStatement();
 
             return new ClassNode(Location, name, inherits, body);
+        }
+        private EnumNode parseEnum()
+        {
+            ExpectToken(TokenType.Identifier, "enum");
+            string enumName = ExpectToken(TokenType.Identifier).Value;
+            EnumNode node = new EnumNode(Location, enumName);
+            ExpectToken(TokenType.OpenBracket);
+            int nextIndex = 0;
+            while (!AcceptToken(TokenType.CloseBracket))
+            {
+                string name = ExpectToken(TokenType.Identifier).Value;
+                AstNode value = new IntegerNode(Location, AcceptToken(TokenType.Assignment) ? Convert.ToInt64(ExpectToken(TokenType.Integer).Value) : nextIndex++);
+                node.Children.Add(new BinaryOperationNode(Location, BinaryOperation.Assignment, new StringNode(Location, name), value));
+                AcceptToken(TokenType.Comma);
+            }
+            return node;
         }
         private ExtendNode parseExtend()
         {

@@ -1,5 +1,10 @@
-use folder.test2
-
 func main () {
-	imported ();
+	println (Codes.sub);
+}
+
+enum Codes {
+	add,
+	sub = 5,
+	mul,
+	div
 }

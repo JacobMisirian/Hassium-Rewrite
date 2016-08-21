@@ -26,9 +26,15 @@ namespace Hassium
             }
             catch (ExpectedTokenException ex)
             {
+                Console.WriteLine("At {0}:", ex.SourceLocation);
                 Console.WriteLine(ex.Message);
             }
             catch (UnexpectedTokenException ex)
+            {
+                Console.WriteLine("At {0}:", ex.SourceLocation);
+                Console.WriteLine(ex.Message);
+            }
+            catch (UseException ex)
             {
                 Console.WriteLine(ex.Message);
             }

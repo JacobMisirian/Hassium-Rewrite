@@ -113,6 +113,8 @@
     <Compile Include="Compiler\Parser\Ast\UseNode.cs" />
     <Compile Include="Compiler\Parser\UnexpectedTokenException.cs" />
     <Compile Include="Compiler\CodeGen\UseException.cs" />
+    <Compile Include="Compiler\Parser\Ast\EnumNode.cs" />
+    <Compile Include="Runtime\Objects\HassiumEnum.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
