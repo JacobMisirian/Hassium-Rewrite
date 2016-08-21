@@ -91,7 +91,6 @@
     <Compile Include="Compiler\Parser\Ast\ContinueNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ForeachNode.cs" />
     <Compile Include="Runtime\Objects\InternalModule.cs" />
-    <Compile Include="Runtime\Objects\Types\TypesModule.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumEvent.cs" />
     <Compile Include="Compiler\Parser\Ast\LambdaNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumClosure.cs" />
@@ -115,6 +114,11 @@
     <Compile Include="Compiler\CodeGen\UseException.cs" />
     <Compile Include="Compiler\Parser\Ast\EnumNode.cs" />
     <Compile Include="Runtime\Objects\HassiumEnum.cs" />
+    <Compile Include="Runtime\Objects\Math\HassiumMath.cs" />
+    <Compile Include="Runtime\Objects\Math\HassiumMathModule.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumTypesModule.cs" />
+    <Compile Include="Runtime\Objects\Math\HassiumRandom.cs" />
+    <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -127,5 +131,6 @@
     <Folder Include="Runtime\" />
     <Folder Include="Runtime\Objects\" />
     <Folder Include="Runtime\Objects\Types\" />
+    <Folder Include="Runtime\Objects\Math\" />
   </ItemGroup>
 </Project>

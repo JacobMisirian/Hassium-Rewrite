@@ -90,7 +90,7 @@ namespace Hassium.Runtime.Objects.Types
         }
         public override HassiumObject Power(VirtualMachine vm, params HassiumObject[] args)
         {
-            return new HassiumFloat(Math.Pow((double)Int, args[0].ToFloat(vm, args).Float));
+            return new HassiumFloat(System.Math.Pow((double)Int, args[0].ToFloat(vm, args).Float));
         }
         public override HassiumObject Subtract(VirtualMachine vm, params HassiumObject[] args)
         {

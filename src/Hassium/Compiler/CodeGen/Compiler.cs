@@ -450,6 +450,18 @@ namespace Hassium.Compiler.CodeGen
             node.DefaultCase.Visit(this);
             method.EmitLabel(node.SourceLocation, endSwitch);
         }
+        public void Accept(TernaryOperationNode node)
+        {
+            var falseLabel = nextLabel();
+            var endLabel = nextLabel();
+            node.Predicate.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.JumpIfFalse, falseLabel);
+            node.TrueStatement.Visit(this);
+            method.Emit(node.SourceLocation, InstructionType.Jump, endLabel);
+            method.EmitLabel(node.SourceLocation, falseLabel);
+            node.FalseStatement.Visit(this);
+            method.EmitLabel(node.SourceLocation, endLabel);
+        }
         public void Accept(TraitNode node)
         {
             int hash = node.Name.GetHashCode();

@@ -2,9 +2,9 @@
 
 namespace Hassium.Runtime.Objects.Types
 {
-    public class TypesModule : InternalModule
+    public class HassiumTypesModule : InternalModule
     {
-        public TypesModule() : base("types")
+        public HassiumTypesModule() : base("types")
         {
             AddAttribute("bool",            HassiumBool.TypeDefinition);
             AddAttribute("char",            HassiumChar.TypeDefinition);

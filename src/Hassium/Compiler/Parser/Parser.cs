@@ -325,7 +325,7 @@ namespace Hassium.Compiler.Parser
         }
         private AstNode parseAssignment()
         {
-            AstNode left = parseLogicalOr();
+            AstNode left = parseTernary();
             if (MatchToken(TokenType.Assignment))
             {
                 switch (Tokens[Position].Value)
@@ -363,6 +363,19 @@ namespace Hassium.Compiler.Parser
                     default:
                         break;
                 }
+            }
+            return left;
+        }
+        private AstNode parseTernary()
+        {
+            AstNode left = parseLogicalOr();
+
+            while (AcceptToken(TokenType.Question))
+            {
+                AstNode trueStatement = parseExpression();
+                ExpectToken(TokenType.Colon);
+                AstNode falseStatement = parseExpression();
+                left = new TernaryOperationNode(Location, left, trueStatement, falseStatement);
             }
             return left;
         }

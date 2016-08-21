@@ -42,10 +42,10 @@ namespace Hassium.Runtime.Objects
         {
             Instructions.Add(new Instruction(location, instructionType, argument));
         }
-        public void EmitLabel(SourceLocation locatiom, int label)
+        public void EmitLabel(SourceLocation location, int label)
         {
            // Labels.Add(label, Instructions.Count);
-            Instructions.Add(new Instruction(locatiom, InstructionType.Label, label));
+            Instructions.Add(new Instruction(location, InstructionType.Label, label));
         }
 
         public override HassiumObject Invoke(VirtualMachine vm, params HassiumObject[] args)

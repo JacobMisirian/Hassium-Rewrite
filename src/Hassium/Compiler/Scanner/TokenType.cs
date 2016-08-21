@@ -4,24 +4,25 @@ namespace Hassium.Compiler.Scanner
 {
     public enum TokenType
     {
-        Identifier,
-        String,
-        Integer,
-        Float,
+        Assignment,
         Char,
-        OpenParentheses,
-        CloseParentheses,
-        OpenBracket,
         CloseBracket,
-        OpenSquare,
+        CloseParentheses,
         CloseSquare,
-        Comma,
-        Dot,
-        Semicolon,
         Colon,
-        Operation,
+        Comma,
         Comparison,
-        Assignment
+        Dot,
+        Float,
+        Identifier,
+        Integer,
+        OpenBracket,
+        OpenParentheses,
+        OpenSquare,
+        Operation,
+        Question,
+        Semicolon,
+        String
     }
 }
 

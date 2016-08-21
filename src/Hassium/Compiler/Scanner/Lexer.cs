@@ -43,6 +43,9 @@ namespace Hassium.Compiler.Scanner
                             add(TokenType.Char, ((char)readChar()).ToString());
                             readChar();
                             break;
+                        case '?':
+                            add(TokenType.Question, ((char)readChar()).ToString());
+                            break;
                         case '(':
                             add(TokenType.OpenParentheses, ((char)readChar()).ToString());
                             break;
