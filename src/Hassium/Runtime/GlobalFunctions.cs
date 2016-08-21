@@ -15,7 +15,7 @@ namespace Hassium.Runtime
             { "map", new HassiumFunction(map, 2) },
             { "print", new HassiumFunction(print, -1) },
             { "println", new HassiumFunction(println, -1) },
-            { "range", new HassiumFunction(range, 1, 2) },
+            { "range", new HassiumFunction(range, new int[] { 1, 2 }) },
             { "type", new HassiumFunction(type, 1) }
         };
 

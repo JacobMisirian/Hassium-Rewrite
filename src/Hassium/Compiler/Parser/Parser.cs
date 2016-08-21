@@ -67,6 +67,8 @@ namespace Hassium.Compiler.Parser
                 return parseTrait();
             else if (MatchToken(TokenType.Identifier, "try"))
                 return parseTryCatch();
+            else if (MatchToken(TokenType.Identifier, "until"))
+                return parseWhile(true);
             else if (MatchToken(TokenType.Identifier, "use"))
                 return parseUse();
             else if (MatchToken(TokenType.Identifier, "while"))
@@ -295,11 +297,13 @@ namespace Hassium.Compiler.Parser
 
             return new TryCatchNode(Location, tryBody, catchBody);
         }
-        private WhileNode parseWhile()
+        private WhileNode parseWhile(bool until = false)
         {
-            ExpectToken(TokenType.Identifier, "while");
+            ExpectToken(TokenType.Identifier);
             ExpectToken(TokenType.OpenParentheses);
             AstNode predicate = parseExpression();
+            if (until)
+                predicate = new UnaryOperationNode(Location, predicate, UnaryOperation.LogicalNot);
             ExpectToken(TokenType.CloseParentheses);
             AstNode body = parseStatement();
             if (AcceptToken(TokenType.Identifier, "else"))

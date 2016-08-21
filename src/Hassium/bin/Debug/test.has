@@ -1,13 +1,3 @@
 func main () {
-	l = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
-	println (map (l, isEven).toString (" "));
-	println (map (map (l, isThree), isEven).toString(" "));
-}
-
-func isEven (i : int) {
-	return i % 2 == 0;
-}
-
-func isThree (i : int) {
-	return i % 3 == 0;
+	println (@"Hello\nworld!");
 }

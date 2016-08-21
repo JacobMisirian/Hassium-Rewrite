@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Hassium.Compiler.Scanner
@@ -31,7 +32,11 @@ namespace Hassium.Compiler.Scanner
                     switch ((char)peekChar())
                     {
                         case '\"':
-                            scanString();
+                            scanString(false);
+                            break;
+                        case '@':
+                            readChar();
+                            scanString(true);
                             break;
                         case '\'':
                             readChar();
@@ -132,16 +137,137 @@ namespace Hassium.Compiler.Scanner
 
         private void scanNumber()
         {
-            StringBuilder sb = new StringBuilder();
-            while ((char.IsDigit((char)peekChar()) || (char)peekChar() == '.') && peekChar() != -1)
-                sb.Append((char)readChar());
-            try
+            var str = new StringBuilder();
+            var sep = false;
+            while (peekChar() != -1 &&
+                (char.IsDigit((char) peekChar()) || "abcdefABCDEF".Contains(((char)peekChar()).ToString()) || "xo-._".Contains(((char)peekChar()).ToString())))
             {
-                add(TokenType.Integer, Convert.ToInt64(sb.ToString()).ToString());
+                var cchar = (char)readChar();
+                if(cchar == '_')
+                {
+                    if (sep) break;
+                    sep = true;
+                }
+                else
+                {
+                    sep = false;
+                    str.Append(cchar);
+                }
             }
-            catch
+            var final = str.ToString();
+            var bname = "";
+            var bsize = 0;
+            if(final.StartsWith("0x"))
             {
-                add(TokenType.Float, Convert.ToDouble(sb.ToString()).ToString());
+                bname = "hex";
+                bsize = 16;
+            }
+            else if(final.StartsWith("0b"))
+            {
+                bname = "binary";
+                bsize = 2;
+            }
+            else if(final.StartsWith("0o"))
+            {
+                bname = "octal";
+                bsize = 8;
+            }
+            if(bname != "")
+            {
+                try
+                {
+                    add(TokenType.Integer, Convert.ToInt64(final.Substring(2), bsize).ToString());
+                }
+                catch
+                {
+                    throw new Exception("Invalid " + bname + " number: " + final);
+                }
+            }
+            else
+            {
+                try
+                {
+                    add(TokenType.Integer, long.Parse(final, NumberStyles.Any, CultureInfo.InvariantCulture).ToString());
+                }
+                catch
+                {
+                    try
+                    {
+                        add(TokenType.Float,
+                            double.Parse(final, NumberStyles.Any, CultureInfo.InvariantCulture).ToString());
+                    }
+                    catch
+                    {
+                        throw new Exception("Invalid number: " + final);
+                    }
+                }
+            }
+        }
+
+        private void scanString(bool isVerbatim)
+        {
+            var str = new StringBuilder();
+            readChar();
+            while ((char)peekChar() != '\"' && peekChar() != -1)
+            {
+                char ch = (char)readChar();
+                if (ch == '\\' && !isVerbatim)
+                    str.Append(scanEscapeCode((char)readChar()));
+                else if (ch == '#' && !isVerbatim && peekChar() == '{')
+                {
+                    readChar();
+                    if (peekChar() == '}')
+                    {
+                        readChar();
+                        continue;
+                    }
+                    result.Add(new Token(TokenType.String, str.ToString(), location));
+                    str.Clear();
+                    result.Add(new Token(TokenType.Operation, "+", location));
+                    result.Add(new Token(TokenType.OpenParentheses, "(", location));
+                    while (peekChar() != -1 && peekChar() != '}')
+                        readChar();
+                    readChar();
+                    result.Add(new Token(TokenType.CloseParentheses, ")", location));
+                    result.Add(new Token(TokenType.Operation, "+", location));
+                    continue;
+                }
+                else
+                    str.Append(ch);
+            }
+            readChar();
+
+            add(TokenType.String, str.ToString());
+        }
+
+        private char scanEscapeCode(char escape)
+        {
+            switch (escape)
+            {
+                case '\\':
+                    return '\\';
+                case '"':
+                    return '\"';
+                case '\'':
+                    return '\'';
+                case 'a':
+                    return '\a';
+                case 'b':
+                    return '\b';
+                case 'f':
+                    return '\f';
+                case 'n':
+                    return '\n';
+                case 'r':
+                    return '\r';
+                case 't':
+                    return '\t';
+                case 'v':
+                    return '\v';
+                case '#':
+                    return '#';
+                default:
+                    throw new Exception("Unknown escape code \\" + escape);
             }
         }
 
@@ -152,16 +278,6 @@ namespace Hassium.Compiler.Scanner
                 sb.Append((char)readChar());
             string val = sb.ToString();
             add(val == "is" ? TokenType.Operation : TokenType.Identifier, val);
-        }
-
-        private void scanString()
-        {
-            StringBuilder sb = new StringBuilder();
-            readChar(); // "
-            while ((char)peekChar() != '\"' && peekChar() != -1)
-                sb.Append((char)readChar());
-            readChar(); // "
-            add(TokenType.String, sb.ToString());
         }
 
         private void whiteSpace()
