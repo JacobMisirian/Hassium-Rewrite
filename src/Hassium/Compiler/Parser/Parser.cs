@@ -315,7 +315,10 @@ namespace Hassium.Compiler.Parser
         {
             AstNode expression = parseExpression();
             AcceptToken(TokenType.Semicolon);
-            if (expression is FunctionCallNode || expression is BinaryOperationNode || expression is UnaryOperationNode)
+            if (expression is FunctionCallNode || expression is BinaryOperationNode)
+                return new ExpressionStatementNode(Location, expression);
+            if (expression is UnaryOperationNode)
+            if (((UnaryOperationNode)expression).UnaryOperation != UnaryOperation.Reference)
                 return new ExpressionStatementNode(Location, expression);
             return expression;
         }
@@ -531,21 +534,27 @@ namespace Hassium.Compiler.Parser
             {
                 switch (Tokens[Position].Value)
                 {
-                    case "!":
-                        AcceptToken(TokenType.Operation);
-                        return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.LogicalNot);
                     case "~":
                         AcceptToken(TokenType.Operation);
                         return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.BitwiseNot);
+                    case "*":
+                        AcceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.Dereference);
+                    case "!":
+                        AcceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.LogicalNot);
+                    case "-":
+                        AcceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.Negate);
                     case "--":
                         AcceptToken(TokenType.Operation);
                         return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.PreDecrement);
                     case "++":
                         AcceptToken(TokenType.Operation);
                         return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.PreIncrement);
-                    case "-":
+                    case "&":
                         AcceptToken(TokenType.Operation);
-                        return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.Negate);
+                        return new UnaryOperationNode(Location, parseUnary(), UnaryOperation.Reference);
                 }
             }
             return parseAccess();

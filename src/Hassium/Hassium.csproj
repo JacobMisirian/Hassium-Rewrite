@@ -119,6 +119,7 @@
     <Compile Include="Runtime\Objects\Types\HassiumTypesModule.cs" />
     <Compile Include="Runtime\Objects\Math\HassiumRandom.cs" />
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
+    <Compile Include="Runtime\Objects\Types\HassiumPointer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

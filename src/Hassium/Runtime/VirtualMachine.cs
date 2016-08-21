@@ -97,6 +97,9 @@ namespace Hassium.Runtime
                                 elements[i] = Stack.Pop();
                             Stack.Push(val.Invoke(this, elements));
                             break;
+                        case InstructionType.Dereference:
+                            Stack.Push(((HassiumPointer)Stack.Pop()).Dereference());
+                            break;
                         case InstructionType.Duplicate:
                             Stack.Push(Stack.Peek());
                             break;
@@ -189,6 +192,9 @@ namespace Hassium.Runtime
                         case InstructionType.Raise:
                             RaiseException(Stack.Pop(), method, ref pos);
                             break;
+                        case InstructionType.Reference:
+                            Stack.Push(new HassiumPointer(StackFrame.Frames.Peek(), arg));
+                            break;
                         case InstructionType.Return:
                             return Stack.Pop();
                         case InstructionType.SelfReference:
@@ -228,6 +234,9 @@ namespace Hassium.Runtime
                                 StackFrame.Modify(arg, val);
                             else
                                 StackFrame.Add(arg, val);
+                            break;
+                        case InstructionType.StoreReference:
+                            Stack.Push(((HassiumPointer)Stack.Pop()).StoreReference(Stack.Pop()));
                             break;
                         case InstructionType.UnaryOperation:
                             interpretUnaryOperation(Stack.Pop(), arg);

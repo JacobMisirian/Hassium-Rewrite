@@ -1,4 +1,10 @@
 func main () {
-	while (true)
-		println (input () == "y" ? "YES " : "NO");
+	a = 4;
+	println (a);
+	test (&a);
+	println (a);
+}
+
+func test (b) {
+	*b = 7;
 }

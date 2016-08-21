@@ -108,6 +108,15 @@ namespace Hassium.Compiler.CodeGen
                         access.Target.Visit(this);
                         method.Emit(node.SourceLocation, InstructionType.StoreListElement);
                     }
+                    else if (node.Left is UnaryOperationNode)
+                    {
+                        var unop = node.Left as UnaryOperationNode;
+                        if (unop.UnaryOperation == UnaryOperation.Dereference)
+                        {
+                            unop.Target.Visit(this);
+                            method.Emit(node.SourceLocation, InstructionType.StoreReference);
+                        }
+                    }
                     break;
                 default:
                     node.VisitChildren(this);
@@ -503,6 +512,10 @@ namespace Hassium.Compiler.CodeGen
                     node.Target.Visit(this);
                     method.Emit(node.SourceLocation, InstructionType.UnaryOperation, (int)UnaryOperation.BitwiseNot);
                     break;
+                case UnaryOperation.Dereference:
+                    node.Target.Visit(this);
+                    method.Emit(node.SourceLocation, InstructionType.Dereference);
+                    break;
                 case UnaryOperation.LogicalNot:
                     node.Target.Visit(this);
                     method.Emit(node.SourceLocation, InstructionType.UnaryOperation, (int)UnaryOperation.LogicalNot);
@@ -539,6 +552,10 @@ namespace Hassium.Compiler.CodeGen
                         if (node.UnaryOperation == UnaryOperation.PreDecrement || node.UnaryOperation == UnaryOperation.PreIncrement)
                             method.Instructions.Add(loadInstruction);
                     }
+                    break;
+                case UnaryOperation.Reference:
+                    string variable = ((IdentifierNode)node.Target).Identifier;
+                    method.Emit(node.SourceLocation, InstructionType.Reference, table.GetSymbol(variable));
                     break;
             }
         }

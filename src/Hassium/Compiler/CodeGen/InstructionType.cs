@@ -11,6 +11,7 @@ namespace Hassium.Compiler.CodeGen
         BuildList,
         BuildTuple,
         Call,
+        Dereference,
         Duplicate,
         Iter,
         IterableFull,
@@ -31,12 +32,14 @@ namespace Hassium.Compiler.CodeGen
         PushHandler,
         PushObject,
         Raise,
+        Reference,
         Return,
         SelfReference,
         StoreAttribute,
         StoreGlobalVariable,
         StoreListElement,
         StoreLocal,
+        StoreReference,
         UnaryOperation
     }
 }

@@ -27,12 +27,14 @@ namespace Hassium.Compiler.Parser.Ast
 
     public enum UnaryOperation
     {
+        Dereference,
         LogicalNot,
         BitwiseNot,
         PostDecrement,
         PostIncrement,
         PreDecrement,
         PreIncrement,
+        Reference,
         Negate
     }
 }
