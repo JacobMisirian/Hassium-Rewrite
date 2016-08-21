@@ -1,8 +1,5 @@
-func main () {
-	MyClass.Name = "Jake";
-	println (MyClass.Name);
-}
+use folder.test2
 
-class MyClass {
-	Name { get { return this.name; } set { println (value); this.name = vaue;} }
+func main () {
+	imported ();
 }

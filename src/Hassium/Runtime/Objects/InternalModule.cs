@@ -13,9 +13,9 @@ namespace Hassium.Runtime.Objects
             Name = name;
         }
 
-        public static List<InternalModule> InternalModules = new List<InternalModule>()
+        public static Dictionary<string, InternalModule> InternalModules = new Dictionary<string, InternalModule>()
         {
-            new TypesModule()
+            { "Types", new TypesModule() }
         };
     }
 }

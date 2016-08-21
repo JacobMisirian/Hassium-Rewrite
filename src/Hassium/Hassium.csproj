@@ -54,7 +54,6 @@
     <Compile Include="Compiler\Parser\Ast\ArgumentListNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ListAccessNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ListDeclarationNode.cs" />
-    <Compile Include="Compiler\Parser\Ast\UnexpectedTokenException.cs" />
     <Compile Include="Compiler\Parser\Ast\FunctionCallNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\AttributeAccessNode.cs" />
@@ -111,6 +110,9 @@
     <Compile Include="Compiler\Parser\Ast\PropertyNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ExtendNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumMultiFunc.cs" />
+    <Compile Include="Compiler\Parser\Ast\UseNode.cs" />
+    <Compile Include="Compiler\Parser\UnexpectedTokenException.cs" />
+    <Compile Include="Compiler\CodeGen\UseException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

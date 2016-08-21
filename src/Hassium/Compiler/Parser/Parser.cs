@@ -65,6 +65,8 @@ namespace Hassium.Compiler.Parser
                 return parseTrait();
             else if (MatchToken(TokenType.Identifier, "try"))
                 return parseTryCatch();
+            else if (MatchToken(TokenType.Identifier, "use"))
+                return parseUse();
             else if (MatchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else if (AcceptToken(TokenType.OpenBracket))
@@ -213,6 +215,17 @@ namespace Hassium.Compiler.Parser
             AstNode setBody = parseStatement();
             ExpectToken(TokenType.CloseBracket);
             return new PropertyNode(Location, variable, getBody, setBody);
+        }
+        private UseNode parseUse()
+        {
+            ExpectToken(TokenType.Identifier, "use");
+            if (MatchToken(TokenType.String))
+                return new UseNode(Location, new List<string> () { ExpectToken(TokenType.String).Value });
+            var parts = new List<string>();
+            parts.Add(ExpectToken(TokenType.Identifier).Value);
+            while (AcceptToken(TokenType.Operation, "/") || AcceptToken(TokenType.Dot))
+                parts.Add(ExpectToken(TokenType.Identifier).Value);
+            return new UseNode(Location, parts);
         }
         private SwitchNode parseSwitch()
         {
@@ -571,7 +584,7 @@ namespace Hassium.Compiler.Parser
             else if (AcceptToken(TokenType.Semicolon))
                 return new StatementNode(Location);
             else
-                throw new UnexpectedTokenException(Tokens[Position]);
+                throw new UnexpectedTokenException(Location, Tokens[Position]);
         }
 
         public bool MatchToken(TokenType tokenType)
@@ -602,13 +615,13 @@ namespace Hassium.Compiler.Parser
         {
             if (MatchToken(tokenType))
                 return Tokens[Position++];
-            throw new ExpectedTokenException(tokenType, tokenType.ToString(), Tokens[Position]);
+            throw new ExpectedTokenException(Location, tokenType, tokenType.ToString(), Tokens[Position]);
         }
         public Token ExpectToken(TokenType tokenType, string value)
         {
             if (MatchToken(tokenType, value))
                 return Tokens[Position++];
-            throw new ExpectedTokenException(tokenType, value, Tokens[Position]);
+            throw new ExpectedTokenException(Location, tokenType, value, Tokens[Position]);
         }
     }
 }

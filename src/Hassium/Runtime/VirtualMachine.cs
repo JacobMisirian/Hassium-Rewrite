@@ -347,7 +347,7 @@ namespace Hassium.Runtime
                     Globals.Add(constant, CurrentModule.Attributes[constant]);
             }
 
-            foreach (var module in InternalModule.InternalModules)
+            foreach (var module in InternalModule.InternalModules.Values)
                 foreach (var pair in module.Attributes)
                     Globals.Add(pair.Key, pair.Value);
         }

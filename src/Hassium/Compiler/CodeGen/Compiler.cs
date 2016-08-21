@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Hassium.Compiler.Parser;
 using Hassium.Compiler.Parser.Ast;
@@ -51,7 +52,7 @@ namespace Hassium.Compiler.CodeGen
                     clazz.Parent = globalParent;
                     module.Attributes.Add(clazz.Name, clazz);
                 }
-                else if (child is TraitNode || child is PropertyNode)
+                else if (child is TraitNode || child is PropertyNode || child is UseNode)
                     child.Visit(this);
             }
 
@@ -513,6 +514,42 @@ namespace Hassium.Compiler.CodeGen
                     break;
             }
         }
+        public void Accept(UseNode node)
+        {
+            string name = node.GetName();
+            string path = locateFile(name);
+            HassiumObject mod;
+            if (path != string.Empty)
+            {
+                var ast = new Parser.Parser().Parse(new Scanner.Lexer().Scan(File.ReadAllText(path)));
+                mod = new Compiler().Compile(ast, new SemanticAnalyzer().Analyze(ast));
+            }
+            else if (InternalModule.InternalModules.ContainsKey(name))
+                mod = InternalModule.InternalModules[name];
+            else
+                throw new UseException(node.SourceLocation, "Could not find path or module " + name);
+            foreach (var pair in mod.Attributes)
+            {
+                if (module.Attributes.ContainsKey(pair.Key))
+                    module.Attributes.Remove(pair.Key);
+                module.Attributes.Add(pair.Key, pair.Value);
+            }
+            if (mod is HassiumModule)
+            {
+                foreach (var constant in ((HassiumModule)mod).ConstantPool)
+                {
+                    if (module.ConstantPool.ContainsKey(constant.Key))
+                        module.ConstantPool.Remove(constant.Key);
+                    module.ConstantPool.Add(constant.Key, constant.Value);
+                }
+                foreach (var obj in ((HassiumModule)mod).ObjectPool)
+                {
+                    if (module.ObjectPool.ContainsKey(obj.Key))
+                        module.ObjectPool.Remove(obj.Key);
+                    module.ObjectPool.Add(obj.Key, obj.Value);
+                }
+            }
+        }
         public void Accept(WhileNode node)
         {
             var startLabel = nextLabel();
@@ -526,6 +563,29 @@ namespace Hassium.Compiler.CodeGen
             node.Body.Visit(this);
             method.Emit(node.SourceLocation, InstructionType.Jump, startLabel);
             method.EmitLabel(node.SourceLocation, endLabel);
+        }
+
+        private string locateFile(string path)
+        {
+            if (File.Exists(path))
+                return path;
+            if (File.Exists(path + ".has"))
+                return path + ".has";
+            string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
+                              Environment.OSVersion.Platform == PlatformID.MacOSX)
+                ? Environment.GetEnvironmentVariable("HOME")
+                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+            string homeFilePath = Path.Combine(homePath, path);
+            if (File.Exists(homeFilePath))
+                return homeFilePath;
+            if (File.Exists(homeFilePath + ".has"))
+                return homeFilePath + ".has";
+            homeFilePath = Path.Combine(Path.Combine(homePath, ".Hassium"), path);
+            if (File.Exists(homeFilePath))
+                return homeFilePath;
+            if (File.Exists(homeFilePath + ".has"))
+                return homeFilePath + ".has";
+            return string.Empty;
         }
         /*
         private void preformExtensions(AstNode ast, HassiumObject compiled)
