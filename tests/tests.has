@@ -1,0 +1,98 @@
+use Math;
+
+class data { }
+
+func main () {
+	data.passed = 0;
+	data.failed = 0;
+	assertEq (9 > 2, true, "greater than, true");
+	assertEq (2 > 9, false, "greater than, false");
+	assertEq (9 >= 2, true, "greater than or equal, true, different");
+	assertEq (2 >= 9, false, "greater tham or equal, false, different");
+	assertEq (9 >= 9, true, "greater than or equal, true, same");
+	assertEq (2 < 9, true, "lesser than, true");
+	assertEq (9 < 2, false, "lesser than, false");
+	assertEq (2 <= 9, true, "lesser than or equal, true, different");
+	assertEq (9 <= 2, false, "lesser than or equal, false, different");
+	assertEq (2 <= 2, true, "lesser than or equal, true, same");
+	assertEq (2 == 2, true, "equal to, true, same");
+	assertEq (2 == 3, false, "equal to, false, different");
+	assertEq (2 != 3, true, "not equal to, true, different");
+	assertEq (2 != 2, false, "not equal to, false, same");
+
+	assertEq (2 + 3, 5, "addition");
+	assertEq (4 - 2, 2, "subtraction");
+	assertEq (5 * 7, 35, "multiplication");
+	assertEq (26 / 2, 13, "division");
+	assertEq (67 % 13, 2, "modulus");
+
+	assertEq ("string", "string", "string equals itself");
+	assertEq (5, 5, "int equals itself");
+	assertEq ('f', 'f', "char equals itself");
+	assertEq (5.5, 5.5, "double equals itself");
+	assertEq (true, true, "bool equals itself");
+	assertEq ([1, 2, 3], [3, 2, 1].reverse (), "list equals itself");
+
+	l = [ 1, 2, 5 ];
+	assertEq (l[1], 2, "list indexing");
+	assertEq (l.length, 3, "list length");
+	assertEq (add (4, 5), 9, "multifunc with 2 arguments");
+	assertEq (add (4, 5, 6), 15, "multifunc with 3 arguments");
+	dict = { "US" : "America", "DE" : "Germany" };
+	assertEq (dict ["US"], "America", "dictionary indexing");
+	dict ["RO"] = "Romania";
+	assertEq (dict ["RO"], "Romania", "dictionary adding");
+	assertEq (dict is object, true, "everything is object");
+	assertEq (dict is dictionary, true, "dict is a dictionary");
+	assertEq (dict is list, false, "dict is not a list");
+
+	c = new InheritingClass ();
+	assertEq (c.firstMethod (), 1, "Inherited func was overridden");
+	assertEq (c.secondMethod (), 2, "func returns correctly");
+
+	try {
+		a = 0 / 0;
+		assertEq (1, 2, "try failed!");
+	} catch {
+		assertEq (0, 0, "caught exception");
+	}
+
+	displayResults ();
+}
+
+class InheritedClass {
+	func new () {}
+	func firstMethod () {
+		return 0;
+	}
+}
+class InheritingClass {
+	func new () {}
+	func firstMethod () {
+		return 1;
+	}
+	func secondMethod () {
+		return 2;
+	}
+}
+
+func add (x, y) {
+	return x + y;
+}
+func add (x, y, z) {
+	return x + y + z;
+}
+
+func assertEq (left, right, type) {
+	if (left == right) {
+		println (format ("Passed {0}, test number {1}", type, data.failed + data.passed));
+		data.passed = data.passed + 1;
+	} else {
+		println (format ("Failed {0}, test number {1}", type, data.passed + data.failed));
+		data.failed = data.failed + 1;
+	}
+}
+
+func displayResults () {
+	println (format ("You passed {0} tests and failed {1} tests!", data.passed, data.failed));
+}

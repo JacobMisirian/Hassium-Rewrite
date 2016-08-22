@@ -573,7 +573,7 @@ namespace Hassium.Compiler.CodeGen
             else if (InternalModule.InternalModules.ContainsKey(name))
                 mod = InternalModule.InternalModules[name];
             else
-                throw new UseException(node.SourceLocation, "Could not find path or module " + name);
+                throw new CompileException(node.SourceLocation, "Could not find path or module for use \"{0}\"!", name);
             foreach (var pair in mod.Attributes)
             {
                 if (module.Attributes.ContainsKey(pair.Key))

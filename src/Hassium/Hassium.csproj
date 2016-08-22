@@ -41,7 +41,6 @@
     <Compile Include="Compiler\Scanner\Token.cs" />
     <Compile Include="Compiler\Parser\IVisitor.cs" />
     <Compile Include="Compiler\Parser\Parser.cs" />
-    <Compile Include="Compiler\Parser\ExpectedTokenException.cs" />
     <Compile Include="Compiler\Parser\Ast\IfNode.cs" />
     <Compile Include="Compiler\Parser\Ast\AstNode.cs" />
     <Compile Include="Compiler\Parser\Ast\CodeBlockNode.cs" />
@@ -110,8 +109,6 @@
     <Compile Include="Compiler\Parser\Ast\ExtendNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumMultiFunc.cs" />
     <Compile Include="Compiler\Parser\Ast\UseNode.cs" />
-    <Compile Include="Compiler\Parser\UnexpectedTokenException.cs" />
-    <Compile Include="Compiler\CodeGen\UseException.cs" />
     <Compile Include="Compiler\Parser\Ast\EnumNode.cs" />
     <Compile Include="Runtime\Objects\HassiumEnum.cs" />
     <Compile Include="Runtime\Objects\Math\HassiumMath.cs" />
@@ -120,6 +117,7 @@
     <Compile Include="Runtime\Objects\Math\HassiumRandom.cs" />
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumPointer.cs" />
+    <Compile Include="Compiler\CompileException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

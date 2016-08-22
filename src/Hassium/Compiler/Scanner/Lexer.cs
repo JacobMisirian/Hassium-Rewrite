@@ -186,7 +186,7 @@ namespace Hassium.Compiler.Scanner
                 }
                 catch
                 {
-                    throw new Exception("Invalid " + bname + " number: " + final);
+                    throw new CompileException(location, "Invalid {0} number {1}!", bname, final);
                 }
             }
             else
@@ -204,7 +204,7 @@ namespace Hassium.Compiler.Scanner
                     }
                     catch
                     {
-                        throw new Exception("Invalid number: " + final);
+                        throw new CompileException(location, "Invalid number: {0}!", final);
                     }
                 }
             }
@@ -273,7 +273,7 @@ namespace Hassium.Compiler.Scanner
                 case '#':
                     return '#';
                 default:
-                    throw new Exception("Unknown escape code \\" + escape);
+                    throw new CompileException(location, "Unknown escape sequence {0}!", escape);
             }
         }
 

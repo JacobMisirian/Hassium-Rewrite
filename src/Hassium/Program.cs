@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 
+using Hassium.Compiler;
 using Hassium.Compiler.Parser;
 using Hassium.Compiler.Parser.Ast;
 using Hassium.Compiler.Scanner;
@@ -24,18 +25,9 @@ namespace Hassium
                 var module = new Compiler.CodeGen.Compiler().Compile(ast, table);
                 vm.Execute(module, new System.Collections.Generic.List<string>());
             }
-            catch (ExpectedTokenException ex)
+            catch (CompileException ex)
             {
                 Console.WriteLine("At {0}:", ex.SourceLocation);
-                Console.WriteLine(ex.Message);
-            }
-            catch (UnexpectedTokenException ex)
-            {
-                Console.WriteLine("At {0}:", ex.SourceLocation);
-                Console.WriteLine(ex.Message);
-            }
-            catch (UseException ex)
-            {
                 Console.WriteLine(ex.Message);
             }
             catch (InternalException ex)

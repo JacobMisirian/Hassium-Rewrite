@@ -18,7 +18,9 @@ namespace Hassium.Runtime.Objects.Types
             AddAttribute("add",             add);
             AddAttribute("clear",           clear);
             AddAttribute("contains",        contains);
+            AddAttribute("length", new HassiumProperty(get_length));
             AddAttribute("remove",          remove);
+            AddAttribute("reverse",         reverse);
             AddAttribute(HassiumObject.TOLIST,      ToList,         0);
             AddAttribute(HassiumObject.TOSTRING,    ToString,    0, 1);
             AddAttribute(HassiumObject.TOTUPLE,     ToTuple,        0);
@@ -39,11 +41,22 @@ namespace Hassium.Runtime.Objects.Types
         {
             return new HassiumBool(List.Contains(args[0]));
         }
+        public HassiumInt get_length(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumInt(List.Count);
+        }
         public HassiumObject remove(VirtualMachine vm, params HassiumObject[] args)
         {
             foreach (var obj in args)
                 List.Remove(args[0]);
             return args[0];
+        }
+        public HassiumList reverse(VirtualMachine vm, params HassiumObject[] args)
+        {
+            HassiumList result = new HassiumList(new HassiumObject[0]);
+            for (int i = List.Count - 1; i >= 0; i--)
+                result.add(vm, List[i]);
+            return result;
         }
 
         public override HassiumObject EqualTo(VirtualMachine vm, params HassiumObject[] args)

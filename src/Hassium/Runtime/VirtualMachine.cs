@@ -226,7 +226,7 @@ namespace Hassium.Runtime
                             CurrentModule.Globals[arg] = Stack.Pop();
                             break;
                         case InstructionType.StoreListElement:
-                            Stack.Push(Stack.Pop().ToList(this).StoreIndex(this, Stack.Pop(), Stack.Pop()));
+                            Stack.Push(Stack.Pop().StoreIndex(this, Stack.Pop(), Stack.Pop()));
                             break;
                         case InstructionType.StoreLocal:
                             val = Stack.Pop();
@@ -242,6 +242,10 @@ namespace Hassium.Runtime
                             interpretUnaryOperation(Stack.Pop(), arg);
                             break;
                     }
+                }
+                catch (DivideByZeroException ex)
+                {
+                    RaiseException(new HassiumString(ex.Message), method, ref pos);
                 }
                 catch (InternalException ex)
                 {

@@ -628,7 +628,7 @@ namespace Hassium.Compiler.Parser
             else if (AcceptToken(TokenType.Semicolon))
                 return new StatementNode(Location);
             else
-                throw new UnexpectedTokenException(Location, Tokens[Position]);
+                throw new CompileException(Location, "Unexpected token type {0} with value {1}!", Tokens[Position].TokenType, Tokens[Position].Value);
         }
 
         public bool MatchToken(TokenType tokenType)
@@ -659,13 +659,13 @@ namespace Hassium.Compiler.Parser
         {
             if (MatchToken(tokenType))
                 return Tokens[Position++];
-            throw new ExpectedTokenException(Location, tokenType, tokenType.ToString(), Tokens[Position]);
+            throw new CompileException(Location, "Expected token type {0}!", tokenType);
         }
         public Token ExpectToken(TokenType tokenType, string value)
         {
             if (MatchToken(tokenType, value))
                 return Tokens[Position++];
-            throw new ExpectedTokenException(Location, tokenType, value, Tokens[Position]);
+            throw new CompileException(Location, "Expected token type {0} with value {1}!", tokenType, value);
         }
     }
 }
