@@ -6,9 +6,11 @@ namespace Hassium.Runtime.Objects.Util
     {
         public HassiumUtilModule() : base("Util")
         {
+            AddAttribute("OS",              new HassiumOS());
             AddAttribute("Process",         new HassiumProcess());
             AddAttribute("ProcessContext",  new HassiumProcessContext());
             AddAttribute("StopWatch",       new HassiumStopWatch());
+            AddAttribute("UI",              new HassiumUI());
         }
     }
 }

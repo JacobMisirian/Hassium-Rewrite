@@ -1,9 +1,12 @@
-use Math;
+use Text;
 
 func main () {
-	println (Math.pi);
-	rand = new Random ();
-
-	foreach (i in range (0, 20))
-		println (rand.nextInt (0, 10));
+	sb = new StringBuilder ();
+	sb.append ("Hello, ");
+	sb.append ("World!");
+	println (sb.toString());
+	sb2 = new StringBuilder ();
+	sb2.append ("Hai");
+	println (sb2.toString ());
+	println (sb.toString ());
 }

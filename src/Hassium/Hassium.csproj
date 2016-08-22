@@ -140,6 +140,8 @@
     <Compile Include="Runtime\Objects\Util\HassiumProcessContext.cs" />
     <Compile Include="Runtime\Objects\Util\HassiumStopWatch.cs" />
     <Compile Include="Runtime\Objects\Util\HassiumUtilModule.cs" />
+    <Compile Include="Runtime\Objects\Util\HassiumUI.cs" />
+    <Compile Include="Runtime\Objects\Util\HassiumOS.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

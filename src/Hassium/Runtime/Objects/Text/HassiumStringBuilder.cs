@@ -28,6 +28,7 @@ namespace Hassium.Runtime.Objects.Text
             stringBuilder.AddAttribute("insert",        stringBuilder.insert,           2);
             stringBuilder.AddAttribute("length",        new HassiumProperty(stringBuilder.get_length));
             stringBuilder.AddAttribute("replace",       stringBuilder.replace,          2);
+            stringBuilder.AddAttribute(HassiumObject.TOSTRING, stringBuilder.ToString,  0);
 
             return stringBuilder;
         }
