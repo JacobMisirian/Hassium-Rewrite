@@ -35,7 +35,7 @@ namespace Hassium.Compiler.CodeGen
                 if (child is FuncNode)
                 {
                     child.Visit(this);
-                    method.Parent = globalParent;
+                    method.Parent = new HassiumClass();
                     if (module.Attributes.ContainsKey(method.Name))
                     {
                         if (module.Attributes[method.Name] is HassiumMultiFunc)
@@ -55,7 +55,7 @@ namespace Hassium.Compiler.CodeGen
                 else if (child is TraitNode || child is PropertyNode || child is UseNode || child is EnumNode)
                     child.Visit(this);
             }
-
+            preformInherits(module);
             return module;
         }
 
@@ -145,6 +145,7 @@ namespace Hassium.Compiler.CodeGen
                 module.ConstantPool.Add(node.Name.GetHashCode(), node.Name);
             HassiumClass clazz = new HassiumClass();
             clazz.Name = node.Name;
+            clazz.Inherits = node.Inherits;
             clazz.TypeDefinition = new HassiumTypeDefinition(clazz.Name);
             clazz.AddType(clazz.TypeDefinition);
 
@@ -632,22 +633,38 @@ namespace Hassium.Compiler.CodeGen
                 return homeFilePath + ".has";
             return string.Empty;
         }
-        /*
-        private void preformExtensions(AstNode ast, HassiumObject compiled)
+
+        private void preformInherits(HassiumObject obj)
         {
-            List<AstNode> children = new List<AstNode>();
-            foreach (AstNode child in ast.Children)
+            foreach (var attrib in obj.Attributes.Values)
             {
-                if (!(child is ExtendNode))
-                    children.Add(compiled.Attributes
-            }
-            foreach (AstNode child in ast.Children)
-            {
-                if (child is ExtendNode)
+                if (attrib is HassiumClass)
                 {
-                    HassiumClass baseClass;
+                    var clazz = attrib as HassiumClass;
+                    foreach (string inherit in clazz.Inherits)
+                        if (module.Attributes.ContainsKey(inherit))
+                        {
+                            foreach (var pair in module.Attributes[inherit].Attributes)
+                                if (!clazz.Attributes.ContainsKey(pair.Key))
+                                {
+                                    var val = pair.Value.Clone() as HassiumObject;
+                                    val.Parent = clazz;
+                                    clazz.Attributes.Add(pair.Key, val);
+                                }
+                        }
+                        else if (clazz.Parent.Attributes.ContainsKey(inherit))
+                        {
+                            foreach (var pair in clazz.Parent.Attributes[inherit].Attributes)
+                                if (!clazz.Attributes.ContainsKey(pair.Key))
+                                {
+                                    var val = pair.Value.Clone() as HassiumObject;
+                                    val.Parent = clazz;
+                                    clazz.Attributes.Add(pair.Key, val);
+                                }
+                        }
+                    preformInherits(clazz);
                 }
             }
-        }*/
+        }
     }
 }

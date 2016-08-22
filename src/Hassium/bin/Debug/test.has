@@ -1,10 +1,22 @@
 func main () {
-	a = 4;
-	println (a);
-	test (&a);
-	println (a);
+	MulClass.mul (3, 5);
+	MulClass.add (3, 5);
 }
 
-func test (b) {
-	*b = 7;
+class MulClass : AddClass {
+	func mul (x, y) {
+		println (x * y);
+	}
+	func div (x, y) {
+		println (x / y);
+	}
+}
+
+class AddClass {
+	func add (x, y) {
+		println (x + y);
+	}
+	func sub (x, y) {
+		println (x - y);
+	}
 }

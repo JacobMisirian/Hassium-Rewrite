@@ -11,15 +11,15 @@ namespace Hassium.Runtime
 {
     public class VirtualMachine
     {
-        public Stack<HassiumObject> Stack { get; private set; }
-        public StackFrame StackFrame { get; private set; }
         public Stack<string> CallStack { get; private set; }
-        public Stack<HassiumExceptionHandler> Handlers { get; private set; }
+        public HassiumMethod CurrentMethod { get; private set; }
+        public HassiumModule CurrentModule { get; private set; }
+        public SourceLocation CurrentSourceLocation { get; private set; }
         public Dictionary<HassiumMethod, int> ExceptionReturns { get; private set; }
         public Dictionary<string, HassiumObject> Globals { get; private set; }
-        public SourceLocation CurrentSourceLocation { get; private set; }
-        public HassiumModule CurrentModule { get; private set; }
-        public HassiumMethod CurrentMethod { get; private set; }
+        public Stack<HassiumExceptionHandler> Handlers { get; private set; }
+        public Stack<HassiumObject> Stack { get; private set; }
+        public StackFrame StackFrame { get; private set; }
 
         public void Execute(HassiumModule module, List<string> args)
         {
@@ -251,6 +251,15 @@ namespace Hassium.Runtime
             return HassiumObject.Null;
         }
 
+        public void RaiseException(HassiumObject message, HassiumMethod method, ref int pos)
+        {
+            if (Handlers.Count == 0)
+                throw new InternalException(this, message.ToString(this).String);
+            var handler = Handlers.Peek();
+            handler.Invoke(this, message);
+            ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);
+        }
+
         private void interpretBinaryOperation(HassiumObject left, HassiumObject right, int op)
         {
             switch (op)
@@ -321,15 +330,6 @@ namespace Hassium.Runtime
             }
         }
 
-        public void RaiseException(HassiumObject message, HassiumMethod method, ref int pos)
-        {
-            if (Handlers.Count == 0)
-                throw new InternalException(this, message.ToString(this).String);
-            var handler = Handlers.Peek();
-            handler.Invoke(this, message);
-            ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);
-        }
-
         private void interpretUnaryOperation(HassiumObject target, int op)
         {
             switch (op)
@@ -355,7 +355,6 @@ namespace Hassium.Runtime
                     else if (CurrentModule.Attributes.ContainsKey(constant))
                         Globals.Add(constant, CurrentModule.Attributes[constant]);
             }
-
             foreach (var pair in InternalModule.InternalModules["Types"].Attributes)
                 Globals.Add(pair.Key, pair.Value);
         }

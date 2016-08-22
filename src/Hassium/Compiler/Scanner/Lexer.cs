@@ -127,6 +127,9 @@ namespace Hassium.Compiler.Scanner
                             else
                                 add(TokenType.Assignment, "=");
                             break;
+                        case '#':
+                            scanSingleLineComment();
+                            break;
                         default:
                             if (peekChar() == -1)
                                 break;
@@ -281,6 +284,13 @@ namespace Hassium.Compiler.Scanner
                 sb.Append((char)readChar());
             string val = sb.ToString();
             add(val == "is" ? TokenType.Operation : TokenType.Identifier, val);
+        }
+
+        private void scanSingleLineComment()
+        {
+            readChar(); // #
+            while (peekChar() != -1 && (char)peekChar() != '\n')
+                readChar();
         }
 
         private void whiteSpace()

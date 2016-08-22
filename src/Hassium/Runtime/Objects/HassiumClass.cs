@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Hassium.Runtime.Objects
 {
     public class HassiumClass: HassiumObject
     {
         public string Name { get; set; }
+        public List<string> Inherits { get; set; }
         public new HassiumTypeDefinition TypeDefinition { get; set; }
 
         public override HassiumObject Invoke(VirtualMachine vm, params HassiumObject[] args)
