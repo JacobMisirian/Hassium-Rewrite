@@ -144,6 +144,8 @@
     <Compile Include="Runtime\Objects\Util\HassiumOS.cs" />
     <Compile Include="Runtime\Objects\Reflection\HassiumHassiumInspector.cs" />
     <Compile Include="Runtime\Objects\Reflection\HassiumReflectionModule.cs" />
+    <Compile Include="HassiumArgumentConfig.cs" />
+    <Compile Include="HassiumArgumentParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

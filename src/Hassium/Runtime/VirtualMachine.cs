@@ -21,7 +21,7 @@ namespace Hassium.Runtime
         public Stack<HassiumObject> Stack { get; private set; }
         public StackFrame StackFrame { get; private set; }
 
-        public void Execute(HassiumModule module, List<string> args)
+        public void Execute(HassiumModule module, string[] args)
         {
             Stack = new Stack<HassiumObject>();
             StackFrame = new StackFrame();
@@ -31,6 +31,7 @@ namespace Hassium.Runtime
             Globals = new Dictionary<string, HassiumObject>() { { "true", new HassiumBool(true) }, { "false", new HassiumBool(false) } };
             CurrentModule = module;
             importGlobals();
+            importArgs(args);
 
             StackFrame.PushFrame();
             CallStack.Push(((HassiumMethod)module.Attributes["main"]).SourceRepresentation);
@@ -348,6 +349,14 @@ namespace Hassium.Runtime
                     Stack.Push(target.Negate(this));
                     break;
             }
+        }
+
+        private void importArgs(string[] args)
+        {
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+            foreach (string arg in args)
+                list.add(this, new HassiumString(arg));
+            Globals.Add("args", list);
         }
 
         private void importGlobals()
