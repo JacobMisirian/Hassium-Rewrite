@@ -1,22 +1,9 @@
+use Math;
+
 func main () {
-	MulClass.mul (3, 5);
-	MulClass.add (3, 5);
-}
+	println (Math.pi);
+	rand = new Random ();
 
-class MulClass : AddClass {
-	func mul (x, y) {
-		println (x * y);
-	}
-	func div (x, y) {
-		println (x / y);
-	}
-}
-
-class AddClass {
-	func add (x, y) {
-		println (x + y);
-	}
-	func sub (x, y) {
-		println (x - y);
-	}
+	foreach (i in range (0, 20))
+		println (rand.nextInt (0, 10));
 }

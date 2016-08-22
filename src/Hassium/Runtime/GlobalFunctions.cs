@@ -10,13 +10,14 @@ namespace Hassium.Runtime
     {
         public static Dictionary<string, HassiumObject> Functions = new Dictionary<string, HassiumObject>()
         {
-            { "format", new HassiumFunction(format, -1) },
-            { "input", new HassiumFunction(input, 0) },
-            { "map", new HassiumFunction(map, 2) },
-            { "print", new HassiumFunction(print, -1) },
-            { "println", new HassiumFunction(println, -1) },
-            { "range", new HassiumFunction(range, new int[] { 1, 2 }) },
-            { "type", new HassiumFunction(type, 1) }
+            { "format",     new HassiumFunction(format,    -1) },
+            { "input",      new HassiumFunction(input,      0) },
+            { "map",        new HassiumFunction(map,        2) },
+            { "print",      new HassiumFunction(print,     -1) },
+            { "println",    new HassiumFunction(println,   -1) },
+            { "range",      new HassiumFunction(range, new int[] { 1, 2 }) },
+            { "type",       new HassiumFunction(type,       1) },
+            { "types",      new HassiumFunction(types,      1) }
         };
 
         public static HassiumString format(VirtualMachine vm, params HassiumObject[] args)
@@ -75,6 +76,10 @@ namespace Hassium.Runtime
         public static HassiumTypeDefinition type(VirtualMachine vm, params HassiumObject[] args)
         {
             return args[0].Type();
+        }
+        public static HassiumList types(VirtualMachine vm, params HassiumObject[] args)
+        {
+            return new HassiumList(args[0].Types.ToArray());
         }
     }
 }

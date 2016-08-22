@@ -118,6 +118,9 @@
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
     <Compile Include="Runtime\Objects\Types\HassiumPointer.cs" />
     <Compile Include="Compiler\CompileException.cs" />
+    <Compile Include="Runtime\Objects\Text\HassiumTextModule.cs" />
+    <Compile Include="Runtime\Objects\Text\HassiumStringBuilder.cs" />
+    <Compile Include="Runtime\Objects\Text\HassiumEncoding.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -131,5 +134,6 @@
     <Folder Include="Runtime\Objects\" />
     <Folder Include="Runtime\Objects\Types\" />
     <Folder Include="Runtime\Objects\Math\" />
+    <Folder Include="Runtime\Objects\Text\" />
   </ItemGroup>
 </Project>
