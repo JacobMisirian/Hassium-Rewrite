@@ -31,6 +31,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -126,6 +128,14 @@
     <Compile Include="Runtime\Objects\IO\HassiumFileWriter.cs" />
     <Compile Include="Runtime\Objects\IO\HassiumFS.cs" />
     <Compile Include="Runtime\Objects\IO\HassiumIOModule.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumCGI.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumConnectionListener.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumNetConnection.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumDns.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumHttpUtility.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumSocket.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumWebClient.cs" />
+    <Compile Include="Runtime\Objects\Net\HassiumNetModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -141,5 +151,6 @@
     <Folder Include="Runtime\Objects\Math\" />
     <Folder Include="Runtime\Objects\Text\" />
     <Folder Include="Runtime\Objects\IO\" />
+    <Folder Include="Runtime\Objects\Net\" />
   </ItemGroup>
 </Project>
