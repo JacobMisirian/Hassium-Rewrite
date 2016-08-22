@@ -4,6 +4,7 @@ using System.IO;
 
 using Hassium.Compiler.Parser;
 using Hassium.Compiler.Parser.Ast;
+using Hassium.Compiler.Scanner;
 using Hassium.Compiler.SemanticAnalysis;
 using Hassium.Runtime.Objects;
 using Hassium.Runtime.Objects.Types;
@@ -12,6 +13,15 @@ namespace Hassium.Compiler.CodeGen
 {
     public class Compiler : IVisitor
     {
+        public static HassiumModule CompileModuleFromSource(string source)
+        {
+            var tokens = new Lexer().Scan(source);
+            var ast = new Parser.Parser().Parse(tokens);
+            var table = new SemanticAnalyzer().Analyze(ast);
+
+            return new Compiler().Compile(ast, table);
+        }
+
         private SymbolTable table;
         private HassiumModule module;
         private HassiumMethod method;
@@ -566,14 +576,12 @@ namespace Hassium.Compiler.CodeGen
             string path = locateFile(name);
             HassiumObject mod;
             if (path != string.Empty)
-            {
-                var ast = new Parser.Parser().Parse(new Scanner.Lexer().Scan(File.ReadAllText(path)));
-                mod = new Compiler().Compile(ast, new SemanticAnalyzer().Analyze(ast));
-            }
+                mod = CompileModuleFromSource(File.ReadAllText(path));
             else if (InternalModule.InternalModules.ContainsKey(name))
                 mod = InternalModule.InternalModules[name];
             else
                 throw new CompileException(node.SourceLocation, "Could not find path or module for use \"{0}\"!", name);
+
             foreach (var pair in mod.Attributes)
             {
                 if (module.Attributes.ContainsKey(pair.Key))

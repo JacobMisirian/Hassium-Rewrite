@@ -121,6 +121,11 @@
     <Compile Include="Runtime\Objects\Text\HassiumTextModule.cs" />
     <Compile Include="Runtime\Objects\Text\HassiumStringBuilder.cs" />
     <Compile Include="Runtime\Objects\Text\HassiumEncoding.cs" />
+    <Compile Include="Runtime\Objects\IO\HassiumStream.cs" />
+    <Compile Include="Runtime\Objects\IO\HassiumFileReader.cs" />
+    <Compile Include="Runtime\Objects\IO\HassiumFileWriter.cs" />
+    <Compile Include="Runtime\Objects\IO\HassiumFS.cs" />
+    <Compile Include="Runtime\Objects\IO\HassiumIOModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -135,5 +140,6 @@
     <Folder Include="Runtime\Objects\Types\" />
     <Folder Include="Runtime\Objects\Math\" />
     <Folder Include="Runtime\Objects\Text\" />
+    <Folder Include="Runtime\Objects\IO\" />
   </ItemGroup>
 </Project>

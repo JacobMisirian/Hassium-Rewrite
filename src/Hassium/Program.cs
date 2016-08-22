@@ -16,14 +16,9 @@ namespace Hassium
         public static void Main(string[] args)
         {
             var vm = new VirtualMachine();
-            AstNode ast = null;
             try
             {
-                var tokens = new Lexer().Scan(File.ReadAllText(args[0]));
-                ast = new Parser().Parse(tokens);
-                var table = new SemanticAnalyzer().Analyze(ast);
-                var module = new Compiler.CodeGen.Compiler().Compile(ast, table);
-                vm.Execute(module, new System.Collections.Generic.List<string>());
+                vm.Execute(Compiler.CodeGen.Compiler.CompileModuleFromSource(File.ReadAllText(args[0])), new System.Collections.Generic.List<string>());
             }
             catch (CompileException ex)
             {

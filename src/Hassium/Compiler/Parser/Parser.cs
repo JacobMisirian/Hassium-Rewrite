@@ -669,4 +669,3 @@ namespace Hassium.Compiler.Parser
         }
     }
 }
-
