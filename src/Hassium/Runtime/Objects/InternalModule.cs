@@ -6,6 +6,7 @@ using Hassium.Runtime.Objects.Math;
 using Hassium.Runtime.Objects.Net;
 using Hassium.Runtime.Objects.Text;
 using Hassium.Runtime.Objects.Types;
+using Hassium.Runtime.Objects.Util;
 
 namespace Hassium.Runtime.Objects
 {
@@ -23,7 +24,8 @@ namespace Hassium.Runtime.Objects
             { "Math",   new HassiumMathModule()     },
             { "Net",    new HassiumNetModule()      },
             { "Text",   new HassiumTextModule()     },
-            { "Types",  new HassiumTypesModule()    }
+            { "Types",  new HassiumTypesModule()    },
+            { "Util",   new HassiumUtilModule()     }
         };
     }
 }

@@ -136,6 +136,10 @@
     <Compile Include="Runtime\Objects\Net\HassiumSocket.cs" />
     <Compile Include="Runtime\Objects\Net\HassiumWebClient.cs" />
     <Compile Include="Runtime\Objects\Net\HassiumNetModule.cs" />
+    <Compile Include="Runtime\Objects\Util\HassiumProcess.cs" />
+    <Compile Include="Runtime\Objects\Util\HassiumProcessContext.cs" />
+    <Compile Include="Runtime\Objects\Util\HassiumStopWatch.cs" />
+    <Compile Include="Runtime\Objects\Util\HassiumUtilModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -152,5 +156,6 @@
     <Folder Include="Runtime\Objects\Text\" />
     <Folder Include="Runtime\Objects\IO\" />
     <Folder Include="Runtime\Objects\Net\" />
+    <Folder Include="Runtime\Objects\Util\" />
   </ItemGroup>
 </Project>
