@@ -1,0 +1,6 @@
+C:\Users\misir\Hassium\Hassium\bin\Debug\Hassium.exe.config
+C:\Users\misir\Hassium\Hassium\bin\Debug\Hassium.exe
+C:\Users\misir\Hassium\Hassium\bin\Debug\Hassium.pdb
+C:\Users\misir\Hassium\Hassium\obj\Debug\Hassium.csprojResolveAssemblyReference.cache
+C:\Users\misir\Hassium\Hassium\obj\Debug\Hassium.exe
+C:\Users\misir\Hassium\Hassium\obj\Debug\Hassium.pdb
