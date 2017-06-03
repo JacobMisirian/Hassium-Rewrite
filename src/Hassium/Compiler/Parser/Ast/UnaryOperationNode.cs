@@ -6,11 +6,15 @@ namespace Hassium.Compiler.Parser.Ast
     {
         public override SourceLocation SourceLocation { get; }
 
+        public UnaryOperation UnaryOperation { get; private set; }
+
         public AstNode Target { get; private set; }
 
-        public UnaryOperationNode(SourceLocation location, AstNode target)
+        public UnaryOperationNode(SourceLocation location, UnaryOperation operation, AstNode target)
         {
             SourceLocation = location;
+
+            UnaryOperation = operation;
 
             Target = target;
         }
@@ -29,6 +33,10 @@ namespace Hassium.Compiler.Parser.Ast
     {
         BitwiseNot,
         LogicalNot,
-        Negate
+        Negate,
+        PostDecrement,
+        PostIncrement,
+        PreDecrement,
+        PreIncrement
     }
 }

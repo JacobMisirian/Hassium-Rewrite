@@ -47,9 +47,13 @@
     <Compile Include="Compiler\Lexer\Scanner.cs" />
     <Compile Include="Compiler\Parser\AstNode.cs" />
     <Compile Include="Compiler\Parser\Ast\BinaryOperationNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\BreakNode.cs" />
     <Compile Include="Compiler\Parser\Ast\CharNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\CodeBlockNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ContinueNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FloatNode.cs" />
     <Compile Include="Compiler\Parser\Ast\IdentifierNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\IfNode.cs" />
     <Compile Include="Compiler\Parser\Ast\IntegerNode.cs" />
     <Compile Include="Compiler\Parser\Ast\StringNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
