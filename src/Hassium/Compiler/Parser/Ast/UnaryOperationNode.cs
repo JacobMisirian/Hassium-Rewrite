@@ -6,17 +6,18 @@ namespace Hassium.Compiler.Parser.Ast
     {
         public override SourceLocation SourceLocation { get; }
 
-        public UnaryOperation UnaryOperation { get; private set; }
-
         public AstNode Target { get; private set; }
 
-        public UnaryOperationNode(SourceLocation location, UnaryOperation operation, AstNode target)
+        public UnaryOperation UnaryOperation { get; private set; }
+
+
+        public UnaryOperationNode(SourceLocation location, AstNode target, UnaryOperation operation)
         {
             SourceLocation = location;
 
-            UnaryOperation = operation;
-
             Target = target;
+
+            UnaryOperation = operation;
         }
 
         public override void Visit(IVisitor visitor)

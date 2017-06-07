@@ -80,6 +80,41 @@ namespace Hassium.Compiler.Parser
             return new DictionaryDeclarationNode(location, keys, values);
         }
 
+        private FunctionDeclarationNode parseFunctionDeclaration()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "func");
+            string name = expectToken(TokenType.Identifier).Value;
+            var parameters = new List<FunctionParameter>();
+            expectToken(TokenType.OpenParentheses);
+            while (!acceptToken(TokenType.CloseParentheses))
+            {
+                var paramType = FunctionParameterType.Normal;
+                if (acceptToken(TokenType.Identifier, "params"))
+                    paramType = FunctionParameterType.Variadic;
+                string paramName = expectToken(TokenType.Identifier).Value;
+                if (acceptToken(TokenType.Colon))
+                    parameters.Add(new FunctionParameter(FunctionParameterType.Enforced, paramName, parseExpression()));
+                else
+                    parameters.Add(new FunctionParameter(paramType, paramName));
+                acceptToken(TokenType.Comma);
+            }
+            if (acceptToken(TokenType.Colon))
+                return new FunctionDeclarationNode(location, name, parameters, parseExpression(), parseStatement());
+            return new FunctionDeclarationNode(location, name, parameters, parseStatement());
+        }
+
+        private IfNode parseIf()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "if");
+            var condition = parseExpression();
+            var ifBody = parseExpression();
+            if (acceptToken(TokenType.Identifier, "else"))
+                return new IfNode(location, condition, ifBody, parseStatement());
+            return new IfNode(location, condition, ifBody);
+        }
+
         private LambdaNode parseLambda()
         {
             var location = this.location;
@@ -122,12 +157,327 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseExpressionStatement()
         {
-            return parseExpression();
+            var location = this.location;
+            AstNode expression = parseExpression();
+            acceptToken(TokenType.Semicolon);
+            if (expression is FunctionCallNode || expression is BinaryOperationNode)
+                return new ExpressionStatementNode(location, expression);
+            if (expression is UnaryOperationNode)
+                return new ExpressionStatementNode(location, expression);
+            return expression;
         }
 
         private AstNode parseExpression()
         {
-            return parseTerm();
+            return parseAssignment();
+        }
+        private AstNode parseAssignment()
+        {
+            var location = this.location;
+            AstNode left = parseTernary();
+            if (matchToken(TokenType.Assignment))
+            {
+                switch (tokens[position].Value)
+                {
+                    case "=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, parseAssignment());
+                    case "+=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.Addition, left, parseAssignment()));
+                    case "-=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.Subtraction, left, parseAssignment()));
+                    case "*=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.Multiplication, left, parseAssignment()));
+                    case "/=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.Division, left, parseAssignment()));
+                    case "%=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.Modulus, left, parseAssignment()));
+                    case "<<=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.BitshiftLeft, left, parseAssignment()));
+                    case ">>=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.BitshiftRight, left, parseAssignment()));
+                    case "&=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.LogicalAnd, left, parseAssignment()));
+                    case "|=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.LogicalOr, left, parseAssignment()));
+                    case "^=":
+                        acceptToken(TokenType.Assignment);
+                        return new BinaryOperationNode(location, BinaryOperation.Assignment, left, new BinaryOperationNode(location, BinaryOperation.BitwiseXor, left, parseAssignment()));
+                    default:
+                        break;
+                }
+            }
+            return left;
+        }
+
+        private AstNode parseTernary()
+        {
+            var location = this.location;
+            AstNode left = parseLogicalOr();
+
+            while (acceptToken(TokenType.Question))
+            {
+                AstNode trueStatement = parseExpression();
+                expectToken(TokenType.Colon);
+                AstNode falseStatement = parseExpression();
+                left = new TernaryOperationNode(location, left, trueStatement, falseStatement);
+            }
+            return left;
+        }
+        private AstNode parseLogicalOr()
+        {
+            var location = this.location;
+            AstNode left = parseLogicalAnd();
+            while (acceptToken(TokenType.Operation, "||"))
+                left = new BinaryOperationNode(location, BinaryOperation.LogicalOr, left, parseLogicalOr());
+            return left;
+        }
+
+        private AstNode parseLogicalAnd()
+        {
+            var location = this.location;
+            AstNode left = parseEquality();
+            while (acceptToken(TokenType.Operation, "&&"))
+                left = new BinaryOperationNode(location, BinaryOperation.LogicalAnd, left, parseLogicalAnd());
+            return left;
+        }
+
+        private AstNode parseEquality()
+        {
+            var location = this.location;
+            AstNode left = parseComparison();
+            AstNode expr;
+            while (matchToken(TokenType.Comparison))
+            {
+                switch (tokens[position].Value)
+                {
+                    case "==":
+                        acceptToken(TokenType.Comparison);
+                        expr = parseComparison();
+                        if (matchToken(TokenType.Comparison))
+                            return new BinaryOperationNode(location, BinaryOperation.LogicalAnd, new BinaryOperationNode(location, BinaryOperation.EqualTo, left, expr), new BinaryOperationNode(location, stringToBinaryOperation(expectToken(TokenType.Comparison).Value), expr, parseOr()));
+                        return new BinaryOperationNode(location, BinaryOperation.EqualTo, left, expr);
+                    case "!=":
+                        acceptToken(TokenType.Comparison);
+                        expr = parseComparison();
+                        if (matchToken(TokenType.Comparison))
+                            return new BinaryOperationNode(location, BinaryOperation.LogicalAnd, new BinaryOperationNode(location, BinaryOperation.NotEqualTo, left, expr), new BinaryOperationNode(location, stringToBinaryOperation(expectToken(TokenType.Comparison).Value), expr, parseOr()));
+                        return new BinaryOperationNode(location, BinaryOperation.NotEqualTo, left, expr);
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
+        }
+
+        private AstNode parseComparison()
+        {
+            var location = this.location;
+            AstNode left = parseOr();
+            AstNode expr;
+            while (matchToken(TokenType.Comparison))
+            {
+                switch (tokens[position].Value)
+                {
+                    case ">":
+                        acceptToken(TokenType.Comparison);
+                        expr = parseOr();
+                        if (matchToken(TokenType.Comparison))
+                            return new BinaryOperationNode(location, BinaryOperation.LogicalAnd, new BinaryOperationNode(location, BinaryOperation.GreaterThan, left, expr), new BinaryOperationNode(location, stringToBinaryOperation(expectToken(TokenType.Comparison).Value), expr, parseOr()));
+                        return new BinaryOperationNode(location, BinaryOperation.GreaterThan, left, expr);
+                    case ">=":
+                        acceptToken(TokenType.Comparison);
+                        expr = parseOr();
+                        if (matchToken(TokenType.Comparison))
+                            return new BinaryOperationNode(location, BinaryOperation.LogicalAnd, new BinaryOperationNode(location, BinaryOperation.GreaterThanOrEqual, left, expr), new BinaryOperationNode(location, stringToBinaryOperation(expectToken(TokenType.Comparison).Value), expr, parseOr()));
+                        return new BinaryOperationNode(location, BinaryOperation.GreaterThanOrEqual, left, expr);
+                    case "<":
+                        acceptToken(TokenType.Comparison);
+                        expr = parseOr();
+                        if (matchToken(TokenType.Comparison))
+                            return new BinaryOperationNode(location, BinaryOperation.LogicalAnd, new BinaryOperationNode(location, BinaryOperation.LesserThan, left, expr), new BinaryOperationNode(location, stringToBinaryOperation(expectToken(TokenType.Comparison).Value), expr, parseOr()));
+                        return new BinaryOperationNode(location, BinaryOperation.LesserThan, left, expr);
+                    case "<=":
+                        acceptToken(TokenType.Comparison);
+                        expr = parseOr();
+                        if (matchToken(TokenType.Comparison))
+                            return new BinaryOperationNode(location, BinaryOperation.LogicalAnd, new BinaryOperationNode(location, BinaryOperation.LesserThanOrEqual, left, expr), new BinaryOperationNode(location, stringToBinaryOperation(expectToken(TokenType.Comparison).Value), expr, parseOr()));
+                        return new BinaryOperationNode(location, BinaryOperation.LesserThanOrEqual, left, expr);
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
+        }
+
+        private AstNode parseOr()
+        {
+            var location = this.location;
+            AstNode left = parseXor();
+            while (acceptToken(TokenType.Operation, "|"))
+                left = new BinaryOperationNode(location, BinaryOperation.BitwiseOr, left, parseOr());
+            return left;
+        }
+
+        private AstNode parseXor()
+        {
+            var location = this.location;
+            AstNode left = parseAnd();
+            while (acceptToken(TokenType.Operation, "^"))
+                left = new BinaryOperationNode(location, BinaryOperation.BitwiseXor, left, parseXor());
+            return left;
+        }
+
+        private AstNode parseAnd()
+        {
+            var location = this.location;
+            AstNode left = parseBitshift();
+            while (acceptToken(TokenType.Operation, "&"))
+                left = new BinaryOperationNode(location, BinaryOperation.BitwiseAnd, left, parseAnd());
+            return left;
+        }
+
+        private AstNode parseBitshift()
+        {
+            var location = this.location;
+            AstNode left = parseAdditive();
+            while (matchToken(TokenType.Operation))
+            {
+                switch (tokens[position].Value)
+                {
+                    case "<<":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.BitshiftLeft, left, parseBitshift());
+                    case ">>":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.BitshiftRight, left, parseBitshift());
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
+        }
+
+        private AstNode parseAdditive()
+        {
+            var location = this.location;
+            AstNode left = parseMultiplicative();
+            while (matchToken(TokenType.Operation))
+            {
+                switch (tokens[position].Value)
+                {
+                    case "+":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Addition, left, parseAdditive());
+                    case "-":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Subtraction, left, parseAdditive());
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
+        }
+
+        private AstNode parseMultiplicative()
+        {
+            var location = this.location;
+            AstNode left = parseUnary();
+            while (matchToken(TokenType.Operation))
+            {
+                switch (tokens[position].Value)
+                {
+                    case "*":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Multiplication, left, parseMultiplicative());
+                    case "/":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Division, left, parseMultiplicative());
+                    case "%":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Modulus, left, parseMultiplicative());
+                    case "**":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Power, left, parseMultiplicative());
+                    case "//":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.IntegerDivision, left, parseMultiplicative());
+                    case "??":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.NullCoalescing, left, parseMultiplicative());
+                    case "is":
+                        acceptToken(TokenType.Operation);
+                        return new BinaryOperationNode(location, BinaryOperation.Is, left, parseMultiplicative());
+                    default:
+                        break;
+                }
+                break;
+            }
+            return left;
+        }
+
+        private AstNode parseUnary()
+        {
+            var location = this.location;
+            if (matchToken(TokenType.Operation))
+            {
+                switch (tokens[position].Value)
+                {
+                    case "~":
+                        acceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(location, parseUnary(), UnaryOperation.BitwiseNot);
+                    case "!":
+                        acceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(location, parseUnary(), UnaryOperation.LogicalNot);
+                    case "-":
+                        acceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(location, parseUnary(), UnaryOperation.Negate);
+                    case "--":
+                        acceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(location, parseUnary(), UnaryOperation.PreDecrement);
+                    case "++":
+                        acceptToken(TokenType.Operation);
+                        return new UnaryOperationNode(location, parseUnary(), UnaryOperation.PreIncrement);
+                }
+            }
+            return parseAccess();
+        }
+
+        private AstNode parseAccess()
+        {
+            return parseAccess(parseTerm());
+        }
+        private AstNode parseAccess(AstNode left)
+        {
+            var location = this.location;
+            if (matchToken(TokenType.OpenParentheses))
+                return new FunctionCallNode(location, left, parseArgumentList());
+            else if (acceptToken(TokenType.OpenSquareBrace))
+            {
+                var index = parseExpression();
+                expectToken(TokenType.CloseSquareBrace);
+                return parseAccess(new IterableAccessNode(location, left, index));
+            }
+            else if (acceptToken(TokenType.Operation, "--"))
+                return new UnaryOperationNode(location, left, UnaryOperation.PostIncrement);
+            else if (acceptToken(TokenType.Operation, "++"))
+                return new UnaryOperationNode(location, left, UnaryOperation.PostIncrement);
+            else if (acceptToken(TokenType.Dot))
+                return parseAccess(new AttributeAccessNode(location, left, expectToken(TokenType.Identifier).Value));
+            return left;
         }
 
         private AstNode parseTerm()

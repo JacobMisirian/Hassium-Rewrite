@@ -15,13 +15,16 @@ namespace Hassium.Compiler
         void Accept(ExpressionStatementNode node);
         void Accept(FloatNode node);
         void Accept(FunctionCallNode node);
+        void Accept(FunctionDeclarationNode node);
         void Accept(IdentifierNode node);
         void Accept(IfNode node);
         void Accept(IntegerNode node);
+        void Accept(IterableAccessNode node);
         void Accept(LambdaNode node);
         void Accept(ListDeclarationNode node);
         void Accept(MultipleAssignmentNode node);
         void Accept(StringNode node);
+        void Accept(TernaryOperationNode node);
         void Accept(TupleNode node);
         void Accept(UnaryOperationNode node);
     }

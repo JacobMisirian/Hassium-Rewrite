@@ -48,12 +48,17 @@ namespace Hassium.Compiler.Parser.Ast
         EqualTo,
         GreaterThan,
         GreaterThanOrEqual,
+        IntegerDivision,
+        Is,
         LesserThan,
         LesserThanOrEqual,
         LogicalAnd,
         LogicalOr,
+        Modulus,
         Multiplication,
         NotEqualTo,
+        NullCoalescing,
+        Power,
         Subtraction
     }
 }
