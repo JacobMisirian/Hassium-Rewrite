@@ -2,17 +2,19 @@
 
 namespace Hassium.Compiler.Parser.Ast
 {
-    public class CodeBlockNode : AstNode
+    public class MultipleAssignmentNode : AstNode
     {
         public override SourceLocation SourceLocation { get; }
-        
-        public List<AstNode> Children { get; private set; }
 
-        public CodeBlockNode(SourceLocation location)
+        public List<AstNode> Targets { get; private set; }
+        public AstNode Value { get; private set; }
+
+        public MultipleAssignmentNode(SourceLocation location, List<AstNode> targets, AstNode value)
         {
             SourceLocation = location;
 
-            Children = new List<AstNode>();
+            Targets = targets;
+            Value = value;
         }
 
         public override void Visit(IVisitor visitor)
@@ -21,8 +23,8 @@ namespace Hassium.Compiler.Parser.Ast
         }
         public override void VisitChildren(IVisitor visitor)
         {
-            foreach (var child in Children)
-                child.Visit(visitor);
+            foreach (var target in Targets)
+                target.Visit(visitor);
         }
     }
 }

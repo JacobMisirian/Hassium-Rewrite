@@ -20,7 +20,9 @@ namespace Hassium.Compiler
         void Accept(IntegerNode node);
         void Accept(LambdaNode node);
         void Accept(ListDeclarationNode node);
+        void Accept(MultipleAssignmentNode node);
         void Accept(StringNode node);
+        void Accept(TupleNode node);
         void Accept(UnaryOperationNode node);
     }
 }

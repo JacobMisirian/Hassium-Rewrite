@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\Exceptions\ParserException.cs" />
     <Compile Include="Compiler\Exceptions\ScannerException.cs" />
     <Compile Include="Compiler\IVisitor.cs" />
     <Compile Include="Compiler\Lexer\Scanner.cs" />
@@ -62,8 +63,11 @@
     <Compile Include="Compiler\Parser\Ast\IntegerNode.cs" />
     <Compile Include="Compiler\Parser\Ast\LambdaNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ListDeclarationNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\MultipleAssignmentNode.cs" />
     <Compile Include="Compiler\Parser\Ast\StringNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
+    <Compile Include="Compiler\Parser\Parser.cs" />
     <Compile Include="Compiler\SourceLocation.cs" />
     <Compile Include="Compiler\Lexer\Token.cs" />
     <Compile Include="Compiler\Lexer\TokenType.cs" />
