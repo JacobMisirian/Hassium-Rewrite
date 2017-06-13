@@ -43,7 +43,12 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseStatement()
         {
-            return parseExpressionStatement();
+            if (matchToken(TokenType.Identifier, "func"))
+                return parseFunctionDeclaration();
+            else if (matchToken(TokenType.OpenCurlyBrace))
+                return parseCodeBlockNode();
+            else
+                return parseExpressionStatement();
         }
 
         private ArgumentListNode parseArgumentList()
@@ -57,9 +62,18 @@ namespace Hassium.Compiler.Parser
                 parameters.Add(parseExpression());
                 acceptToken(TokenType.Comma);
             }
-            expectToken(TokenType.CloseParentheses);
 
             return new ArgumentListNode(location, parameters);
+        }
+
+        private CodeBlockNode parseCodeBlockNode()
+        {
+            var location = this.location;
+            expectToken(TokenType.OpenCurlyBrace);
+            var block = new CodeBlockNode(location);
+            while (!acceptToken(TokenType.CloseCurlyBrace))
+                block.Children.Add(parseStatement());
+            return block;
         }
 
         private DictionaryDeclarationNode parseDictionaryDeclaration()
@@ -75,7 +89,6 @@ namespace Hassium.Compiler.Parser
                 values.Add(parseExpression());
                 acceptToken(TokenType.Comma);
             }
-            expectToken(TokenType.CloseCurlyBrace);
 
             return new DictionaryDeclarationNode(location, keys, values);
         }
@@ -134,7 +147,6 @@ namespace Hassium.Compiler.Parser
                 elements.Add(parseExpression());
                 acceptToken(TokenType.Comma);
             }
-            expectToken(TokenType.CloseSquareBrace);
 
             return new ListDeclarationNode(location, elements);
         }
@@ -150,7 +162,6 @@ namespace Hassium.Compiler.Parser
                 elements.Add(parseExpression());
                 acceptToken(TokenType.Comma);
             }
-            expectToken(TokenType.CloseParentheses);
 
             return new TupleNode(location, elements);
         }

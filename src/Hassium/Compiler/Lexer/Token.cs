@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hassium.Compiler.Lexer
+﻿namespace Hassium.Compiler.Lexer
 {
     public class Token
     {
@@ -19,6 +13,11 @@ namespace Hassium.Compiler.Lexer
 
             TokenType = tokenType;
             Value = value;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}\t{1}", TokenType, Value);
         }
     }
 }

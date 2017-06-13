@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\Emit\HassiumCompiler.cs" />
+    <Compile Include="Compiler\Emit\HassiumInstruction.cs" />
+    <Compile Include="Compiler\Emit\Scope.cs" />
+    <Compile Include="Compiler\Emit\SymbolTable.cs" />
     <Compile Include="Compiler\Exceptions\ParserException.cs" />
     <Compile Include="Compiler\Exceptions\ScannerException.cs" />
     <Compile Include="Compiler\IVisitor.cs" />
@@ -77,9 +81,19 @@
     <Compile Include="Compiler\Lexer\TokenType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\HassiumClass.cs" />
+    <Compile Include="Runtime\HassiumMethod.cs" />
+    <Compile Include="Runtime\HassiumModule.cs" />
+    <Compile Include="Runtime\HassiumObject.cs" />
+    <Compile Include="Runtime\HassiumTypeDefinition.cs" />
+    <Compile Include="Runtime\Types\HassiumString.cs" />
+    <Compile Include="Runtime\VirtualMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Runtime\HassiumFunction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
