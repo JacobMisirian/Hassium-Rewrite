@@ -31,7 +31,9 @@ namespace Hassium.Compiler.Emit
 
             ast.Visit(this);
 
-            module.AddAttribute("__global__", classStack.Pop());
+            var globalClass = classStack.Pop();
+            globalClass.AddAttribute("__init__", methodStack.Pop());
+            module.AddAttribute("__global__", globalClass);
             return module;
         }
 

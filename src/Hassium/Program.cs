@@ -9,7 +9,7 @@ using Hassium.Compiler.Exceptions;
 using Hassium.Compiler.Lexer;
 using Hassium.Compiler.Parser;
 using Hassium.Runtime;
-using Hassium.Runtime.Types;
+using Hassium.Runtime.Exceptions;
 
 namespace Hassium
 {
@@ -26,12 +26,19 @@ namespace Hassium
 
                 var module = new HassiumCompiler().Compile(ast);
 
-                foreach (var attribPair in module.Attributes["__global__"].Attributes)
-                {
-                    Console.WriteLine("{0}:", attribPair.Key);
-                    foreach (var instruction in (attribPair.Value as HassiumMethod).Instructions)
-                        Console.WriteLine(instruction);
-                }
+                /*      foreach (var attribPair in module.Attributes["__global__"].Attributes)
+                      {
+                          Console.WriteLine("{0}:", attribPair.Key);
+                          foreach (var instruction in (attribPair.Value as HassiumMethod).Instructions)
+                              Console.WriteLine(instruction);
+                      }*/
+
+                new VirtualMachine().Execute(module, args);
+            }
+            catch (InternalException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
             catch (ParserException ex)
             {

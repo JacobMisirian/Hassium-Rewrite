@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Hassium.Compiler;
 
 namespace Hassium.Runtime.Types
 {
@@ -15,6 +12,13 @@ namespace Hassium.Runtime.Types
         {
             AddType(TypeDefinition);
             String = val;
+
+            AddAttribute(TOSTRING, ToString,   0);
+        }
+
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return this;
         }
     }
 }
