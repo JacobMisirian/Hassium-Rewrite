@@ -9,9 +9,9 @@ namespace Hassium.Runtime.Types
     {
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("int");
 
-        public int Int { get; private set; }
+        public long Int { get; private set; }
 
-        public HassiumInt(int val)
+        public HassiumInt(long val)
         {
             AddType(TypeDefinition);
             Int = val;

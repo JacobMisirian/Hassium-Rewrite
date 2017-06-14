@@ -92,6 +92,7 @@
     <Compile Include="Runtime\StackFrame.cs" />
     <Compile Include="Runtime\Types\HassiumBool.cs" />
     <Compile Include="Runtime\Types\HassiumChar.cs" />
+    <Compile Include="Runtime\Types\HassiumDictionary.cs" />
     <Compile Include="Runtime\Types\HassiumFloat.cs" />
     <Compile Include="Runtime\Types\HassiumInt.cs" />
     <Compile Include="Runtime\Types\HassiumList.cs" />

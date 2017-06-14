@@ -39,23 +39,69 @@ namespace Hassium.Compiler.Emit
 
         public void Accept(ArgumentListNode node)
         {
-
+            node.VisitChildren(this);
         }
         public void Accept(AttributeAccessNode node)
         {
-
+            node.Left.Visit(this);
+            emit(node.SourceLocation, InstructionType.LoadAttribute, handleConstant(node.Right));
         }
         public void Accept(BinaryOperationNode node)
         {
-
+            switch (node.BinaryOperation)
+            {
+                case BinaryOperation.Assignment:
+                    node.Right.Visit(this);
+                    if (node.Left is IdentifierNode)
+                    {
+                        string identifier = ((IdentifierNode)node.Left).Identifier;
+                        if (table.ContainsGlobalSymbol(identifier))
+                        {
+                            emit(node.SourceLocation, InstructionType.StoreGlobalVariable, table.GetGlobalSymbol(identifier));
+                            emit(node.SourceLocation, InstructionType.LoadGlobalVariable, table.GetGlobalSymbol(identifier));
+                        }
+                        else
+                        {
+                            if (!table.ContainsSymbol(identifier))
+                                table.AddSymbol(identifier);
+                            emit(node.SourceLocation, InstructionType.StoreLocal, table.GetSymbol(identifier));
+                            emit(node.SourceLocation, InstructionType.LoadLocal, table.GetSymbol(identifier));
+                        }
+                    }
+                    else if (node.Left is AttributeAccessNode)
+                    {
+                        AttributeAccessNode accessor = node.Left as AttributeAccessNode;
+                        accessor.Left.Visit(this);
+                        if (!module.ConstantPool.ContainsValue(accessor.Right))
+                            module.ConstantPool.Add(accessor.Right.GetHashCode(), accessor.Right);
+                        emit(node.SourceLocation, InstructionType.StoreAttribute, accessor.Right.GetHashCode());
+                        accessor.Left.Visit(this);
+                    }
+                    else if (node.Left is IterableAccessNode)
+                    {
+                        IterableAccessNode access = node.Left as IterableAccessNode;
+                        access.Target.Visit(this);
+                        access.Index.Visit(this);
+                        emit(node.SourceLocation, InstructionType.StoreIterableElement);
+                    }
+                    break;
+                case BinaryOperation.Swap:
+                    emit(node.SourceLocation, InstructionType.Push, table.GetSymbol(((IdentifierNode)node.Left).Identifier));
+                    emit(node.SourceLocation, InstructionType.Swap, table.GetSymbol(((IdentifierNode)node.Right).Identifier));
+                    break;
+                default:
+                    node.VisitChildren(this);
+                    emit(node.SourceLocation, InstructionType.BinaryOperation, (int)node.BinaryOperation);
+                    break;
+            }
         }
         public void Accept(BreakNode node)
         {
-
+            emit(node.SourceLocation, InstructionType.Goto, methodStack.Peek().BreakLabels.Pop());
         }
         public void Accept(CharNode node)
         {
-
+            emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumChar(node.Char)));
         }
         public void Accept(CodeBlockNode node)
         {
@@ -65,11 +111,16 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(ContinueNode node)
         {
-
+            emit(node.SourceLocation, InstructionType.Jump, methodStack.Peek().ContinueLabels.Pop());
         }
         public void Accept(DictionaryDeclarationNode node)
         {
-
+            for (int i = 0; i < node.Keys.Count; i++)
+            {
+                node.Values[i].Visit(this);
+                node.Keys[i].Visit(this);
+            }
+            emit(node.SourceLocation, InstructionType.BuildDictionary, node.Keys.Count);
         }
         public void Accept(ExpressionStatementNode node)
         {
@@ -78,7 +129,7 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(FloatNode node)
         {
-
+            emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumFloat(node.Float)));
         }
         public void Accept(FunctionCallNode node)
         {
@@ -124,7 +175,7 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(IntegerNode node)
         {
-
+            emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumInt(node.Integer)));
         }
         public void Accept(IterableAccessNode node)
         {
@@ -144,7 +195,7 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(StringNode node)
         {
-            emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumString(node.Value)));
+            emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumString(node.String)));
         }
         public void Accept(TernaryOperationNode node)
         {

@@ -4,13 +4,13 @@
     {
         public override SourceLocation SourceLocation { get; }
 
-        public string Value { get; private set; }
+        public string String { get; private set; }
 
         public StringNode(SourceLocation location, string value)
         {
             SourceLocation = location;
 
-            Value = value;
+            String = value;
         }
 
         public override void Visit(IVisitor visitor)

@@ -33,7 +33,8 @@ namespace Hassium.Runtime
 
             var globalClass = module.Attributes["__global__"];
             (globalClass.Attributes["__init__"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
-            (globalClass.Attributes["main"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
+            if (globalClass.Attributes.ContainsKey("main"))
+                (globalClass.Attributes["main"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
         }
 
         public HassiumObject ExecuteMethod(HassiumMethod method)
@@ -56,6 +57,12 @@ namespace Hassium.Runtime
                             right = Stack.Pop();
                             left = Stack.Pop();
                             interpretBinaryOperation(left, right, arg);
+                            break;
+                        case InstructionType.BuildDictionary:
+                            var initials = new Dictionary<HassiumObject, HassiumObject>();
+                            for (int i = 0; i < arg; i++)
+                                initials.Add(Stack.Pop(), Stack.Pop());
+                            Stack.Push(new HassiumDictionary(initials));
                             break;
                         case InstructionType.BuildList:
                             elements = new HassiumObject[arg];
@@ -124,7 +131,7 @@ namespace Hassium.Runtime
                                 else
                                     throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, attrib);
                             }
-                            else
+                            else 
                                 throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, attrib);
                             break;
                         case InstructionType.LoadGlobalVariable:
@@ -137,7 +144,7 @@ namespace Hassium.Runtime
                                 throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, arg);
                             }
                             break;
-                        case InstructionType.LoadListElement:
+                        case InstructionType.LoadIterableElement:
                             list = Stack.Pop();
                             Stack.Push(list.Index(this, CurrentSourceLocation, Stack.Pop()));
                             break;
@@ -187,7 +194,7 @@ namespace Hassium.Runtime
                         case InstructionType.StoreGlobalVariable:
                             CurrentModule.Globals[arg] = Stack.Pop();
                             break;
-                        case InstructionType.StoreListElement:
+                        case InstructionType.StoreIterableElement:
                             Stack.Push(Stack.Pop().StoreIndex(this, CurrentSourceLocation, Stack.Pop(), Stack.Pop()));
                             break;
                         case InstructionType.StoreLocal:

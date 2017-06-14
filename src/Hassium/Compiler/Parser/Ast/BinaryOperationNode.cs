@@ -59,6 +59,7 @@ namespace Hassium.Compiler.Parser.Ast
         NotEqualTo,
         NullCoalescing,
         Power,
-        Subtraction
+        Subtraction,
+        Swap
     }
 }
