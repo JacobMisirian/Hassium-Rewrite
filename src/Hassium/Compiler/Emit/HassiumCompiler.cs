@@ -171,7 +171,16 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(IfNode node)
         {
+            var elseLabel = nextLabel();
+            var endLabel = nextLabel();
 
+            node.Condition.Visit(this);
+            emit(node.Condition.SourceLocation, InstructionType.JumpIfFalse, elseLabel);
+            node.IfBody.Visit(this);
+            emit(node.IfBody.SourceLocation, InstructionType.Jump, endLabel);
+            emitLabel(node.ElseBody.SourceLocation, elseLabel);
+            node.ElseBody.Visit(this);
+            emitLabel(node.ElseBody.SourceLocation, endLabel);
         }
         public void Accept(IntegerNode node)
         {
@@ -179,7 +188,9 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(IterableAccessNode node)
         {
-
+            node.Index.Visit(this);
+            node.Target.Visit(this);
+            emit(node.SourceLocation, InstructionType.LoadIterableElement);
         }
         public void Accept(LambdaNode node)
         {
@@ -187,7 +198,9 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(ListDeclarationNode node)
         {
-
+            foreach (var element in node.Elements)
+                element.Visit(this);
+            emit(node.SourceLocation, InstructionType.BuildList, node.Elements.Count);
         }
         public void Accept(MultipleAssignmentNode node)
         {
@@ -203,11 +216,56 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(TupleNode node)
         {
-
+            foreach (var element in node.Elements)
+                element.Visit(this);
+            emit(node.SourceLocation, InstructionType.BuildList, node.Elements.Count);
         }
         public void Accept(UnaryOperationNode node)
         {
-
+            switch (node.UnaryOperation)
+            {
+                case UnaryOperation.BitwiseNot:
+                    node.Target.Visit(this);
+                    emit(node.SourceLocation, InstructionType.UnaryOperation, (int)UnaryOperation.BitwiseNot);
+                    break;
+                case UnaryOperation.LogicalNot:
+                    node.Target.Visit(this);
+                    emit(node.SourceLocation, InstructionType.UnaryOperation, (int)UnaryOperation.LogicalNot);
+                    break;
+                case UnaryOperation.Negate:
+                    node.Target.Visit(this);
+                    emit(node.SourceLocation, InstructionType.UnaryOperation, (int)UnaryOperation.Negate);
+                    break;
+                case UnaryOperation.PostDecrement:
+                case UnaryOperation.PostIncrement:
+                case UnaryOperation.PreDecrement:
+                case UnaryOperation.PreIncrement:
+                    if (node.Target is IdentifierNode)
+                    {
+                        string identifier = ((IdentifierNode)node.Target).Identifier;
+                        HassiumInstruction loadInstruction, storeInstruction;
+                        if (table.ContainsGlobalSymbol(identifier))
+                        {
+                            loadInstruction = new HassiumInstruction(node.SourceLocation, InstructionType.LoadGlobalVariable, table.GetGlobalSymbol(identifier));
+                            storeInstruction = new HassiumInstruction(node.SourceLocation, InstructionType.StoreGlobalVariable, table.GetGlobalSymbol(identifier));
+                        }
+                        else
+                        {
+                            loadInstruction = new HassiumInstruction(node.SourceLocation, InstructionType.LoadLocal, table.GetSymbol(identifier));
+                            storeInstruction = new HassiumInstruction(node.SourceLocation, InstructionType.StoreLocal, table.GetSymbol(identifier));
+                        }
+                        methodStack.Peek().Instructions.Add(loadInstruction);
+                        if (node.UnaryOperation == UnaryOperation.PostDecrement || node.UnaryOperation == UnaryOperation.PostIncrement)
+                            emit(node.SourceLocation, InstructionType.Duplicate);
+                        emit(node.SourceLocation, InstructionType.Push, 1);
+                        emit(node.SourceLocation, InstructionType.BinaryOperation,
+                            node.UnaryOperation == UnaryOperation.PostIncrement || node.UnaryOperation == UnaryOperation.PreIncrement ? (int)BinaryOperation.Addition : (int)BinaryOperation.Subtraction);
+                        methodStack.Peek().Instructions.Add(storeInstruction);
+                        if (node.UnaryOperation == UnaryOperation.PreDecrement || node.UnaryOperation == UnaryOperation.PreIncrement)
+                            methodStack.Peek().Instructions.Add(loadInstruction);
+                    }
+                    break;
+            }
         }
 
         private void emit(SourceLocation location, InstructionType instructionType, int arg = -1)
@@ -232,6 +290,12 @@ namespace Hassium.Compiler.Emit
             if (!module.ObjectPool.ContainsKey(hashcode))
                 module.ObjectPool.Add(hashcode, obj);
             return hashcode;
+        }
+
+        private int label = 0;
+        private int nextLabel()
+        {
+            return label++;
         }
     }
 }

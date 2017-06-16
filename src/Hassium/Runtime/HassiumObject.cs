@@ -136,16 +136,16 @@ namespace Hassium.Runtime
                 return Attributes[BITSHIFTRIGHT].Invoke(vm, location, args);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, ">>", Type());
         }
-        public virtual HassiumObject EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(EQUALTO))
-                return Attributes[EQUALTO].Invoke(vm, location, args);
+                return Attributes[EQUALTO].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "==", Type());
         }
-        public virtual HassiumObject NotEqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool NotEqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(NOTEQUALTO))
-                return Attributes[NOTEQUALTO].Invoke(vm, location, args);
+                return Attributes[NOTEQUALTO].Invoke(vm, location, args).ToBool(vm, location);  
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "!=", Type());
         }
         public virtual HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
