@@ -194,7 +194,25 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(LambdaNode node)
         {
+            var lambda = new HassiumMethod();
+            methodStack.Push(lambda);
+            lambda.Parent = classStack.Peek();
 
+            table.EnterScope();
+
+            foreach (var param in node.Parameters.Arguments)
+            {
+                string name = ((IdentifierNode)param).Identifier;
+                lambda.Parameters.Add(new FunctionParameter(FunctionParameterType.Normal, name), table.HandleSymbol(name));
+            }
+
+            node.Body.VisitChildren(this);
+
+            table.LeaveScope();
+            methodStack.Pop();
+
+            emit(node.SourceLocation, InstructionType.PushObject, handleObject(lambda));
+            emit(node.SourceLocation, InstructionType.BuildClosure);
         }
         public void Accept(ListDeclarationNode node)
         {

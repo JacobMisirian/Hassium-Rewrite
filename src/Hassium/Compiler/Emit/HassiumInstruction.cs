@@ -54,6 +54,7 @@ namespace Hassium.Compiler.Emit
         LoadGlobalVariable,
         LoadIterableElement,
         LoadLocal,
+        multipleAssignment,
         Pop,
         PopHandler,
         Push,
