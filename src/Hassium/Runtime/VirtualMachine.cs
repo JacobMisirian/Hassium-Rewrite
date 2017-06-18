@@ -244,7 +244,7 @@ namespace Hassium.Runtime
                     Stack.Push(left.BitwiseOr(this, CurrentSourceLocation, right));
                     break;
                 case (int)BinaryOperation.BitwiseXor:
-                    Stack.Push(left.BitwiseXor(this, CurrentSourceLocation, right));
+                    Stack.Push(left.Xor(this, CurrentSourceLocation, right));
                     break;
                 case (int)BinaryOperation.Division:
                     Stack.Push(left.Divide(this, CurrentSourceLocation, right));

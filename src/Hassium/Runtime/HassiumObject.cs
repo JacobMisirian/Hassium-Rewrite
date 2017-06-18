@@ -12,6 +12,7 @@ namespace Hassium.Runtime
         public static HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("object");
 
         public static HassiumNull Null = new HassiumNull();
+        public static HassiumTypeDefinition Number = new HassiumTypeDefinition("number");
 
         public static string INVOKE = "__invoke__";
         public static string ADD = "__add__";
@@ -31,7 +32,6 @@ namespace Hassium.Runtime
         public static string LESSERTHANOREQUAL = "__lesserthanorequal__";
         public static string BITWISEAND = "__bitwiseand__";
         public static string BITWISEOR = "__bitwiseor__";
-        public static string BITWISEXOR = "__bitwisexor__";
         public static string BITWISENOT = "__bitwisenot__";
         public static string LOGICALAND = "__logicaland__";
         public static string LOGICALOR = "__logicalor__";
@@ -50,6 +50,7 @@ namespace Hassium.Runtime
         public static string TOLIST = "toList";
         public static string TOSTRING = "toString";
         public static string TOTUPLE = "toTuple";
+        public static string XOR = "__xor__";
 
         public HassiumClass Parent { get; set; }
 
@@ -148,28 +149,28 @@ namespace Hassium.Runtime
                 return Attributes[NOTEQUALTO].Invoke(vm, location, args).ToBool(vm, location);  
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "!=", Type());
         }
-        public virtual HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(GREATERTHAN))
-                return Attributes[GREATERTHAN].Invoke(vm, location, args);
+                return Attributes[GREATERTHAN].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, ">", Type());
         }
-        public virtual HassiumObject GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(GREATERTHANOREQUAL))
-                return Attributes[GREATERTHANOREQUAL].Invoke(vm, location, args);
+                return Attributes[GREATERTHANOREQUAL].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, ">=", Type());
         }
-        public virtual HassiumObject LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LESSERTHAN))
-                return Attributes[LESSERTHAN].Invoke(vm, location, args);
+                return Attributes[LESSERTHAN].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "<", Type());
         }
-        public virtual HassiumObject LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LESSERTHANOREQUAL))
-                return Attributes[LESSERTHANOREQUAL].Invoke(vm, location, args);
+                return Attributes[LESSERTHANOREQUAL].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "<=", Type());
         }
         public virtual HassiumObject BitwiseAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -184,34 +185,28 @@ namespace Hassium.Runtime
                 return Attributes[BITWISEOR].Invoke(vm, location, args);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "|", Type());
         }
-        public virtual HassiumObject BitwiseXor(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-            if (Attributes.ContainsKey(BITWISEXOR))
-                return Attributes[BITWISEXOR].Invoke(vm, location, args);
-            throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "^", Type());
-        }
         public virtual HassiumObject BitwiseNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(BITWISENOT))
                 return Attributes[BITWISENOT].Invoke(vm, location, args);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "~", Type());
         }
-        public virtual HassiumObject LogicalAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool LogicalAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LOGICALAND))
-                return Attributes[LOGICALAND].Invoke(vm, location, args);
+                return Attributes[LOGICALAND].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "&&", Type());
         }
-        public virtual HassiumObject LogicalOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool LogicalOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LOGICALOR))
-                return Attributes[LOGICALOR].Invoke(vm, location, args);
+                return Attributes[LOGICALOR].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "||", Type());
         }
-        public virtual HassiumObject LogicalNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool LogicalNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LOGICALNOT))
-                return Attributes[LOGICALNOT].Invoke(vm, location, args);
+                return Attributes[LOGICALNOT].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "!", Type());
         }
         public virtual HassiumObject Negate(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -238,10 +233,10 @@ namespace Hassium.Runtime
                 return Attributes[ITER].Invoke(vm, location, args);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "foreach", Type());
         }
-        public virtual HassiumObject IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public virtual HassiumBool IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(ITERABLEFULL))
-                return Attributes[ITERABLEFULL].Invoke(vm, location, args);
+                return Attributes[ITERABLEFULL].Invoke(vm, location, args).ToBool(vm, location);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "foreach", Type());
         }
         public virtual HassiumObject IterableNext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -305,6 +300,13 @@ namespace Hassium.Runtime
             if (Attributes.ContainsKey(INVOKE))
                 return Attributes[INVOKE].Invoke(vm, location, args);
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "()", Type());
+        }
+        
+        public virtual HassiumObject Xor(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            if (Attributes.ContainsKey(XOR))
+                return Attributes[XOR].Invoke(vm, location, args);
+            throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "^", Type());
         }
 
         public object Clone()

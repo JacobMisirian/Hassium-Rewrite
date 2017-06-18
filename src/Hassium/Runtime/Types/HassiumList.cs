@@ -9,6 +9,8 @@ namespace Hassium.Runtime.Types
 {
     public class HassiumList : HassiumObject
     {
+        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("list");
+
         public HassiumList(params HassiumObject[] values)
         {
 

@@ -27,17 +27,17 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(Bool == args[0].ToBool(vm, location).Bool);
         }
 
-        public override HassiumObject LogicalAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool LogicalAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Bool && args[0].ToBool(vm, location).Bool);
         }
 
-        public override HassiumObject LogicalNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool LogicalNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(!Bool);
         }
 
-        public override HassiumObject LogicalOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool LogicalOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Bool || args[0].ToBool(vm, location).Bool);
         }

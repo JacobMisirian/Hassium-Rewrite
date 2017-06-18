@@ -22,7 +22,7 @@ namespace Hassium.Runtime.Exceptions
 
         public InternalException(VirtualMachine vm, SourceLocation location, string messageFormat, params object[] args)
         {
-            Message = string.Format("Internal error at {0}! Message {1}", location, args.Length == 0 ? messageFormat : string.Format(messageFormat, args));
+            Message = string.Format("Error at {0}! Message {1}", location, args.Length == 0 ? messageFormat : string.Format(messageFormat, args));
             SourceLocation = location;
             VM = vm;
         }

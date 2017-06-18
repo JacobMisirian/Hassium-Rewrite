@@ -7,6 +7,8 @@ namespace Hassium.Runtime
 {
     public class HassiumTypeDefinition : HassiumObject
     {
+        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("TypeDefinition");
+
         public string TypeName { get; private set; }
 
         public HassiumTypeDefinition(string type)

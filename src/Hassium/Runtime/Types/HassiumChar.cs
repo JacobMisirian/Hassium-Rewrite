@@ -65,11 +65,6 @@ namespace Hassium.Runtime.Types
             return new HassiumInt(Char | args[0].ToInt(vm, location).Int);
         }
 
-        public override HassiumObject BitwiseXor(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-            return new HassiumChar((char)((byte)Char ^ (byte)args[0].ToChar(vm, location).Char));
-        }
-
         public override HassiumObject Divide(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt(Char / args[0].ToInt(vm, location).Int);
@@ -85,12 +80,12 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(((byte)Char & (1 << (int)args[0].ToInt(vm, location).Int - 1)) != 0);
         }
 
-        public override HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool((int)Char > args[0].ToInt(vm, location).Int);
         }
 
-        public override HassiumObject GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool((int)Char >= args[0].ToInt(vm, location).Int);
         }
@@ -140,12 +135,12 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(char.IsWhiteSpace(Char));
         }
 
-        public override HassiumObject LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool((int)Char < args[0].ToInt(vm, location).Int);
         }
 
-        public override HassiumObject LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumBool LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool((int)Char <= args[0].ToInt(vm, location).Int);
         }
@@ -205,15 +200,19 @@ namespace Hassium.Runtime.Types
             return new HassiumChar(Char.ToLower(Char));
         }
 
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(Char.ToString());
+        }
+
         public HassiumChar toUpper(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumChar(Char.ToUpper(Char));
         }
 
-
-        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumObject Xor(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumString(Char.ToString());
+            return new HassiumChar((char)((byte)Char ^ (byte)args[0].ToChar(vm, location).Char));
         }
     }
 }
