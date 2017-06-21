@@ -49,6 +49,8 @@ namespace Hassium.Compiler.Parser
                 return parseFunctionDeclaration();
             else if (matchToken(TokenType.Identifier, "if"))
                 return parseIf();
+            else if (matchToken(TokenType.Identifier, "return"))
+                return parseReturn();
             else if (matchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else if (matchToken(TokenType.OpenCurlyBrace))
@@ -166,6 +168,15 @@ namespace Hassium.Compiler.Parser
             }
 
             return new ListDeclarationNode(location, elements);
+        }
+
+        private ReturnNode parseReturn()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "return");
+            AstNode value = parseExpression();
+
+            return new ReturnNode(location, value);
         }
 
         private TupleNode parseTuple(AstNode init)

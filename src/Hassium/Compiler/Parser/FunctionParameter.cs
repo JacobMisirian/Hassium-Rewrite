@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Hassium.Runtime;
 
 namespace Hassium.Compiler.Parser
 {
@@ -11,6 +8,8 @@ namespace Hassium.Compiler.Parser
 
         public string Name { get; private set; }
         public AstNode Type { get; private set; }
+
+        public HassiumMethod EnforcedType { get; set; }
 
         public FunctionParameter(FunctionParameterType functionParameterType, string name)
         {

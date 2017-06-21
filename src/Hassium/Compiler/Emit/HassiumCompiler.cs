@@ -171,11 +171,28 @@ namespace Hassium.Compiler.Emit
             table.EnterScope();
 
             foreach (var param in node.Parameters)
+            {
+                if (param.FunctionParameterType == FunctionParameterType.Enforced)
+                {
+                    methodStack.Push(new HassiumMethod());
+                    param.Type.Visit(this);
+                    emit(param.Type.SourceLocation, InstructionType.Return);
+                    param.EnforcedType = methodStack.Pop();
+                }
                 method.Parameters.Add(param, table.AddSymbol(param.Name));
+            }
             if (node.Body is CodeBlockNode)
                 node.Body.VisitChildren(this);
             else
                 node.Body.Visit(this);
+
+            if (node.EnforcedReturnType != null)
+            {
+                methodStack.Push(new HassiumMethod());
+                node.EnforcedReturnType.Visit(this);
+                emit(node.EnforcedReturnType.SourceLocation, InstructionType.Return);
+                method.ReturnType = methodStack.Pop();
+            }
 
             table.LeaveScope();
             classStack.Peek().AddAttribute(method.Name, methodStack.Pop());
@@ -245,6 +262,11 @@ namespace Hassium.Compiler.Emit
         public void Accept(MultipleAssignmentNode node)
         {
 
+        }
+        public void Accept(ReturnNode node)
+        {
+            node.Value.Visit(this);
+            emit(node.SourceLocation, InstructionType.Return);
         }
         public void Accept(StringNode node)
         {

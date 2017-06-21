@@ -22,7 +22,7 @@ namespace Hassium.Runtime
 
         public Dictionary<FunctionParameter, int> Parameters { get; private set; }
         public List<HassiumInstruction> Instructions { get; private set; }
-        public HassiumMethod ReturnType { get; private set; }
+        public HassiumMethod ReturnType { get; set; }
 
         public HassiumMethod()
         {
@@ -79,10 +79,14 @@ namespace Hassium.Runtime
                         break;
                     }
                     if (param.Key.FunctionParameterType == FunctionParameterType.Enforced)
-                        if (!arg.Types.Contains((HassiumTypeDefinition)vm.Globals[param.Key.Name]))
-                            throw new InternalException(vm, location, InternalException.PARAMETER_ERROR, param.Key.Type, arg.Type());
+                    {
+                        var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(param.Key.EnforcedType);
+                        if (!arg.Types.Contains(enforcedType))
+                            throw new InternalException(vm, location, InternalException.PARAMETER_ERROR, enforcedType, arg.Type());
+                    }
                     vm.StackFrame.Add(param.Value, arg);
                 }
+
                 if (IsConstructor)
                 {
                     HassiumClass ret = new HassiumClass();
@@ -98,14 +102,22 @@ namespace Hassium.Runtime
                 }
                 else
                 {
-                    var val = vm.ExecuteMethod(this);
+                    var ret = vm.ExecuteMethod(this);
                     if (Name == "catch")
                     {
                         vm.CallStack.Pop();
-                        return val;
+                        return ret;
                     }
+
+                    if (ReturnType != null)
+                    {
+                        var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(ReturnType);
+                        if (!ret.Types.Contains(enforcedType))
+                            throw new InternalException(vm, vm.CurrentSourceLocation, InternalException.RETURN_ERROR, enforcedType, ret.Type());
+                    }
+
                     if (Name != "lambda") vm.StackFrame.PopFrame();
-                    return val;
+                    return ret;
                 }
             }
             catch (InternalException ex)

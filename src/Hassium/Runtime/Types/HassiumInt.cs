@@ -16,8 +16,8 @@ namespace Hassium.Runtime.Types
 
         public HassiumInt(long val)
         {
-            AddType(TypeDefinition);
             AddType(Number);
+            AddType(TypeDefinition);
             Int = val;
 
             AddAttribute("getBit", getBit, 1);

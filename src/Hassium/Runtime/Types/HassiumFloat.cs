@@ -16,8 +16,8 @@ namespace Hassium.Runtime.Types
 
         public HassiumFloat(double val)
         {
-            AddType(TypeDefinition);
             AddType(Number);
+            AddType(TypeDefinition);
             Float = val;
 
             AddAttribute(TOFLOAT, ToFloat, 0);
