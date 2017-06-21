@@ -43,8 +43,14 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseStatement()
         {
-            if (matchToken(TokenType.Identifier, "func"))
+            if (matchToken(TokenType.Identifier, "do"))
+                return parseDoWhile();
+            else if (matchToken(TokenType.Identifier, "func"))
                 return parseFunctionDeclaration();
+            else if (matchToken(TokenType.Identifier, "if"))
+                return parseIf();
+            else if (matchToken(TokenType.Identifier, "while"))
+                return parseWhile();
             else if (matchToken(TokenType.OpenCurlyBrace))
                 return parseCodeBlockNode();
             else
@@ -91,6 +97,17 @@ namespace Hassium.Compiler.Parser
             }
 
             return new DictionaryDeclarationNode(location, keys, values);
+        }
+
+        private DoWhileNode parseDoWhile()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "do");
+            AstNode body = parseStatement();
+            expectToken(TokenType.Identifier, "while");
+            AstNode condition = parseStatement();
+
+            return new DoWhileNode(location, condition, body);
         }
 
         private FunctionDeclarationNode parseFunctionDeclaration()
@@ -164,6 +181,16 @@ namespace Hassium.Compiler.Parser
             }
 
             return new TupleNode(location, elements);
+        }
+
+        private WhileNode parseWhile()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "while");
+            AstNode condition = parseExpression();
+            AstNode body = parseStatement();
+
+            return new WhileNode(location, condition, body);
         }
 
         private AstNode parseExpressionStatement()

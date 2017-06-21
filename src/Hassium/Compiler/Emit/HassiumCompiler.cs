@@ -122,6 +122,28 @@ namespace Hassium.Compiler.Emit
             }
             emit(node.SourceLocation, InstructionType.BuildDictionary, node.Keys.Count);
         }
+        public void Accept(DoWhileNode node)
+        {
+            var bodyLabel = nextLabel();
+            var endLabel = nextLabel();
+
+            int breakLabelCount = methodStack.Peek().BreakLabels.Count;
+            int continueLabelCount = methodStack.Peek().ContinueLabels.Count;
+
+            methodStack.Peek().BreakLabels.Push(endLabel);
+            methodStack.Peek().ContinueLabels.Push(bodyLabel);
+
+            emitLabel(node.Body.SourceLocation, bodyLabel);
+            node.Body.Visit(this);
+            node.Condition.Visit(this);
+            emit(node.Body.SourceLocation, InstructionType.JumpIfTrue, bodyLabel);
+            emitLabel(node.Condition.SourceLocation, endLabel);
+
+            while (methodStack.Peek().BreakLabels.Count > breakLabelCount)
+                methodStack.Peek().BreakLabels.Pop();
+            while (methodStack.Peek().ContinueLabels.Count > continueLabelCount)
+                methodStack.Peek().ContinueLabels.Pop();
+        }
         public void Accept(ExpressionStatementNode node)
         {
             node.Expression.Visit(this);
@@ -284,6 +306,29 @@ namespace Hassium.Compiler.Emit
                     }
                     break;
             }
+        }
+        public void Accept(WhileNode node)
+        {
+            var bodyLabel = nextLabel();
+            var endLabel = nextLabel();
+
+            int breakLabelCount = methodStack.Peek().BreakLabels.Count;
+            int continueLabelCount = methodStack.Peek().ContinueLabels.Count;
+
+            methodStack.Peek().BreakLabels.Push(endLabel);
+            methodStack.Peek().ContinueLabels.Push(bodyLabel);
+
+            emitLabel(node.Condition.SourceLocation, bodyLabel);
+            node.Condition.Visit(this);
+            emit(node.Condition.SourceLocation, InstructionType.JumpIfFalse, endLabel);
+            node.Body.Visit(this);
+            emit(node.Body.SourceLocation, InstructionType.Jump, bodyLabel);
+            emitLabel(node.Body.SourceLocation, endLabel);
+
+            while (methodStack.Peek().BreakLabels.Count > breakLabelCount)
+                methodStack.Peek().BreakLabels.Pop();
+            while (methodStack.Peek().ContinueLabels.Count > continueLabelCount)
+                methodStack.Peek().ContinueLabels.Pop();
         }
 
         private void emit(SourceLocation location, InstructionType instructionType, int arg = -1)

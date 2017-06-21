@@ -12,6 +12,7 @@ namespace Hassium.Compiler
         void Accept(CodeBlockNode node);
         void Accept(ContinueNode node);
         void Accept(DictionaryDeclarationNode node);
+        void Accept(DoWhileNode node);
         void Accept(ExpressionStatementNode node);
         void Accept(FloatNode node);
         void Accept(FunctionCallNode node);
@@ -27,5 +28,6 @@ namespace Hassium.Compiler
         void Accept(TernaryOperationNode node);
         void Accept(TupleNode node);
         void Accept(UnaryOperationNode node);
+        void Accept(WhileNode node);
     }
 }

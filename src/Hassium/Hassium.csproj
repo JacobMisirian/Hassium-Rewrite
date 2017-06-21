@@ -74,6 +74,7 @@
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\WhileNode.cs" />
     <Compile Include="Compiler\Parser\FunctionParameter.cs" />
     <Compile Include="Compiler\Parser\Parser.cs" />
     <Compile Include="Compiler\SourceLocation.cs" />
