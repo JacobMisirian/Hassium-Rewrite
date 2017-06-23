@@ -43,7 +43,9 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseStatement()
         {
-            if (matchToken(TokenType.Identifier, "do"))
+            if (matchToken(TokenType.Identifier, "class"))
+                return parseClassDeclaration();
+            else if (matchToken(TokenType.Identifier, "do"))
                 return parseDoWhile();
             else if (matchToken(TokenType.Identifier, "func"))
                 return parseFunctionDeclaration();
@@ -72,6 +74,23 @@ namespace Hassium.Compiler.Parser
             }
 
             return new ArgumentListNode(location, parameters);
+        }
+
+        private ClassDeclarationNode parseClassDeclaration()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "class");
+            string name = expectToken(TokenType.Identifier).Value;
+            if (acceptToken(TokenType.Colon))
+            {
+                var inherits = new List<AstNode>();
+                do
+                {
+                    inherits.Add(parseExpression());
+                } while (acceptToken(TokenType.Comma));
+                return new ClassDeclarationNode(location, name, parseStatement(), inherits);
+            }
+            return new ClassDeclarationNode(location, name, parseStatement());
         }
 
         private CodeBlockNode parseCodeBlockNode()

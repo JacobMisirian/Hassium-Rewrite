@@ -32,7 +32,7 @@ namespace Hassium.Runtime
             Labels = new Dictionary<int, int>();
             Parameters = new Dictionary<FunctionParameter, int>();
 
-            AddAttribute(HassiumObject.INVOKE, Invoke);
+            AddAttribute(INVOKE, Invoke);
         }
         public HassiumMethod(string name)
         {
@@ -44,7 +44,7 @@ namespace Hassium.Runtime
             
             Name = name;
 
-            AddAttribute(HassiumObject.INVOKE, Invoke);
+            AddAttribute(INVOKE, Invoke);
         }
 
         public void Emit(SourceLocation location, InstructionType instructionType, int argument = 0)
@@ -89,15 +89,24 @@ namespace Hassium.Runtime
 
                 if (IsConstructor)
                 {
-                    HassiumClass ret = new HassiumClass();
+                    HassiumClass ret = new HassiumClass(Parent.Name);
                     ret.Attributes = CloneDictionary(Parent.Attributes);
+                    
+                    foreach (var inherit in Parent.Inherits)
+                    {
+                        foreach (var attrib in CloneDictionary(vm.ExecuteMethod(inherit).Attributes))
+                        {
+                            attrib.Value.Parent = ret;
+                            ret.Attributes.Add(attrib.Key, attrib.Value);
+                        }
+                    }
+
                     foreach (var type in Parent.Types)
                         ret.AddType(type);
                     foreach (var attrib in ret.Attributes.Values)
                         attrib.Parent = ret;
                     vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);
                     vm.StackFrame.PopFrame();
-                    vm.CallStack.Pop();
                     return ret;
                 }
                 else

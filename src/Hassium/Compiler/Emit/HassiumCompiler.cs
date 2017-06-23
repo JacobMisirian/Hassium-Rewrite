@@ -26,7 +26,7 @@ namespace Hassium.Compiler.Emit
             table = new SymbolTable();
             module = new HassiumModule();
 
-            classStack.Push(new HassiumClass());
+            classStack.Push(new HassiumClass("__global__"));
             methodStack.Push(new HassiumMethod("__init__") { Parent = classStack.Peek() } );
 
             ast.Visit(this);
@@ -102,6 +102,31 @@ namespace Hassium.Compiler.Emit
         public void Accept(CharNode node)
         {
             emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumChar(node.Char)));
+        }
+        public void Accept(ClassDeclarationNode node)
+        {
+            var clazz = new HassiumClass(node.Name);
+            clazz.Parent = classStack.Peek();
+
+            handleConstant(node.Name);
+
+            foreach (var inherit in node.Inherits)
+            {
+                methodStack.Push(new HassiumMethod() { Parent = classStack.Peek() });
+                inherit.Visit(this);
+                emit(inherit.SourceLocation, InstructionType.Return);
+                clazz.Inherits.Add(methodStack.Pop());
+            }
+
+            classStack.Push(clazz);
+            table.EnterScope();
+
+            node.Body.Visit(this);
+
+            table.LeaveScope();
+            handleObject(classStack.Pop());
+
+            classStack.Peek().AddAttribute(node.Name, clazz);
         }
         public void Accept(CodeBlockNode node)
         {

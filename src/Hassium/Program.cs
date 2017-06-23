@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 using Hassium.Compiler.Emit;
 using Hassium.Compiler.Exceptions;
@@ -19,8 +16,7 @@ namespace Hassium
         {
             try
             {
-                string code = Console.ReadLine();
-                var tokens = new Scanner().Scan("stdin", code);
+                var tokens = new Scanner().Scan(args[0], File.ReadAllText(args[0]));
 
                 var ast = new Parser().Parse(tokens);
 

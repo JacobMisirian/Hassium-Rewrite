@@ -56,6 +56,7 @@
     <Compile Include="Compiler\Parser\Ast\BinaryOperationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\BreakNode.cs" />
     <Compile Include="Compiler\Parser\Ast\CharNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ClassDeclarationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\CodeBlockNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ContinueNode.cs" />
     <Compile Include="Compiler\Parser\Ast\DictionaryDeclarationNode.cs" />

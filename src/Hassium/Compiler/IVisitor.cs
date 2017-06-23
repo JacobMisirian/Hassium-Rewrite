@@ -9,6 +9,7 @@ namespace Hassium.Compiler
         void Accept(BinaryOperationNode node);
         void Accept(BreakNode node);
         void Accept(CharNode node);
+        void Accept(ClassDeclarationNode node);
         void Accept(CodeBlockNode node);
         void Accept(ContinueNode node);
         void Accept(DictionaryDeclarationNode node);
