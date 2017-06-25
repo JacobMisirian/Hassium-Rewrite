@@ -58,6 +58,9 @@ namespace Hassium.Runtime
                             left = Stack.Pop();
                             interpretBinaryOperation(left, right, arg);
                             break;
+                        case InstructionType.BuildClosure:
+                            Stack.Push(new HassiumClosure(Stack.Pop() as HassiumMethod, StackFrame.Frames.Peek()));
+                            break;
                         case InstructionType.BuildDictionary:
                             var initials = new Dictionary<HassiumObject, HassiumObject>();
                             for (int i = 0; i < arg; i++)
@@ -90,12 +93,21 @@ namespace Hassium.Runtime
                             var type = Globals[Stack.Pop().ToString(this, CurrentSourceLocation).String].Type();
                             val = Stack.Pop();
                             if (!val.Types.Contains(type))
-                                throw new InternalException(this, CurrentSourceLocation, "Expcted assignment type {0}, got {1}!", type, val.Type());
+                                throw new InternalException(this, CurrentSourceLocation, "Expected assignment type {0}, got {1}!", type, val.Type());
                             if (StackFrame.Contains(arg))
                                 StackFrame.Modify(arg, val);
                             else
                                 StackFrame.Add(arg, val);
                             Stack.Push(val);
+                            break;
+                        case InstructionType.Iter:
+                            Stack.Push(Stack.Pop().Iter(this, CurrentSourceLocation));
+                            break;
+                        case InstructionType.IterableFull:
+                            Stack.Push(Stack.Pop().IterableFull(this, CurrentSourceLocation));
+                            break;
+                        case InstructionType.IterableNext:
+                            Stack.Push(Stack.Pop().IterableNext(this, CurrentSourceLocation));
                             break;
                         case InstructionType.Jump:
                             pos = method.Labels[arg];

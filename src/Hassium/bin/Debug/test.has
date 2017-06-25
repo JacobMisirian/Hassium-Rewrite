@@ -1,34 +1,4 @@
 func main () {
-	one = new Calc (5, 9);
-	two = new Calc (7, 4);
-
-	println (one.add ());
-	println (two.add ());
-	println (two.sub());
-	println (one.sub());
+	
 }
-
-class Calc : CalcTwo {
-	func new (x : number, y : number) {
-		this.x = x;
-		this.y = y;
-	}
-
-	func add () : number {
-		return this.x + this.y;
-	}
-
-	func mul () : number {
-		return this.x * this.y;
-	}
-}
-
-class CalcTwo {
-	func sub () : number {
-		return this.x - this.y;
-	}
-
-	func div () : number { 
-		return this.x / this.y;
-	}
-}
+	

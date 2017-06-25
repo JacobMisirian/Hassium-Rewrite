@@ -13,6 +13,8 @@ namespace Hassium.Runtime
 {
     public class HassiumMethod : HassiumObject
     {
+        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("func");
+
         public Stack<int> BreakLabels { get; private set; }
         public Stack<int> ContinueLabels { get; private set; }
         public Dictionary<int, int> Labels { get; private set; }

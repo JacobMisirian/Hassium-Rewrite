@@ -11,14 +11,32 @@ namespace Hassium.Runtime.Types
     {
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("list");
 
-        public HassiumList(params HassiumObject[] values)
-        {
+        public List<HassiumObject> Values { get; private set; }
 
+        public HassiumList(IEnumerable<HassiumObject> values)
+        {
+            Values = values.ToList();
         }
 
         public HassiumNull add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return HassiumObject.Null;
+        }
+
+        private int iterIndex = 0;
+        public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return this;
+        }
+
+        public override HassiumBool IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(iterIndex >= Values.Count);
+        }
+
+        public override HassiumObject IterableNext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return Values[iterIndex++];
         }
     }
 }

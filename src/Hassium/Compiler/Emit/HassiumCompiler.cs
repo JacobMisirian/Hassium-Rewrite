@@ -178,6 +178,33 @@ namespace Hassium.Compiler.Emit
         {
             emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumFloat(node.Float)));
         }
+        public void Accept(ForeachNode node)
+        {
+            var bodyLabel = nextLabel();
+            var endLabel = nextLabel();
+
+            int breakLabelCount = methodStack.Peek().BreakLabels.Count;
+            int continueLabelCount = methodStack.Peek().ContinueLabels.Count;
+
+            methodStack.Peek().BreakLabels.Push(endLabel);
+            methodStack.Peek().ContinueLabels.Push(bodyLabel);
+
+            var tmp = table.HandleSymbol(nextLabel().ToString());
+            node.Expression.Visit(this);
+            emit(node.SourceLocation, InstructionType.Iter);
+            emit(node.SourceLocation, InstructionType.StoreLocal, tmp);
+            emitLabel(node.SourceLocation, bodyLabel);
+            emit(node.SourceLocation, InstructionType.LoadLocal, tmp);
+            emit(node.SourceLocation, InstructionType.IterableFull);
+            emit(node.SourceLocation, InstructionType.JumpIfTrue, endLabel);
+            emit(node.SourceLocation, InstructionType.IterableNext);
+            emit(node.SourceLocation, InstructionType.StoreLocal, table.HandleSymbol(node.Variable));
+            node.Body.Visit(this);
+            emit(node.SourceLocation, InstructionType.Jump, bodyLabel);
+            emitLabel(node.SourceLocation, endLabel);
+
+            restoreLabels(breakLabelCount, continueLabelCount);
+        }
         public void Accept(FunctionCallNode node)
         {
             foreach (var param in node.Parameters.Arguments)
@@ -372,10 +399,7 @@ namespace Hassium.Compiler.Emit
             emit(node.Body.SourceLocation, InstructionType.Jump, bodyLabel);
             emitLabel(node.Body.SourceLocation, endLabel);
 
-            while (methodStack.Peek().BreakLabels.Count > breakLabelCount)
-                methodStack.Peek().BreakLabels.Pop();
-            while (methodStack.Peek().ContinueLabels.Count > continueLabelCount)
-                methodStack.Peek().ContinueLabels.Pop();
+            restoreLabels(breakLabelCount, continueLabelCount);
         }
 
         private void emit(SourceLocation location, InstructionType instructionType, int arg = -1)
@@ -406,6 +430,14 @@ namespace Hassium.Compiler.Emit
         private int nextLabel()
         {
             return label++;
+        }
+
+        private void restoreLabels(int breakLabelCount, int continueLabelCount)
+        {
+            while (methodStack.Peek().BreakLabels.Count > breakLabelCount)
+                methodStack.Peek().BreakLabels.Pop();
+            while (methodStack.Peek().ContinueLabels.Count > continueLabelCount)
+                methodStack.Peek().ContinueLabels.Pop();
         }
     }
 }

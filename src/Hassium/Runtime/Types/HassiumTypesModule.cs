@@ -11,14 +11,15 @@ namespace Hassium.Runtime.Types
         {
             AddAttribute("bool", HassiumBool.TypeDefinition);
             AddAttribute("char", HassiumChar.TypeDefinition);
+            AddAttribute("closure", HassiumClosure.TypeDefinition);
             AddAttribute("dictionary", HassiumDictionary.TypeDefinition);
             AddAttribute("float", HassiumFloat.TypeDefinition);
             AddAttribute("func", HassiumFunction.TypeDefinition);
             AddAttribute("int", HassiumInt.TypeDefinition);
             AddAttribute("list", HassiumList.TypeDefinition);
-            AddAttribute("null", HassiumObject.Null);
-            AddAttribute("number", HassiumObject.Number);
-            AddAttribute("object", HassiumObject.TypeDefinition);
+            AddAttribute("null", Null);
+            AddAttribute("number", Number);
+            AddAttribute("object", TypeDefinition);
             AddAttribute("string", HassiumString.TypeDefinition);
             AddAttribute("tuple", HassiumTuple.TypeDefinition);
             AddAttribute("TypeDefinition", HassiumTypeDefinition.TypeDefinition);

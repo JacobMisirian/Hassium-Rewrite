@@ -63,6 +63,7 @@
     <Compile Include="Compiler\Parser\Ast\DoWhileNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ExpressionStatementNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FloatNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ForeachNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FunctionCallNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FunctionDeclarationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\IdentifierNode.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Runtime\StackFrame.cs" />
     <Compile Include="Runtime\Types\HassiumBool.cs" />
     <Compile Include="Runtime\Types\HassiumChar.cs" />
+    <Compile Include="Runtime\Types\HassiumClosure.cs" />
     <Compile Include="Runtime\Types\HassiumDictionary.cs" />
     <Compile Include="Runtime\Types\HassiumFloat.cs" />
     <Compile Include="Runtime\Types\HassiumInt.cs" />
