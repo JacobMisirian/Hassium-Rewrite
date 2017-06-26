@@ -20,9 +20,12 @@ namespace Hassium.Runtime.Types
 
         public HassiumNull add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return HassiumObject.Null;
-        }
+            foreach (var arg in args)
+                Values.Add(arg);
 
+            return Null;
+        }
+        
         private int iterIndex = 0;
         public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {

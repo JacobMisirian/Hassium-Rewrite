@@ -141,6 +141,7 @@ namespace Hassium.Compiler.Parser
             string variable = expectToken(TokenType.Identifier).Value;
             expectToken(TokenType.Identifier, "in");
             AstNode expression = parseExpression();
+            expectToken(TokenType.CloseParentheses);
             AstNode body = parseStatement();
 
             return new ForeachNode(location, variable, expression, body);

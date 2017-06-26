@@ -1,4 +1,4 @@
 func main () {
-	
+	foreach (c in "hello world")
+		println (c);
 }
-	

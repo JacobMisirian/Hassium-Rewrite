@@ -189,6 +189,7 @@ namespace Hassium.Compiler.Emit
             methodStack.Peek().BreakLabels.Push(endLabel);
             methodStack.Peek().ContinueLabels.Push(bodyLabel);
 
+            table.EnterScope();
             var tmp = table.HandleSymbol(nextLabel().ToString());
             node.Expression.Visit(this);
             emit(node.SourceLocation, InstructionType.Iter);
@@ -197,11 +198,16 @@ namespace Hassium.Compiler.Emit
             emit(node.SourceLocation, InstructionType.LoadLocal, tmp);
             emit(node.SourceLocation, InstructionType.IterableFull);
             emit(node.SourceLocation, InstructionType.JumpIfTrue, endLabel);
+            emit(node.SourceLocation, InstructionType.LoadLocal, tmp);
             emit(node.SourceLocation, InstructionType.IterableNext);
             emit(node.SourceLocation, InstructionType.StoreLocal, table.HandleSymbol(node.Variable));
-            node.Body.Visit(this);
+            if (node.Body is CodeBlockNode)
+                node.Body.VisitChildren(this);
+            else
+                node.Body.Visit(this);
             emit(node.SourceLocation, InstructionType.Jump, bodyLabel);
             emitLabel(node.SourceLocation, endLabel);
+            table.LeaveScope();
 
             restoreLabels(breakLabelCount, continueLabelCount);
         }
