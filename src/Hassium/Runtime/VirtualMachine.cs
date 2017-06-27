@@ -21,6 +21,7 @@ namespace Hassium.Runtime
         public Stack<HassiumObject> Stack { get; set; }
         public StackFrame StackFrame { get; set; }
 
+        public StackFrame.Frame GlobalFrame { get; set;  }
 
         public void Execute(HassiumModule module, string[] args, StackFrame.Frame frame = null)
         {
@@ -33,6 +34,7 @@ namespace Hassium.Runtime
 
             var globalClass = module.Attributes["__global__"];
             (globalClass.Attributes["__init__"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
+            GlobalFrame = StackFrame.PopFrame();
             if (globalClass.Attributes.ContainsKey("main"))
                 (globalClass.Attributes["main"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
         }
@@ -161,7 +163,10 @@ namespace Hassium.Runtime
                             Stack.Push(list.Index(this, CurrentSourceLocation, Stack.Pop()));
                             break;
                         case InstructionType.LoadLocal:
-                            Stack.Push(StackFrame.GetVariable(CurrentSourceLocation, this, arg));
+                            if (StackFrame.Contains(arg))
+                                Stack.Push(StackFrame.GetVariable(CurrentSourceLocation, this, arg));
+                            else
+                                Stack.Push(GlobalFrame.GetVariable(arg));
                             break;
                         case InstructionType.Pop:
                             Stack.Pop();

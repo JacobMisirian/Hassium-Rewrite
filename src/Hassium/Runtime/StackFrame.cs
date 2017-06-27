@@ -43,9 +43,9 @@ namespace Hassium.Runtime
         {
             Frames.Push(new Frame());
         }
-        public void PopFrame()
+        public Frame PopFrame()
         {
-            Frames.Pop();
+            return Frames.Pop();
         }
         public void Add(int index, HassiumObject value = null)
         {

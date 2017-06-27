@@ -127,7 +127,7 @@ namespace Hassium.Runtime
                             throw new InternalException(vm, vm.CurrentSourceLocation, InternalException.RETURN_ERROR, enforcedType, ret.Type());
                     }
 
-                    if (Name != "lambda") vm.StackFrame.PopFrame();
+                    if (Name != "lambda" && Name != "__init__") vm.StackFrame.PopFrame();
                     return ret;
                 }
             }
