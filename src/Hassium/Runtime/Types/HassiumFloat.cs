@@ -20,6 +20,19 @@ namespace Hassium.Runtime.Types
             AddType(TypeDefinition);
             Float = val;
 
+            AddAttribute(ADD, Add, 1);
+            AddAttribute(DIVIDE, Divide, 1);
+            AddAttribute(EQUALTO, EqualTo, 1);
+            AddAttribute(GREATERTHAN, GreaterThan, 1);
+            AddAttribute(GREATERTHANOREQUAL, GreaterThanOrEqual, 1);
+            AddAttribute(INTEGERDIVISION, IntegerDivision, 1);
+            AddAttribute(LESSERTHAN, LesserThan, 1);
+            AddAttribute(LESSERTHANOREQUAL, LesserThanOrEqual, 1);
+            AddAttribute(MULTIPLY, Multiply, 1);
+            AddAttribute(NEGATE, Negate, 0);
+            AddAttribute(NOTEQUALTO, NotEqualTo, 1);
+            AddAttribute(POWER, Power, 1);
+            AddAttribute(SUBTRACT, Subtract, 1);
             AddAttribute(TOFLOAT, ToFloat, 0);
             AddAttribute(TOINT, ToInt, 0);
             AddAttribute(TOSTRING, ToString, 0);

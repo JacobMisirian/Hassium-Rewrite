@@ -12,6 +12,9 @@ namespace Hassium.Runtime.Types
         {
             AddType(TypeDefinition);
             Elements = val;
+
+            AddAttribute(INDEX, Index, 1);
+            AddAttribute(ITER, Iter, 0);
         }
 
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

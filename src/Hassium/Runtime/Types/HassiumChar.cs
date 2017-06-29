@@ -17,7 +17,18 @@ namespace Hassium.Runtime.Types
             AddType(TypeDefinition);
             Char = val;
 
+            AddAttribute(ADD, Add, 1);
+            AddAttribute(BITSHIFTLEFT, BitshiftLeft, 1);
+            AddAttribute(BITSHIFTRIGHT, BitshiftRight, 1);
+            AddAttribute(BITWISEAND, BitwiseAnd, 1);
+            AddAttribute(BITWISENOT, BitwiseNot, 0);
+            AddAttribute(BITWISEOR, BitwiseOr, 1);
+            AddAttribute(DIVIDE, Divide, 1);
+            AddAttribute(EQUALTO, EqualTo, 1);
             AddAttribute("getBit", getBit, 1);
+            AddAttribute(GREATERTHAN, GreaterThan, 1);
+            AddAttribute(GREATERTHANOREQUAL, GreaterThanOrEqual, 1);
+            AddAttribute(INTEGERDIVISION, IntegerDivision, 1);
             AddAttribute("isControl", isControl, 0);
             AddAttribute("isDigit", isDigit, 0);
             AddAttribute("isLetter", isLetter, 0);
@@ -26,13 +37,20 @@ namespace Hassium.Runtime.Types
             AddAttribute("isSymbol", isSymbol, 0);
             AddAttribute("isUpper", isUpper, 0);
             AddAttribute("isWhiteSpace", isWhiteSpace, 0);
+            AddAttribute(LESSERTHAN, LesserThan, 1);
+            AddAttribute(LESSERTHANOREQUAL, LesserThanOrEqual, 1);
+            AddAttribute(MODULUS, Modulus, 1);
+            AddAttribute(MULTIPLY, Multiply, 1);
+            AddAttribute(NOTEQUALTO, NotEqualTo, 1);
             AddAttribute("setBit", setBit, 2);
+            AddAttribute(SUBTRACT, Subtract, 1);
             AddAttribute(TOCHAR, ToChar, 0);
             AddAttribute(TOFLOAT, ToFloat, 0);
             AddAttribute(TOINT, ToInt, 0);
             AddAttribute("toLower", toLower, 0);
             AddAttribute(TOSTRING, ToString, 0);
             AddAttribute("toUpper", toUpper, 0);
+            AddAttribute(XOR, Xor, 1);
         }
 
         public override HassiumObject Add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

@@ -20,11 +20,30 @@ namespace Hassium.Runtime.Types
             AddType(TypeDefinition);
             Int = val;
 
+            AddAttribute(ADD, Add, 1);
+            AddAttribute(BITSHIFTLEFT, BitshiftLeft, 1);
+            AddAttribute(BITSHIFTRIGHT, BitshiftRight, 1);
+            AddAttribute(BITWISEAND, BitwiseAnd, 1);
+            AddAttribute(BITWISENOT, BitwiseNot, 0);
+            AddAttribute(BITWISEOR, BitwiseOr, 1);
+            AddAttribute(DIVIDE, Divide, 1);
+            AddAttribute(EQUALTO, EqualTo, 1);
             AddAttribute("getBit", getBit, 1);
+            AddAttribute(GREATERTHAN, GreaterThan, 1);
+            AddAttribute(GREATERTHANOREQUAL, GreaterThanOrEqual, 1);
+            AddAttribute(INTEGERDIVISION, IntegerDivision, 1);
+            AddAttribute(LESSERTHAN, LesserThan, 1);
+            AddAttribute(LESSERTHANOREQUAL, LesserThanOrEqual, 1);
+            AddAttribute(MULTIPLY, Multiply, 1);
+            AddAttribute(NEGATE, Negate, 0);
+            AddAttribute(NOTEQUALTO, NotEqualTo, 1);
+            AddAttribute(POWER, Power, 1);
             AddAttribute("setBit", setBit, 2);
-            AddAttribute(TOFLOAT, ToFloat);
-            AddAttribute(TOINT, ToInt);
-            AddAttribute(TOSTRING, ToString);
+            AddAttribute(SUBTRACT, Subtract, 1);
+            AddAttribute(TOFLOAT, ToFloat, 0);
+            AddAttribute(TOINT, ToInt, 0);
+            AddAttribute(TOSTRING, ToString, 0);
+            AddAttribute(XOR, Xor, 1);
         }
 
         public override HassiumObject Add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -46,6 +65,21 @@ namespace Hassium.Runtime.Types
         public override HassiumObject BitshiftRight(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt((int)Int >> (int)args[0].ToInt(vm, location).Int);
+        }
+
+        public override HassiumObject BitwiseAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(Int & args[0].ToInt(vm, location).Int);
+        }
+
+        public override HassiumObject BitwiseNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(~Int);
+        }
+
+        public override HassiumObject BitwiseOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(Int | args[0].ToInt(vm, location).Int);
         }
 
         public override HassiumObject Divide(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

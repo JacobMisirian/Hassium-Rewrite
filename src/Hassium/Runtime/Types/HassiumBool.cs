@@ -17,6 +17,11 @@ namespace Hassium.Runtime.Types
             AddType(TypeDefinition);
             Bool = val;
 
+            AddAttribute(EQUALTO, EqualTo, 1);
+            AddAttribute(LOGICALAND, LogicalAnd, 1);
+            AddAttribute(LOGICALNOT, LogicalNot, 0);
+            AddAttribute(LOGICALOR, LogicalOr, 1);
+            AddAttribute(NOTEQUALTO, NotEqualTo, 1);
             AddAttribute(TOBOOL, ToBool, 0);
             AddAttribute(TOINT, ToInt, 0);
             AddAttribute(TOSTRING, ToString, 0);

@@ -17,6 +17,12 @@ namespace Hassium.Runtime.Types
         {
             AddType(TypeDefinition);
             Values = values.ToList();
+
+            AddAttribute("add", add, -1);
+            AddAttribute("contains", contains, 1);
+            AddAttribute(ITER, Iter, 0);
+            AddAttribute(ITERABLEFULL, IterableFull, 0);
+            AddAttribute(ITERABLENEXT, IterableNext, 0);
         }
 
         public HassiumNull add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

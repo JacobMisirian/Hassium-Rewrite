@@ -10,10 +10,32 @@ namespace Hassium.Runtime
     {
         public static Dictionary<string, HassiumObject> Functions = new Dictionary<string, HassiumObject>()
         {
+            { "format",        new HassiumFunction(format,         -1) },
+            { "print",         new HassiumFunction(print,          -1) },
             { "println",       new HassiumFunction(println,        -1) },
             { "type",          new HassiumFunction(type,            1) },
             { "types",         new HassiumFunction(types,           1) }
         };
+
+        public static HassiumString format(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            if (args.Length <= 0)
+                return new HassiumString(string.Empty);
+            if (args.Length == 1)
+                return args[0].ToString(vm, location);
+
+            string[] fargs = new string[args.Length];
+            for (int i = 1; i < args.Length; i++)
+                fargs[i] = args[i].ToString(vm, location).String;
+            return new HassiumString(string.Format(args[0].ToString(vm, location).String, fargs));
+        }
+
+        public static HassiumNull print(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            foreach (var arg in args)
+                Console.Write(arg);
+            return HassiumObject.Null;
+        }
 
         public static HassiumNull println(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
