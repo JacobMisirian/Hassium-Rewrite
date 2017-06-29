@@ -21,5 +21,13 @@ namespace Hassium.Runtime.Types
             foreach (var pair in initial)
                 Dictionary.Add(pair.Key, pair.Value);
         }
+
+        public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+            foreach (var pair in Dictionary)
+                list.add(vm, location, new HassiumTuple(pair.Key, pair.Value));
+            return list;
+        }
     }
 }

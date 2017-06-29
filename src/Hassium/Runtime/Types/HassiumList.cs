@@ -15,6 +15,7 @@ namespace Hassium.Runtime.Types
 
         public HassiumList(IEnumerable<HassiumObject> values)
         {
+            AddType(TypeDefinition);
             Values = values.ToList();
         }
 

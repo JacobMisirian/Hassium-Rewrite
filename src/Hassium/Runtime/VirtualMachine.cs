@@ -77,7 +77,7 @@ namespace Hassium.Runtime
                             break;
                         case InstructionType.BuildTuple:
                             HassiumObject[] tupleElements = new HassiumObject[arg];
-                            for (int i = 0; i < arg; i++)
+                            for (int i = arg - 1; i >= 0; i--)
                                 tupleElements[i] = Stack.Pop();
                             Stack.Push(new HassiumTuple(tupleElements));
                             break;

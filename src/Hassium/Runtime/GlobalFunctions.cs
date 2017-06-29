@@ -12,7 +12,8 @@ namespace Hassium.Runtime
     {
         public static Dictionary<string, HassiumObject> Functions = new Dictionary<string, HassiumObject>()
         {
-             { "println",        new HassiumFunction(println,       -1) }
+            { "println",       new HassiumFunction(println,        -1) },
+            { "type",          new HassiumFunction(type,            1) }
         };
 
         public static HassiumNull println(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -20,6 +21,11 @@ namespace Hassium.Runtime
             foreach (var arg in args)
                 Console.WriteLine(arg.ToString(vm, location).String);
             return HassiumObject.Null;
+        }
+
+        public static HassiumTypeDefinition type(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return args[0].Type();
         }
     }
 }

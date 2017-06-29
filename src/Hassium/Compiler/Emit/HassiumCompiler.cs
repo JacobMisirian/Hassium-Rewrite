@@ -364,7 +364,7 @@ namespace Hassium.Compiler.Emit
         {
             foreach (var element in node.Elements)
                 element.Visit(this);
-            emit(node.SourceLocation, InstructionType.BuildList, node.Elements.Count);
+            emit(node.SourceLocation, InstructionType.BuildTuple, node.Elements.Count);
         }
         public void Accept(UnaryOperationNode node)
         {
