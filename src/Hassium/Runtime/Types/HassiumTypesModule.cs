@@ -15,11 +15,13 @@ namespace Hassium.Runtime.Types
             AddAttribute("dictionary", HassiumDictionary.TypeDefinition);
             AddAttribute("float", HassiumFloat.TypeDefinition);
             AddAttribute("func", HassiumFunction.TypeDefinition);
+            AddAttribute("IndexOutOfRangeException", HassiumIndexOutOfRangeException.TypeDefinition);
             AddAttribute("int", HassiumInt.TypeDefinition);
             AddAttribute("list", HassiumList.TypeDefinition);
             AddAttribute("null", Null);
             AddAttribute("number", Number);
             AddAttribute("object", TypeDefinition);
+            AddAttribute("property", HassiumProperty.TypeDefinition);
             AddAttribute("string", HassiumString.TypeDefinition);
             AddAttribute("tuple", HassiumTuple.TypeDefinition);
             AddAttribute("TypeDefinition", HassiumTypeDefinition.TypeDefinition);

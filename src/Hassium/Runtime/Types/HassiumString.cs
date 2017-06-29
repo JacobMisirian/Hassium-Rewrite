@@ -18,6 +18,11 @@ namespace Hassium.Runtime.Types
             AddAttribute(TOSTRING, ToString,   0);
         }
 
+        public override HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(String == args[0].ToString(vm, location).String);
+        }
+
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumChar(String[(int)args[0].ToInt(vm, location).Int]);

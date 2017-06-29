@@ -42,7 +42,7 @@ namespace Hassium.Runtime.Types
             if (Dictionary.ContainsKey(args[0]))
                 return Dictionary[args[0]];
             foreach (var key in Dictionary.Keys)
-                if (key == args[0] || key.EqualTo(vm, location, args[0]).Bool)
+                if (key.EqualTo(vm, location, args[0]).Bool)
                     return Dictionary[key];
             throw new InternalException(vm, location, InternalException.KEY_NOT_FOUND_ERROR, args[0]);
         }

@@ -93,13 +93,17 @@ namespace Hassium.Runtime
                 {
                     HassiumClass ret = new HassiumClass(Parent.Name);
                     ret.Attributes = CloneDictionary(Parent.Attributes);
+                    ret.AddType(Parent.TypeDefinition);
                     
                     foreach (var inherit in Parent.Inherits)
                     {
                         foreach (var attrib in CloneDictionary(vm.ExecuteMethod(inherit).Attributes))
                         {
-                            attrib.Value.Parent = ret;
-                            ret.Attributes.Add(attrib.Key, attrib.Value);
+                            if (!ret.Attributes.ContainsKey(attrib.Key))
+                            {
+                                attrib.Value.Parent = ret;
+                                ret.Attributes.Add(attrib.Key, attrib.Value);
+                            }
                         }
                     }
 

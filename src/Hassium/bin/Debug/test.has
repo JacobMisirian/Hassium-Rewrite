@@ -1,3 +1,9 @@
 func main () {
+	d = { "US" : "America", "DE" : "Germany" }
 
+	println (d ["US"]);
+
+	d ["RO"] = "Romania";
+
+	println (d ["RO"]);
 }

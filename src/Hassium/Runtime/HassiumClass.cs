@@ -30,6 +30,21 @@ namespace Hassium.Runtime
                 return Attributes["new"].Invoke(vm, location, args);
             else if (Attributes.ContainsKey(INVOKE))
                 return Attributes[INVOKE].Invoke(vm, location, args);
+            else
+            {
+                foreach (var inherit in Inherits)
+                {
+                    foreach (var attrib in HassiumMethod.CloneDictionary(vm.ExecuteMethod(inherit).Attributes))
+                    {
+                        if (!Attributes.ContainsKey(attrib.Key))
+                        {
+                            attrib.Value.Parent = this;
+                            Attributes.Add(attrib.Key, attrib.Value);
+                        }
+                    }
+                }
+                return Invoke(vm, location, args);
+            }
             throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "()", TypeDefinition);
         }
     }

@@ -33,7 +33,7 @@ namespace Hassium.Runtime
         public static HassiumNull print(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var arg in args)
-                Console.Write(arg);
+                Console.Write(arg.ToString(vm, location).String);
             return HassiumObject.Null;
         }
 

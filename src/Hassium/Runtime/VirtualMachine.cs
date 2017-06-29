@@ -17,7 +17,9 @@ namespace Hassium.Runtime
         public HassiumMethod CurrentMethod { get; private set; }
         public HassiumModule CurrentModule { get; private set; }
         public SourceLocation CurrentSourceLocation { get; private set; }
+        public Dictionary<HassiumMethod, int> ExceptionReturns { get; set; }
         public Dictionary<string, HassiumObject> Globals { get; private set; }
+        public Stack<HassiumExceptionHandler> Handlers { get; set; }
         public Stack<HassiumObject> Stack { get; set; }
         public StackFrame StackFrame { get; set; }
 
@@ -37,6 +39,7 @@ namespace Hassium.Runtime
             GlobalFrame = StackFrame.Frames.Peek();
             if (globalClass.Attributes.ContainsKey("main"))
                 (globalClass.Attributes["main"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
+
         }
 
         public HassiumObject ExecuteMethod(HassiumMethod method)
@@ -50,7 +53,7 @@ namespace Hassium.Runtime
 
                 int arg = method.Instructions[pos].Arg;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
-                //Console.WriteLine(method.Instructions[pos].ToString());
+                //Console.WriteLine(method.Instructions[pos].ToString() + "\t"  + method.Name);
                 try
                 {
                     switch (method.Instructions[pos].InstructionType)
@@ -115,8 +118,8 @@ namespace Hassium.Runtime
                             pos = method.Labels[arg];
                             break;
                         case InstructionType.JumpIfFalse:
-                            if (!Stack.Pop().ToBool(this, CurrentSourceLocation).Bool)
-                                pos = method.Labels[arg];
+                        if (!Stack.Pop().ToBool(this, CurrentSourceLocation).Bool)
+                            pos = method.Labels[arg];
                             break;
                         case InstructionType.JumpIfTrue:
                             if (Stack.Pop().ToBool(this, CurrentSourceLocation).Bool)
@@ -331,6 +334,20 @@ namespace Hassium.Runtime
                     Stack.Push(target.Negate(this, CurrentSourceLocation));
                     break;
             }
+        }
+
+        public void RaiseException(HassiumObject message, ref int pos)
+        {
+            if (Handlers.Count == 0)
+                throw new InternalException(this, CurrentSourceLocation, message.ToString(this, CurrentSourceLocation).String);
+            var handler = Handlers.Peek();
+            handler.Invoke(this, CurrentSourceLocation, message);
+            ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);
+        }
+
+        public void RaiseException(HassiumObject message)
+        {
+
         }
 
         private void importGlobals()

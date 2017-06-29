@@ -80,8 +80,8 @@ namespace Hassium.Compiler.Emit
                     else if (node.Left is IterableAccessNode)
                     {
                         IterableAccessNode access = node.Left as IterableAccessNode;
-                        access.Target.Visit(this);
                         access.Index.Visit(this);
+                        access.Target.Visit(this);
                         emit(node.SourceLocation, InstructionType.StoreIterableElement);
                     }
                     break;

@@ -100,10 +100,13 @@
     <Compile Include="Runtime\Types\HassiumChar.cs" />
     <Compile Include="Runtime\Types\HassiumClosure.cs" />
     <Compile Include="Runtime\Types\HassiumDictionary.cs" />
+    <Compile Include="Runtime\Types\HassiumExceptionHandler.cs" />
     <Compile Include="Runtime\Types\HassiumFloat.cs" />
+    <Compile Include="Runtime\Types\HassiumIndexOutOfRangeException.cs" />
     <Compile Include="Runtime\Types\HassiumInt.cs" />
     <Compile Include="Runtime\Types\HassiumList.cs" />
     <Compile Include="Runtime\Types\HassiumNull.cs" />
+    <Compile Include="Runtime\Types\HassiumProperty.cs" />
     <Compile Include="Runtime\Types\HassiumString.cs" />
     <Compile Include="Runtime\Types\HassiumTuple.cs" />
     <Compile Include="Runtime\Types\HassiumTypesModule.cs" />

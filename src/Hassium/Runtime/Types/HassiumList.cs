@@ -40,7 +40,18 @@ namespace Hassium.Runtime.Types
                     return new HassiumBool(true);
             return new HassiumBool(false);
         }
-        
+
+        public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            var index = args[0].ToInt(vm, location);
+            if (index.Int < 0 || index.Int >= Values.Count)
+            {
+                vm.RaiseException(new HassiumIndexOutOfRangeException(this, index));
+                return Null;
+            }
+            return Values[(int)index.Int];
+        }
+
         private int iterIndex = 0;
         public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
@@ -55,6 +66,18 @@ namespace Hassium.Runtime.Types
         public override HassiumObject IterableNext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Values[iterIndex++];
+        }
+
+        public override HassiumObject StoreIndex(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            var index = args[0].ToInt(vm, location);
+            if (index.Int < 0 || index.Int >= Values.Count)
+            {
+                vm.RaiseException(new HassiumIndexOutOfRangeException(this, index));
+                return Null;
+            }
+            Values[(int)index.Int] = args[1];
+            return args[1];
         }
     }
 }
