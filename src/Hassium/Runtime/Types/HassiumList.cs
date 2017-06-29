@@ -26,6 +26,14 @@ namespace Hassium.Runtime.Types
 
             return Null;
         }
+
+        public HassiumBool contains(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            foreach (var value in Values)
+                if (value == args[0] || args[0].EqualTo(vm, location, args[0]).Bool)
+                    return new HassiumBool(true);
+            return new HassiumBool(false);
+        }
         
         private int iterIndex = 0;
         public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

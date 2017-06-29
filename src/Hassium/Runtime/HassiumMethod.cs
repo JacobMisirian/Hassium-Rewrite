@@ -104,7 +104,7 @@ namespace Hassium.Runtime
                     }
 
                     foreach (var type in Parent.Types)
-                        ret.AddType(type);
+                        ret.AddType(type as HassiumTypeDefinition);
                     foreach (var attrib in ret.Attributes.Values)
                         attrib.Parent = ret;
                     vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);

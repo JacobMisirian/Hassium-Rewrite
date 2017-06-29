@@ -54,16 +54,13 @@ namespace Hassium.Runtime
 
         public HassiumClass Parent { get; set; }
 
-        public List<HassiumTypeDefinition> Types = new List<HassiumTypeDefinition>()
-        {
-            TypeDefinition
-        };
-        public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
+        public List<HassiumTypeDefinition> Types = new List<HassiumTypeDefinition>();
 
+        public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
 
         public HassiumTypeDefinition Type()
         {
-            return Types[Types.Count - 1];
+            return Types[Types.Count - 1] as HassiumTypeDefinition;
         }
 
         public void AddAttribute(string name, HassiumObject value)

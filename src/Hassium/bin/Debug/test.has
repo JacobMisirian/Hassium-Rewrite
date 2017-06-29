@@ -1,5 +1,3 @@
 func main () {
-	t = ( "Hello", "from", "world" )
 
-	println (t [2]);
 }
