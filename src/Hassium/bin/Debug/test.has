@@ -1,7 +1,9 @@
 func main () {
 	i = 45;
 	for (i = 0; i < 10; i++) {
+		if (i == 4) {
+			continue;
+		}
 		println (i);
 	}
-	println (i);
 }

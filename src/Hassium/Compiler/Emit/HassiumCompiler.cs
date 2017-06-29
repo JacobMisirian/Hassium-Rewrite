@@ -97,7 +97,7 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(BreakNode node)
         {
-            emit(node.SourceLocation, InstructionType.Goto, methodStack.Peek().BreakLabels.Pop());
+            emit(node.SourceLocation, InstructionType.Jump, methodStack.Peek().BreakLabels.Pop());
         }
         public void Accept(CharNode node)
         {
@@ -178,13 +178,14 @@ namespace Hassium.Compiler.Emit
         public void Accept(ForNode node)
         {
             var bodyLabel = nextLabel();
+            var repeatLabel = nextLabel();
             var endLabel = nextLabel();
 
             int breakLabelCount = methodStack.Peek().BreakLabels.Count;
             int continueLabelCount = methodStack.Peek().ContinueLabels.Count;
 
             methodStack.Peek().BreakLabels.Push(endLabel);
-            methodStack.Peek().ContinueLabels.Push(bodyLabel);
+            methodStack.Peek().ContinueLabels.Push(repeatLabel);
 
             table.EnterScope();
             node.InitialStatement.Visit(this);
@@ -195,6 +196,7 @@ namespace Hassium.Compiler.Emit
                 node.Body.VisitChildren(this);
             else
                 node.Body.Visit(this);
+            emitLabel(node.RepeatStatement.SourceLocation, repeatLabel);
             node.RepeatStatement.Visit(this);
             emit(node.RepeatStatement.SourceLocation, InstructionType.Jump, bodyLabel);
             emitLabel(node.RepeatStatement.SourceLocation, endLabel);

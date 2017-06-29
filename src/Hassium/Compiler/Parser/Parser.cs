@@ -43,7 +43,11 @@ namespace Hassium.Compiler.Parser
 
         private AstNode parseStatement()
         {
-            if (matchToken(TokenType.Identifier, "class"))
+            if (acceptToken(TokenType.Identifier, "break"))
+                return new BreakNode(location);
+            else if (acceptToken(TokenType.Identifier, "continue"))
+                return new ContinueNode(location);
+            else if (matchToken(TokenType.Identifier, "class"))
                 return parseClassDeclaration();
             else if (matchToken(TokenType.Identifier, "do"))
                 return parseDoWhile();
@@ -195,7 +199,7 @@ namespace Hassium.Compiler.Parser
             var location = this.location;
             expectToken(TokenType.Identifier, "if");
             var condition = parseExpression();
-            var ifBody = parseExpression();
+            var ifBody = parseStatement();
             if (acceptToken(TokenType.Identifier, "else"))
                 return new IfNode(location, condition, ifBody, parseStatement());
             return new IfNode(location, condition, ifBody);
