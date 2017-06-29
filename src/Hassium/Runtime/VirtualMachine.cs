@@ -34,7 +34,7 @@ namespace Hassium.Runtime
 
             var globalClass = module.Attributes["__global__"];
             (globalClass.Attributes["__init__"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
-            GlobalFrame = StackFrame.PopFrame();
+            GlobalFrame = StackFrame.Frames.Peek();
             if (globalClass.Attributes.ContainsKey("main"))
                 (globalClass.Attributes["main"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
         }

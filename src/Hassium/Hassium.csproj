@@ -64,6 +64,7 @@
     <Compile Include="Compiler\Parser\Ast\ExpressionStatementNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FloatNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ForeachNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\ForNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FunctionCallNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FunctionDeclarationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\IdentifierNode.cs" />

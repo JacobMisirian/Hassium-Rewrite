@@ -47,6 +47,8 @@ namespace Hassium.Compiler.Parser
                 return parseClassDeclaration();
             else if (matchToken(TokenType.Identifier, "do"))
                 return parseDoWhile();
+            else if (matchToken(TokenType.Identifier, "for"))
+                return parseFor();
             else if (matchToken(TokenType.Identifier, "foreach"))
                 return parseForeach();
             else if (matchToken(TokenType.Identifier, "func"))
@@ -131,6 +133,23 @@ namespace Hassium.Compiler.Parser
             AstNode condition = parseStatement();
 
             return new DoWhileNode(location, condition, body);
+        }
+
+        private ForNode parseFor()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "for");
+            acceptToken(TokenType.OpenParentheses);
+            AstNode initialStatement = parseStatement();
+            acceptToken(TokenType.Semicolon);
+            AstNode condition = parseExpression();
+            acceptToken(TokenType.Semicolon);
+            AstNode repeatStatement = parseStatement();
+            acceptToken(TokenType.Semicolon);
+            acceptToken(TokenType.CloseParentheses);
+            AstNode body = parseStatement();
+
+            return new ForNode(location, initialStatement, condition, repeatStatement, body);
         }
 
         private ForeachNode parseForeach()

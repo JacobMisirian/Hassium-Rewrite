@@ -17,7 +17,7 @@ namespace Hassium.Compiler.Emit
 
         private SymbolTable table;
         private HassiumModule module;
-        
+
         public HassiumModule Compile(AstNode ast)
         {
             methodStack = new Stack<HassiumMethod>();
@@ -27,7 +27,7 @@ namespace Hassium.Compiler.Emit
             module = new HassiumModule();
 
             classStack.Push(new HassiumClass("__global__"));
-            methodStack.Push(new HassiumMethod("__init__") { Parent = classStack.Peek() } );
+            methodStack.Push(new HassiumMethod("__init__") { Parent = classStack.Peek() });
 
             ast.Visit(this);
 
@@ -164,10 +164,7 @@ namespace Hassium.Compiler.Emit
             emit(node.Body.SourceLocation, InstructionType.JumpIfTrue, bodyLabel);
             emitLabel(node.Condition.SourceLocation, endLabel);
 
-            while (methodStack.Peek().BreakLabels.Count > breakLabelCount)
-                methodStack.Peek().BreakLabels.Pop();
-            while (methodStack.Peek().ContinueLabels.Count > continueLabelCount)
-                methodStack.Peek().ContinueLabels.Pop();
+            restoreLabels(breakLabelCount, continueLabelCount);
         }
         public void Accept(ExpressionStatementNode node)
         {
@@ -177,6 +174,33 @@ namespace Hassium.Compiler.Emit
         public void Accept(FloatNode node)
         {
             emit(node.SourceLocation, InstructionType.PushObject, handleObject(new HassiumFloat(node.Float)));
+        }
+        public void Accept(ForNode node)
+        {
+            var bodyLabel = nextLabel();
+            var endLabel = nextLabel();
+
+            int breakLabelCount = methodStack.Peek().BreakLabels.Count;
+            int continueLabelCount = methodStack.Peek().ContinueLabels.Count;
+
+            methodStack.Peek().BreakLabels.Push(endLabel);
+            methodStack.Peek().ContinueLabels.Push(bodyLabel);
+
+            table.EnterScope();
+            node.InitialStatement.Visit(this);
+            emitLabel(node.Condition.SourceLocation, bodyLabel);
+            node.Condition.Visit(this);
+            emit(node.Condition.SourceLocation, InstructionType.JumpIfFalse, endLabel);
+            if (node.Body is CodeBlockNode)
+                node.Body.VisitChildren(this);
+            else
+                node.Body.Visit(this);
+            node.RepeatStatement.Visit(this);
+            emit(node.RepeatStatement.SourceLocation, InstructionType.Jump, bodyLabel);
+            emitLabel(node.RepeatStatement.SourceLocation, endLabel);
+            table.LeaveScope();
+
+            restoreLabels(breakLabelCount, continueLabelCount);
         }
         public void Accept(ForeachNode node)
         {
