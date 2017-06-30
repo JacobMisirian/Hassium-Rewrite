@@ -74,6 +74,7 @@
     <Compile Include="Compiler\Parser\Ast\LambdaNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ListDeclarationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\MultipleAssignmentNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\RaiseNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ReturnNode.cs" />
     <Compile Include="Compiler\Parser\Ast\StringNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />

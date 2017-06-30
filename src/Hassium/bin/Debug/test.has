@@ -1,9 +1,22 @@
 func main () {
-	d = { "US" : "America", "DE" : "Germany" }
+	c = new Container.Sub ();
+	c.hai ();
+	d = new Container ();
+	d.runMe ();
+}
 
-	println (d ["US"]);
+class Container {
+	func new () {}
 
-	d ["RO"] = "Romania";
+	func runMe () {
+		c = new Sub ();
+		c.hai ();
+	}
 
-	println (d ["RO"]);
+	class Sub {
+		func new () {}
+		func hai () {
+			println ("Hello from Container.Sub");
+		}
+	}
 }

@@ -43,9 +43,10 @@ namespace Hassium.Runtime
                         }
                     }
                 }
-                return Invoke(vm, location, args);
+                if (Attributes.ContainsKey("new"))
+                    return Invoke(vm, location, args);
+                throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "()", TypeDefinition);
             }
-            throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "()", TypeDefinition);
         }
     }
 }

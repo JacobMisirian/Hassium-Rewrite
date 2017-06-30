@@ -183,6 +183,9 @@ namespace Hassium.Runtime
                         case InstructionType.PushObject:
                             Stack.Push(CurrentModule.ObjectPool[arg]);
                             break;
+                        case InstructionType.Raise:
+                            RaiseException(Stack.Pop());
+                            break;
                         case InstructionType.Return:
                             return Stack.Pop();
                         case InstructionType.SelfReference:
@@ -336,18 +339,13 @@ namespace Hassium.Runtime
             }
         }
 
-        public void RaiseException(HassiumObject message, ref int pos)
+        public void RaiseException(HassiumObject message)
         {
             if (Handlers.Count == 0)
                 throw new InternalException(this, CurrentSourceLocation, message.ToString(this, CurrentSourceLocation).String);
             var handler = Handlers.Peek();
             handler.Invoke(this, CurrentSourceLocation, message);
             ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);
-        }
-
-        public void RaiseException(HassiumObject message)
-        {
-
         }
 
         private void importGlobals()

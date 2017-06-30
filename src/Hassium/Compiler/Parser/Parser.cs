@@ -228,6 +228,15 @@ namespace Hassium.Compiler.Parser
             return new ListDeclarationNode(location, elements);
         }
 
+        private RaiseNode parseRaise()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "raise");
+            AstNode exception = parseExpression();
+
+            return new RaiseNode(location, exception);
+        }
+
         private ReturnNode parseReturn()
         {
             var location = this.location;

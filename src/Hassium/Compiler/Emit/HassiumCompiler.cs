@@ -347,6 +347,11 @@ namespace Hassium.Compiler.Emit
         {
 
         }
+        public void Accept(RaiseNode node)
+        {
+            node.Exception.Visit(this);
+            emit(node.SourceLocation, InstructionType.Raise);
+        }
         public void Accept(ReturnNode node)
         {
             node.Value.Visit(this);
