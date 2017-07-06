@@ -1,14 +1,4 @@
-use test2;
-
 func main () {
-	foo ();
-
-	try {
-	c = new Calc ();
-	println (c.add (4, 5));
-
-	println (c.add (3, "4"));
-	} catch {
-		println ("Caught error {0}".format (value));
-	}
+	println (1 == 1 ? "Good" : "Bad");
+	println (3 > 5 ? "Bad" : "Good");
 }

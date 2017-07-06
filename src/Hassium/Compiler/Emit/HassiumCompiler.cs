@@ -373,6 +373,16 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(TernaryOperationNode node)
         {
+            var falseLabel = nextLabel();
+            var endLabel = nextLabel();
+
+            node.Condition.Visit(this);
+            emit(node.Condition.SourceLocation, InstructionType.JumpIfFalse, falseLabel);
+            node.TrueExpression.Visit(this);
+            emit(node.TrueExpression.SourceLocation, InstructionType.Jump, endLabel);
+            emitLabel(node.FalseExpression.SourceLocation, falseLabel);
+            node.FalseExpression.Visit(this);
+            emitLabel(node.FalseExpression.SourceLocation, endLabel);
 
         }
         public void Accept(TryCatchNode node)
