@@ -136,12 +136,8 @@ namespace Hassium.Runtime
             }
             catch (InternalException ex)
             {
-                Console.WriteLine("At location {0}:", ex.VM.CurrentSourceLocation);
-                Console.WriteLine("{0} at:", ex.Message);
-                while (ex.VM.CallStack.Count > 0)
-                    Console.WriteLine(ex.VM.CallStack.Pop());
-                Environment.Exit(0);
-                return null;
+                vm.RaiseException(new HassiumString(ex.Message));
+                return Null;
             }
         }
 

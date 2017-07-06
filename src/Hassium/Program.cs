@@ -16,11 +16,7 @@ namespace Hassium
         {
             try
             {
-                var tokens = new Scanner().Scan(args[0], File.ReadAllText(args[0]));
-
-                var ast = new Parser().Parse(tokens);
-
-                var module = new HassiumCompiler().Compile(ast);
+                var module = HassiumCompiler.CompileModuleFromFilePath(args[0]);
 
                 /*      foreach (var attribPair in module.Attributes["__global__"].Attributes)
                       {

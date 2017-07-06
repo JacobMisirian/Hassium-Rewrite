@@ -1,0 +1,9 @@
+func foo () {
+	println ("Hello from an imported Hassium module!");
+}
+
+class Calc {
+	func new () {}
+
+	func add (x : number, y : number) : number { return x + y; }
+}

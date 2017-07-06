@@ -1,25 +1,14 @@
+use test2;
+
 func main () {
 	foo ();
-}
-
-func foo () {
-	a = 3;
 
 	try {
-		bar ();
-		println ("You can't see me");
-	}
-	catch {
-		println ("Caught {0} {1}".format (value, a));
-		println ("My time is now");
-	}
-}
+	c = new Calc ();
+	println (c.add (4, 5));
 
-func bar () {
-	baz ();
-}
-
-func baz () {
-	x = 2;
-	raise x;
+	println (c.add (3, "4"));
+	} catch {
+		println ("Caught error {0}".format (value));
+	}
 }

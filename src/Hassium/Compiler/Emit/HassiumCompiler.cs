@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 
+using Hassium.Compiler.Exceptions;
+using Hassium.Compiler.Lexer;
 using Hassium.Compiler.Parser;
 using Hassium.Compiler.Parser.Ast;
 using Hassium.Runtime;
@@ -12,6 +13,15 @@ namespace Hassium.Compiler.Emit
 {
     public class HassiumCompiler : IVisitor
     {
+        public static HassiumModule CompileModuleFromFilePath(string abspath)
+        {
+            var tokens = new Scanner().Scan(abspath, File.ReadAllText(abspath));
+            var ast = new Parser.Parser().Parse(tokens);
+            var module = new HassiumCompiler().Compile(ast);
+
+            return module;
+        }
+
         private Stack<HassiumMethod> methodStack;
         private Stack<HassiumClass> classStack;
 
@@ -434,6 +444,50 @@ namespace Hassium.Compiler.Emit
                     break;
             }
         }
+        public void Accept(UseNode node)
+        {
+            string path = node.Module.Replace(".", "/").Replace("\\", "/");
+            HassiumObject mod;
+            if (InternalModule.InternalModules.ContainsKey(path))
+                mod = InternalModule.InternalModules[path];
+            else
+                mod = resolveModuleByPath(node.SourceLocation, path);
+
+            if (mod.Attributes.ContainsKey("__global__"))
+            {
+                var globalClass = mod.Attributes["__global__"];
+                foreach (var attrib in globalClass.Attributes)
+                {
+                    if (attrib.Key == "__init__")
+                        foreach (var instruction in (attrib.Value as HassiumMethod).Instructions)
+                            methodStack.Peek().Instructions.Add(instruction);
+                    else if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                    {
+                        var value = attrib.Value.Clone() as HassiumObject;
+                        value.Parent = classStack.Peek();
+                        classStack.Peek().Attributes.Add(attrib.Key, value);
+                    }
+                            
+                }
+            }
+
+            if (mod is HassiumModule)
+            {
+                foreach (var constant in ((HassiumModule)mod).ConstantPool)
+                {
+                    if (module.ConstantPool.ContainsKey(constant.Key))
+                        module.ConstantPool.Remove(constant.Key);
+                    module.ConstantPool.Add(constant.Key, constant.Value);
+                }
+                foreach (var obj in ((HassiumModule)mod).ObjectPool)
+                {
+                    if (module.ObjectPool.ContainsKey(obj.Key))
+                        module.ObjectPool.Remove(obj.Key);
+                    module.ObjectPool.Add(obj.Key, obj.Value);
+                }
+            }
+
+        }
         public void Accept(WhileNode node)
         {
             var bodyLabel = nextLabel();
@@ -479,7 +533,7 @@ namespace Hassium.Compiler.Emit
             return hashcode;
         }
 
-        private int label = 0;
+        private static int label = 0;
         private int nextLabel()
         {
             return label++;
@@ -491,6 +545,42 @@ namespace Hassium.Compiler.Emit
                 methodStack.Peek().BreakLabels.Pop();
             while (methodStack.Peek().ContinueLabels.Count > continueLabelCount)
                 methodStack.Peek().ContinueLabels.Pop();
+        }
+
+        private HassiumObject resolveModuleByPath(SourceLocation location, string path)
+        {
+            string filePath = locateFile(path, ".has");
+            if (filePath == string.Empty)
+                filePath = locateFile(path, ".dll");
+            if (filePath == string.Empty)
+                throw new CompilerException(location, "Could not locate file by reference {0}!", path);
+
+            return CompileModuleFromFilePath(filePath);
+        }
+
+        private string locateFile(string path, string extension)
+        {
+            if (File.Exists(path))
+                return path;
+            if (File.Exists(path + extension))
+                return path + extension;
+            string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
+                              Environment.OSVersion.Platform == PlatformID.MacOSX)
+                ? Environment.GetEnvironmentVariable("HOME")
+                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+            if (homePath == null)
+                return string.Empty;
+            string homeFilePath = Path.Combine(homePath, path);
+            if (File.Exists(homeFilePath))
+                return homeFilePath;
+            if (File.Exists(homeFilePath + extension))
+                return homeFilePath + extension;
+            homeFilePath = Path.Combine(Path.Combine(homePath, ".Hassium"), path);
+            if (File.Exists(homeFilePath))
+                return homeFilePath;
+            if (File.Exists(homeFilePath + extension))
+                return homeFilePath + extension;
+            return string.Empty;
         }
     }
 }

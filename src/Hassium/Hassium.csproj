@@ -46,6 +46,7 @@
     <Compile Include="Compiler\Emit\HassiumInstruction.cs" />
     <Compile Include="Compiler\Emit\Scope.cs" />
     <Compile Include="Compiler\Emit\SymbolTable.cs" />
+    <Compile Include="Compiler\Exceptions\CompilerException.cs" />
     <Compile Include="Compiler\Exceptions\ParserException.cs" />
     <Compile Include="Compiler\Exceptions\ScannerException.cs" />
     <Compile Include="Compiler\IVisitor.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Compiler\Parser\Ast\TryCatchNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\UseNode.cs" />
     <Compile Include="Compiler\Parser\Ast\WhileNode.cs" />
     <Compile Include="Compiler\Parser\FunctionParameter.cs" />
     <Compile Include="Compiler\Parser\Parser.cs" />

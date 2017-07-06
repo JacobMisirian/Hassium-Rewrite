@@ -34,6 +34,7 @@ namespace Hassium.Compiler
         void Accept(TryCatchNode node);
         void Accept(TupleNode node);
         void Accept(UnaryOperationNode node);
+        void Accept(UseNode node);
         void Accept(WhileNode node);
     }
 }

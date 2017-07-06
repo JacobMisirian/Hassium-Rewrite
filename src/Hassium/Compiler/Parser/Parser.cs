@@ -65,6 +65,8 @@ namespace Hassium.Compiler.Parser
                 return parseReturn();
             else if (matchToken(TokenType.Identifier, "try"))
                 return parseTryCatch();
+            else if (matchToken(TokenType.Identifier, "use"))
+                return parseUse();
             else if (matchToken(TokenType.Identifier, "while"))
                 return parseWhile();
             else if (matchToken(TokenType.OpenCurlyBrace))
@@ -274,6 +276,25 @@ namespace Hassium.Compiler.Parser
             }
 
             return new TupleNode(location, elements);
+        }
+
+        private UseNode parseUse()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "use");
+            StringBuilder module = new StringBuilder();
+            if (matchToken(TokenType.String))
+                module.Append(expectToken(TokenType.String).Value);
+            else
+            {
+                do
+                {
+                    module.Append(expectToken(TokenType.Identifier).Value);
+                }
+                while (acceptToken(TokenType.Dot) || acceptToken(TokenType.Operation, "/"));
+            }
+
+            return new UseNode(location, module.ToString());
         }
 
         private WhileNode parseWhile()
