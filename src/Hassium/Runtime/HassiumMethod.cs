@@ -120,7 +120,6 @@ namespace Hassium.Runtime
                     var ret = vm.ExecuteMethod(this);
                     if (Name == "catch")
                     {
-                        vm.CallStack.Pop();
                         return ret;
                     }
 

@@ -27,11 +27,13 @@ namespace Hassium.Runtime
 
         public void Execute(HassiumModule module, string[] args, StackFrame.Frame frame = null)
         {
+            CallStack = new Stack<string>();
+            CurrentModule = module;
+            ExceptionReturns = new Dictionary<HassiumMethod, int>();
+            Globals = new Dictionary<string, HassiumObject>();
+            Handlers = new Stack<HassiumExceptionHandler>();
             Stack = new Stack<HassiumObject>();
             StackFrame = new StackFrame();
-            CallStack = new Stack<string>();
-            Globals = new Dictionary<string, HassiumObject>();
-            CurrentModule = module;
             importGlobals();
 
             var globalClass = module.Attributes["__global__"];
@@ -47,6 +49,12 @@ namespace Hassium.Runtime
 
             for (int pos = 0; pos < method.Instructions.Count; pos++)
             {
+                if (ExceptionReturns.ContainsKey(method))
+                {
+                    pos = ExceptionReturns[method];
+                    ExceptionReturns.Remove(method);
+                }
+
                 HassiumObject left, right, val, list;
                 HassiumObject[] elements;
                 string attrib;
@@ -174,11 +182,19 @@ namespace Hassium.Runtime
                         case InstructionType.Pop:
                             Stack.Pop();
                             break;
+                        case InstructionType.PopHandler:
+                            Handlers.Pop();
+                            break;
                         case InstructionType.Push:
                             Stack.Push(new HassiumInt(arg));
                             break;
                         case InstructionType.PushConstant:
                             Stack.Push(new HassiumString(CurrentModule.ConstantPool[arg]));
+                            break;
+                        case InstructionType.PushHandler:
+                            var handler = CurrentModule.ObjectPool[arg] as HassiumExceptionHandler;
+                            handler.Frame = StackFrame.Frames.Peek();
+                            Handlers.Push(handler);
                             break;
                         case InstructionType.PushObject:
                             Stack.Push(CurrentModule.ObjectPool[arg]);
@@ -241,7 +257,7 @@ namespace Hassium.Runtime
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    RaiseException(new HassiumString(ex.ToString()));
                 }
             }
             return HassiumObject.Null;

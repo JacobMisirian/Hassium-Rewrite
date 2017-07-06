@@ -31,6 +31,7 @@ namespace Hassium.Compiler
         void Accept(ReturnNode node);
         void Accept(StringNode node);
         void Accept(TernaryOperationNode node);
+        void Accept(TryCatchNode node);
         void Accept(TupleNode node);
         void Accept(UnaryOperationNode node);
         void Accept(WhileNode node);

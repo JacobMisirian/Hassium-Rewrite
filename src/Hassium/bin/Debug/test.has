@@ -1,22 +1,25 @@
 func main () {
-	c = new Container.Sub ();
-	c.hai ();
-	d = new Container ();
-	d.runMe ();
+	foo ();
 }
 
-class Container {
-	func new () {}
+func foo () {
+	a = 3;
 
-	func runMe () {
-		c = new Sub ();
-		c.hai ();
+	try {
+		bar ();
+		println ("You can't see me");
 	}
+	catch {
+		println ("Caught {0} {1}".format (value, a));
+		println ("My time is now");
+	}
+}
 
-	class Sub {
-		func new () {}
-		func hai () {
-			println ("Hello from Container.Sub");
-		}
-	}
+func bar () {
+	baz ();
+}
+
+func baz () {
+	x = 2;
+	raise x;
 }

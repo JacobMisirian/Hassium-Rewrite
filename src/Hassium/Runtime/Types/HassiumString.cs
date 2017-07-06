@@ -13,6 +13,8 @@ namespace Hassium.Runtime.Types
             AddType(TypeDefinition);
             String = val;
 
+            AddAttribute(EQUALTO, EqualTo, 1);
+            AddAttribute("format", format, -1);
             AddAttribute(INDEX, Index, 1);
             AddAttribute(ITER, Iter, 0);
             AddAttribute(TOSTRING, ToString,   0);
@@ -21,6 +23,14 @@ namespace Hassium.Runtime.Types
         public override HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(String == args[0].ToString(vm, location).String);
+        }
+
+        public HassiumString format(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            string[] strargs = new string[args.Length];
+            for (int i = 0; i < strargs.Length; i++)
+                strargs[i] = args[i].ToString(vm, location).String;
+            return new HassiumString(string.Format(String, strargs));
         }
 
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

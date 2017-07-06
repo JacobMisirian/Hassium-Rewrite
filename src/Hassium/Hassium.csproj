@@ -78,6 +78,7 @@
     <Compile Include="Compiler\Parser\Ast\ReturnNode.cs" />
     <Compile Include="Compiler\Parser\Ast\StringNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\TryCatchNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\WhileNode.cs" />

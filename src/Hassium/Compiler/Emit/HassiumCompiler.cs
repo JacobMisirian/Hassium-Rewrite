@@ -365,6 +365,22 @@ namespace Hassium.Compiler.Emit
         {
 
         }
+        public void Accept(TryCatchNode node)
+        {
+            var endLabel = nextLabel();
+            var temp = methodStack.Peek();
+            methodStack.Push(new HassiumMethod("catch"));
+            table.EnterScope();
+            methodStack.Peek().Parameters.Add(new FunctionParameter(FunctionParameterType.Normal, "value"), table.HandleSymbol("value"));
+            node.CatchBody.VisitChildren(this);
+            var handler = new HassiumExceptionHandler(temp, methodStack.Peek(), endLabel);
+            handleObject(handler);
+            methodStack.Pop();
+            emit(node.SourceLocation, InstructionType.PushHandler, handler.GetHashCode());
+            node.TryBody.Visit(this);
+            emit(node.SourceLocation, InstructionType.PopHandler);
+            emitLabel(node.SourceLocation, endLabel);
+        }
         public void Accept(TupleNode node)
         {
             foreach (var element in node.Elements)
