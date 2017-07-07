@@ -477,7 +477,20 @@ namespace Hassium.Compiler.Emit
                         value.Parent = classStack.Peek();
                         classStack.Peek().Attributes.Add(attrib.Key, value);
                     }
-                            
+
+                }
+            }
+            else
+            {
+                foreach (var attrib in mod.Attributes)
+                {
+                    if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                    {
+                        var value = attrib.Value.Clone() as HassiumObject;
+                        value.Parent = classStack.Peek();
+                        if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                            classStack.Peek().Attributes.Add(attrib.Key, value);
+                    }
                 }
             }
 
