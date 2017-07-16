@@ -24,7 +24,7 @@ namespace Hassium.Runtime.Types
             AddAttribute("property", HassiumProperty.TypeDefinition);
             AddAttribute("string", HassiumString.TypeDefinition);
             AddAttribute("tuple", HassiumTuple.TypeDefinition);
-            AddAttribute("TypeDefinition", HassiumTypeDefinition.TypeDefinition);
+            AddAttribute("type", HassiumTypeDefinition.TypeDefinition);
         }
     }
 }

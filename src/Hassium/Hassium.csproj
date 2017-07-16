@@ -99,6 +99,10 @@
     <Compile Include="Runtime\HassiumTypeDefinition.cs" />
     <Compile Include="Runtime\Exceptions\InternalException.cs" />
     <Compile Include="Runtime\InternalModule.cs" />
+    <Compile Include="Runtime\IO\HassiumFile.cs" />
+    <Compile Include="Runtime\IO\HassiumFileNotFoundException.cs" />
+    <Compile Include="Runtime\IO\HassiumFS.cs" />
+    <Compile Include="Runtime\IO\HassiumIOModule.cs" />
     <Compile Include="Runtime\StackFrame.cs" />
     <Compile Include="Runtime\Types\HassiumBool.cs" />
     <Compile Include="Runtime\Types\HassiumChar.cs" />
