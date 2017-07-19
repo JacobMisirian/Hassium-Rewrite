@@ -1,10 +1,22 @@
-﻿using Hassium.Compiler;
+﻿using System.IO;
+
+using Hassium.Compiler;
 using Hassium.Runtime.Types;
 
 namespace Hassium.Runtime.IO
 {
     public class HassiumFileNotFoundException : HassiumObject
     {
+        public static void VerifyPath(VirtualMachine vm, HassiumString path)
+        {
+            VerifyPath(vm, path.String);
+        }
+        public static void VerifyPath(VirtualMachine vm, string path)
+        {
+            if (!File.Exists(path))
+                vm.RaiseException(new HassiumFileNotFoundException(new HassiumString(path)));
+        }
+
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("FileNotFoundException");
         
         public HassiumString Path { get; private set; }

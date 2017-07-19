@@ -7,6 +7,7 @@
             AddAttribute("File", HassiumFile.TypeDefinition);
             AddAttribute("FileNotFoundException", HassiumFileNotFoundException.TypeDefinition);
             AddAttribute("FS", new HassiumFS());
+            AddAttribute("StreamClosedException", HassiumStreamClosedException.TypeDefinition);
         }
     }
 }

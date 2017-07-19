@@ -1,4 +1,10 @@
+use IO;
+
 func main () {
-	println (1 == 1 ? "Good" : "Bad");
-	println (3 > 5 ? "Bad" : "Good");
+	file = FS.open ("file.txt");
+
+	file.writeLine ("Hello, World!");
+	file.writeLine ("This is a test");
+
+	file.close ();
 }
