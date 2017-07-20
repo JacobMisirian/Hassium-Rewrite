@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Hassium.Compiler;
 
-using Hassium.Runtime.Exceptions;
-
 namespace Hassium.Runtime
 {
     public class HassiumClass : HassiumObject
@@ -45,7 +43,8 @@ namespace Hassium.Runtime
                 }
                 if (Attributes.ContainsKey("new"))
                     return Invoke(vm, location, args);
-                throw new InternalException(vm, location, InternalException.OPERATOR_ERROR, "()", TypeDefinition);
+                vm.RaiseException(new HassiumAttributeNotFoundException(this, INVOKE));
+                return Null;
             }
         }
     }

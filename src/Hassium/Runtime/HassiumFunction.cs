@@ -1,5 +1,4 @@
 ﻿using Hassium.Compiler;
-using Hassium.Runtime.Exceptions;
 
 namespace Hassium.Runtime
 {
@@ -30,7 +29,8 @@ namespace Hassium.Runtime
                 foreach (int len in ParameterLengths)
                     if (len == args.Length)
                         return Target(vm, location, args);
-                throw new InternalException(vm, location, "Expected argument length of {0}, got {1} in {2}!", ParameterLengths[0], args.Length, Target.Method.Name);
+                vm.RaiseException(new HassiumArgumentLengthException(this, ParameterLengths[0], args.Length));
+                return Null;
             }
             return Target(vm, location, args);
         }

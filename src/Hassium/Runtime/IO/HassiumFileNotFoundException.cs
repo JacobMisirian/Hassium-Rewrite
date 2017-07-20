@@ -28,6 +28,7 @@ namespace Hassium.Runtime.IO
 
             AddAttribute("message", new HassiumProperty(get_message));
             AddAttribute("path", new HassiumProperty(get_path));
+            AddAttribute(TOSTRING, Attributes["message"]);
         }
 
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

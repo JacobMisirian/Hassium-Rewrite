@@ -54,7 +54,7 @@ namespace Hassium.Runtime.IO
             AddAttribute("relativePath", new HassiumProperty(get_relativePath));
             AddAttribute("size", new HassiumProperty(get_size));
             AddAttribute("writeAllBytes", writeAllBytes, 1);
-            AddAttribute("writeAllLines", writeAllLines, 1);
+            AddAttribute("writeAllLines", writeAllLines, -1);
             AddAttribute("writeAllText", writeAllText, 1);
             AddAttribute("writeByte", writeByte, 1);
             AddAttribute("writeFloat", writeFloat, 1);
@@ -167,17 +167,56 @@ namespace Hassium.Runtime.IO
 
         public HassiumObject readAllBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return InternalModule.InternalModules["IO"].Attributes["FS"].Attributes["readBytes"].Invoke(vm, location, AbsolutePath);
+            HassiumFileNotFoundException.VerifyPath(vm, AbsolutePath);
+
+            if (closed)
+            {
+                vm.RaiseException(new HassiumStreamClosedException(this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+
+            while (Reader.BaseStream.Position < Reader.BaseStream.Length)
+                list.add(vm, location, new HassiumChar((char)Reader.ReadBytes(1)[0]));
+
+            return list;
         }
 
         public HassiumObject readAllLines(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return InternalModule.InternalModules["IO"].Attributes["FS"].Attributes["readLines"].Invoke(vm, location, AbsolutePath);
+            HassiumFileNotFoundException.VerifyPath(vm, AbsolutePath);
+
+            if (closed)
+            {
+                vm.RaiseException(new HassiumStreamClosedException(this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+
+            while (Reader.BaseStream.Position < Reader.BaseStream.Length)
+                list.add(vm, location, readLine(vm, location));
+
+            return list;
         }
 
         public HassiumObject readAllText(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return InternalModule.InternalModules["IO"].Attributes["FS"].Attributes["readString"].Invoke(vm, location, AbsolutePath);
+            HassiumFileNotFoundException.VerifyPath(vm, AbsolutePath);
+
+            if (closed)
+            {
+                vm.RaiseException(new HassiumStreamClosedException(this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            while (Reader.BaseStream.Position < Reader.BaseStream.Length)
+                sb.AppendLine(readLine(vm, location).ToString(vm, location).String);
+
+            return new HassiumString(sb.ToString());
         }
 
         public HassiumObject readByte(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -281,19 +320,59 @@ namespace Hassium.Runtime.IO
             return new HassiumInt(FileInfo.Length);
         }
 
-        public HassiumObject writeAllBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public HassiumNull writeAllBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return InternalModule.InternalModules["IO"].Attributes["FS"].Attributes["writeBytes"].Invoke(vm, location, AbsolutePath, args[0]);
+            if (closed)
+            {
+                vm.RaiseException(new HassiumStreamClosedException(this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            for (int i = 0; i < args.Length; i++)
+                writeHassiumObject(Writer, args[i], vm, location);
+
+            if (autoFlush)
+                Writer.Flush();
+            return Null;
         }
 
-        public HassiumObject writeAllLines(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public HassiumNull writeAllLines(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return InternalModule.InternalModules["IO"].Attributes["FS"].Attributes["writeLines"].Invoke(vm, location, AbsolutePath, args[0]);
+            if (closed)
+            {
+                vm.RaiseException(new HassiumStreamClosedException(this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                var type = args[i].Type();
+
+                if (type == HassiumList.TypeDefinition)
+                    foreach (var item in args[i].ToList(vm, location).Values)
+                        writeLine(vm, location, item.ToString(vm, location));
+                else if (type == HassiumString.TypeDefinition)
+                    writeLine(vm, location, args[i].ToString(vm, location));
+            }
+
+            if (autoFlush)
+                Writer.Flush();
+            return Null;
         }
 
-        public HassiumObject writeAllText(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public HassiumNull writeAllText(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return InternalModule.InternalModules["IO"].Attributes["FS"].Attributes["writeString"].Invoke(vm, location, AbsolutePath, args[0]);
+            if (closed)
+            {
+                vm.RaiseException(new HassiumStreamClosedException(this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            foreach (var c in args[0].ToString(vm, location).String)
+                Writer.Write(c);
+            if (autoFlush)
+                Writer.Flush();
+            return Null;
         }
 
         public HassiumNull writeByte(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -351,7 +430,6 @@ namespace Hassium.Runtime.IO
 
             if (autoFlush)
                 Writer.Flush();
-
             return Null;
         }
 
@@ -392,6 +470,28 @@ namespace Hassium.Runtime.IO
             if (autoFlush)
                 Writer.Flush();
             return Null;
+        }
+
+        private void writeHassiumObject(BinaryWriter writer, HassiumObject obj, VirtualMachine vm, SourceLocation location)
+        {
+            var type = obj.Type();
+
+            if (type == HassiumBool.TypeDefinition)
+                writer.Write(obj.ToBool(vm, location).Bool);
+            else if (type == HassiumChar.TypeDefinition)
+                writer.Write((byte)obj.ToChar(vm, location).Char);
+            else if (type == HassiumFloat.TypeDefinition)
+                writer.Write(obj.ToFloat(vm, location).Float);
+            else if (type == HassiumInt.TypeDefinition)
+                writer.Write(obj.ToInt(vm, location).Int);
+            else if (type == HassiumList.TypeDefinition)
+                foreach (var item in obj.ToList(vm, location).Values)
+                    writeHassiumObject(writer, item, vm, location);
+            else if (type == HassiumString.TypeDefinition)
+                writer.Write(obj.ToString(vm, location).String);
+            else if (type == HassiumTuple.TypeDefinition)
+                foreach (var item in obj.ToTuple(vm, location).Values)
+                    writeHassiumObject(writer, item, vm, location);
         }
     }
 }

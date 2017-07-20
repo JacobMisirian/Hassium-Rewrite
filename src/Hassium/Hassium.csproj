@@ -92,12 +92,15 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\GlobalFunctions.cs" />
+    <Compile Include="Runtime\HassiumArgumentLengthException.cs" />
+    <Compile Include="Runtime\HassiumAttributeNotFoundException.cs" />
     <Compile Include="Runtime\HassiumClass.cs" />
+    <Compile Include="Runtime\HassiumConversionFailedException.cs" />
     <Compile Include="Runtime\HassiumMethod.cs" />
     <Compile Include="Runtime\HassiumModule.cs" />
     <Compile Include="Runtime\HassiumObject.cs" />
     <Compile Include="Runtime\HassiumTypeDefinition.cs" />
-    <Compile Include="Runtime\Exceptions\InternalException.cs" />
+    <Compile Include="Runtime\HassiumVariableNotFoundException.cs" />
     <Compile Include="Runtime\InternalModule.cs" />
     <Compile Include="Runtime\IO\HassiumFile.cs" />
     <Compile Include="Runtime\IO\HassiumFileNotFoundException.cs" />

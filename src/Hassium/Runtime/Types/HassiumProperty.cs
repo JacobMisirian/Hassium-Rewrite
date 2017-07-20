@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Hassium.Compiler;
 
 namespace Hassium.Runtime.Types
 {
@@ -27,6 +24,11 @@ namespace Hassium.Runtime.Types
             Set = set_ != null ? new HassiumFunction(set_, 1) : null;
 
             AddType(HassiumFunction.TypeDefinition);
+        }
+
+        public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return Get.Invoke(vm, location, args);
         }
     }
 }

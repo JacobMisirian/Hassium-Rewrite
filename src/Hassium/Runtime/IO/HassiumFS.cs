@@ -21,6 +21,11 @@ namespace Hassium.Runtime.IO
             AddAttribute("writeString", writeString, -1);
         }
 
+        public HassiumNull close(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return Null;
+        }
+
         public HassiumNull copy(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string source = args[0].ToString(vm, location).String;

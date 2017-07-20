@@ -18,6 +18,8 @@ namespace Hassium.Runtime.IO
 
             AddAttribute("file", new HassiumProperty(get_file));
             AddAttribute("filePath", new HassiumProperty(get_filePath));
+            AddAttribute("message", new HassiumProperty(get_message));
+            AddAttribute(TOSTRING, Attributes["message"]);
         }
 
         public HassiumFile get_file(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -28,6 +30,11 @@ namespace Hassium.Runtime.IO
         public HassiumString get_filePath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return FilePath;
+        }
+
+        public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(string.Format("Stream Closed: Filepath {0}", FilePath.String));
         }
     }
 }

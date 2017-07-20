@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 using Hassium.Compiler;
-using Hassium.Runtime.Exceptions;
 
 namespace Hassium.Runtime.Types
 {
@@ -44,7 +43,8 @@ namespace Hassium.Runtime.Types
             foreach (var key in Dictionary.Keys)
                 if (key.EqualTo(vm, location, args[0]).Bool)
                     return Dictionary[key];
-            throw new InternalException(vm, location, InternalException.KEY_NOT_FOUND_ERROR, args[0]);
+            vm.RaiseException(new HassiumAttributeNotFoundException(this, args[0].ToString(vm, location).String));
+            return Null;
         }
 
         public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

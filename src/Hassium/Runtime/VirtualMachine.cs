@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 using Hassium.Compiler;
 using Hassium.Compiler.Parser.Ast;
 using Hassium.Compiler.Emit;
-using Hassium.Runtime.Exceptions;
 using Hassium.Runtime.Types;
 
 namespace Hassium.Runtime
@@ -62,8 +59,6 @@ namespace Hassium.Runtime
                 int arg = method.Instructions[pos].Arg;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
                 //Console.WriteLine(method.Instructions[pos].ToString() + "\t"  + method.Name);
-                try
-                {
                     switch (method.Instructions[pos].InstructionType)
                     {
                         case InstructionType.BinaryOperation:
@@ -106,7 +101,7 @@ namespace Hassium.Runtime
                             var type = Globals[Stack.Pop().ToString(this, CurrentSourceLocation).String].Type();
                             val = Stack.Pop();
                             if (!val.Types.Contains(type))
-                                throw new InternalException(this, CurrentSourceLocation, "Expected assignment type {0}, got {1}!", type, val.Type());
+                                RaiseException(new HassiumConversionFailedException(val, type));
                             if (StackFrame.Contains(arg))
                                 StackFrame.Modify(arg, val);
                             else
@@ -142,7 +137,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                throw new InternalException(this, CurrentSourceLocation, InternalException.ATTRIBUTE_NOT_FOUND, CurrentModule.ConstantPool[arg], val.Type());
+                                RaiseException(new HassiumAttributeNotFoundException(val, CurrentModule.ConstantPool[arg]));
                             }
                             break;
                         case InstructionType.LoadGlobal:
@@ -154,10 +149,10 @@ namespace Hassium.Runtime
                                 if (method.Parent.Attributes.ContainsKey(attrib))
                                     Stack.Push(method.Parent.Attributes[attrib]);
                                 else
-                                    throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, attrib);
+                                    RaiseException(new HassiumAttributeNotFoundException(method.Parent, attrib));
                             }
-                            else 
-                                throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, attrib);
+                            else
+                                RaiseException(new HassiumAttributeNotFoundException(CurrentModule, attrib));
                             break;
                         case InstructionType.LoadGlobalVariable:
                             try
@@ -166,7 +161,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, arg);
+                                RaiseException(new HassiumAttributeNotFoundException(CurrentModule, arg.ToString()));
                             }
                             break;
                         case InstructionType.LoadIterableElement:
@@ -227,7 +222,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                throw new InternalException(this, CurrentSourceLocation, InternalException.VARIABLE_ERROR, val.Type());
+                                RaiseException(new HassiumAttributeNotFoundException(val, attrib));
                             }
                             break;
                         case InstructionType.StoreGlobalVariable:
@@ -254,11 +249,6 @@ namespace Hassium.Runtime
                             interpretUnaryOperation(Stack.Pop(), arg);
                             break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    RaiseException(new HassiumString(ex.ToString()));
-                }
             }
             return HassiumObject.Null;
         }
@@ -358,7 +348,11 @@ namespace Hassium.Runtime
         public void RaiseException(HassiumObject message)
         {
             if (Handlers.Count == 0)
-                throw new InternalException(this, CurrentSourceLocation, message.ToString(this, CurrentSourceLocation).String);
+            {
+                Console.WriteLine(message.ToString(this, CurrentSourceLocation).String);
+                Environment.Exit(0);
+                return;
+            }
             var handler = Handlers.Peek();
             handler.Invoke(this, CurrentSourceLocation, message);
             ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);

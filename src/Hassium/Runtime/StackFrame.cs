@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Hassium.Compiler;
-using Hassium.Runtime.Exceptions;
 
 namespace Hassium.Runtime
 {
@@ -68,7 +67,8 @@ namespace Hassium.Runtime
         {
             if (Frames.Peek().ContainsVariable(index))
                 return Frames.Peek().GetVariable(index);
-            throw new InternalException(vm, location, "Variable at index {0} was not found inside of the stack frame!", index);
+            vm.RaiseException(new HassiumVariableNotFoundException());
+            return HassiumObject.Null;
         }
     }
 }

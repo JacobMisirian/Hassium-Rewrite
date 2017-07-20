@@ -18,6 +18,7 @@ namespace Hassium.Runtime.Types
             AddAttribute("index", new HassiumProperty(get_index));
             AddAttribute("message", new HassiumProperty(get_message));
             AddAttribute("object", new HassiumProperty(get_object));
+            AddAttribute(TOSTRING, Attributes["message"]);
         }
 
         public HassiumInt get_index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

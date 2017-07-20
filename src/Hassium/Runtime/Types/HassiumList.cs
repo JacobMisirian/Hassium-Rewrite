@@ -58,7 +58,7 @@ namespace Hassium.Runtime.Types
             return this;
         }
 
-        public override HassiumBool IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumObject IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(iterIndex >= Values.Count);
         }

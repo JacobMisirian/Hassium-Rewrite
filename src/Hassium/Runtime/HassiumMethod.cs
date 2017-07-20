@@ -6,7 +6,6 @@ using System.Text;
 using Hassium.Compiler;
 using Hassium.Compiler.Emit;
 using Hassium.Compiler.Parser;
-using Hassium.Runtime.Exceptions;
 using Hassium.Runtime.Types;
 
 namespace Hassium.Runtime
@@ -60,84 +59,82 @@ namespace Hassium.Runtime
 
         public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            try
+            if (Name != "lambda" && Name != "catch" && Name != "thread") vm.StackFrame.PushFrame();
+            int i = 0;
+            foreach (var param in Parameters)
             {
-                if (Name != "lambda" && Name != "catch" && Name != "thread") vm.StackFrame.PushFrame();
-                int i = 0;
-                foreach (var param in Parameters)
+                var arg = args[i++];
+                if (param.Key.FunctionParameterType == FunctionParameterType.Variadic)
                 {
-                    var arg = args[i++];
-                    if (param.Key.FunctionParameterType == FunctionParameterType.Variadic)
+                    if (arg is HassiumList || arg is HassiumTuple)
+                        vm.StackFrame.Add(param.Value, arg);
+                    else
                     {
-                        if (arg is HassiumList || arg is HassiumTuple)
-                            vm.StackFrame.Add(param.Value, arg);
-                        else
-                        {
-                            HassiumList list = new HassiumList(new HassiumObject[0]);
-                            for (; i < args.Length; i++)
-                                list.add(vm, location, args[i]);
-                            vm.StackFrame.Add(param.Value, list);
-                        }
-                        break;
+                        HassiumList list = new HassiumList(new HassiumObject[0]);
+                        for (; i < args.Length; i++)
+                            list.add(vm, location, args[i]);
+                        vm.StackFrame.Add(param.Value, list);
                     }
-                    if (param.Key.FunctionParameterType == FunctionParameterType.Enforced)
-                    {
-                        var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(param.Key.EnforcedType);
-                        if (!arg.Types.Contains(enforcedType))
-                            throw new InternalException(vm, location, InternalException.PARAMETER_ERROR, enforcedType, arg.Type());
-                    }
-                    vm.StackFrame.Add(param.Value, arg);
+                    break;
                 }
-
-                if (IsConstructor)
+                if (param.Key.FunctionParameterType == FunctionParameterType.Enforced)
                 {
-                    HassiumClass ret = new HassiumClass(Parent.Name);
-                    ret.Attributes = CloneDictionary(Parent.Attributes);
-                    ret.AddType(Parent.TypeDefinition);
-                    
-                    foreach (var inherit in Parent.Inherits)
+                    var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(param.Key.EnforcedType);
+                    if (!arg.Types.Contains(enforcedType))
                     {
-                        foreach (var attrib in CloneDictionary(vm.ExecuteMethod(inherit).Attributes))
-                        {
-                            if (!ret.Attributes.ContainsKey(attrib.Key))
-                            {
-                                attrib.Value.Parent = ret;
-                                ret.Attributes.Add(attrib.Key, attrib.Value);
-                            }
-                        }
+                        vm.RaiseException(new HassiumConversionFailedException(arg, enforcedType));
+                        return Null;
                     }
-
-                    foreach (var type in Parent.Types)
-                        ret.AddType(type as HassiumTypeDefinition);
-                    foreach (var attrib in ret.Attributes.Values)
-                        attrib.Parent = ret;
-                    vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);
-                    vm.StackFrame.PopFrame();
-                    return ret;
                 }
-                else
-                {
-                    var ret = vm.ExecuteMethod(this);
-                    if (Name == "catch")
-                    {
-                        return ret;
-                    }
-
-                    if (ReturnType != null)
-                    {
-                        var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(ReturnType);
-                        if (!ret.Types.Contains(enforcedType))
-                            throw new InternalException(vm, vm.CurrentSourceLocation, InternalException.RETURN_ERROR, enforcedType, ret.Type());
-                    }
-
-                    if (Name != "lambda" && Name != "__init__") vm.StackFrame.PopFrame();
-                    return ret;
-                }
+                vm.StackFrame.Add(param.Value, arg);
             }
-            catch (InternalException ex)
+
+            if (IsConstructor)
             {
-                vm.RaiseException(new HassiumString(ex.Message));
-                return Null;
+                HassiumClass ret = new HassiumClass(Parent.Name);
+                ret.Attributes = CloneDictionary(Parent.Attributes);
+                ret.AddType(Parent.TypeDefinition);
+
+                foreach (var inherit in Parent.Inherits)
+                {
+                    foreach (var attrib in CloneDictionary(vm.ExecuteMethod(inherit).Attributes))
+                    {
+                        if (!ret.Attributes.ContainsKey(attrib.Key))
+                        {
+                            attrib.Value.Parent = ret;
+                            ret.Attributes.Add(attrib.Key, attrib.Value);
+                        }
+                    }
+                }
+
+                foreach (var type in Parent.Types)
+                    ret.AddType(type as HassiumTypeDefinition);
+                foreach (var attrib in ret.Attributes.Values)
+                    attrib.Parent = ret;
+                vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);
+                vm.StackFrame.PopFrame();
+                return ret;
+            }
+            else
+            {
+                var ret = vm.ExecuteMethod(this);
+                if (Name == "catch")
+                {
+                    return ret;
+                }
+
+                if (ReturnType != null)
+                {
+                    var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(ReturnType);
+                    if (!ret.Types.Contains(enforcedType))
+                    {
+                        vm.RaiseException(new HassiumConversionFailedException(ret, enforcedType));
+                        return this;
+                    }
+                }
+
+                if (Name != "lambda" && Name != "__init__") vm.StackFrame.PopFrame();
+                return ret;
             }
         }
 

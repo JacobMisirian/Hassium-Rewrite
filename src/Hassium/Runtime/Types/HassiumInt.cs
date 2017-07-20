@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 using Hassium.Compiler;
-using Hassium.Runtime.Exceptions;
 
 namespace Hassium.Runtime.Types
 {
@@ -54,7 +53,8 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int + args[0].ToFloat(vm, location).Float);
-            throw new InternalException(vm, location, InternalException.CONVERSION_ERROR, args[0].Type(), Number);
+            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            return this;
         }
 
         public override HassiumObject BitshiftLeft(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -90,7 +90,8 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int / args[0].ToFloat(vm, location).Float);
-            throw new InternalException(vm, location, InternalException.CONVERSION_ERROR, args[0].Type(), Number);
+            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            return this;
         }
 
         public override HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -103,12 +104,12 @@ namespace Hassium.Runtime.Types
             return new HassiumBool((Int & (1 << (int)args[0].ToInt(vm, location).Int - 1)) != 0);
         }
 
-        public override HassiumBool GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Int > args[0].ToInt(vm, location).Int);
         }
 
-        public override HassiumBool GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumObject GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Int >= args[0].ToInt(vm, location).Int);
         }
@@ -118,12 +119,12 @@ namespace Hassium.Runtime.Types
             return new HassiumInt(Int / args[0].ToInt(vm, location).Int);
         }
 
-        public override HassiumBool LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumObject LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Int < args[0].ToInt(vm, location).Int);
         }
 
-        public override HassiumBool LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public override HassiumObject LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Int <= args[0].ToInt(vm, location).Int);
         }
@@ -141,7 +142,8 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int * args[0].ToFloat(vm, location).Float);
-            throw new InternalException(vm, location, InternalException.CONVERSION_ERROR, args[0].Type(), Number);
+            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            return this;
         }
 
         public override HassiumObject Negate(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -177,7 +179,8 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int - args[0].ToFloat(vm, location).Float);
-            throw new InternalException(vm, location, InternalException.CONVERSION_ERROR, args[0].Type(), Number);
+            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            return this;
         }
 
         public override HassiumBool ToBool(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

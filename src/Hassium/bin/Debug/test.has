@@ -1,10 +1,9 @@
 use IO;
 
 func main () {
-	file = FS.open ("file.txt");
+	file = FS.open ("test.txt", "");
 
-	file.writeLine ("Hello, World!");
-	file.writeLine ("This is a test");
+	file.writeAllLines("Hello");
 
 	file.close ();
 }
