@@ -23,6 +23,7 @@ namespace Hassium.Runtime.Types
             AddAttribute(ITER, Iter, 0);
             AddAttribute(ITERABLEFULL, IterableFull, 0);
             AddAttribute(ITERABLENEXT, IterableNext, 0);
+            AddAttribute("removeAt", removeAt, 1);
         }
 
         public HassiumNull add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -66,6 +67,18 @@ namespace Hassium.Runtime.Types
         public override HassiumObject IterableNext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Values[iterIndex++];
+        }
+
+        public HassiumNull removeAt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            var index = args[0].ToInt(vm, location);
+            if (index.Int < 0 || index.Int >= Values.Count)
+            {
+                vm.RaiseException(new HassiumIndexOutOfRangeException(this, index));
+                return Null;
+            }
+            Values.Remove(Values[(int)index.Int]);
+            return Null;
         }
 
         public override HassiumObject StoreIndex(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

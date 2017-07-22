@@ -59,6 +59,8 @@ namespace Hassium.Runtime
                 int arg = method.Instructions[pos].Arg;
                 CurrentSourceLocation = method.Instructions[pos].SourceLocation;
                 //Console.WriteLine(method.Instructions[pos].ToString() + "\t"  + method.Name);
+                try
+                {
                     switch (method.Instructions[pos].InstructionType)
                     {
                         case InstructionType.BinaryOperation:
@@ -249,6 +251,11 @@ namespace Hassium.Runtime
                             interpretUnaryOperation(Stack.Pop(), arg);
                             break;
                     }
+                }
+                catch (Exception ex)
+                {
+                    RaiseException(new HassiumString(ex.ToString()));
+                }
             }
             return HassiumObject.Null;
         }
