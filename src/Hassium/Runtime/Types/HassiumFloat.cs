@@ -94,7 +94,7 @@ namespace Hassium.Runtime.Types
 
         public override HassiumObject Power(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumFloat(Math.Pow(Float, args[0].ToFloat(vm, location).Float));
+            return new HassiumFloat(System.Math.Pow(Float, args[0].ToFloat(vm, location).Float));
         }
 
         public override HassiumObject Subtract(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

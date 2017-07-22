@@ -158,7 +158,7 @@ namespace Hassium.Runtime.Types
 
         public override HassiumObject Power(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumInt((long)Math.Pow((double)Int, (double)args[0].ToInt(vm, location).Int));
+            return new HassiumInt((long)System.Math.Pow((double)Int, (double)args[0].ToInt(vm, location).Int));
         }
 
         public HassiumInt setBit(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

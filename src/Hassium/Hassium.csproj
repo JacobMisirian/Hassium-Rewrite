@@ -109,6 +109,9 @@
     <Compile Include="Runtime\IO\HassiumIOModule.cs" />
     <Compile Include="Runtime\IO\HassiumPath.cs" />
     <Compile Include="Runtime\IO\HassiumStreamClosedException.cs" />
+    <Compile Include="Runtime\Math\HassiumMath.cs" />
+    <Compile Include="Runtime\Math\HassiumMathModule.cs" />
+    <Compile Include="Runtime\Math\HassiumRandom.cs" />
     <Compile Include="Runtime\StackFrame.cs" />
     <Compile Include="Runtime\Types\HassiumBool.cs" />
     <Compile Include="Runtime\Types\HassiumChar.cs" />
