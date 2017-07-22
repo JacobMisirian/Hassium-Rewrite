@@ -102,6 +102,7 @@
     <Compile Include="Runtime\HassiumTypeDefinition.cs" />
     <Compile Include="Runtime\HassiumVariableNotFoundException.cs" />
     <Compile Include="Runtime\InternalModule.cs" />
+    <Compile Include="Runtime\IO\HassiumDirectoryNotFoundException.cs" />
     <Compile Include="Runtime\IO\HassiumFile.cs" />
     <Compile Include="Runtime\IO\HassiumFileNotFoundException.cs" />
     <Compile Include="Runtime\IO\HassiumFS.cs" />

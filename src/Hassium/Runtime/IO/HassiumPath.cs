@@ -29,22 +29,27 @@ namespace Hassium.Runtime.IO
                 paths[i] = args[i].ToString(vm, location).String;
             return new HassiumString(Path.Combine(paths));
         }
+
         public HassiumString parseDirectoryName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetDirectoryName(args[0].ToString(vm, location).String));
         }
+
         public HassiumString parseExtension(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetExtension(args[0].ToString(vm, location).String));
         }
+
         public HassiumString parseFileName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetFileName(args[0].ToString(vm, location).String));
         }
+
         public HassiumString parseFileNameWithoutExtension(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetFileNameWithoutExtension(args[0].ToString(vm, location).String));
         }
+
         public HassiumString parseRoot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetPathRoot(args[0].ToString(vm, location).String));

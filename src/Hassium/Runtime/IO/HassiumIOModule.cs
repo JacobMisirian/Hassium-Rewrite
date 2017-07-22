@@ -4,6 +4,7 @@
     {
         public HassiumIOModule() : base("IO")
         {
+            AddAttribute("DirectoryNotFoundException", HassiumDirectoryNotFoundException.TypeDefinition);
             AddAttribute("File", HassiumFile.TypeDefinition);
             AddAttribute("FileNotFoundException", HassiumFileNotFoundException.TypeDefinition);
             AddAttribute("FS", new HassiumFS());

@@ -10,7 +10,18 @@ namespace Hassium.Runtime.IO
     {
         public HassiumFS()
         {
+            AddAttribute("close", close, 1);
             AddAttribute("copy", copy, 2);
+            AddAttribute("createDirectory", createDirectory, 1);
+            AddAttribute("createFile", createFile, 1);
+            AddAttribute("currentDirectory", new HassiumProperty(get_currentDirectory, set_currentDirectory));
+            AddAttribute("delete", delete, 1);
+            AddAttribute("deleteDirectory", deleteDirectory, 1);
+            AddAttribute("deleteFile", deleteFile, 1);
+            AddAttribute("getTempFile", getTempFile, 0);
+            AddAttribute("getTempPath", getTempPath, 0);
+            AddAttribute("listDirectories", listDirectories, 1);
+            AddAttribute("listFiles", listFiles, 1);
             AddAttribute("move", move, 2);
             AddAttribute("open", open, 1);
             AddAttribute("readBytes", readBytes, 1);
@@ -23,6 +34,7 @@ namespace Hassium.Runtime.IO
 
         public HassiumNull close(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
+            (args[0] as HassiumFile).close(vm, location);
             return Null;
         }
 
@@ -33,6 +45,91 @@ namespace Hassium.Runtime.IO
             File.Copy(source, args[1].ToString(vm, location).String);
 
             return Null;
+        }
+
+        public HassiumNull createDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            Directory.CreateDirectory(args[0].ToString(vm, location).String);
+            return Null;
+        }
+
+        public HassiumNull createFile(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            File.Create(args[0].ToString(vm, location).String);
+            return Null;
+        }
+
+        public HassiumString get_currentDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(Directory.GetCurrentDirectory());
+        }
+
+        public HassiumString set_currentDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            Directory.SetCurrentDirectory(args[0].ToString(vm, location).String);
+            return get_currentDirectory(vm, location);
+        }
+
+        public HassiumNull delete(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            string path = args[0].ToString(vm, location).String;
+
+            if (File.Exists(path))
+                File.Delete(path);
+            else if (Directory.Exists(path))
+                Directory.Delete(path);
+            else
+                vm.RaiseException(new HassiumFileNotFoundException(args[0].ToString(vm, location)));
+
+            return Null;
+        }
+
+        public HassiumNull deleteDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            string dir = args[0].ToString(vm, location).String;
+
+            if (Directory.Exists(dir))
+                Directory.Delete(dir);
+            else
+                vm.RaiseException(new HassiumDirectoryNotFoundException(args[0].ToString(vm, location)));
+            return Null;
+        }
+
+        public HassiumNull deleteFile(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            string path = args[0].ToString(vm, location).String;
+
+            if (File.Exists(path))
+                File.Delete(path);
+            else
+                vm.RaiseException(new HassiumFileNotFoundException(args[0].ToString(vm, location)));
+            return Null;
+        }
+
+        public HassiumString getTempFile(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(Path.GetTempFileName());
+        }
+
+        public HassiumString getTempPath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(Path.GetTempPath());
+        }
+
+        public HassiumList listDirectories(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            HassiumList result = new HassiumList(new HassiumObject[0]);
+            foreach (string dir in Directory.GetDirectories(args[0].ToString(vm, location).String))
+                result.add(vm, location, new HassiumString(dir));
+            return result;
+        }
+
+        public HassiumList listFiles(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            HassiumList result = new HassiumList(new HassiumObject[0]);
+            foreach (string dir in Directory.GetFiles(args[0].ToString(vm, location).String))
+                result.add(vm, location, new HassiumString(dir));
+            return result;
         }
 
         public HassiumNull move(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
