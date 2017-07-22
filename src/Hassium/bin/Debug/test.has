@@ -1,9 +1,8 @@
-use IO;
-
 func main () {
-	file = FS.open ("test.txt", "");
+	l = [ "hello", "world" ];
 
-	file.writeAllLines("Hello");
-
-	file.close ();
+	println (l is string);
+	println (l is list);
+	println (l [0] is string);
+	println (l [1] is list);
 }
