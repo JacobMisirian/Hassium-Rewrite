@@ -3,6 +3,13 @@ use Net;
 func main () {
 	sock = new Socket ("google.com", 80);
 
-	p = sock.connectedTo;
-	println (p.port);
+	sock.writeLine("GET\n");
+
+	while (1 == 1) {
+		line = sock.readLine ();
+		if (line.length == -1) {
+			break;
+		}
+		println (line);
+	}
 }

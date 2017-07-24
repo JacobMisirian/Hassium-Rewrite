@@ -199,13 +199,7 @@ namespace Hassium.Runtime.Net
                 return Null;
             }
 
-            StringBuilder sb = new StringBuilder();
-
-            while (Reader.PeekChar() != '\n' && (Reader.BaseStream.Position < Reader.BaseStream.Length))
-                sb.Append(Reader.ReadChar());
-            sb.Append("\n");
-
-            return new HassiumString(sb.ToString());
+            return new HassiumString(new StreamReader(Reader.BaseStream).ReadLine());
         }
 
         public HassiumObject readList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

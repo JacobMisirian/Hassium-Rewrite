@@ -19,6 +19,7 @@ namespace Hassium.Runtime.Types
             AddAttribute("format", format, -1);
             AddAttribute(INDEX, Index, 1);
             AddAttribute(ITER, Iter, 0);
+            AddAttribute("length", new HassiumProperty(get_length));
             AddAttribute(TOSTRING, ToString,   0);
         }
 
@@ -46,6 +47,11 @@ namespace Hassium.Runtime.Types
             foreach (var c in String)
                 list.add(vm, location, new HassiumChar(c));
             return list;
+        }
+
+        public HassiumInt get_length(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(String == null ? -1 : String.Length);
         }
 
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
