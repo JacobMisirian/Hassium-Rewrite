@@ -19,7 +19,7 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 1, 2);
         }
 
-        public HassiumIPAddr _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public static HassiumIPAddr _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumIPAddr addr = new HassiumIPAddr();
 

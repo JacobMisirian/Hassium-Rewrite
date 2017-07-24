@@ -41,13 +41,16 @@ namespace Hassium.Runtime.IO
             AddAttribute("extension", new HassiumProperty(get_extension, set_extension));
             AddAttribute("flush", flush, 0);
             AddAttribute("isClosed", new HassiumProperty(get_isClosed));
+            AddAttribute("length", new HassiumProperty(get_length));
             AddAttribute("moveTo", moveTo, 1);
             AddAttribute("name", new HassiumProperty(get_name, set_name));
+            AddAttribute("position", new HassiumProperty(get_position, set_position));
             AddAttribute("readAllByteS", readAllBytes, 0);
             AddAttribute("readAllLines", readAllLines, 0);
             AddAttribute("readAllText", readAllText, 0);
             AddAttribute("readInt", readInt, 0);
             AddAttribute("readLine", readLine, 0);
+            AddAttribute("readList", readList, 1);
             AddAttribute("readLong", readLong, 0);
             AddAttribute("readShort", readShort, 0);
             AddAttribute("readString", readString, 0);
@@ -60,6 +63,7 @@ namespace Hassium.Runtime.IO
             AddAttribute("writeFloat", writeFloat, 1);
             AddAttribute("writeInt", writeInt, 1);
             AddAttribute("writeLine", writeLine, 1);
+            AddAttribute("writeList", writeList, 1);
             AddAttribute("writeLong", writeLong, 1);
             AddAttribute("writeShort", writeShort, 1);
             AddAttribute("writeString", writeString, 1);
@@ -155,6 +159,11 @@ namespace Hassium.Runtime.IO
             return new HassiumBool(closed);
         }
 
+        public HassiumInt get_length(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(Reader.BaseStream.Length);
+        }
+
         public HassiumNull moveTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (!File.Exists(AbsolutePath.String))
@@ -182,6 +191,16 @@ namespace Hassium.Runtime.IO
 
             File.Move(AbsolutePath.String, args[0].ToString(vm, location).String);
 
+            return Null;
+        }
+
+        public HassiumInt get_position(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(Reader.BaseStream.Position);
+        }
+        public HassiumNull set_position(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            Reader.BaseStream.Position = args[0].ToInt(vm, location).Int;
             return Null;
         }
 
@@ -323,6 +342,28 @@ namespace Hassium.Runtime.IO
             sb.Append("\n");
 
             return new HassiumString(sb.ToString());
+        }
+
+        public HassiumObject readList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            if (!File.Exists(AbsolutePath.String))
+            {
+                vm.RaiseException(HassiumFileNotFoundException._new(vm, location, AbsolutePath));
+                return Null;
+            }
+
+            if (closed)
+            {
+                vm.RaiseException(HassiumFileClosedException._new(vm, location, this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+            int count = (int)args[0].ToInt(vm, location).Int;
+            for (int i = 0; i < count; i++)
+                list.add(vm, location, new HassiumChar((char)Reader.ReadBytes(1)[0]));
+
+            return list;
         }
 
         public HassiumObject readLong(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -499,6 +540,20 @@ namespace Hassium.Runtime.IO
 
             if (autoFlush)
                 Writer.Flush();
+            return Null;
+        }
+
+        public HassiumNull writeList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            if (closed)
+            {
+                vm.RaiseException(HassiumFileClosedException._new(vm, location, this, get_absolutePath(vm, location)));
+                return Null;
+            }
+
+            foreach (var i in args[0].ToList(vm, location).Values)
+                writeHassiumObject(Writer, i, vm, location);
+
             return Null;
         }
 
