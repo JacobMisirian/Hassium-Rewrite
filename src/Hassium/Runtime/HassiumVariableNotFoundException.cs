@@ -11,8 +11,16 @@ namespace Hassium.Runtime
         {
             AddType(TypeDefinition);
 
-            AddAttribute("message", new HassiumProperty(get_message));
-            AddAttribute(TOSTRING, Attributes["message"]);
+        }
+
+        public static HassiumVariableNotFoundException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            HassiumVariableNotFoundException exception = new HassiumVariableNotFoundException();
+
+            exception.AddAttribute("message", new HassiumProperty(exception.get_message));
+            exception.AddAttribute(TOSTRING, exception.Attributes["message"]);
+
+            return exception;
         }
 
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

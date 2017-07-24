@@ -7,19 +7,27 @@ namespace Hassium.Runtime
     {
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("ConversionFailedException");
 
-        public HassiumTypeDefinition DesiredType { get; private set; }
-        public HassiumObject Object { get; private set; }
+        public HassiumTypeDefinition DesiredType { get; set; }
+        public HassiumObject Object { get; set; }
 
-        public HassiumConversionFailedException(HassiumObject obj, HassiumTypeDefinition desiredType)
+        public HassiumConversionFailedException()
         {
-            Object = obj;
-            DesiredType = desiredType;
             AddType(TypeDefinition);
+            AddAttribute(INVOKE, _new, 2);
+        }
 
-            AddAttribute("desiredType", new HassiumProperty(get_desiredType));
-            AddAttribute("message", new HassiumProperty(get_message));
-            AddAttribute("object", new HassiumProperty(get_object));
-            AddAttribute(TOSTRING, Attributes["message"]);
+        public static HassiumConversionFailedException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            HassiumConversionFailedException exception = new HassiumConversionFailedException();
+
+            exception.Object = args[0];
+            exception.DesiredType = args[1] as HassiumTypeDefinition;
+            exception.AddAttribute("desiredType", new HassiumProperty(exception.get_desiredType));
+            exception.AddAttribute("message", new HassiumProperty(exception.get_message));
+            exception.AddAttribute("object", new HassiumProperty(exception.get_object));
+            exception.AddAttribute(TOSTRING, exception.Attributes["message"]);
+
+            return exception;
         }
 
         public HassiumTypeDefinition get_desiredType(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -29,7 +37,7 @@ namespace Hassium.Runtime
 
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumString(string.Format("Conversion Failed: Could not convert object of type {0} to type {1}", Object.Type().ToString(vm, location).String, DesiredType.ToString(vm, location).String));
+            return new HassiumString(string.Format("Conversion Failed: Could not convert object of type '{0}' to type '{1}'", Object.Type().ToString(vm, location).String, DesiredType.ToString(vm, location).String));
         }
 
         public HassiumObject get_object(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

@@ -53,7 +53,7 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int + args[0].ToFloat(vm, location).Float);
-            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            vm.RaiseException(HassiumConversionFailedException._new(vm, location, args[0], Number));
             return this;
         }
 
@@ -90,7 +90,7 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int / args[0].ToFloat(vm, location).Float);
-            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            vm.RaiseException(HassiumConversionFailedException._new(vm, location, args[0], Number));
             return this;
         }
 
@@ -142,7 +142,7 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int * args[0].ToFloat(vm, location).Float);
-            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            vm.RaiseException(HassiumConversionFailedException._new(vm, location, args[0], Number));
             return this;
         }
 
@@ -179,7 +179,7 @@ namespace Hassium.Runtime.Types
             var floatArg = args[0] as HassiumFloat;
             if (floatArg != null)
                 return new HassiumFloat(Int - args[0].ToFloat(vm, location).Float);
-            vm.RaiseException(new HassiumConversionFailedException(args[0], Number));
+            vm.RaiseException(HassiumConversionFailedException._new(vm, location, args[0], Number));
             return this;
         }
 
@@ -190,7 +190,7 @@ namespace Hassium.Runtime.Types
 
         public override HassiumFloat ToFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumFloat((double)Int);
+            return new HassiumFloat(Int);
         }
 
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

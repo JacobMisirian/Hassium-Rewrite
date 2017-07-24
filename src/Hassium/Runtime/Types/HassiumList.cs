@@ -48,7 +48,7 @@ namespace Hassium.Runtime.Types
             var index = args[0].ToInt(vm, location);
             if (index.Int < 0 || index.Int >= Values.Count)
             {
-                vm.RaiseException(new HassiumIndexOutOfRangeException(this, index));
+                vm.RaiseException(HassiumIndexOutOfRangeException._new(vm, location, this, index));
                 return Null;
             }
             return Values[(int)index.Int];
@@ -88,7 +88,7 @@ namespace Hassium.Runtime.Types
             var index = args[0].ToInt(vm, location);
             if (index.Int < 0 || index.Int >= Values.Count)
             {
-                vm.RaiseException(new HassiumIndexOutOfRangeException(this, index));
+                vm.RaiseException(HassiumIndexOutOfRangeException._new(vm, location, this, index));
                 return Null;
             }
             Values.Remove(Values[(int)index.Int]);
@@ -100,7 +100,7 @@ namespace Hassium.Runtime.Types
             var index = args[0].ToInt(vm, location);
             if (index.Int < 0 || index.Int >= Values.Count)
             {
-                vm.RaiseException(new HassiumIndexOutOfRangeException(this, index));
+                vm.RaiseException(HassiumIndexOutOfRangeException._new(vm, location, this, index));
                 return Null;
             }
             Values[(int)index.Int] = args[1];

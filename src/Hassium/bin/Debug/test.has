@@ -1,8 +1,5 @@
-func main () {
-	l = [ "hello", "world" ];
+use IO;
 
-	println (l is string);
-	println (l is list);
-	println (l [0] is string);
-	println (l [1] is list);
+func main () {
+	FS.deleteDirectory ("badDir");
 }

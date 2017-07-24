@@ -1,4 +1,5 @@
 ﻿using Hassium.Compiler;
+using Hassium.Runtime.Types;
 
 namespace Hassium.Runtime
 {
@@ -29,7 +30,7 @@ namespace Hassium.Runtime
                 foreach (int len in ParameterLengths)
                     if (len == args.Length)
                         return Target(vm, location, args);
-                vm.RaiseException(new HassiumArgumentLengthException(this, ParameterLengths[0], args.Length));
+                vm.RaiseException(HassiumArgumentLengthException._new(vm, location, this, new HassiumInt(ParameterLengths[0]), new HassiumInt(args.Length)));
                 return Null;
             }
             return Target(vm, location, args);

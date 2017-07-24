@@ -82,7 +82,7 @@ namespace Hassium.Runtime
                     var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(param.Key.EnforcedType);
                     if (!arg.Types.Contains(enforcedType))
                     {
-                        vm.RaiseException(new HassiumConversionFailedException(arg, enforcedType));
+                        vm.RaiseException(HassiumConversionFailedException._new(vm, location, arg, enforcedType));
                         return Null;
                     }
                 }
@@ -128,7 +128,7 @@ namespace Hassium.Runtime
                     var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(ReturnType);
                     if (!ret.Types.Contains(enforcedType))
                     {
-                        vm.RaiseException(new HassiumConversionFailedException(ret, enforcedType));
+                        vm.RaiseException(HassiumConversionFailedException._new(vm, location, ret, enforcedType));
                         return this;
                     }
                 }

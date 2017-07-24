@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+
 using Hassium.Compiler;
+using Hassium.Runtime.Types;
 
 namespace Hassium.Runtime
 {
@@ -43,7 +45,7 @@ namespace Hassium.Runtime
                 }
                 if (Attributes.ContainsKey("new"))
                     return Invoke(vm, location, args);
-                vm.RaiseException(new HassiumAttributeNotFoundException(this, INVOKE));
+                vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(INVOKE)));
                 return Null;
             }
         }

@@ -43,7 +43,7 @@ namespace Hassium.Runtime.Types
             foreach (var key in Dictionary.Keys)
                 if (key.EqualTo(vm, location, args[0]).Bool)
                     return Dictionary[key];
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, args[0].ToString(vm, location).String));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, args[0].ToString(vm, location)));
             return Null;
         }
 

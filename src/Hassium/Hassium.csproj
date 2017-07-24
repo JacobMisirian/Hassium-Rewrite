@@ -108,10 +108,14 @@
     <Compile Include="Runtime\IO\HassiumFS.cs" />
     <Compile Include="Runtime\IO\HassiumIOModule.cs" />
     <Compile Include="Runtime\IO\HassiumPath.cs" />
-    <Compile Include="Runtime\IO\HassiumStreamClosedException.cs" />
+    <Compile Include="Runtime\IO\HassiumFileClosedException.cs" />
     <Compile Include="Runtime\Math\HassiumMath.cs" />
     <Compile Include="Runtime\Math\HassiumMathModule.cs" />
     <Compile Include="Runtime\Math\HassiumRandom.cs" />
+    <Compile Include="Runtime\Net\HassiumSocketClosedException.cs" />
+    <Compile Include="Runtime\Net\HassiumNetModule.cs" />
+    <Compile Include="Runtime\Net\HassiumSocket.cs" />
+    <Compile Include="Runtime\Net\HassiumIPAddr.cs" />
     <Compile Include="Runtime\StackFrame.cs" />
     <Compile Include="Runtime\Types\HassiumBool.cs" />
     <Compile Include="Runtime\Types\HassiumChar.cs" />

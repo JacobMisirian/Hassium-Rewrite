@@ -4,12 +4,12 @@
     {
         public HassiumIOModule() : base("IO")
         {
-            AddAttribute("DirectoryNotFoundException", HassiumDirectoryNotFoundException.TypeDefinition);
+            AddAttribute("DirectoryNotFoundException", new HassiumDirectoryNotFoundException());
             AddAttribute("File", HassiumFile.TypeDefinition);
-            AddAttribute("FileNotFoundException", HassiumFileNotFoundException.TypeDefinition);
+            AddAttribute("FileClosedException", new HassiumFileClosedException());
+            AddAttribute("FileNotFoundException", new HassiumFileNotFoundException());
             AddAttribute("FS", new HassiumFS());
             AddAttribute("Path", new HassiumPath());
-            AddAttribute("StreamClosedException", HassiumStreamClosedException.TypeDefinition);
         }
     }
 }

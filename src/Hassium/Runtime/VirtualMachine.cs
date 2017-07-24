@@ -103,7 +103,7 @@ namespace Hassium.Runtime
                             var type = Globals[Stack.Pop().ToString(this, CurrentSourceLocation).String].Type();
                             val = Stack.Pop();
                             if (!val.Types.Contains(type))
-                                RaiseException(new HassiumConversionFailedException(val, type));
+                                RaiseException(HassiumConversionFailedException._new(this, CurrentSourceLocation, val, type));
                             if (StackFrame.Contains(arg))
                                 StackFrame.Modify(arg, val);
                             else
@@ -139,7 +139,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                RaiseException(new HassiumAttributeNotFoundException(val, CurrentModule.ConstantPool[arg]));
+                                RaiseException(HassiumAttributeNotFoundException._new(this, CurrentSourceLocation, val, new HassiumString(CurrentModule.ConstantPool[arg])));
                             }
                             break;
                         case InstructionType.LoadGlobal:
@@ -151,10 +151,10 @@ namespace Hassium.Runtime
                                 if (method.Parent.Attributes.ContainsKey(attrib))
                                     Stack.Push(method.Parent.Attributes[attrib]);
                                 else
-                                    RaiseException(new HassiumAttributeNotFoundException(method.Parent, attrib));
+                                    RaiseException(HassiumAttributeNotFoundException._new(this, CurrentSourceLocation, method.Parent, new HassiumString(attrib)));
                             }
                             else
-                                RaiseException(new HassiumAttributeNotFoundException(CurrentModule, attrib));
+                                RaiseException(HassiumAttributeNotFoundException._new(this, CurrentSourceLocation, CurrentModule, new HassiumString(attrib)));
                             break;
                         case InstructionType.LoadGlobalVariable:
                             try
@@ -163,7 +163,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                RaiseException(new HassiumAttributeNotFoundException(CurrentModule, arg.ToString()));
+                                RaiseException(HassiumAttributeNotFoundException._new(this, CurrentSourceLocation, CurrentModule, new HassiumString(arg.ToString())));
                             }
                             break;
                         case InstructionType.LoadIterableElement:
@@ -224,7 +224,7 @@ namespace Hassium.Runtime
                             }
                             catch (KeyNotFoundException)
                             {
-                                RaiseException(new HassiumAttributeNotFoundException(val, attrib));
+                                RaiseException(HassiumAttributeNotFoundException._new(this, CurrentSourceLocation, val, new HassiumString(attrib)));
                             }
                             break;
                         case InstructionType.StoreGlobalVariable:

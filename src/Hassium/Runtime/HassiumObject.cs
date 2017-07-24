@@ -83,245 +83,245 @@ namespace Hassium.Runtime
         {
             if (Attributes.ContainsKey(ADD))
                 return Attributes[ADD].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, ADD));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(ADD)));
             return Null;
         }
         public virtual HassiumObject Subtract(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(SUBTRACT))
                 return Attributes[SUBTRACT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, SUBTRACT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location,this, new HassiumString(SUBTRACT)));
             return Null;
         }
         public virtual HassiumObject Multiply(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(MULTIPLY))
                 return Attributes[MULTIPLY].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, MULTIPLY));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(MULTIPLY)));
             return Null;
         }
         public virtual HassiumObject Divide(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(DIVIDE))
                 return Attributes[DIVIDE].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, DIVIDE));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(DIVIDE)));
             return Null;
         }
         public virtual HassiumObject Modulus(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(MODULUS))
                 return Attributes[MODULUS].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, MODULUS));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(MODULUS)));
             return Null;
         }
         public virtual HassiumObject Power(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(POWER))
                 return Attributes[POWER].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, POWER));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(POWER)));
             return Null;
         }
         public virtual HassiumObject IntegerDivision(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(INTEGERDIVISION))
                 return Attributes[INTEGERDIVISION].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, INTEGERDIVISION));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(INTEGERDIVISION)));
             return Null;
         }
         public virtual HassiumObject BitshiftLeft(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(BITSHIFTLEFT))
                 return Attributes[BITSHIFTLEFT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, BITSHIFTLEFT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(BITSHIFTLEFT)));
             return Null;
         }
         public virtual HassiumObject BitshiftRight(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(BITSHIFTRIGHT))
                 return Attributes[BITSHIFTRIGHT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, BITSHIFTRIGHT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(BITSHIFTRIGHT)));
             return Null;
         }
         public virtual HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(EQUALTO))
                 return Attributes[EQUALTO].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, EQUALTO));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(EQUALTO)));
             return new HassiumBool(false);
         }
         public virtual HassiumBool NotEqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(NOTEQUALTO))
                 return Attributes[NOTEQUALTO].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, NOTEQUALTO));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(NOTEQUALTO)));
             return new HassiumBool(false);
         }
         public virtual HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(GREATERTHAN))
                 return Attributes[GREATERTHAN].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, GREATERTHAN));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(GREATERTHAN)));
             return Null;
         }
         public virtual HassiumObject GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(GREATERTHANOREQUAL))
                 return Attributes[GREATERTHANOREQUAL].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, GREATERTHANOREQUAL));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(GREATERTHANOREQUAL)));
             return Null;
         }
         public virtual HassiumObject LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LESSERTHAN))
                 return Attributes[LESSERTHAN].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, LESSERTHAN));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(LESSERTHAN)));
             return Null;
         }
         public virtual HassiumObject LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LESSERTHANOREQUAL))
                 return Attributes[LESSERTHANOREQUAL].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, LESSERTHANOREQUAL));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(LESSERTHANOREQUAL)));
             return Null;
         }
         public virtual HassiumObject BitwiseAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(BITWISEAND))
                 return Attributes[BITWISEAND].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, BITWISEAND));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(BITWISEAND)));
             return Null;
         }
         public virtual HassiumObject BitwiseOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(BITWISEOR))
                 return Attributes[BITWISEOR].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, BITWISEOR));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(BITWISEOR)));
             return Null;
         }
         public virtual HassiumObject BitwiseNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(BITWISENOT))
                 return Attributes[BITWISENOT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, BITWISENOT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(BITWISENOT)));
             return Null;
         }
         public virtual HassiumObject LogicalAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LOGICALAND))
                 return Attributes[LOGICALAND].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, LOGICALAND));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(LOGICALAND)));
             return Null;
         }
         public virtual HassiumObject LogicalOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LOGICALOR))
                 return Attributes[LOGICALOR].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, LOGICALOR));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(LOGICALOR)));
             return Null;
         }
         public virtual HassiumObject LogicalNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(LOGICALNOT))
                 return Attributes[LOGICALNOT].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, LOGICALNOT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(LOGICALNOT)));
             return Null;
         }
         public virtual HassiumObject Negate(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(NEGATE))
                 return Attributes[NEGATE].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, NEGATE));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(NEGATE)));
             return Null;
         }
         public virtual HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(INDEX))
                 return Attributes[INDEX].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, INDEX));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(INDEX)));
             return Null;
         }
         public virtual HassiumObject StoreIndex(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(STOREINDEX))
                 return Attributes[STOREINDEX].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, STOREINDEX));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(STOREINDEX)));
             return Null;
         }
         public virtual HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(ITER))
                 return Attributes[ITER].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, ITER));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(ITER)));
             return Null;
         }
         public virtual HassiumObject IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(ITERABLEFULL))
                 return Attributes[ITERABLEFULL].Invoke(vm, location, args).ToBool(vm, location);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, ITERABLEFULL));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(ITERABLEFULL)));
             return Null;
         }
         public virtual HassiumObject IterableNext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(ITERABLENEXT))
                 return Attributes[ITERABLENEXT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, ITERABLENEXT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(ITERABLENEXT)));
             return Null;
         }
         public virtual HassiumObject Dispose(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(DISPOSE))
                 return Attributes[DISPOSE].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, DISPOSE));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(DISPOSE)));
             return Null;
         }
         public virtual HassiumBool ToBool(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOBOOL))
                 return (HassiumBool)Attributes[TOBOOL].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOBOOL));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOBOOL)));
             return new HassiumBool(false);
         }
         public virtual HassiumChar ToChar(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOCHAR))
                 return (HassiumChar)Attributes[TOCHAR].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOCHAR));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOCHAR)));
             return new HassiumChar('\0');
         }
         public virtual HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOINT))
                 return (HassiumInt)Attributes[TOINT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOINT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOINT)));
             return new HassiumInt(-1);
         }
         public virtual HassiumFloat ToFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOFLOAT))
                 return (HassiumFloat)Attributes[TOFLOAT].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOFLOAT));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOFLOAT)));
             return new HassiumFloat(-1);
         }
         public virtual HassiumList ToList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOLIST))
                 return (HassiumList)Attributes[TOLIST].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOLIST));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOLIST)));
             return new HassiumList(new HassiumObject[0]);
         }
         public virtual HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOSTRING))
                 return Attributes[TOSTRING].Invoke(vm, location, args).ToString(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOSTRING));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOSTRING)));
             return new HassiumString("");
         }
         public virtual HassiumTuple ToTuple(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(TOTUPLE))
                 return (HassiumTuple)Attributes[TOTUPLE].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, TOTUPLE));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOTUPLE)));
             return new HassiumTuple(new HassiumObject[0]);
         }
         
@@ -329,7 +329,7 @@ namespace Hassium.Runtime
         {
             if (Attributes.ContainsKey(INVOKE))
                 return Attributes[INVOKE].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, INVOKE));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(INVOKE)));
             return Null;
         }
         
@@ -337,7 +337,7 @@ namespace Hassium.Runtime
         {
             if (Attributes.ContainsKey(XOR))
                 return Attributes[XOR].Invoke(vm, location, args);
-            vm.RaiseException(new HassiumAttributeNotFoundException(this, XOR));
+            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(XOR)));
             return Null;
         }
 

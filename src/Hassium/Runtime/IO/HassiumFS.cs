@@ -41,7 +41,11 @@ namespace Hassium.Runtime.IO
         public HassiumNull copy(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string source = args[0].ToString(vm, location).String;
-            HassiumFileNotFoundException.VerifyPath(vm, source);
+            if (!File.Exists(source))
+            {
+                vm.RaiseException(HassiumFileNotFoundException._new(vm, location, args[0].ToString(vm, location)));
+                return Null;
+            }
             File.Copy(source, args[1].ToString(vm, location).String);
 
             return Null;
@@ -79,7 +83,7 @@ namespace Hassium.Runtime.IO
             else if (Directory.Exists(path))
                 Directory.Delete(path);
             else
-                vm.RaiseException(new HassiumFileNotFoundException(args[0].ToString(vm, location)));
+                vm.RaiseException(HassiumFileNotFoundException._new(vm, location, args[0].ToString(vm, location)));
 
             return Null;
         }
@@ -91,7 +95,7 @@ namespace Hassium.Runtime.IO
             if (Directory.Exists(dir))
                 Directory.Delete(dir);
             else
-                vm.RaiseException(new HassiumDirectoryNotFoundException(args[0].ToString(vm, location)));
+                vm.RaiseException(HassiumDirectoryNotFoundException._new(vm, location, args[0].ToString(vm, location)));
             return Null;
         }
 
@@ -102,7 +106,7 @@ namespace Hassium.Runtime.IO
             if (File.Exists(path))
                 File.Delete(path);
             else
-                vm.RaiseException(new HassiumFileNotFoundException(args[0].ToString(vm, location)));
+                vm.RaiseException(HassiumFileNotFoundException._new(vm, location, args[0].ToString(vm, location)));
             return Null;
         }
 
@@ -135,7 +139,11 @@ namespace Hassium.Runtime.IO
         public HassiumNull move(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string source = args[0].ToString(vm, location).String;
-            HassiumFileNotFoundException.VerifyPath(vm, source);
+            if (!File.Exists(source))
+            {
+                vm.RaiseException(HassiumFileNotFoundException._new(vm, location, args[0].ToString(vm, location)));
+                return Null;
+            }
             File.Move(source, args[1].ToString(vm, location).String);
 
             return Null;
