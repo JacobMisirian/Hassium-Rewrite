@@ -2,6 +2,7 @@
 using Hassium.Runtime.Types;
 
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -54,6 +55,8 @@ namespace Hassium.Runtime.Net
             socket.AddAttribute("autoFlush", new HassiumProperty(socket.get_autoFlush, socket.set_autoFlush));
             socket.AddAttribute("close", socket.close, 0);
             socket.AddAttribute("connect", socket.connect, 1, 2);
+            socket.AddAttribute("connectedFrom", new HassiumProperty(socket.get_connectedFrom));
+            socket.AddAttribute("connectedTo", new HassiumProperty(socket.get_connectedTo));
             socket.AddAttribute("flush", socket.flush, 0);
             socket.AddAttribute("isConnected", new HassiumProperty(socket.get_isConnected));
             socket.AddAttribute("readInt", socket.readInt, 0);
@@ -110,6 +113,28 @@ namespace Hassium.Runtime.Net
                     return Null;
             }
             return Null;
+        }
+
+        public HassiumObject get_connectedFrom(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            if (Closed)
+            {
+                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
+                return Null;
+            }
+            string[] parts = (Client.Client.LocalEndPoint as IPEndPoint).ToString().Split(':');
+            return HassiumIPAddr._new(vm, location, new HassiumString(parts[0]), new HassiumString(parts[1]));
+        }
+
+        public HassiumObject get_connectedTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            if (Closed)
+            {
+                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
+                return Null;
+            }
+            string[] parts = (Client.Client.RemoteEndPoint as IPEndPoint).ToString().Split(':');
+            return HassiumIPAddr._new(vm, location, new HassiumString(parts[0]), new HassiumString(parts[1]));
         }
 
         public HassiumNull flush(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

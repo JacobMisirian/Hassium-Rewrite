@@ -2,6 +2,7 @@
 
 using Hassium.Runtime.IO;
 using Hassium.Runtime.Math;
+using Hassium.Runtime.Net;
 using Hassium.Runtime.Types;
 
 namespace Hassium.Runtime
@@ -16,8 +17,9 @@ namespace Hassium.Runtime
 
         public static Dictionary<string, InternalModule> InternalModules = new Dictionary<string, InternalModule>()
         {
-            {"IO",          new HassiumIOModule() },
+            { "IO",         new HassiumIOModule() },
             { "Math",       new HassiumMathModule() },
+            { "Net",        new HassiumNetModule() },
             { "Types",      new HassiumTypesModule() }
         };
     }

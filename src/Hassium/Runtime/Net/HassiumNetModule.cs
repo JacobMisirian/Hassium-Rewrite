@@ -4,7 +4,9 @@
     {
         public HassiumNetModule() : base("Net")
         {
-
+            AddAttribute("IPAddr", new HassiumIPAddr());
+            AddAttribute("Socket", new HassiumSocket());
+            AddAttribute("SocketClosedException", new HassiumSocketClosedException());
         }
     }
 }

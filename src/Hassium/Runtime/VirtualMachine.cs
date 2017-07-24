@@ -135,7 +135,10 @@ namespace Hassium.Runtime
                             try
                             {
                                 var attribute = val.Attributes[CurrentModule.ConstantPool[arg]];
-                                Stack.Push(attribute);
+                                if (attribute is HassiumProperty)
+                                    Stack.Push((attribute as HassiumProperty).Get.Invoke(this, CurrentSourceLocation));
+                                else
+                                    Stack.Push(attribute);
                             }
                             catch (KeyNotFoundException)
                             {

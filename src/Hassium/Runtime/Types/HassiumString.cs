@@ -1,5 +1,7 @@
 ﻿using Hassium.Compiler;
 
+using System;
+
 namespace Hassium.Runtime.Types
 {
     public class HassiumString : HassiumObject
@@ -44,6 +46,19 @@ namespace Hassium.Runtime.Types
             foreach (var c in String)
                 list.add(vm, location, new HassiumChar(c));
             return list;
+        }
+
+        public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            try
+            {
+                return new HassiumInt(Convert.ToInt64(String));
+            }
+            catch
+            {
+                vm.RaiseException(HassiumConversionFailedException._new(vm, location, this, HassiumInt.TypeDefinition));
+                return new HassiumInt(-1);
+            }
         }
 
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

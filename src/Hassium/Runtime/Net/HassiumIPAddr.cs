@@ -27,8 +27,8 @@ namespace Hassium.Runtime.Net
             addr.Port = args.Length == 2 ? args[1].ToInt(vm, location) : new HassiumInt(-1);
             addr.AddAttribute("address", new HassiumProperty(addr.get_address));
             addr.AddAttribute("port", new HassiumProperty(addr.get_port));
-            addr.AddAttribute(TOSTRING, addr.ToString, 0);
-
+            addr.AddAttribute(TOSTRING, addr.toString, 0);
+            
             return addr;
         }
 
