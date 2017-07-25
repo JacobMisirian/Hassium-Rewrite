@@ -17,10 +17,15 @@ namespace Hassium.Runtime.Types
 
             AddAttribute(EQUALTO, EqualTo, 1);
             AddAttribute("format", format, -1);
+            AddAttribute(GREATERTHAN, GreaterThan, 1);
+            AddAttribute(GREATERTHANOREQUAL, GreaterThanOrEqual, 1);
             AddAttribute(INDEX, Index, 1);
             AddAttribute(ITER, Iter, 0);
             AddAttribute("length", new HassiumProperty(get_length));
-            AddAttribute(TOSTRING, ToString,   0);
+            AddAttribute(LESSERTHAN, LesserThan, 1);
+            AddAttribute(LESSERTHANOREQUAL, LesserThanOrEqual, 1);
+            AddAttribute(NOTEQUALTO, NotEqualTo, 1);
+            AddAttribute(TOSTRING, ToString, 0);
         }
 
         public override HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -34,6 +39,16 @@ namespace Hassium.Runtime.Types
             for (int i = 0; i < strargs.Length; i++)
                 strargs[i] = args[i].ToString(vm, location).String;
             return new HassiumString(string.Format(String, strargs));
+        }
+
+        public override HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(string.Compare(String, args[0].ToString(vm, location).String) == 1);
+        }
+
+        public override HassiumObject GreaterThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(string.Compare(String, args[0].ToString(vm, location).String) >= 0);
         }
 
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -53,6 +68,21 @@ namespace Hassium.Runtime.Types
         {
             return new HassiumInt(String == null ? -1 : String.Length);
         }
+        
+        public override HassiumObject LesserThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(string.Compare(String, args[0].ToString(vm, location).String) == -1);
+        }
+
+        public override HassiumObject LesserThanOrEqual(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(string.Compare(String, args[0].ToString(vm, location).String) <= 0);
+        }
+
+        public override HassiumBool NotEqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumBool(String != args[0].ToString(vm, location).String);
+        }
 
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
@@ -67,9 +97,19 @@ namespace Hassium.Runtime.Types
             }
         }
 
+        public HassiumString toLower(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(String.ToLower());
+        }
+
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
+        }
+
+        public HassiumString toUpper(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(String.ToUpper());
         }
     }
 }

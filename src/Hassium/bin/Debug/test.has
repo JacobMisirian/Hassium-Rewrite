@@ -1,15 +1,13 @@
-use Net;
+use IO;
 
 func main () {
-	sock = new Socket ("google.com", 80);
-
-	sock.writeLine("GET\n");
-
-	while (1 == 1) {
-		line = sock.readLine ();
-		if (line.length == -1) {
-			break;
+	thread do {
+		while (1 == 1) {
+			println ("Thread");
 		}
-		println (line);
+	}
+
+	while (1 = 1) {
+		println ("main");
 	}
 }

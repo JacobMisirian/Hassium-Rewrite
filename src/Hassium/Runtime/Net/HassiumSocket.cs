@@ -16,8 +16,8 @@ namespace Hassium.Runtime.Net
         public BinaryReader Reader { get; set; }
         public BinaryWriter Writer { get; set; }
 
-        public bool Closed { get; set; }
         public bool AutoFlush { get; set; }
+        public bool Closed { get; set; }
 
         public HassiumSocket()
         {
@@ -50,8 +50,8 @@ namespace Hassium.Runtime.Net
             }
             socket.Reader = new BinaryReader(socket.Client.GetStream());
             socket.Writer = new BinaryWriter(socket.Client.GetStream());
-            socket.Closed = false;
             socket.AutoFlush = true;
+            socket.Closed = false;
             socket.AddAttribute("autoFlush", new HassiumProperty(socket.get_autoFlush, socket.set_autoFlush));
             socket.AddAttribute("close", socket.close, 0);
             socket.AddAttribute("connect", socket.connect, 1, 2);
@@ -304,9 +304,7 @@ namespace Hassium.Runtime.Net
 
             string str = args[0].ToString(vm, location).String;
 
-            foreach (var c in str)
-                Writer.Write(c);
-            Writer.Write("\n");
+            new StreamWriter(Writer.BaseStream).WriteLine(str);
 
             if (AutoFlush)
                 Writer.Flush();

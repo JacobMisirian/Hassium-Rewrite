@@ -64,6 +64,7 @@ namespace Hassium.Compiler.Emit
         Raise,
         Reference,
         Return,
+        StartThread,
         SelfReference,
         SetInitialAttribute,
         StoreAttribute,

@@ -335,13 +335,7 @@ namespace Hassium.Runtime.IO
                 return Null;
             }
 
-            StringBuilder sb = new StringBuilder();
-
-            while (Reader.PeekChar() != '\n' && (Reader.BaseStream.Position < Reader.BaseStream.Length))
-                sb.Append(Reader.ReadChar());
-            sb.Append("\n");
-
-            return new HassiumString(sb.ToString());
+            return new HassiumString(new StreamReader(Reader.BaseStream).ReadLine());
         }
 
         public HassiumObject readList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
@@ -534,9 +528,7 @@ namespace Hassium.Runtime.IO
 
             string str = args[0].ToString(vm, location).String;
 
-            foreach (var c in str)
-                Writer.Write(c);
-            Writer.Write("\n");
+            new StreamWriter(Writer.BaseStream).WriteLine(str);
 
             if (autoFlush)
                 Writer.Flush();

@@ -662,9 +662,23 @@ namespace Hassium.Compiler.Parser
                 return parseLambda();
             else if (acceptToken(TokenType.Identifier, "new"))
                 return parseExpression();
+            else if (matchToken(TokenType.Identifier, "thread"))
+                return parseThread();
             else if (matchToken(TokenType.Identifier))
                 return new IdentifierNode(location, expectToken(TokenType.Identifier).Value);
             throw new ParserException(location, "Unexpected token of type '{0}' with value '{1}'", tokens[position].TokenType, tokens[position].Value);
+        }
+        
+        private ThreadNode parseThread()
+        {
+            var location = this.location;
+            bool doImmediately = false;
+            expectToken(TokenType.Identifier, "thread");
+            if (acceptToken(TokenType.Identifier, "do"))
+                doImmediately = true;
+            AstNode body = parseStatement();
+
+            return new ThreadNode(location, body, doImmediately);
         }
 
         private bool matchToken(TokenType tokenType)

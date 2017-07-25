@@ -57,6 +57,12 @@ namespace Hassium.Runtime
             Labels.Add(label, Instructions.Count - 1);
         }
 
+        public HassiumObject Invoke(VirtualMachine vm, SourceLocation location, StackFrame.Frame frame)
+        {
+            vm.StackFrame.Frames.Push(frame);
+            return Invoke(vm, location);
+        }
+
         public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Name != "lambda" && Name != "catch" && Name != "thread") vm.StackFrame.PushFrame();

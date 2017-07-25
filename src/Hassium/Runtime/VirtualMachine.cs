@@ -83,6 +83,9 @@ namespace Hassium.Runtime
                                 elements[i] = Stack.Pop();
                             Stack.Push(new HassiumList(elements));
                             break;
+                        case InstructionType.BuildThread:
+                            Stack.Push(new HassiumThread(this, CurrentSourceLocation, CurrentModule.ObjectPool[arg] as HassiumMethod, StackFrame.Frames.Peek()));
+                            break;
                         case InstructionType.BuildTuple:
                             HassiumObject[] tupleElements = new HassiumObject[arg];
                             for (int i = arg - 1; i >= 0; i--)
@@ -215,6 +218,9 @@ namespace Hassium.Runtime
                                 obj.Attributes.Remove(attrib);
                             obj.Attributes.Add(attrib, val);
                             Stack.Push(obj);
+                            break;
+                        case InstructionType.StartThread:
+                            (Stack.Pop() as HassiumThread).start(this, CurrentSourceLocation);
                             break;
                         case InstructionType.StoreAttribute:
                             val = Stack.Pop();

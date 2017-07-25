@@ -15,6 +15,7 @@ namespace Hassium.Runtime
         {
             Name = name;
             TypeDefinition = new HassiumTypeDefinition(name);
+            AddType(TypeDefinition);
             Inherits = new List<HassiumMethod>();
         }
 

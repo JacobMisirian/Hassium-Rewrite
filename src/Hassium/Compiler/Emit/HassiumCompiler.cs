@@ -275,6 +275,7 @@ namespace Hassium.Compiler.Emit
                 }
                 method.Parameters.Add(param, table.AddSymbol(param.Name));
             }
+            
             if (node.Body is CodeBlockNode)
                 node.Body.VisitChildren(this);
             else
@@ -384,6 +385,24 @@ namespace Hassium.Compiler.Emit
             node.FalseExpression.Visit(this);
             emitLabel(node.FalseExpression.SourceLocation, endLabel);
 
+        }
+        public void Accept(ThreadNode node)
+        {
+            var method = new HassiumMethod();
+            methodStack.Push(method);
+            method.Parent = classStack.Peek();
+
+            if (node.Body is CodeBlockNode)
+                node.Body.VisitChildren(this);
+            else
+                node.Body.Visit(this);
+
+            methodStack.Pop();
+
+            handleObject(method);
+            emit(node.SourceLocation, InstructionType.BuildThread, method.GetHashCode());
+            if (node.DoImmediately)
+                emit(node.SourceLocation, InstructionType.StartThread);
         }
         public void Accept(TryCatchNode node)
         {
