@@ -51,6 +51,8 @@ namespace Hassium.Compiler.Parser
                 return parseClassDeclaration();
             else if (matchToken(TokenType.Identifier, "do"))
                 return parseDoWhile();
+            else if (matchToken(TokenType.Identifier, "enum"))
+                return parseEnum();
             else if (matchToken(TokenType.Identifier, "for"))
                 return parseFor();
             else if (matchToken(TokenType.Identifier, "foreach"))
@@ -143,6 +145,27 @@ namespace Hassium.Compiler.Parser
             AstNode condition = parseStatement();
 
             return new DoWhileNode(location, condition, body);
+        }
+
+        private EnumNode parseEnum()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "enum");
+            string name = expectToken(TokenType.Identifier).Value;
+            EnumNode enum_ = new EnumNode(location, name);
+            expectToken(TokenType.OpenCurlyBrace);
+            int count = 0;
+            while (!acceptToken(TokenType.CloseCurlyBrace))
+            {
+                int num = count++;
+                string attrib = expectToken(TokenType.Identifier).Value;
+                if (acceptToken(TokenType.Assignment))
+                    num = Convert.ToInt32(expectToken(TokenType.Integer).Value);
+                acceptToken(TokenType.Comma);
+                enum_.Attributes.Add(num, attrib);
+            }
+
+            return enum_;
         }
 
         private ForNode parseFor()

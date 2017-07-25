@@ -22,7 +22,7 @@
             AddAttribute("property", HassiumProperty.TypeDefinition);
             AddAttribute("string", HassiumString.TypeDefinition);
             AddAttribute("tuple", HassiumTuple.TypeDefinition);
-            AddAttribute("type", HassiumTypeDefinition.TypeDefinition);
+            AddAttribute("typedef", HassiumTypeDefinition.TypeDefinition);
             AddAttribute("VariableNotFoundException", new HassiumVariableNotFoundException());
         }
     }

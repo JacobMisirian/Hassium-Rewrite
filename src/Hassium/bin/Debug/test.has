@@ -1,13 +1,10 @@
-use IO;
+enum MyEnum {
+	one,
+	two,
+	three,
+	four
+}
 
 func main () {
-	thread do {
-		while (1 == 1) {
-			println ("Thread");
-		}
-	}
-
-	while (1 = 1) {
-		println ("main");
-	}
+	println (types (MyEnum.two));
 }

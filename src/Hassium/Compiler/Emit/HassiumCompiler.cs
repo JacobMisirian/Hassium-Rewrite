@@ -176,6 +176,14 @@ namespace Hassium.Compiler.Emit
 
             restoreLabels(breakLabelCount, continueLabelCount);
         }
+        public void Accept(EnumNode node)
+        {
+            HassiumEnum enum_ = new HassiumEnum(node.Name);
+            foreach (var pair in node.Attributes)
+                enum_.AddAttribute(pair.Value, new HassiumInt(pair.Key));
+
+            classStack.Peek().AddAttribute(enum_.Name, enum_);
+        }
         public void Accept(ExpressionStatementNode node)
         {
             node.Expression.Visit(this);

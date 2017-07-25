@@ -106,5 +106,18 @@ namespace Hassium.Runtime.Types
             Values[(int)index.Int] = args[1];
             return args[1];
         }
+
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("[ ");
+            foreach (var v in Values)
+                sb.AppendFormat("{0}, ", v.ToString(vm, location).String);
+            sb.Remove(sb.Length - 2, 2);
+            sb.Append(" ]");
+
+            return new HassiumString(sb.ToString());
+        }
     }
 }

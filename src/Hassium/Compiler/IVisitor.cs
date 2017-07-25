@@ -14,6 +14,7 @@ namespace Hassium.Compiler
         void Accept(ContinueNode node);
         void Accept(DictionaryDeclarationNode node);
         void Accept(DoWhileNode node);
+        void Accept(EnumNode node);
         void Accept(ExpressionStatementNode node);
         void Accept(FloatNode node);
         void Accept(ForNode node);

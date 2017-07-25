@@ -62,6 +62,7 @@
     <Compile Include="Compiler\Parser\Ast\ContinueNode.cs" />
     <Compile Include="Compiler\Parser\Ast\DictionaryDeclarationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\DoWhileNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\EnumNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ExpressionStatementNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FloatNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ForeachNode.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Runtime\HassiumAttributeNotFoundException.cs" />
     <Compile Include="Runtime\HassiumClass.cs" />
     <Compile Include="Runtime\HassiumConversionFailedException.cs" />
+    <Compile Include="Runtime\HassiumEnum.cs" />
     <Compile Include="Runtime\HassiumMethod.cs" />
     <Compile Include="Runtime\HassiumModule.cs" />
     <Compile Include="Runtime\HassiumObject.cs" />
