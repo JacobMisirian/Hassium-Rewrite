@@ -19,5 +19,12 @@ class MyClass {
 }
 
 func main () {
-	println (new MyClass() is MyTrait);
+	MyTrait c = new MyClass ();
+	
+	myFunc (c);
+	myFunc ("c");
+}
+
+func myFunc (f : MyTrait) {
+	println ("Good");
 }

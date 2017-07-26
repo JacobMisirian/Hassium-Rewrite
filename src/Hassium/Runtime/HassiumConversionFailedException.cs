@@ -7,7 +7,7 @@ namespace Hassium.Runtime
     {
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("ConversionFailedException");
 
-        public HassiumTypeDefinition DesiredType { get; set; }
+        public HassiumObject DesiredType { get; set; }
         public HassiumObject Object { get; set; }
 
         public HassiumConversionFailedException()
@@ -21,7 +21,12 @@ namespace Hassium.Runtime
             HassiumConversionFailedException exception = new HassiumConversionFailedException();
 
             exception.Object = args[0];
-            exception.DesiredType = args[1] as HassiumTypeDefinition;
+            if (args[1] is HassiumTypeDefinition)
+                exception.DesiredType = args[1] as HassiumTypeDefinition;
+            else if (args[1] is HassiumTrait)
+                exception.DesiredType = args[1] as HassiumTrait;
+            else
+                exception.Object = args[1];
             exception.AddAttribute("desiredType", new HassiumProperty(exception.get_desiredType));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
             exception.AddAttribute("object", new HassiumProperty(exception.get_object));
@@ -30,7 +35,7 @@ namespace Hassium.Runtime
             return exception;
         }
 
-        public HassiumTypeDefinition get_desiredType(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        public HassiumObject get_desiredType(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return DesiredType;
         }

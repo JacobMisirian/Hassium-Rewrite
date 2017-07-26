@@ -103,11 +103,19 @@ namespace Hassium.Runtime
                             Stack.Push(Stack.Peek());
                             break;
                         case InstructionType.EnforcedAssignment:
-                            HassiumObject type = CurrentModule.ObjectPool[arg].Invoke(this, CurrentSourceLocation);
-                            type = type is HassiumTypeDefinition ? type : type.Type();
                             val = Stack.Pop();
-                            if (!val.Types.Contains(type as HassiumTypeDefinition))
-                                RaiseException(HassiumConversionFailedException._new(this, CurrentSourceLocation, val, type));
+                            HassiumObject type = CurrentModule.ObjectPool[arg].Invoke(this, CurrentSourceLocation);
+                            if (type is HassiumTrait)
+                            {
+                                if (!(type as HassiumTrait).Is(this, CurrentSourceLocation, val).Bool)
+                                    RaiseException(HassiumConversionFailedException._new(this, CurrentSourceLocation, val, type));
+                            }
+                            else
+                            {
+                                type = type is HassiumTypeDefinition ? type : type.Type();
+                                if (!val.Types.Contains(type as HassiumTypeDefinition))
+                                    RaiseException(HassiumConversionFailedException._new(this, CurrentSourceLocation, val, type));
+                            }
                             if (StackFrame.Contains(arg))
                                 StackFrame.Modify(arg, val);
                             else

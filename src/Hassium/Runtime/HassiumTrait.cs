@@ -2,6 +2,7 @@
 using Hassium.Runtime.Types;
 
 using System.Collections.Generic;
+using System.Text;
 
 namespace Hassium.Runtime
 {
@@ -17,6 +18,8 @@ namespace Hassium.Runtime
             Name = name;
             Traits = new HassiumDictionary(new Dictionary<HassiumObject, HassiumObject>());
             AddType(TypeDefinition);
+
+            AddAttribute(TOSTRING, ToString, 0);
         }
 
         public HassiumBool Is(VirtualMachine vm, SourceLocation location, HassiumObject left)
@@ -36,6 +39,11 @@ namespace Hassium.Runtime
             }
 
             return True;
+        }
+
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(Name);
         }
 
         public HassiumDictionary get_traits(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

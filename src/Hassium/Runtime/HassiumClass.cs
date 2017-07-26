@@ -28,9 +28,9 @@ namespace Hassium.Runtime
         public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey("new"))
-                return Attributes["new"].Invoke(vm, location, args);
+                return Attributes["new"].Invoke(vm, location, args).AddType(TypeDefinition);
             else if (Attributes.ContainsKey(INVOKE))
-                return Attributes[INVOKE].Invoke(vm, location, args);
+                return Attributes[INVOKE].Invoke(vm, location, args).AddType(TypeDefinition);
             else
             {
                 foreach (var inherit in Inherits)
@@ -45,7 +45,7 @@ namespace Hassium.Runtime
                     }
                 }
                 if (Attributes.ContainsKey("new"))
-                    return Invoke(vm, location, args);
+                    return Invoke(vm, location, args).AddType(TypeDefinition);
                 vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(INVOKE)));
                 return Null;
             }

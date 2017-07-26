@@ -78,9 +78,10 @@ namespace Hassium.Runtime
         {
             AddAttribute(name, func, new int[] { paramLength });
         }
-        public void AddType(HassiumTypeDefinition typeDefinition)
+        public HassiumObject AddType(HassiumTypeDefinition typeDefinition)
         {
             Types.Add(typeDefinition);
+            return this;
         }
 
         public virtual HassiumObject Add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

@@ -87,8 +87,16 @@ namespace Hassium.Runtime
                 }
                 if (param.Key.FunctionParameterType == FunctionParameterType.Enforced)
                 {
-                    var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(param.Key.EnforcedType);
-                    if (!arg.Types.Contains(enforcedType))
+                    var enforcedType = vm.ExecuteMethod(param.Key.EnforcedType);
+                    if (enforcedType is HassiumTrait)
+                    {
+                        if (!(enforcedType as HassiumTrait).Is(vm, location, arg).Bool)
+                        {
+                            vm.RaiseException(HassiumConversionFailedException._new(vm, location, arg, enforcedType));
+                            return Null;
+                        }
+                    }
+                    else if (!arg.Types.Contains(enforcedType))
                     {
                         vm.RaiseException(HassiumConversionFailedException._new(vm, location, arg, enforcedType));
                         return Null;

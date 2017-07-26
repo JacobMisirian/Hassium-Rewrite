@@ -178,6 +178,7 @@ namespace Hassium.Compiler.Emit
         public void Accept(EnforcedAssignmentNode node)
         {
             methodStack.Push(new HassiumMethod());
+            methodStack.Peek().Parent = classStack.Peek();
             node.Type.Visit(this);
             emit(node.Type.SourceLocation, InstructionType.Return);
             var enforcedType = methodStack.Pop();
@@ -299,6 +300,7 @@ namespace Hassium.Compiler.Emit
                 if (param.FunctionParameterType == FunctionParameterType.Enforced)
                 {
                     methodStack.Push(new HassiumMethod());
+                    methodStack.Peek().Parent = classStack.Peek();
                     param.Type.Visit(this);
                     emit(param.Type.SourceLocation, InstructionType.Return);
                     param.EnforcedType = methodStack.Pop();
