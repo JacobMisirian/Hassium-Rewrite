@@ -65,6 +65,8 @@ namespace Hassium.Compiler.Parser
                 return parseRaise();
             else if (matchToken(TokenType.Identifier, "return"))
                 return parseReturn();
+            else if (matchToken(TokenType.Identifier, "trait"))
+                return parseTrait();
             else if (matchToken(TokenType.Identifier, "try"))
                 return parseTryCatch();
             else if (matchToken(TokenType.Identifier, "use"))
@@ -273,6 +275,26 @@ namespace Hassium.Compiler.Parser
             AstNode value = parseExpression();
 
             return new ReturnNode(location, value);
+        }
+
+        private TraitNode parseTrait()
+        {
+            var location = this.location;
+            expectToken(TokenType.Identifier, "trait");
+            string name = expectToken(TokenType.Identifier).Value;
+            TraitNode trait = new TraitNode(location, name);
+
+            expectToken(TokenType.OpenCurlyBrace);
+            while (!acceptToken(TokenType.CloseCurlyBrace))
+            {
+                string attrib = expectToken(TokenType.Identifier).Value;
+                expectToken(TokenType.Colon);
+                AstNode type = new IdentifierNode(this.location, expectToken(TokenType.Identifier).Value);
+                trait.Attributes.Add(attrib, type);
+                acceptToken(TokenType.Comma);
+            }
+
+            return trait;
         }
 
         private TryCatchNode parseTryCatch()
@@ -687,11 +709,28 @@ namespace Hassium.Compiler.Parser
                 return parseExpression();
             else if (matchToken(TokenType.Identifier, "thread"))
                 return parseThread();
+            else if (matchToken(TokenType.Identifier) && tokens[position + 1].TokenType == TokenType.Identifier)
+                return parseEnforcedAssignment();
             else if (matchToken(TokenType.Identifier))
                 return new IdentifierNode(location, expectToken(TokenType.Identifier).Value);
             throw new ParserException(location, "Unexpected token of type '{0}' with value '{1}'", tokens[position].TokenType, tokens[position].Value);
         }
-        
+
+        private EnforcedAssignmentNode parseEnforcedAssignment()
+        {
+            var location = this.location;
+            AstNode type;
+            if (tokens[position + 1].TokenType == TokenType.Dot)
+                type = parseExpression();
+            else
+                type = new IdentifierNode(location, expectToken(TokenType.Identifier).Value);
+            string variable = expectToken(TokenType.Identifier).Value;
+            expectToken(TokenType.Assignment);
+            AstNode value = parseExpression();
+
+            return new EnforcedAssignmentNode(location, type, variable, value);
+        }
+
         private ThreadNode parseThread()
         {
             var location = this.location;

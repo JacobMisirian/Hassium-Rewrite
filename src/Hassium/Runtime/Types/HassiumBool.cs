@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hassium.Compiler;
+﻿using Hassium.Compiler;
 
 namespace Hassium.Runtime.Types
 {

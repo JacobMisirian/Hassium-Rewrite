@@ -72,8 +72,7 @@ namespace Hassium.Compiler.Emit
                         }
                         else
                         {
-                            if (!table.ContainsSymbol(identifier))
-                                table.AddSymbol(identifier);
+                            table.HandleSymbol(identifier);
                             emit(node.SourceLocation, InstructionType.StoreLocal, table.GetSymbol(identifier));
                             emit(node.SourceLocation, InstructionType.LoadLocal, table.GetSymbol(identifier));
                         }
@@ -175,6 +174,29 @@ namespace Hassium.Compiler.Emit
             emitLabel(node.Condition.SourceLocation, endLabel);
 
             restoreLabels(breakLabelCount, continueLabelCount);
+        }
+        public void Accept(EnforcedAssignmentNode node)
+        {
+            methodStack.Push(new HassiumMethod());
+            node.Type.Visit(this);
+            emit(node.Type.SourceLocation, InstructionType.Return);
+            var enforcedType = methodStack.Pop();
+
+            node.Value.Visit(this);
+
+            if (table.ContainsGlobalSymbol(node.Variable))
+            {
+                emit(node.SourceLocation, InstructionType.StoreGlobalVariable, table.GetGlobalSymbol(node.Variable));
+                emit(node.SourceLocation, InstructionType.LoadGlobalVariable, table.GetGlobalSymbol(node.Variable));
+            }
+            else
+            {
+                table.HandleSymbol(node.Variable);
+                emit(node.SourceLocation, InstructionType.StoreLocal, table.GetSymbol(node.Variable));
+                emit(node.SourceLocation, InstructionType.LoadLocal, table.GetSymbol(node.Variable));
+            }
+
+            emit(node.SourceLocation, InstructionType.EnforcedAssignment, handleObject(enforcedType));
         }
         public void Accept(EnumNode node)
         {
@@ -411,6 +433,22 @@ namespace Hassium.Compiler.Emit
             emit(node.SourceLocation, InstructionType.BuildThread, method.GetHashCode());
             if (node.DoImmediately)
                 emit(node.SourceLocation, InstructionType.StartThread);
+        }
+        public void Accept(TraitNode node)
+        {
+            HassiumTrait trait = new HassiumTrait(node.Name);
+
+            foreach (var pair in node.Attributes)
+            {
+                methodStack.Push(new HassiumMethod());
+                pair.Value.Visit(this);
+                emit(pair.Value.SourceLocation, InstructionType.Return);
+                var type = methodStack.Pop();
+
+                trait.Traits.add(null, pair.Value.SourceLocation, new HassiumString(pair.Key), type);
+            }
+
+            classStack.Peek().AddAttribute(node.Name, trait);
         }
         public void Accept(TryCatchNode node)
         {

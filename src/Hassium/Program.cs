@@ -11,6 +11,7 @@ namespace Hassium
     {
         static void Main(string[] args)
         {
+
             try
             {
                 var module = HassiumCompiler.CompileModuleFromFilePath(args[0]);

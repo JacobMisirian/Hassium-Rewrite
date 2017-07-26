@@ -39,8 +39,8 @@ namespace Hassium.Runtime.Types
         {
             foreach (var value in Values)
                 if (value == args[0] || args[0].EqualTo(vm, location, args[0]).Bool)
-                    return new HassiumBool(true);
-            return new HassiumBool(false);
+                    return True;
+            return False;
         }
 
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

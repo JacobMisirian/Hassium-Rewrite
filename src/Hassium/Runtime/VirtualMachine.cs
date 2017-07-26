@@ -103,9 +103,10 @@ namespace Hassium.Runtime
                             Stack.Push(Stack.Peek());
                             break;
                         case InstructionType.EnforcedAssignment:
-                            var type = Globals[Stack.Pop().ToString(this, CurrentSourceLocation).String].Type();
+                            HassiumObject type = CurrentModule.ObjectPool[arg].Invoke(this, CurrentSourceLocation);
+                            type = type is HassiumTypeDefinition ? type : type.Type();
                             val = Stack.Pop();
-                            if (!val.Types.Contains(type))
+                            if (!val.Types.Contains(type as HassiumTypeDefinition))
                                 RaiseException(HassiumConversionFailedException._new(this, CurrentSourceLocation, val, type));
                             if (StackFrame.Contains(arg))
                                 StackFrame.Modify(arg, val);
@@ -309,6 +310,8 @@ namespace Hassium.Runtime
                 case (int)BinaryOperation.Is:
                     if (right is HassiumTypeDefinition)
                         Stack.Push(new HassiumBool(left.Types.Contains(right as HassiumTypeDefinition)));
+                    else if (right is HassiumTrait)
+                        Stack.Push((right as HassiumTrait).Is(this, CurrentSourceLocation, left));
                     else
                         Stack.Push(new HassiumBool(left.Types.Contains(right.Type())));
                     break;
@@ -392,7 +395,7 @@ namespace Hassium.Runtime
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
     }
 }

@@ -34,6 +34,7 @@ namespace Hassium.Runtime
             Parameters = new Dictionary<FunctionParameter, int>();
 
             AddAttribute(INVOKE, Invoke);
+            AddType(TypeDefinition);
         }
         public HassiumMethod(string name)
         {
@@ -46,6 +47,7 @@ namespace Hassium.Runtime
             Name = name;
 
             AddAttribute(INVOKE, Invoke);
+            AddType(TypeDefinition);
         }
 
         public void Emit(SourceLocation location, InstructionType instructionType, int argument = 0)

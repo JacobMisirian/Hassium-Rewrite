@@ -62,6 +62,7 @@
     <Compile Include="Compiler\Parser\Ast\ContinueNode.cs" />
     <Compile Include="Compiler\Parser\Ast\DictionaryDeclarationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\DoWhileNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\EnforcedAssignmentNode.cs" />
     <Compile Include="Compiler\Parser\Ast\EnumNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ExpressionStatementNode.cs" />
     <Compile Include="Compiler\Parser\Ast\FloatNode.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Compiler\Parser\Ast\StringNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TernaryOperationNode.cs" />
     <Compile Include="Compiler\Parser\Ast\ThreadNode.cs" />
+    <Compile Include="Compiler\Parser\Ast\TraitNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TryCatchNode.cs" />
     <Compile Include="Compiler\Parser\Ast\TupleNode.cs" />
     <Compile Include="Compiler\Parser\Ast\UnaryOperationNode.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Runtime\HassiumMethod.cs" />
     <Compile Include="Runtime\HassiumModule.cs" />
     <Compile Include="Runtime\HassiumObject.cs" />
+    <Compile Include="Runtime\HassiumTrait.cs" />
     <Compile Include="Runtime\HassiumTypeDefinition.cs" />
     <Compile Include="Runtime\HassiumVariableNotFoundException.cs" />
     <Compile Include="Runtime\InternalModule.cs" />

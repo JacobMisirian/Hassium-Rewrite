@@ -11,6 +11,10 @@ namespace Hassium.Runtime
         public static HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("object");
 
         public static HassiumNull Null = new HassiumNull();
+
+        public HassiumBool False {  get { return InternalModule.InternalModules["Types"].Attributes["false"] as HassiumBool; } }
+        public HassiumBool True { get { return InternalModule.InternalModules["Types"].Attributes["true"] as HassiumBool; } }
+
         public static HassiumTypeDefinition Number = new HassiumTypeDefinition("number");
 
         public static string INVOKE = "__invoke__";
@@ -147,14 +151,14 @@ namespace Hassium.Runtime
             if (Attributes.ContainsKey(EQUALTO))
                 return Attributes[EQUALTO].Invoke(vm, location, args).ToBool(vm, location);
             vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(EQUALTO)));
-            return new HassiumBool(false);
+            return False;
         }
         public virtual HassiumBool NotEqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Attributes.ContainsKey(NOTEQUALTO))
                 return Attributes[NOTEQUALTO].Invoke(vm, location, args).ToBool(vm, location);
             vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(NOTEQUALTO)));
-            return new HassiumBool(false);
+            return False;
         }
         public virtual HassiumObject GreaterThan(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
@@ -280,7 +284,7 @@ namespace Hassium.Runtime
             if (Attributes.ContainsKey(TOBOOL))
                 return (HassiumBool)Attributes[TOBOOL].Invoke(vm, location, args);
             vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOBOOL)));
-            return new HassiumBool(false);
+            return False;
         }
         public virtual HassiumChar ToChar(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {

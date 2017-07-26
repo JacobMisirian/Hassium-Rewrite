@@ -11,6 +11,7 @@
             AddAttribute("closure", HassiumClosure.TypeDefinition);
             AddAttribute("ConversionFailedException", new HassiumConversionFailedException());
             AddAttribute("dictionary", HassiumDictionary.TypeDefinition);
+            AddAttribute("false", new HassiumBool(false));
             AddAttribute("float", HassiumFloat.TypeDefinition);
             AddAttribute("func", HassiumFunction.TypeDefinition);
             AddAttribute("IndexOutOfRangeException", new HassiumIndexOutOfRangeException());
@@ -21,6 +22,7 @@
             AddAttribute("object", TypeDefinition);
             AddAttribute("property", HassiumProperty.TypeDefinition);
             AddAttribute("string", HassiumString.TypeDefinition);
+            AddAttribute("true", new HassiumBool(true));
             AddAttribute("tuple", HassiumTuple.TypeDefinition);
             AddAttribute("typedef", HassiumTypeDefinition.TypeDefinition);
             AddAttribute("VariableNotFoundException", new HassiumVariableNotFoundException());

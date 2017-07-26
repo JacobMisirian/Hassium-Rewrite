@@ -1,10 +1,23 @@
-enum MyEnum {
-	one,
-	two,
-	three,
-	four
+trait MyTrait {
+	a : func,
+	b : func,
+	c : string
+}
+
+class MyClass {
+	func new () {
+		this.c = "hai";
+	}
+
+	func a () {
+
+	}
+
+	func b () {
+
+	}
 }
 
 func main () {
-	println (types (MyEnum.two));
+	println (new MyClass() is MyTrait);
 }
