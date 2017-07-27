@@ -37,6 +37,7 @@ namespace Hassium.Runtime
             Labels = new Dictionary<int, int>();
             Parameters = new Dictionary<FunctionParameter, int>();
 
+            Name = string.Empty;
             SourceRepresentation = string.Empty;
 
             AddAttribute(INVOKE, Invoke);
@@ -169,7 +170,7 @@ namespace Hassium.Runtime
                     }
                 }
 
-                if (Name != "__init__") vm.StackFrame.PopFrame();
+                if (Name != "__init__" && Name != string.Empty) vm.StackFrame.PopFrame();
                 if (SourceRepresentation != string.Empty && Name != "__init__")
                     vm.PopCallStack();
                 return ret;

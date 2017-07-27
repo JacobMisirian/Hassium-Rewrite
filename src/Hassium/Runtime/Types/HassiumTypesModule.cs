@@ -19,7 +19,7 @@
             AddAttribute("list", HassiumList.TypeDefinition);
             AddAttribute("null", Null);
             AddAttribute("number", Number);
-            AddAttribute("object", TypeDefinition);
+            AddAttribute("object", HassiumObject.TypeDefinition);
             AddAttribute("property", HassiumProperty.TypeDefinition);
             AddAttribute("string", HassiumString.TypeDefinition);
             AddAttribute("true", new HassiumBool(true));

@@ -476,6 +476,7 @@ namespace Hassium.Compiler.Emit
             var endLabel = nextLabel();
             var temp = methodStack.Peek();
             methodStack.Push(new HassiumMethod("catch"));
+            methodStack.Peek().Parent = classStack.Peek();
             table.EnterScope();
             methodStack.Peek().Parameters.Add(new FunctionParameter(FunctionParameterType.Normal, "value"), table.HandleSymbol("value"));
             node.CatchBody.VisitChildren(this);

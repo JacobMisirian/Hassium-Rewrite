@@ -14,7 +14,7 @@ namespace Hassium.Runtime
             ConstantPool = new Dictionary<int, string>();
             Globals = new Dictionary<int, HassiumObject>();
 
-            AddType(new HassiumTypeDefinition("module"));
+            AddType(new HassiumTypeDefinition("Module"));
         }
     }
 }

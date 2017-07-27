@@ -85,14 +85,16 @@ func add (x, y, z) {
 
 func assertEq (left, right, type) {
 	if (left == right) {
-		println (format ("Passed {0}, test number {1}", type, data.failed + data.passed));
+		println ("Passed {0}".format (type));
 		data.passed = data.passed + 1;
 	} else {
-		println (format ("Failed {0}, test number {1}", type, data.passed + data.failed));
+		println ("Failed {0}".format (type));
 		data.failed = data.failed + 1;
 	}
 }
 
 func displayResults () {
-	println (format ("You passed {0} tests and failed {1} tests!", data.passed, data.failed));
+	println (data.passed);
+	println (data.failed);
+
 }

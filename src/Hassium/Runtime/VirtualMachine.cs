@@ -40,7 +40,10 @@ namespace Hassium.Runtime
             if (globalClass.Attributes.ContainsKey("main"))
             {
                 var mainMethod = (globalClass.Attributes["main"] as HassiumMethod);
-                mainMethod.Invoke(this, mainMethod.SourceLocation, args);
+                if (mainMethod.Parameters.Count > 0)
+                    mainMethod.Invoke(this, mainMethod.SourceLocation, args);
+                else
+                    mainMethod.Invoke(this, mainMethod.SourceLocation);
             }
 
         }
@@ -385,6 +388,7 @@ namespace Hassium.Runtime
 
         public void RaiseException(HassiumObject message)
         {
+            Console.WriteLine("Raising exception of {0}", message.ToString(this, CurrentSourceLocation).String);
             if (Handlers.Count == 0)
             {
                 if (message.Attributes.ContainsKey("message"))
