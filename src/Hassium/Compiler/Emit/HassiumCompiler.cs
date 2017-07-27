@@ -324,7 +324,24 @@ namespace Hassium.Compiler.Emit
             }
 
             table.LeaveScope();
-            classStack.Peek().AddAttribute(method.Name, methodStack.Pop());
+            method = methodStack.Pop();
+
+            if (classStack.Peek().Attributes.ContainsKey(method.Name))
+            {
+                var attrib = classStack.Peek().Attributes[method.Name];
+                if (attrib is HassiumMultiFunc)
+                    (attrib as HassiumMultiFunc).Methods.Add(method);
+                else
+                {
+                    classStack.Peek().Attributes.Remove(method.Name);
+                    var multiFunc = new HassiumMultiFunc();
+                    multiFunc.Methods.Add(attrib as HassiumMethod);
+                    multiFunc.Methods.Add(method);
+                    classStack.Peek().Attributes.Add(method.Name, multiFunc);
+                }
+            }
+            else
+                classStack.Peek().Attributes.Add(method.Name, method);
         }
         public void Accept(IdentifierNode node)
         {

@@ -82,6 +82,11 @@ namespace Hassium.Runtime
             int i = 0;
             foreach (var param in Parameters)
             {
+                if (i >= args.Length)
+                {
+                    vm.RaiseException(HassiumArgumentLengthException._new(vm, location, this, new HassiumInt(Parameters.Count), new HassiumInt(args.Length)));
+                    return Null;
+                }
                 var arg = args[i++];
                 if (param.Key.FunctionParameterType == FunctionParameterType.Variadic)
                 {

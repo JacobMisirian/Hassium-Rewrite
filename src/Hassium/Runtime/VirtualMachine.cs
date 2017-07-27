@@ -319,12 +319,7 @@ namespace Hassium.Runtime
                     Stack.Push(left.IntegerDivision(this, CurrentSourceLocation, right));
                     break;
                 case (int)BinaryOperation.Is:
-                    if (right is HassiumTypeDefinition)
-                        Stack.Push(new HassiumBool(left.Types.Contains(right as HassiumTypeDefinition)));
-                    else if (right is HassiumTrait)
-                        Stack.Push((right as HassiumTrait).Is(this, CurrentSourceLocation, left));
-                    else
-                        Stack.Push(new HassiumBool(left.Types.Contains(right.Type())));
+                    Stack.Push(Is(left, right));
                     break;
                 case (int)BinaryOperation.LesserThan:
                     Stack.Push(left.LesserThan(this, CurrentSourceLocation, right));
@@ -360,6 +355,16 @@ namespace Hassium.Runtime
                     Stack.Push(left.Subtract(this, CurrentSourceLocation, right));
                     break;
             }
+        }
+
+        public HassiumBool Is(HassiumObject left, HassiumObject right)
+        {
+            if (right is HassiumTypeDefinition)
+                return new HassiumBool(left.Types.Contains(right as HassiumTypeDefinition));
+            else if (right is HassiumTrait)
+                return (right as HassiumTrait).Is(this, CurrentSourceLocation, left);
+            else
+                return new HassiumBool(left.Types.Contains(right.Type()));
         }
 
         private void interpretUnaryOperation(HassiumObject target, int op)
