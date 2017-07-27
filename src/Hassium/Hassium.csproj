@@ -147,6 +147,8 @@
     <Compile Include="Runtime\Types\HassiumThread.cs" />
     <Compile Include="Runtime\Types\HassiumTuple.cs" />
     <Compile Include="Runtime\Types\HassiumTypesModule.cs" />
+    <Compile Include="Runtime\Util\HassiumStopWatch.cs" />
+    <Compile Include="Runtime\Util\HassiumUtilModule.cs" />
     <Compile Include="Runtime\VirtualMachine.cs" />
   </ItemGroup>
   <ItemGroup>

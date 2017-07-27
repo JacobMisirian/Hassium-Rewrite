@@ -57,7 +57,10 @@ namespace Hassium.Runtime
 
         public HassiumClass Parent { get; set; }
 
-        public List<HassiumTypeDefinition> Types = new List<HassiumTypeDefinition>();
+        public List<HassiumTypeDefinition> Types = new List<HassiumTypeDefinition>()
+        {
+            TypeDefinition
+        };
 
         public Dictionary<string, HassiumObject> Attributes = new Dictionary<string, HassiumObject>();
 
@@ -319,8 +322,7 @@ namespace Hassium.Runtime
         {
             if (Attributes.ContainsKey(TOSTRING))
                 return Attributes[TOSTRING].Invoke(vm, location, args).ToString(vm, location, args);
-            vm.RaiseException(HassiumAttributeNotFoundException._new(vm, location, this, new HassiumString(TOSTRING)));
-            return new HassiumString("");
+            return new HassiumString(Type().TypeName);
         }
         public virtual HassiumTuple ToTuple(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {

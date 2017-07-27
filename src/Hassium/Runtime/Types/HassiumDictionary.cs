@@ -27,6 +27,7 @@ namespace Hassium.Runtime.Types
             AddAttribute(ITER, Iter, 0);
             AddAttribute("keyByValue", keyByValue, 1);
             AddAttribute(STOREINDEX, StoreIndex, 2);
+            AddAttribute(TOSTRING, ToString, 0);
             AddAttribute("valueByKey", valueByKey, 1);
         }
 
@@ -98,6 +99,21 @@ namespace Hassium.Runtime.Types
             else
                 Dictionary.Add(args[0], args[1]);
             return args[1];
+        }
+
+        [FunctionAttribute("func toString () : string")]
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("{ ");
+            foreach (var pair in Dictionary)
+                sb.AppendFormat("{0} : {1}, ", pair.Key.ToString(vm, location).String, pair.Value.ToString(vm, location).String);
+            if (Dictionary.Count > 0)
+                sb.Append("\b\b ");
+            sb.Append("}");
+
+            return new HassiumString(sb.ToString());
         }
 
         [FunctionAttribute("func valueByKey (key : object) : object")]
