@@ -4,27 +4,27 @@ using System.Text;
 
 namespace Hassium.Runtime.Types
 {
-    public class HassiumIndexOutOfRangeException : HassiumObject
+    public class HassiumKeyNotFoundException : HassiumObject
     {
-        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("IndexOutOfRangeException");
+        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("KeyNotFoundException");
 
-        public HassiumObject Object { get;  set; }
-        public HassiumInt RequestedIndex { get; set; }
+        public HassiumObject Key { get; private set; }
+        public HassiumObject Object { get; private set; }
 
-        public HassiumIndexOutOfRangeException()
+        public HassiumKeyNotFoundException()
         {
             AddType(TypeDefinition);
             AddAttribute(INVOKE, _new, 2);
         }
 
-        [FunctionAttribute("func new (obj : object, int reqIndex) : IndexOutOfRangeException")]
-        public static HassiumIndexOutOfRangeException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func new (obj : object, key : object) : KeyNotFoundException")]
+        public static HassiumKeyNotFoundException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            HassiumIndexOutOfRangeException exception = new HassiumIndexOutOfRangeException();
+            HassiumKeyNotFoundException exception = new HassiumKeyNotFoundException();
 
             exception.Object = args[0];
-            exception.RequestedIndex = args[1].ToInt(vm, location);
-            exception.AddAttribute("index", new HassiumProperty(exception.get_index));
+            exception.Key = args[1];
+            exception.AddAttribute("key", new HassiumProperty(exception.get_key));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
             exception.AddAttribute("object", new HassiumProperty(exception.get_object));
             exception.AddAttribute(TOSTRING, exception.ToString, 0);
@@ -32,16 +32,16 @@ namespace Hassium.Runtime.Types
             return exception;
         }
 
-        [FunctionAttribute("index { get; }")]
-        public HassiumInt get_index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("key { get; }")]
+        public HassiumObject get_key(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return RequestedIndex;
+            return Key;
         }
 
         [FunctionAttribute("message { get; }")]
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumString(string.Format("Out of range: Index '{0}' is less than 0 or greater than the size of the collection of type '{1}'", RequestedIndex.Int, Object.Type()));
+            return new HassiumString(string.Format("Key Not Found Error: Could not find key '{0}' in object of type '{1}'", Key.ToString(vm, location).String, Object.Type()));
         }
 
         [FunctionAttribute("object { get; }")]

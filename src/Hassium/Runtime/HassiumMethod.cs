@@ -14,15 +14,19 @@ namespace Hassium.Runtime
     {
         public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("func");
 
+        public string Name { get; set; }
+        public bool IsConstructor { get { return Name == "new"; } }
+
+        public SourceLocation SourceLocation { get; set; }
+        public string SourceRepresentation { get; set; }
+
         public Stack<int> BreakLabels { get; private set; }
         public Stack<int> ContinueLabels { get; private set; }
         public Dictionary<int, int> Labels { get; private set; }
 
-        public string Name { get; set; }
-        public bool IsConstructor { get { return Name == "new"; } }
+        public List<HassiumInstruction> Instructions { get; private set; }
 
         public Dictionary<FunctionParameter, int> Parameters { get; private set; }
-        public List<HassiumInstruction> Instructions { get; private set; }
         public HassiumMethod ReturnType { get; set; }
 
         public HassiumMethod()
@@ -32,6 +36,8 @@ namespace Hassium.Runtime
             Instructions = new List<HassiumInstruction>();
             Labels = new Dictionary<int, int>();
             Parameters = new Dictionary<FunctionParameter, int>();
+
+            SourceRepresentation = string.Empty;
 
             AddAttribute(INVOKE, Invoke);
             AddType(TypeDefinition);
@@ -45,6 +51,7 @@ namespace Hassium.Runtime
             Parameters = new Dictionary<FunctionParameter, int>();
             
             Name = name;
+            SourceRepresentation = string.Empty;
 
             AddAttribute(INVOKE, Invoke);
             AddType(TypeDefinition);
@@ -67,7 +74,11 @@ namespace Hassium.Runtime
 
         public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            if (Name != "lambda" && Name != "catch" && Name != "thread") vm.StackFrame.PushFrame();
+            if (SourceRepresentation != string.Empty)
+                vm.PushCallStack(string.Format("{0}\t{1}", SourceRepresentation, location));
+            if (SourceRepresentation != string.Empty || Name == "__init__")
+                vm.StackFrame.PushFrame();
+
             int i = 0;
             foreach (var param in Parameters)
             {
@@ -105,6 +116,12 @@ namespace Hassium.Runtime
                 vm.StackFrame.Add(param.Value, arg);
             }
 
+            if (i < args.Length)
+            {
+                vm.RaiseException(HassiumArgumentLengthException._new(vm, location, this, new HassiumInt(Parameters.Count), new HassiumInt(args.Length)));
+                return Null;
+            }
+
             if (IsConstructor)
             {
                 HassiumClass ret = new HassiumClass(Parent.Name);
@@ -128,16 +145,13 @@ namespace Hassium.Runtime
                 foreach (var attrib in ret.Attributes.Values)
                     attrib.Parent = ret;
                 vm.ExecuteMethod(ret.Attributes["new"] as HassiumMethod);
+                vm.PopCallStack();
                 vm.StackFrame.PopFrame();
                 return ret;
             }
             else
             {
                 var ret = vm.ExecuteMethod(this);
-                if (Name == "catch")
-                {
-                    return ret;
-                }
 
                 if (ReturnType != null)
                 {
@@ -149,7 +163,9 @@ namespace Hassium.Runtime
                     }
                 }
 
-                if (Name != "lambda" && Name != "__init__") vm.StackFrame.PopFrame();
+                if (Name != "__init__") vm.StackFrame.PopFrame();
+                if (SourceRepresentation != string.Empty && Name != "__init__")
+                    vm.PopCallStack();
                 return ret;
             }
         }

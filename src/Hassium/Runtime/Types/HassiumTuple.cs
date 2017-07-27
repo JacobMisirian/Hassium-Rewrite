@@ -17,11 +17,13 @@ namespace Hassium.Runtime.Types
             AddAttribute(ITER, Iter, 0);
         }
 
+        [FunctionAttribute("func __index__ (index : int) : object")]
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Values[args[0].ToInt(vm, location).Int];
         }
 
+        [FunctionAttribute("func __iter__ () : list")]
         public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumList(Values);

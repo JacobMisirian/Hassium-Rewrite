@@ -1,6 +1,8 @@
 ﻿using Hassium.Compiler;
 using Hassium.Runtime.Types;
 
+using System.Text;
+
 namespace Hassium.Runtime
 {
     public class HassiumArgumentLengthException : HassiumObject
@@ -28,7 +30,7 @@ namespace Hassium.Runtime
             exception.AddAttribute("function", new HassiumProperty(exception.get_function));
             exception.AddAttribute("givenLength", new HassiumProperty(exception.get_givenLength));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
-            exception.AddAttribute(TOSTRING, exception.Attributes["message"]);
+            exception.AddAttribute(TOSTRING, exception.ToString, 0);
 
             return exception;
         }
@@ -51,6 +53,17 @@ namespace Hassium.Runtime
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(string.Format("Argument Length Error: Expected '{0}' arguments, '{1}' given", ExpectedLength.Int, GivenLength.Int));
+        }
+
+        [FunctionAttribute("func toString () : string")]
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine(get_message(vm, location).String);
+            sb.Append(vm.UnwindCallStack());
+
+            return new HassiumString(sb.ToString());
         }
     }
 }

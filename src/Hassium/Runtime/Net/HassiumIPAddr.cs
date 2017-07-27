@@ -19,6 +19,7 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 1, 2);
         }
 
+        [FunctionAttribute("func new (host : string) : IPaddr, func new (host : string, port : int) : IPAddr")]
         public static HassiumIPAddr _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumIPAddr addr = new HassiumIPAddr();
@@ -32,16 +33,19 @@ namespace Hassium.Runtime.Net
             return addr;
         }
 
+        [FunctionAttribute("address { get; }")]
         public HassiumString get_address(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Address;
         }
 
+        [FunctionAttribute("port { get; }")]
         public HassiumInt get_port(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Port;
         }
 
+        [FunctionAttribute("func toString () : string")]
         public HassiumString toString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Port.Int == -1)

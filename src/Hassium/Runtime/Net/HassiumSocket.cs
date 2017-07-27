@@ -4,7 +4,6 @@ using Hassium.Runtime.Types;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace Hassium.Runtime.Net
 {
@@ -26,6 +25,7 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 0, 1, 2);
         }
 
+        [FunctionAttribute("func new () : Socket, func new (ip : IPAddr) : Socket, func new (ipStr : string) : Socket, func new (ip : string, port : int) : Socket")]
         public HassiumObject _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumSocket socket = new HassiumSocket();
@@ -42,7 +42,7 @@ namespace Hassium.Runtime.Net
                         socket.Client = new TcpClient(ipAddr.Address.String, (int)ipAddr.Port.Int);
                     }
                     else
-                        return _new(vm, location, InternalModule.InternalModules["Net"].Attributes["IPAddr"].Attributes[INVOKE].Invoke(vm, location, args[0].ToString(vm, location)));
+                        return _new(vm, location, HassiumIPAddr._new(vm, location, args[0].ToString(vm, location)));
                     break;
                 case 2:
                     socket.Client = new TcpClient(args[0].ToString(vm, location).String, (int)args[1].ToInt(vm, location).Int);
@@ -77,11 +77,13 @@ namespace Hassium.Runtime.Net
             return socket;
         }
 
+        [FunctionAttribute("autoFluah { get; }")]
         public HassiumBool get_autoFlush(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(AutoFlush);
         }
 
+        [FunctionAttribute("autoFluah { set; }")]
         public HassiumNull set_autoFlush(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             AutoFlush = args[0].ToBool(vm, location).Bool;
@@ -89,12 +91,14 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func close () : null")]
         public HassiumNull close(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Client.Close();
             return Null;
         }
 
+        [FunctionAttribute("func connect (ip : IPAddr) : null, func connect (ipStr : string) : null, func connect (ip : string, port : int) : null")]
         public HassiumNull connect(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             switch (args.Length)
@@ -115,6 +119,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("connectedFrom { get; }")]
         public HassiumObject get_connectedFrom(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -126,6 +131,7 @@ namespace Hassium.Runtime.Net
             return HassiumIPAddr._new(vm, location, new HassiumString(parts[0]), new HassiumString(parts[1]));
         }
 
+        [FunctionAttribute("connectedTo { get; }")]
         public HassiumObject get_connectedTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -137,6 +143,7 @@ namespace Hassium.Runtime.Net
             return HassiumIPAddr._new(vm, location, new HassiumString(parts[0]), new HassiumString(parts[1]));
         }
 
+        [FunctionAttribute("func flish () : null")]
         public HassiumNull flush(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -149,11 +156,13 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("isConnected { get; }")]
         public HassiumBool get_isConnected(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Client.Connected);
         }
 
+        [FunctionAttribute("func readByte () : char")]
         public HassiumObject readByte(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
 
@@ -166,42 +175,7 @@ namespace Hassium.Runtime.Net
             return new HassiumChar((char)Reader.ReadBytes(1)[0]);
         }
 
-        public HassiumObject readFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-
-            if (Closed)
-            {
-                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
-                return Null;
-            }
-
-            return new HassiumFloat(Reader.ReadDouble());
-        }
-
-        public HassiumObject readInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-
-            if (Closed)
-            {
-                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
-                return Null;
-            }
-
-            return new HassiumInt(Reader.ReadInt32());
-        }
-
-        public HassiumObject readLine(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-
-            if (Closed)
-            {
-                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
-                return Null;
-            }
-
-            return new HassiumString(new StreamReader(Reader.BaseStream).ReadLine());
-        }
-
+        [FunctionAttribute("func readBytes (count : int) : list")]
         public HassiumObject readList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -218,6 +192,46 @@ namespace Hassium.Runtime.Net
             return list;
         }
 
+        [FunctionAttribute("func readFloat () : float")]
+        public HassiumObject readFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+
+            if (Closed)
+            {
+                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
+                return Null;
+            }
+
+            return new HassiumFloat(Reader.ReadDouble());
+        }
+
+        [FunctionAttribute("func readInt () : int")]
+        public HassiumObject readInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+
+            if (Closed)
+            {
+                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
+                return Null;
+            }
+
+            return new HassiumInt(Reader.ReadInt32());
+        }
+
+        [FunctionAttribute("func readLine () : string")]
+        public HassiumObject readLine(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+
+            if (Closed)
+            {
+                vm.RaiseException(HassiumSocketClosedException._new(vm, location, this));
+                return Null;
+            }
+
+            return new HassiumString(new StreamReader(Reader.BaseStream).ReadLine());
+        }
+
+        [FunctionAttribute("func readLong () : int")]
         public HassiumObject readLong(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -229,6 +243,7 @@ namespace Hassium.Runtime.Net
             return new HassiumInt(Reader.ReadInt64());
         }
 
+        [FunctionAttribute("func readShort () : int")]
         public HassiumObject readShort(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
 
@@ -241,6 +256,7 @@ namespace Hassium.Runtime.Net
             return new HassiumInt(Reader.ReadInt16());
         }
 
+        [FunctionAttribute("func readString () : string")]
         public HassiumObject readString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -252,6 +268,7 @@ namespace Hassium.Runtime.Net
             return new HassiumString(Reader.ReadString());
         }
 
+        [FunctionAttribute("func writeByte (b : char) : null")]
         public HassiumNull writeByte(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -266,6 +283,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeFloat (f : float) : null")]
         public HassiumNull writeFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -280,6 +298,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeInt (i : int) : null")]
         public HassiumNull writeInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -294,6 +313,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeLine (str : string) : null")]
         public HassiumNull writeLine(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -311,6 +331,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeList (l : list) : null")]
         public HassiumNull writeList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -325,6 +346,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeLong (l : int) : null")]
         public HassiumNull writeLong(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -339,6 +361,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeShort (s : int) : null")]
         public HassiumNull writeShort(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)
@@ -353,6 +376,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
+        [FunctionAttribute("func writeString (str : string) : null")]
         public HassiumNull writeString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Closed)

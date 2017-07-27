@@ -25,6 +25,9 @@ namespace Hassium.Runtime
 
         public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
+            var v = Target.Method.GetCustomAttributes(typeof(FunctionAttribute), false);
+            if (v.Length > 0)
+                vm.PushCallStack(string.Format("{0}\t{1}", (v[0] as FunctionAttribute).SourceRepresentation, location));
             if (ParameterLengths[0] != -1)
             {
                 foreach (int len in ParameterLengths)

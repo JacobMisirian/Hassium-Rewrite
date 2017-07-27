@@ -95,6 +95,7 @@
     <Compile Include="Compiler\Lexer\TokenType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\FunctionAttribute.cs" />
     <Compile Include="Runtime\GlobalFunctions.cs" />
     <Compile Include="Runtime\HassiumArgumentLengthException.cs" />
     <Compile Include="Runtime\HassiumAttributeNotFoundException.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Runtime\Types\HassiumFloat.cs" />
     <Compile Include="Runtime\Types\HassiumIndexOutOfRangeException.cs" />
     <Compile Include="Runtime\Types\HassiumInt.cs" />
+    <Compile Include="Runtime\Types\HassiumKeyNotFoundException.cs" />
     <Compile Include="Runtime\Types\HassiumList.cs" />
     <Compile Include="Runtime\Types\HassiumNull.cs" />
     <Compile Include="Runtime\Types\HassiumProperty.cs" />

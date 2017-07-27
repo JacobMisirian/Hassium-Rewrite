@@ -1,6 +1,8 @@
 ﻿using Hassium.Compiler;
 using Hassium.Runtime.Types;
 
+using System.Text;
+
 namespace Hassium.Runtime.IO
 {
     public class HassiumFileClosedException : HassiumObject
@@ -16,6 +18,7 @@ namespace Hassium.Runtime.IO
             AddAttribute(INVOKE, _new, 2);
         }
 
+        [FunctionAttribute("func new (file : File, path : string) : FileClosedException")]
         public static HassiumFileClosedException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumFileClosedException exception = new HassiumFileClosedException();
@@ -25,24 +28,38 @@ namespace Hassium.Runtime.IO
             exception.AddAttribute("file", new HassiumProperty(exception.get_file));
             exception.AddAttribute("filePath", new HassiumProperty(exception.get_filePath));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
-            exception.AddAttribute(TOSTRING, exception.Attributes["message"]);
+            exception.AddAttribute(TOSTRING, exception.ToString, 0);
 
             return exception;
         }
 
+        [FunctionAttribute("file { get; }")]
         public HassiumFile get_file(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return File;
         }
 
+        [FunctionAttribute("filePath { get; }")]
         public HassiumString get_filePath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return FilePath;
         }
 
+        [FunctionAttribute("message { message; }")]
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(string.Format("File Closed: Filepath '{0}' has been closed", FilePath.String));
+        }
+
+        [FunctionAttribute("func toString () : string")]
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine(get_message(vm, location).String);
+            sb.Append(vm.UnwindCallStack());
+
+            return new HassiumString(sb.ToString());
         }
     }
 }

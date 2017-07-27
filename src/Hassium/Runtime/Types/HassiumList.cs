@@ -27,6 +27,7 @@ namespace Hassium.Runtime.Types
             AddAttribute("removeAt", removeAt, 1);
         }
 
+        [FunctionAttribute("func add (params args) : null")]
         public HassiumNull add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var arg in args)
@@ -35,6 +36,7 @@ namespace Hassium.Runtime.Types
             return Null;
         }
 
+        [FunctionAttribute("func contains (obj : object) : bool")]
         public HassiumBool contains(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var value in Values)
@@ -43,6 +45,7 @@ namespace Hassium.Runtime.Types
             return False;
         }
 
+        [FunctionAttribute("func __index__ (i : int) : object")]
         public override HassiumObject Index(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             var index = args[0].ToInt(vm, location);
@@ -55,21 +58,26 @@ namespace Hassium.Runtime.Types
         }
 
         private int iterIndex = 0;
+
+        [FunctionAttribute("func __iter__ () : list")]
         public override HassiumObject Iter(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
+        [FunctionAttribute("func __iterfull__ () : bool")]
         public override HassiumObject IterableFull(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(iterIndex >= Values.Count);
         }
 
+        [FunctionAttribute("func __iternext__ () : bool")]
         public override HassiumObject IterableNext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Values[iterIndex++];
         }
 
+        [FunctionAttribute("func remove (obj : object) : null")]
         public HassiumNull remove(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var value in Values)
@@ -83,6 +91,7 @@ namespace Hassium.Runtime.Types
             return Null;
         }
 
+        [FunctionAttribute("func removeAt (index : int) : null")]
         public HassiumNull removeAt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             var index = args[0].ToInt(vm, location);
@@ -95,6 +104,7 @@ namespace Hassium.Runtime.Types
             return Null;
         }
 
+        [FunctionAttribute("func __storeindex__ (index : int, obj : object) : object")]
         public override HassiumObject StoreIndex(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             var index = args[0].ToInt(vm, location);
@@ -107,6 +117,7 @@ namespace Hassium.Runtime.Types
             return args[1];
         }
 
+        [FunctionAttribute("func toString () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();

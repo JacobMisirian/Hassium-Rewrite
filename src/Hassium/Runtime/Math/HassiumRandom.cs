@@ -18,6 +18,7 @@ namespace Hassium.Runtime.Math
             AddAttribute(INVOKE, _new, 0, 1);
         }
 
+        [FunctionAttribute("func new () : Random, func new (seed : int) : Random")]
         public HassiumObject _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumRandom rand = new HassiumRandom();
@@ -30,6 +31,7 @@ namespace Hassium.Runtime.Math
             return rand;
         }
 
+        [FunctionAttribute("func randBytes (count : int) : list")]
         public HassiumList randBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumList bytes = new HassiumList(new HassiumObject[0]);
@@ -45,11 +47,13 @@ namespace Hassium.Runtime.Math
             return bytes;
         }
 
+        [FunctionAttribute("func randFloat () : float")]
         public HassiumFloat randFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumFloat(Random.NextDouble());
         }
 
+        [FunctionAttribute("func randInt () : int, func randInt (up : int) : int, func randInt (low : int, up : int) : int")]
         public HassiumObject randInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             switch (args.Length)

@@ -32,12 +32,14 @@ namespace Hassium.Runtime.IO
             AddAttribute("writeString", writeString, -1);
         }
 
+        [FunctionAttribute("func close () : null")]
         public HassiumNull close(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             (args[0] as HassiumFile).close(vm, location);
             return Null;
         }
 
+        [FunctionAttribute("func copy (src : string, dest : string) : null")]
         public HassiumNull copy(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string source = args[0].ToString(vm, location).String;
@@ -51,29 +53,34 @@ namespace Hassium.Runtime.IO
             return Null;
         }
 
+        [FunctionAttribute("func createDirectory (path : string) : null")]
         public HassiumNull createDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Directory.CreateDirectory(args[0].ToString(vm, location).String);
             return Null;
         }
 
+        [FunctionAttribute("func createFile (path : string) : null")]
         public HassiumNull createFile(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             File.Create(args[0].ToString(vm, location).String);
             return Null;
         }
 
+        [FunctionAttribute("currentDirectory { get; }")]
         public HassiumString get_currentDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Directory.GetCurrentDirectory());
         }
 
+        [FunctionAttribute("currentDirectory { set; }")]
         public HassiumString set_currentDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Directory.SetCurrentDirectory(args[0].ToString(vm, location).String);
             return get_currentDirectory(vm, location);
         }
 
+        [FunctionAttribute("func delete (path : string) : null")]
         public HassiumNull delete(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string path = args[0].ToString(vm, location).String;
@@ -88,6 +95,7 @@ namespace Hassium.Runtime.IO
             return Null;
         }
 
+        [FunctionAttribute("func deleteDirectory (dir : string) : null")]
         public HassiumNull deleteDirectory(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string dir = args[0].ToString(vm, location).String;
@@ -99,6 +107,7 @@ namespace Hassium.Runtime.IO
             return Null;
         }
 
+        [FunctionAttribute("func deleteFile (file : string) : null")]
         public HassiumNull deleteFile(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string path = args[0].ToString(vm, location).String;
@@ -110,16 +119,19 @@ namespace Hassium.Runtime.IO
             return Null;
         }
 
+        [FunctionAttribute("func getTempFile () : string")]
         public HassiumString getTempFile(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetTempFileName());
         }
 
+        [FunctionAttribute("func getTempPath () : string")]
         public HassiumString getTempPath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetTempPath());
         }
 
+        [FunctionAttribute("func listDirectories (path : string) : list")]
         public HassiumList listDirectories(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumList result = new HassiumList(new HassiumObject[0]);
@@ -128,6 +140,7 @@ namespace Hassium.Runtime.IO
             return result;
         }
 
+        [FunctionAttribute("func listFiles (path : string) : list")]
         public HassiumList listFiles(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumList result = new HassiumList(new HassiumObject[0]);
@@ -136,6 +149,7 @@ namespace Hassium.Runtime.IO
             return result;
         }
 
+        [FunctionAttribute("func move (src : string, dest : string) : null")]
         public HassiumNull move(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string source = args[0].ToString(vm, location).String;
@@ -149,12 +163,14 @@ namespace Hassium.Runtime.IO
             return Null;
         }
 
+        [FunctionAttribute("func open (path : string) : File")]
         public HassiumFile open(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string path = args[0].ToString(vm, location).String;
             return new HassiumFile(path);
         }
 
+        [FunctionAttribute("func readBytes (path : string) : list")]
         public HassiumList readBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumList list = new HassiumList(new HassiumObject[0]);
@@ -175,6 +191,7 @@ namespace Hassium.Runtime.IO
             }
         }
 
+        [FunctionAttribute("func readLines (path : string) : list")]
         public HassiumList readLines(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumList list = new HassiumList(new HassiumObject[0]);
@@ -195,6 +212,7 @@ namespace Hassium.Runtime.IO
             }
         }
 
+        [FunctionAttribute("func readString (path : string) : string")]
         public HassiumString readString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();
@@ -215,6 +233,7 @@ namespace Hassium.Runtime.IO
             }
         }
 
+        [FunctionAttribute("func writeBytes (path : string, bytes : list) : null")]
         public HassiumNull writeBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string path = args[0].ToString(vm, location).String;
@@ -235,6 +254,7 @@ namespace Hassium.Runtime.IO
             }
         }
 
+        [FunctionAttribute("func writeLines (path : string, lines : list) : null")]
         public HassiumNull writeLines(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string path = args[0].ToString(vm, location).String;
@@ -264,6 +284,7 @@ namespace Hassium.Runtime.IO
             }
         }
 
+        [FunctionAttribute("func writeString (path : string, str : string) : null")]
         public HassiumNull writeString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string path = args[0].ToString(vm, location).String;

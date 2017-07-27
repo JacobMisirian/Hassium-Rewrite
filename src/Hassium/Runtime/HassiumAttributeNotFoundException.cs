@@ -1,6 +1,8 @@
 ﻿using Hassium.Compiler;
 using Hassium.Runtime.Types;
 
+using System.Text;
+
 namespace Hassium.Runtime
 {
     public class HassiumAttributeNotFoundException : HassiumObject
@@ -16,6 +18,7 @@ namespace Hassium.Runtime
             AddAttribute(INVOKE, _new, 2);
         }
 
+        [FunctionAttribute("func new (obj : object, attrib : string) : AttributeNotFoundException")]
         public static HassiumAttributeNotFoundException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumAttributeNotFoundException exception = new HassiumAttributeNotFoundException();
@@ -30,19 +33,33 @@ namespace Hassium.Runtime
             return exception;
         }
 
+        [FunctionAttribute("attribute { get; }")]
         public HassiumObject get_attribute(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Attribute;
         }
 
+        [FunctionAttribute("message { get; }")]
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(string.Format("Attribute Not Found: Could not find attribute '{0}' in object of type '{1}'", Attribute.String, Object.Type().ToString(vm, location).String));
         }
 
+        [FunctionAttribute("object { get; }")]
         public HassiumObject get_object(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Object;
+        }
+
+        [FunctionAttribute("func toString () : string")]
+        public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine(get_message(vm, location).String);
+            sb.Append(vm.UnwindCallStack());
+
+            return new HassiumString(sb.ToString());
         }
     }
 }

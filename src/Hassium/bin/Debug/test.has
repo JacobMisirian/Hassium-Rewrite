@@ -1,30 +1,21 @@
-trait MyTrait {
-	a : func,
-	b : func,
-	c : string
-}
-
-class MyClass {
-	func new () {
-		this.c = "hai";
-	}
-
-	func a () {
-
-	}
-
-	func b () {
-
-	}
-}
+use IO;
 
 func main () {
-	MyTrait c = new MyClass ();
-	
-	myFunc (c);
-	myFunc ("c");
+	foo (1);
 }
 
-func myFunc (f : MyTrait) {
-	println ("Good");
+func foo (i : int) {
+	bar ("2");
+}
+
+func bar (s : string) {
+	baz (s)	
+}
+
+func baz (s : string) {
+	boz (2)
+}
+
+func boz (s : string) {
+
 }

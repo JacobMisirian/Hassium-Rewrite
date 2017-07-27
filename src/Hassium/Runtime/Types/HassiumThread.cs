@@ -31,22 +31,26 @@ namespace Hassium.Runtime.Types
             AddAttribute("stop", stop, 0);
         }
 
+        [FunctionAttribute("isAlive { get; }")]
         public HassiumBool get_isAlive(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Thread.IsAlive);
         }
 
+        [FunctionAttribute("returnValue { get; }")]
         public HassiumObject get_returnValue(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return ReturnValue;
         }
 
+        [FunctionAttribute("func start () : null")]
         public HassiumNull start(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Thread.Start();
             return Null;
         }
 
+        [FunctionAttribute("func stop () : null")]
         public HassiumNull stop(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Thread.Abort();

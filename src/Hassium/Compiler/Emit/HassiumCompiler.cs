@@ -289,6 +289,8 @@ namespace Hassium.Compiler.Emit
         {
             var method = new HassiumMethod(node.Name);
             methodStack.Push(method);
+            method.SourceLocation = node.SourceLocation;
+            method.SourceRepresentation = node.ToString();
 
             handleConstant(node.Name);
             method.Parent = classStack.Peek();

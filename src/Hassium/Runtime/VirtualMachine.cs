@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Hassium.Compiler;
 using Hassium.Compiler.Parser.Ast;
@@ -20,7 +21,7 @@ namespace Hassium.Runtime
         public Stack<HassiumObject> Stack { get; set; }
         public StackFrame StackFrame { get; set; }
 
-        public StackFrame.Frame GlobalFrame { get; set;  }
+        public StackFrame.Frame GlobalFrame { get; set; }
 
         public void Execute(HassiumModule module, string[] args, StackFrame.Frame frame = null)
         {
@@ -37,13 +38,15 @@ namespace Hassium.Runtime
             (globalClass.Attributes["__init__"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
             GlobalFrame = StackFrame.Frames.Peek();
             if (globalClass.Attributes.ContainsKey("main"))
-                (globalClass.Attributes["main"] as HassiumMethod).Invoke(this, new SourceLocation("", 0, 0));
+            {
+                var mainMethod = (globalClass.Attributes["main"] as HassiumMethod);
+                mainMethod.Invoke(this, mainMethod.SourceLocation);
+            }
 
         }
 
         public HassiumObject ExecuteMethod(HassiumMethod method)
         {
-
             for (int pos = 0; pos < method.Instructions.Count; pos++)
             {
                 if (ExceptionReturns.ContainsKey(method))
@@ -379,7 +382,11 @@ namespace Hassium.Runtime
         {
             if (Handlers.Count == 0)
             {
-                Console.WriteLine(message.ToString(this, CurrentSourceLocation).String);
+                if (message.Attributes.ContainsKey("message"))
+                    Console.WriteLine(message.Attributes["message"].Invoke(this, CurrentSourceLocation).ToString(this, CurrentSourceLocation).String);
+                else
+                    Console.WriteLine(message.ToString(this, CurrentSourceLocation).String);
+                Console.WriteLine(UnwindCallStack());
                 Environment.Exit(0);
                 return;
             }
@@ -400,10 +407,39 @@ namespace Hassium.Runtime
             foreach (var pair in InternalModule.InternalModules["Types"].Attributes)
                 Globals.Add(pair.Key, pair.Value);
         }
+        public void PushCallStack(string val)
+        {
+            CallStack.Push(val);
+        }
+
+        public string PopCallStack()
+        {
+            var ret = CallStack.Pop();
+            return ret;
+        }
+
+        public string UnwindCallStack()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("At:");
+            while (true)
+            {
+                try
+                {
+                    sb.AppendLine(PopCallStack());
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            return sb.ToString();
+        }
 
         public object Clone()
         {
             return MemberwiseClone();
         }
+
     }
 }

@@ -29,10 +29,10 @@ namespace Hassium.Runtime
         public static string BITSHIFTRIGHT = "__bitshiftright__";
         public static string EQUALTO = "__equals__";
         public static string NOTEQUALTO = "__notequal__";
-        public static string GREATERTHAN = "__greaterthan__";
-        public static string GREATERTHANOREQUAL = "__greaterthanorequal__";
-        public static string LESSERTHAN = "__lesserthan__";
-        public static string LESSERTHANOREQUAL = "__lesserthanorequal__";
+        public static string GREATERTHAN = "__greater__";
+        public static string GREATERTHANOREQUAL = "__greaterorequal__";
+        public static string LESSERTHAN = "__lesser__";
+        public static string LESSERTHANOREQUAL = "__lesserorequal__";
         public static string BITWISEAND = "__bitwiseand__";
         public static string BITWISEOR = "__bitwiseor__";
         public static string BITWISENOT = "__bitwisenot__";
@@ -43,8 +43,8 @@ namespace Hassium.Runtime
         public static string INDEX = "__index__";
         public static string STOREINDEX = "__storeindex__";
         public static string ITER = "__iter__";
-        public static string ITERABLEFULL = "__iterablefull__";
-        public static string ITERABLENEXT = "__iterablenext__";
+        public static string ITERABLEFULL = "__iterfull__";
+        public static string ITERABLENEXT = "__iternext__";
         public static string DISPOSE = "dispose";
         public static string TOBOOL = "toBool";
         public static string TOCHAR = "toChar";

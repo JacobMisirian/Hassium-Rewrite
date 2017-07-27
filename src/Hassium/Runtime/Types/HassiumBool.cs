@@ -23,41 +23,49 @@ namespace Hassium.Runtime.Types
             AddAttribute(TOSTRING, ToString, 0);
         }
 
+        [FunctionAttribute("func __equals__ (b : bool) : bool")]
         public override HassiumBool EqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Bool == args[0].ToBool(vm, location).Bool);
         }
 
+        [FunctionAttribute("func __logicaland__ (b : bool) : bool")]
         public override HassiumObject LogicalAnd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Bool && args[0].ToBool(vm, location).Bool);
         }
 
+        [FunctionAttribute("func __logicalnot__ (b : bool) : bool")]
         public override HassiumObject LogicalNot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(!Bool);
         }
 
+        [FunctionAttribute("func __logicalor__ (b : bool) : bool")]
         public override HassiumObject LogicalOr(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Bool || args[0].ToBool(vm, location).Bool);
         }
 
+        [FunctionAttribute("func __notequal__ (b : bool) : bool")]
         public override HassiumBool NotEqualTo(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Bool != args[0].ToBool(vm, location).Bool);
         }
 
+        [FunctionAttribute("func toBool () : bool")]
         public override HassiumBool ToBool(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
+        [FunctionAttribute("func toInt () : int")]
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt(Bool ? 1 : 0);
         }
 
+        [FunctionAttribute("func toString () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Bool.ToString().ToLower());
