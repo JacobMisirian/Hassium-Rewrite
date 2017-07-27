@@ -243,7 +243,20 @@ namespace Hassium.Runtime
                             try
                             {
                                 if (val.Attributes.ContainsKey(attrib))
-                                    val.Attributes.Remove(attrib);
+                                {
+                                    if (val.Attributes[attrib] is HassiumProperty)
+                                    {
+                                        if (((HassiumProperty)val.Attributes[attrib]).Set == null)
+                                        {
+                                            RaiseException(HassiumKeyNotFoundException._new(this, CurrentSourceLocation, val, new HassiumString(string.Format("{0} { set; }", attrib))));
+                                            return null;
+                                        }
+                                        ((HassiumProperty)val.Attributes[attrib]).Set.Invoke(this, CurrentSourceLocation, Stack.Pop());
+                                        break;
+                                    }
+                                    else
+                                        val.Attributes.Remove(attrib);
+                                }
                                 val.Attributes.Add(attrib, Stack.Pop());
                             }
                             catch (KeyNotFoundException)
