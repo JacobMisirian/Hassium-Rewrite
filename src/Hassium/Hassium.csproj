@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -95,6 +96,9 @@
     <Compile Include="Compiler\Lexer\TokenType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\Drawing\HassiumBitmap.cs" />
+    <Compile Include="Runtime\Drawing\HassiumColor.cs" />
+    <Compile Include="Runtime\Drawing\HassiumDrawingModule.cs" />
     <Compile Include="Runtime\FunctionAttribute.cs" />
     <Compile Include="Runtime\GlobalFunctions.cs" />
     <Compile Include="Runtime\HassiumArgumentLengthException.cs" />
@@ -124,6 +128,9 @@
     <Compile Include="Runtime\Net\HassiumSocket.cs" />
     <Compile Include="Runtime\Net\HassiumIPAddr.cs" />
     <Compile Include="Runtime\StackFrame.cs" />
+    <Compile Include="Runtime\Text\HassiumEncoding.cs" />
+    <Compile Include="Runtime\Text\HassiumStringBuilder.cs" />
+    <Compile Include="Runtime\Text\HassiumTextModule.cs" />
     <Compile Include="Runtime\Types\HassiumBool.cs" />
     <Compile Include="Runtime\Types\HassiumChar.cs" />
     <Compile Include="Runtime\Types\HassiumClosure.cs" />
