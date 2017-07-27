@@ -1,9 +1,9 @@
 ﻿using System;
-using System.IO;
 
 using Hassium.Compiler.Emit;
 using Hassium.Compiler.Exceptions;
 using Hassium.Runtime;
+using Hassium.Runtime.Types;
 
 namespace Hassium
 {
@@ -11,19 +11,15 @@ namespace Hassium
     {
         static void Main(string[] args)
         {
-
             try
             {
+                VirtualMachine vm = new VirtualMachine();
                 var module = HassiumCompiler.CompileModuleFromFilePath(args[0]);
+                HassiumList hargs = new HassiumList(new HassiumObject[0]);
+                foreach (var arg in args)
+                    hargs.add(vm, null, new HassiumString(arg));
 
-                /*      foreach (var attribPair in module.Attributes["__global__"].Attributes)
-                      {
-                          Console.WriteLine("{0}:", attribPair.Key);
-                          foreach (var instruction in (attribPair.Value as HassiumMethod).Instructions)
-                              Console.WriteLine(instruction);
-                      }*/
-
-                new VirtualMachine().Execute(module, args);
+                vm.Execute(module, hargs);
             }
             catch (ParserException ex)
             {

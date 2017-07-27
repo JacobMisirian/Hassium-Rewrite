@@ -23,7 +23,7 @@ namespace Hassium.Runtime
 
         public StackFrame.Frame GlobalFrame { get; set; }
 
-        public void Execute(HassiumModule module, string[] args, StackFrame.Frame frame = null)
+        public void Execute(HassiumModule module, HassiumList args, StackFrame.Frame frame = null)
         {
             CallStack = new Stack<string>();
             CurrentModule = module;
@@ -40,7 +40,7 @@ namespace Hassium.Runtime
             if (globalClass.Attributes.ContainsKey("main"))
             {
                 var mainMethod = (globalClass.Attributes["main"] as HassiumMethod);
-                mainMethod.Invoke(this, mainMethod.SourceLocation);
+                mainMethod.Invoke(this, mainMethod.SourceLocation, args);
             }
 
         }

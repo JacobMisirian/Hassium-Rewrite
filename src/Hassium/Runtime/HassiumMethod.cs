@@ -155,7 +155,8 @@ namespace Hassium.Runtime
 
                 if (ReturnType != null)
                 {
-                    var enforcedType = (HassiumTypeDefinition)vm.ExecuteMethod(ReturnType);
+                    var enforcedType = vm.ExecuteMethod(ReturnType);
+                    enforcedType = enforcedType is HassiumTypeDefinition ? enforcedType : enforcedType.Type();
                     if (!ret.Types.Contains(enforcedType))
                     {
                         vm.RaiseException(HassiumConversionFailedException._new(vm, location, ret, enforcedType));

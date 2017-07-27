@@ -1,21 +1,3 @@
-use IO;
-
-func main () {
-	foo (1);
-}
-
-func foo (i : int) {
-	bar ("2");
-}
-
-func bar (s : string) {
-	baz (s)	
-}
-
-func baz (s : string) {
-	boz (2)
-}
-
-func boz (s : string) {
+func main (args : list) : null {
 
 }
