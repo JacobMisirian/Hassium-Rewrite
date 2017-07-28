@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Hassium.Runtime
 {
     public class FunctionAttribute : Attribute
     {
-        public string SourceRepresentation { get; private set; }
+        public string SourceRepresentation { get { return SourceRepresentations[0]; } }
 
-        public FunctionAttribute(string sourceRep)
+        public List<string> SourceRepresentations { get; private set; }
+
+        public FunctionAttribute(params string[] sourceRep)
         {
-            SourceRepresentation = sourceRep;
+            SourceRepresentations = new List<string>(sourceRep);
         }
     }
 }

@@ -401,14 +401,15 @@ namespace Hassium.Runtime
 
         public void RaiseException(HassiumObject message)
         {
-            Console.WriteLine("Raising exception of {0}", message.ToString(this, CurrentSourceLocation).String);
             if (Handlers.Count == 0)
             {
+                var callStack = UnwindCallStack();
+                Console.Write("Unhandled Exception: ");
                 if (message.Attributes.ContainsKey("message"))
                     Console.WriteLine(message.Attributes["message"].Invoke(this, CurrentSourceLocation).ToString(this, CurrentSourceLocation).String);
                 else
                     Console.WriteLine(message.ToString(this, CurrentSourceLocation).String);
-                Console.WriteLine(UnwindCallStack());
+                Console.WriteLine(callStack);
                 Environment.Exit(0);
                 return;
             }
@@ -448,17 +449,15 @@ namespace Hassium.Runtime
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("At:");
-            while (true)
-            {
-                try
-                {
-                    sb.AppendLine(PopCallStack());
-                }
-                catch
-                {
-                    break;
-                }
-            }
+            var firstLine = CallStack.Peek();
+            firstLine = firstLine.Substring(0, firstLine.IndexOf("\t"));
+            firstLine = string.Format("{0}\t{1}", firstLine, CurrentSourceLocation);
+            sb.AppendLine(firstLine);
+            int len = CallStack.Count;
+            for (int i = 0; i < len; i++)
+                sb.AppendLine(CallStack.Pop());
+
+            CallStack = new Stack<string>();
             return sb.ToString();
         }
 

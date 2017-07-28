@@ -25,7 +25,7 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 0, 1, 2);
         }
 
-        [FunctionAttribute("func new () : Socket, func new (ip : IPAddr) : Socket, func new (ipStr : string) : Socket, func new (ip : string, port : int) : Socket")]
+        [FunctionAttribute("func new () : Socket", "func new (IPAddrOrStr : IPAddr) : Socket", "func new (ip : string, port : int) : Socket")]
         public HassiumObject _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumSocket socket = new HassiumSocket();
@@ -98,7 +98,7 @@ namespace Hassium.Runtime.Net
             return Null;
         }
 
-        [FunctionAttribute("func connect (ip : IPAddr) : null, func connect (ipStr : string) : null, func connect (ip : string, port : int) : null")]
+        [FunctionAttribute("func connect (IPAddrOrStr : object) : null", "func connect (ip : string, port : int) : null")]
         public HassiumNull connect(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             switch (args.Length)

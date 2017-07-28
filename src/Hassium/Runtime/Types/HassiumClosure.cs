@@ -1,6 +1,4 @@
-﻿using System;
-
-using Hassium.Compiler;
+﻿using Hassium.Compiler;
 
 namespace Hassium.Runtime.Types
 {

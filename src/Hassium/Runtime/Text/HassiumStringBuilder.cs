@@ -17,6 +17,7 @@ namespace Hassium.Runtime.Text
             AddAttribute(INVOKE, _new, 0, 1);
         }
 
+        [FunctionAttribute("func new () : StringBuilder", "func new (obj : object) : StringBuilder")]
         public static HassiumStringBuilder _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumStringBuilder sb = new HassiumStringBuilder();
@@ -30,10 +31,10 @@ namespace Hassium.Runtime.Text
             sb.AddAttribute("length", new HassiumProperty(sb.get_length));
             sb.AddAttribute("replace", sb.replace, 2);
             sb.AddAttribute(TOSTRING, sb.ToString, 0);
-
             return sb;
         }
 
+        [FunctionAttribute("func append (obj : object) : StringBuilder")]
         public HassiumStringBuilder append(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.Append(args[0].ToString(vm, location).String);
@@ -41,6 +42,7 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
+        [FunctionAttribute("func appendFormat (fmt : string, params obj) : StringBuilder")]
         public HassiumStringBuilder appendFormat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.Append(GlobalFunctions.format(vm, location, args).ToString(vm, location).String);
@@ -48,6 +50,7 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
+        [FunctionAttribute("func appendLine (obj : object) : StringBuilder")]
         public HassiumStringBuilder appendLine(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.AppendLine(args[0].ToString(vm, location).String);
@@ -55,6 +58,7 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
+        [FunctionAttribute("func clear () : StringBuilder")]
         public HassiumStringBuilder clear(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.Clear();
@@ -62,6 +66,7 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
+        [FunctionAttribute("func insert (index : int, obj : object) : StringBuilder")]
         public HassiumStringBuilder insert(VirtualMachine vm, SourceLocation location, params HassiumObject[] argS)
         {
             StringBuilder.Insert((int)argS[0].ToInt(vm, location).Int, argS[1].ToString(vm, location).String);
@@ -69,11 +74,13 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
+        [FunctionAttribute("length { get; }")]
         public HassiumInt get_length(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt(StringBuilder.Length);
         }
 
+        [FunctionAttribute("func replace (obj1 : object, obj2 : object) : StringBuilder")]
         public HassiumStringBuilder replace(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.Replace(args[0].ToString(vm, location).String, args[1].ToString(vm, location).String);
@@ -81,6 +88,7 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
+        [FunctionAttribute("func toString () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(StringBuilder.ToString());

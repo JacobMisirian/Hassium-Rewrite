@@ -17,6 +17,7 @@ namespace Hassium.Runtime
             { "types",         new HassiumFunction(types,           1) }
         };
 
+        [FunctionAttribute("func format (fmt : string, params obj) : string")]
         public static HassiumString format(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (args.Length <= 0)
@@ -30,6 +31,7 @@ namespace Hassium.Runtime
             return new HassiumString(string.Format(args[0].ToString(vm, location).String, fargs));
         }
 
+        [FunctionAttribute("func print (params obj) : null")]
         public static HassiumNull print(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var arg in args)
@@ -37,6 +39,7 @@ namespace Hassium.Runtime
             return HassiumObject.Null;
         }
 
+        [FunctionAttribute("func println (params obj) : null")]
         public static HassiumNull println(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var arg in args)
@@ -44,11 +47,13 @@ namespace Hassium.Runtime
             return HassiumObject.Null;
         }
 
+        [FunctionAttribute("func type (obj : object) : typedef")]
         public static HassiumTypeDefinition type(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return args[0].Type();
         }
 
+        [FunctionAttribute("func types (obj : object) : list")]
         public static HassiumList types(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumList(args[0].Types);

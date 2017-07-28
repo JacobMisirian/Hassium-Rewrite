@@ -17,7 +17,7 @@ namespace Hassium.Runtime.Drawing
             AddAttribute(INVOKE, _new, 1, 2);
         }
 
-        [FunctionAttribute("func new (path : string) : Bitmap, func new (height : int, width : int) : Bitmap")]
+        [FunctionAttribute("func new (path : string) : Bitmap", "func new (height : int, width : int) : Bitmap")]
         public HassiumBitmap _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumBitmap bitmap = new HassiumBitmap();

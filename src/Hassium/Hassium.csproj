@@ -128,6 +128,7 @@
     <Compile Include="Runtime\Net\HassiumNetModule.cs" />
     <Compile Include="Runtime\Net\HassiumSocket.cs" />
     <Compile Include="Runtime\Net\HassiumIPAddr.cs" />
+    <Compile Include="Runtime\Net\HassiumSocketListener.cs" />
     <Compile Include="Runtime\StackFrame.cs" />
     <Compile Include="Runtime\Text\HassiumEncoding.cs" />
     <Compile Include="Runtime\Text\HassiumStringBuilder.cs" />

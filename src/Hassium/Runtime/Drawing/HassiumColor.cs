@@ -17,7 +17,7 @@ namespace Hassium.Runtime.Drawing
             AddAttribute(INVOKE, _new, 1, 3, 4);
         }
 
-        [FunctionAttribute("func new (col : int) : Color, func new (col : string) : Color, func new (r : int, g : int, b : int) : Color, func new (a : int, r : int, g : int, b : int) : Color")]
+        [FunctionAttribute("func new (colIntOrStr : object) : Color", "func new (r : int, g : int, b : int) : Color", "func new (a : int, r : int, g : int, b : int) : Color")]
         public HassiumColor _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumColor color = new HassiumColor();

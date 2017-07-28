@@ -1,0 +1,11 @@
+func main () {
+	foo ();
+}
+
+func foo () {
+	bar ();
+}
+
+func bar () {
+	raise "test"
+}

@@ -19,6 +19,7 @@ namespace Hassium.Runtime
             AddAttribute(INVOKE, _new, 3);
         }
 
+        [FunctionAttribute("func new (fn : object, expected : int, given : int) : ArgumentLengthException")]
         public static HassiumArgumentLengthException _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumArgumentLengthException exception = new HassiumArgumentLengthException();
@@ -35,21 +36,25 @@ namespace Hassium.Runtime
             return exception;
         }
 
+        [FunctionAttribute("expectedLength { get; }")]
         public HassiumInt get_expectedLength(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return ExpectedLength;
         }
 
+        [FunctionAttribute("function { get; }")]
         public HassiumObject get_function(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Function;
         }
 
+        [FunctionAttribute("givenLength { get; }")]
         public HassiumInt get_givenLength(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return GivenLength;
         }
 
+        [FunctionAttribute("message { get; }")]
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(string.Format("Argument Length Error: Expected '{0}' arguments, '{1}' given", ExpectedLength.Int, GivenLength.Int));

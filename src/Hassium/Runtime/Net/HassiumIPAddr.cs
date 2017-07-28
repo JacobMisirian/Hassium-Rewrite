@@ -19,7 +19,7 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 1, 2);
         }
 
-        [FunctionAttribute("func new (host : string) : IPaddr, func new (host : string, port : int) : IPAddr")]
+        [FunctionAttribute("func new (host : string) : IPaddr", "func new (host : string, port : int) : IPAddr")]
         public static HassiumIPAddr _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumIPAddr addr = new HassiumIPAddr();

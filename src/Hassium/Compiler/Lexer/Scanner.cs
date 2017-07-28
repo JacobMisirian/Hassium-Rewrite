@@ -18,7 +18,7 @@ namespace Hassium.Compiler.Lexer
         public List<Token> Scan(string filename, string source)
         {
             this.filename = filename;
-            location = new SourceLocation(filename, 1, 0);
+            location = new SourceLocation(filename, 1, 1);
             code = source;
             position = 0;
             result = new List<Token>();

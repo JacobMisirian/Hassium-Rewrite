@@ -1,6 +1,8 @@
 ﻿using Hassium.Compiler;
 using Hassium.Runtime.Types;
 
+using System.Collections.Generic;
+
 namespace Hassium.Runtime
 {
     public delegate HassiumObject HassiumFunctionDelegate(VirtualMachine vm, SourceLocation location, params HassiumObject[] args);
@@ -27,7 +29,13 @@ namespace Hassium.Runtime
         {
             var v = Target.Method.GetCustomAttributes(typeof(FunctionAttribute), false);
             if (v.Length > 0)
-                vm.PushCallStack(string.Format("{0}\t{1}", (v[0] as FunctionAttribute).SourceRepresentation, location));
+            {
+                var reps = (v[0] as FunctionAttribute).SourceRepresentations;
+                if (reps.Count > 1)
+                    vm.CallStack.Push(string.Format("{0}\t{1}", reps[new List<int>(ParameterLengths).IndexOf(args.Length)], location));
+                else if (reps.Count == 0)
+                    vm.CallStack.Push(string.Format("{0}\t{1}", reps[0]));
+            }
             if (ParameterLengths[0] != -1)
             {
                 foreach (int len in ParameterLengths)
