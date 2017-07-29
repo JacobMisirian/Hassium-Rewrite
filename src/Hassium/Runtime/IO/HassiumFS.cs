@@ -14,7 +14,7 @@ namespace Hassium.Runtime.IO
             AddAttribute("copy", copy, 2);
             AddAttribute("createdir", createdir, 1);
             AddAttribute("createfile", createfile, 1);
-            AddAttribute("curdir", new HassiumProperty(get_curdir, set_curdir));
+            AddAttribute("cwd", new HassiumProperty(get_cwd, set_cwd));
             AddAttribute("delete", delete, 1);
             AddAttribute("deletedir", deletedir, 1);
             AddAttribute("deletefile", deletefile, 1);
@@ -67,17 +67,17 @@ namespace Hassium.Runtime.IO
             return Null;
         }
 
-        [FunctionAttribute("curdir { get; }")]
-        public HassiumString get_curdir(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("cwd { get; }")]
+        public HassiumString get_cwd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Directory.GetCurrentDirectory());
         }
 
-        [FunctionAttribute("curdir { set; }")]
-        public HassiumString set_curdir(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("cwd { set; }")]
+        public HassiumString set_cwd(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Directory.SetCurrentDirectory(args[0].ToString(vm, location).String);
-            return get_curdir(vm, location);
+            return get_cwd(vm, location);
         }
 
         [FunctionAttribute("func delete (path : string) : null")]
