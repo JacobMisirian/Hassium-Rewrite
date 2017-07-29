@@ -32,7 +32,7 @@ namespace Hassium.Runtime
             return new HassiumString(string.Format("Variable Not Found: variable was not found inside the stack frmae"));
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();

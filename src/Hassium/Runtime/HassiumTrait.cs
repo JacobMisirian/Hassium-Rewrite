@@ -19,6 +19,7 @@ namespace Hassium.Runtime
             Traits = new HassiumDictionary(new Dictionary<HassiumObject, HassiumObject>());
             AddType(TypeDefinition);
 
+            AddAttribute("traits", new HassiumProperty(get_traits));
             AddAttribute(TOSTRING, ToString, 0);
         }
 
@@ -41,11 +42,13 @@ namespace Hassium.Runtime
             return True;
         }
 
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Name);
         }
 
+        [FunctionAttribute("traits { get; }")]
         public HassiumDictionary get_traits(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Traits;

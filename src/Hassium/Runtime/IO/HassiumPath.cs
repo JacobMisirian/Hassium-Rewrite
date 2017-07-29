@@ -14,16 +14,15 @@ namespace Hassium.Runtime.IO
         {
             AddType(TypeDefinition);
 
-            AddAttribute("combinePath", combinePath, -1);
-            AddAttribute("parseDirectoryName", parseDirectoryName, 1);
-            AddAttribute("parseExtension", parseExtension, 1);
-            AddAttribute("parseFileName", parseFileName, 1);
-            AddAttribute("parseFileNameWithoutExtension", parseFileNameWithoutExtension, 1);
-            AddAttribute("parseRoot", parseRoot, 1);
+            AddAttribute("combine", combine, -1);
+            AddAttribute("parsedir", parsedir, 1);
+            AddAttribute("parseext", parseext, 1);
+            AddAttribute("parsename", parsename, 1);
+            AddAttribute("parseroot", parseroot, 1);
         }
 
-        [FunctionAttribute("func combinePath (params paths) : string")]
-        public HassiumString combinePath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func combine (params paths) : string")]
+        public HassiumString combine(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             string[] paths = new string[args.Length];
             for (int i = 0; i < paths.Length; i++)
@@ -31,32 +30,26 @@ namespace Hassium.Runtime.IO
             return new HassiumString(Path.Combine(paths));
         }
 
-        [FunctionAttribute("func parseDirectoryName (path : string) : string")]
-        public HassiumString parseDirectoryName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func parsedir (path : string) : string")]
+        public HassiumString parsedir(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetDirectoryName(args[0].ToString(vm, location).String));
         }
 
-        [FunctionAttribute("func parseExtension (path : string) : string")]
-        public HassiumString parseExtension(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func parseext (path : string) : string")]
+        public HassiumString parseext(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetExtension(args[0].ToString(vm, location).String));
         }
 
-        [FunctionAttribute("func parseFileName (path : string) : string")]
-        public HassiumString parseFileName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func parsename (path : string) : string")]
+        public HassiumString parsename(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetFileName(args[0].ToString(vm, location).String));
         }
 
-        [FunctionAttribute("func parseFileNameWithoutExtension (path : string) : string")]
-        public HassiumString parseFileNameWithoutExtension(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-            return new HassiumString(Path.GetFileNameWithoutExtension(args[0].ToString(vm, location).String));
-        }
-
-        [FunctionAttribute("func parseRoot (path : string) : string")]
-        public HassiumString parseRoot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func parseroot (path : string) : string")]
+        public HassiumString parseroot(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Path.GetPathRoot(args[0].ToString(vm, location).String));
         }

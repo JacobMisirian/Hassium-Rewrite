@@ -30,7 +30,7 @@ namespace Hassium.Runtime
                 exception.DesiredType = args[1] as HassiumTrait;
             else
                 exception.Object = args[1];
-            exception.AddAttribute("desiredType", new HassiumProperty(exception.get_desiredType));
+            exception.AddAttribute("desired", new HassiumProperty(exception.get_desired));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
             exception.AddAttribute("object", new HassiumProperty(exception.get_object));
             exception.AddAttribute(TOSTRING, exception.ToString, 0);
@@ -38,8 +38,8 @@ namespace Hassium.Runtime
             return exception;
         }
 
-        [FunctionAttribute("desiredType { get; }")]
-        public HassiumObject get_desiredType(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("desired { get; }")]
+        public HassiumObject get_desired(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return DesiredType;
         }
@@ -56,7 +56,7 @@ namespace Hassium.Runtime
             return Object;
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();

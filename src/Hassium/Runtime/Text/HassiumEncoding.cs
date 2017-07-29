@@ -40,24 +40,29 @@ namespace Hassium.Runtime.Text
                     encoding.Encoding = Encoding.ASCII;
                     break;
             }
+            encoding.AddAttribute("bodyname", new HassiumProperty(encoding.get_bodyname));
+            encoding.AddAttribute("encodingname", new HassiumProperty(encoding.get_encodingname));
+            encoding.AddAttribute("getbytes", encoding.getbytes, 1);
+            encoding.AddAttribute("getstring", encoding.getstring, 1);
+            encoding.AddAttribute("headername", new HassiumProperty(encoding.get_headername));
 
             return encoding;
         }
 
-        [FunctionAttribute("bodyName { get; }")]
-        public HassiumString get_bodyName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("bodyname { get; }")]
+        public HassiumString get_bodyname(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Encoding.BodyName);
         }
 
-        [FunctionAttribute("encodingName { get; }")]
-        public HassiumString get_encodingName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("encodingname { get; }")]
+        public HassiumString get_encodingname(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Encoding.EncodingName);
         }
 
-        [FunctionAttribute("func getBytes (str : string) : list")]
-        public HassiumList getBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func getbytes (str : string) : list")]
+        public HassiumList getbytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             byte[] bytes = Encoding.GetBytes(args[0].ToString(vm, location).String);
             HassiumList list = new HassiumList(new HassiumObject[0]);
@@ -68,8 +73,8 @@ namespace Hassium.Runtime.Text
             return list;
         }
 
-        [FunctionAttribute("func getString (bytes : list) : string")]
-        public HassiumString getString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func getstring (bytes : list) : string")]
+        public HassiumString getstring(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             var list = args[0].ToList(vm, location).Values;
             byte[] bytes = new byte[list.Count];
@@ -80,8 +85,8 @@ namespace Hassium.Runtime.Text
             return new HassiumString(Encoding.GetString(bytes));
         }
 
-        [FunctionAttribute("headerName { get; }")]
-        public HassiumString get_headerName(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("headername { get; }")]
+        public HassiumString get_headername(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Encoding.HeaderName);
         }

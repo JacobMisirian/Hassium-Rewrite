@@ -25,20 +25,20 @@ namespace Hassium.Runtime.Types
 
             AddType(TypeDefinition);
 
-            AddAttribute("isAlive", new HassiumProperty(get_isAlive));
-            AddAttribute("returnValue", new HassiumProperty(get_returnValue));
+            AddAttribute("isalive", new HassiumProperty(get_isalive));
+            AddAttribute("returns", new HassiumProperty(get_returns));
             AddAttribute("start", start, 0);
             AddAttribute("stop", stop, 0);
         }
 
-        [FunctionAttribute("isAlive { get; }")]
-        public HassiumBool get_isAlive(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("isalive { get; }")]
+        public HassiumBool get_isalive(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Thread.IsAlive);
         }
 
-        [FunctionAttribute("returnValue { get; }")]
-        public HassiumObject get_returnValue(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("returns { get; }")]
+        public HassiumObject get_returns(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return ReturnValue;
         }

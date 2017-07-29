@@ -21,14 +21,14 @@ namespace Hassium.Runtime.Types
                 Dictionary.Add(pair.Key, pair.Value);
 
             AddAttribute("add", add, 2);
-            AddAttribute("containsKey", containsKey, 1);
-            AddAttribute("containsValue", containsValue, 1);
+            AddAttribute("containskey", containskey, 1);
+            AddAttribute("containsvalue", containsvalue, 1);
             AddAttribute(INDEX, Index, 1);
             AddAttribute(ITER, Iter, 0);
-            AddAttribute("keyByValue", keyByValue, 1);
+            AddAttribute("keybyvalue", keybyvalue, 1);
             AddAttribute(STOREINDEX, StoreIndex, 2);
             AddAttribute(TOSTRING, ToString, 0);
-            AddAttribute("valueByKey", valueByKey, 1);
+            AddAttribute("valuebykey", valuebykey, 1);
         }
 
         [FunctionAttribute("func add (key : object, val : object) : null")]
@@ -38,8 +38,8 @@ namespace Hassium.Runtime.Types
             return Null;
         }
 
-        [FunctionAttribute("func containsKey (key : object) : bool")]
-        public HassiumBool containsKey(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func containskey (key : object) : bool")]
+        public HassiumBool containskey(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Dictionary.ContainsKey(args[0]))
                 return True;
@@ -49,8 +49,8 @@ namespace Hassium.Runtime.Types
             return False;
         }
 
-        [FunctionAttribute("func containsValue (val : object) : bool")]
-        public HassiumBool containsValue(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func containsvalue (val : object) : bool")]
+        public HassiumBool containsvalue(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Dictionary.ContainsValue(args[0]))
                 return True;
@@ -81,8 +81,8 @@ namespace Hassium.Runtime.Types
             return list;
         }
 
-        [FunctionAttribute("func keyByValue (val : object) : object")]
-        public HassiumObject keyByValue(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func keybyvalue (val : object) : object")]
+        public HassiumObject keybyvalue(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             foreach (var pair in Dictionary)
                 if (pair.Value.EqualTo(vm, location, args[0]).ToBool(vm, location).Bool)
@@ -94,14 +94,14 @@ namespace Hassium.Runtime.Types
         [FunctionAttribute("func __storeindex__ (key : object, val : object) : object")]
         public override HassiumObject StoreIndex(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            if (containsKey(vm, location, args[0]).Bool)
+            if (containskey(vm, location, args[0]).Bool)
                 Dictionary[args[0]] = args[1];
             else
                 Dictionary.Add(args[0], args[1]);
             return args[1];
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();
@@ -116,8 +116,8 @@ namespace Hassium.Runtime.Types
             return new HassiumString(sb.ToString());
         }
 
-        [FunctionAttribute("func valueByKey (key : object) : object")]
-        public HassiumObject valueByKey(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func valuebykey (key : object) : object")]
+        public HassiumObject valuebykey(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return Index(vm, location, args[0]);
         }

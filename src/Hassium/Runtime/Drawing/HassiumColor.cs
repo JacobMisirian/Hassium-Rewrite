@@ -38,9 +38,9 @@ namespace Hassium.Runtime.Drawing
                     break;
             }
             color.AddAttribute("a", new HassiumProperty(color.get_a));
+            color.AddAttribute("argb", new HassiumProperty(color.get_argb));
             color.AddAttribute("b", new HassiumProperty(color.get_b));
             color.AddAttribute("g", new HassiumProperty(color.get_g));
-            color.AddAttribute("getArgb", color.getArgb, 0);
             color.AddAttribute("r", new HassiumProperty(color.get_r));
 
             return color;
@@ -50,6 +50,11 @@ namespace Hassium.Runtime.Drawing
         public HassiumInt get_a(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt(Color.A);
+        }
+
+        public HassiumInt get_argb(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumInt(Color.ToArgb());
         }
 
         [FunctionAttribute("b { get; }")]
@@ -62,12 +67,6 @@ namespace Hassium.Runtime.Drawing
         public HassiumInt get_g(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt(Color.G);
-        }
-
-        [FunctionAttribute("func getArgb () : int")]
-        public HassiumInt getArgb(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
-        {
-            return new HassiumInt(Color.ToArgb());
         }
 
         [FunctionAttribute("r { get; }")]

@@ -53,19 +53,19 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(Bool != args[0].ToBool(vm, location).Bool);
         }
 
-        [FunctionAttribute("func toBool () : bool")]
+        [FunctionAttribute("func tobool () : bool")]
         public override HassiumBool ToBool(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
-        [FunctionAttribute("func toInt () : int")]
+        [FunctionAttribute("func toint () : int")]
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt(Bool ? 1 : 0);
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Bool.ToString().ToLower());

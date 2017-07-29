@@ -31,12 +31,20 @@ namespace Hassium.Runtime.Drawing
                     bitmap.Bitmap = new Bitmap((int)args[0].ToInt(vm, location).Int, (int)args[1].ToInt(vm, location).Int);
                     break;
             }
+            bitmap.AddAttribute("getpixel", bitmap.getpixel, 2);
+            bitmap.AddAttribute("height", new HassiumProperty(bitmap.get_height));
+            bitmap.AddAttribute("hres", new HassiumProperty(bitmap.get_hres));
+            bitmap.AddAttribute("save", bitmap.save, 1);
+            bitmap.AddAttribute("setpixel", bitmap.setpixel, 3);
+            bitmap.AddAttribute("setres", bitmap.setres, 2);
+            bitmap.AddAttribute("vres", new HassiumProperty(bitmap.get_vres));
+            bitmap.AddAttribute("width", new HassiumProperty(bitmap.get_width));
 
             return bitmap;
         }
         
-        [FunctionAttribute("func getPixel (x : int, y : int) : Color")]
-        public HassiumColor getPixel(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func getpixel (x : int, y : int) : Color")]
+        public HassiumColor getpixel(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumColor()._new(vm, location, new HassiumInt(Bitmap.GetPixel((int)args[0].ToInt(vm, location).Int, (int)args[1].ToInt(vm, location).Int).ToArgb()));
         }
@@ -47,8 +55,8 @@ namespace Hassium.Runtime.Drawing
             return new HassiumInt(Bitmap.Height);
         }
 
-        [FunctionAttribute("horizontalResolution { get; }")]
-        public HassiumFloat get_horizontalResolution(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("hres { get; }")]
+        public HassiumFloat get_hres(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumFloat(Bitmap.HorizontalResolution);
         }
@@ -61,24 +69,24 @@ namespace Hassium.Runtime.Drawing
             return Null;
         }
 
-        [FunctionAttribute("func setPixel (x : int, y : int, col : Color) : null")]
-        public HassiumNull setPixel(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func setpixel (x : int, y : int, col : Color) : null")]
+        public HassiumNull setpixel(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Bitmap.SetPixel((int)args[0].ToInt(vm, location).Int, (int)args[1].ToInt(vm, location).Int, (args[2] as HassiumColor).Color);
 
             return Null;
         }
 
-        [FunctionAttribute("func setResolution (x : float, y : float) : null")]
-        public HassiumNull setResolution(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func setres (x : float, y : float) : null")]
+        public HassiumNull setres(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             Bitmap.SetResolution((float)args[0].ToFloat(vm, location).Float, (float)args[1].ToFloat(vm, location).Float);
 
             return Null;
         }
 
-        [FunctionAttribute("verticalResolution { get; }")]
-        public HassiumFloat get_verticalResolution(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("vres { get; }")]
+        public HassiumFloat get_vres(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumFloat(Bitmap.VerticalResolution);
         }

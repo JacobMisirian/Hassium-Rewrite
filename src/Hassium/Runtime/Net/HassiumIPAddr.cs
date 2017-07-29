@@ -45,7 +45,7 @@ namespace Hassium.Runtime.Net
             return Port;
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public HassiumString toString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             if (Port.Int == -1)

@@ -24,8 +24,8 @@ namespace Hassium.Runtime.Text
 
             sb.StringBuilder = args.Length == 0 ? new StringBuilder() : new StringBuilder(args[0].ToString(vm, location).String);
             sb.AddAttribute("append", sb.append, 1);
-            sb.AddAttribute("appendFormat", sb.appendFormat, -1);
-            sb.AddAttribute("appendLine", sb.appendLine, 1);
+            sb.AddAttribute("appendf", sb.appendf, -1);
+            sb.AddAttribute("appendline", sb.appendline, 1);
             sb.AddAttribute("clear", sb.clear, 0);
             sb.AddAttribute("insert", sb.insert, 2);
             sb.AddAttribute("length", new HassiumProperty(sb.get_length));
@@ -42,16 +42,16 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
-        [FunctionAttribute("func appendFormat (fmt : string, params obj) : StringBuilder")]
-        public HassiumStringBuilder appendFormat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func appendf (fmt : string, params obj) : StringBuilder")]
+        public HassiumStringBuilder appendf(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.Append(GlobalFunctions.format(vm, location, args).ToString(vm, location).String);
 
             return this;
         }
 
-        [FunctionAttribute("func appendLine (obj : object) : StringBuilder")]
-        public HassiumStringBuilder appendLine(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func appendline (obj : object) : StringBuilder")]
+        public HassiumStringBuilder appendline(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder.AppendLine(args[0].ToString(vm, location).String);
 
@@ -88,7 +88,7 @@ namespace Hassium.Runtime.Text
             return this;
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(StringBuilder.ToString());

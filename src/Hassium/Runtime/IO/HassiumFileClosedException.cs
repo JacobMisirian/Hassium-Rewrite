@@ -26,7 +26,7 @@ namespace Hassium.Runtime.IO
             exception.File = args[0] as HassiumFile;
             exception.FilePath = args[1].ToString(vm, location);
             exception.AddAttribute("file", new HassiumProperty(exception.get_file));
-            exception.AddAttribute("filePath", new HassiumProperty(exception.get_filePath));
+            exception.AddAttribute("filepath", new HassiumProperty(exception.get_filepath));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
             exception.AddAttribute(TOSTRING, exception.ToString, 0);
 
@@ -39,8 +39,8 @@ namespace Hassium.Runtime.IO
             return File;
         }
 
-        [FunctionAttribute("filePath { get; }")]
-        public HassiumString get_filePath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("filepath { get; }")]
+        public HassiumString get_filepath(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return FilePath;
         }
@@ -51,7 +51,7 @@ namespace Hassium.Runtime.IO
             return new HassiumString(string.Format("File Closed: Filepath '{0}' has been closed", FilePath.String));
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();

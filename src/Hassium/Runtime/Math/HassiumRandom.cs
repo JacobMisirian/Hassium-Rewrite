@@ -24,15 +24,15 @@ namespace Hassium.Runtime.Math
             HassiumRandom rand = new HassiumRandom();
 
             rand.Random = args.Length == 0 ? new Random() : new Random((int)args[0].ToInt(vm, location).Int);
-            rand.AddAttribute("randFloat", rand.randFloat, 0);
-            rand.AddAttribute("randBytes", rand.randBytes, 1);
-            rand.AddAttribute("randInt", rand.randInt, 0, 1, 2);
+            rand.AddAttribute("randfloat", rand.randfloat, 0);
+            rand.AddAttribute("randbytes", rand.randbytes, 1);
+            rand.AddAttribute("randint", rand.randint, 0, 1, 2);
 
             return rand;
         }
 
-        [FunctionAttribute("func randBytes (count : int) : list")]
-        public HassiumList randBytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func randbytes (count : int) : list")]
+        public HassiumList randbytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumList bytes = new HassiumList(new HassiumObject[0]);
 
@@ -47,14 +47,14 @@ namespace Hassium.Runtime.Math
             return bytes;
         }
 
-        [FunctionAttribute("func randFloat () : float")]
-        public HassiumFloat randFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func randfloat () : float")]
+        public HassiumFloat randfloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumFloat(Random.NextDouble());
         }
 
-        [FunctionAttribute("func randInt () : int", "func randInt (up : int) : int", "func randInt (low : int, up : int) : int")]
-        public HassiumObject randInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func randint () : int", "func randInt (up : int) : int", "func randInt (low : int, up : int) : int")]
+        public HassiumObject randint(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             switch (args.Length)
             {

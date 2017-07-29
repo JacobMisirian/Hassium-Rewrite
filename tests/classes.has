@@ -2,11 +2,11 @@
 class Dog {
 	func new(name) {
 		# Create attribute inside of class
-		this.Name = name;
+		this.name = name;
 	}
 
-	func showName() {
-		println(this.Name);
+	func showname() {
+		println(this.name);
 	}
 
 	func bark() {
@@ -30,7 +30,7 @@ func main() {
 	fiddo.bark ();
 
 	ralph = new BigDog ("Ralph");
-	ralph.showName ();
+	ralph.showname ();
 
 	ralph.bark ();
 }

@@ -27,17 +27,17 @@ namespace Hassium.Runtime
             exception.ExpectedLength = args[1].ToInt(vm, location);
             exception.Function = args[0];
             exception.GivenLength = args[2].ToInt(vm, location);
-            exception.AddAttribute("expectedLength", new HassiumProperty(exception.get_expectedLength));
+            exception.AddAttribute("expected", new HassiumProperty(exception.get_expected));
             exception.AddAttribute("function", new HassiumProperty(exception.get_function));
-            exception.AddAttribute("givenLength", new HassiumProperty(exception.get_givenLength));
+            exception.AddAttribute("given", new HassiumProperty(exception.get_given));
             exception.AddAttribute("message", new HassiumProperty(exception.get_message));
             exception.AddAttribute(TOSTRING, exception.ToString, 0);
 
             return exception;
         }
 
-        [FunctionAttribute("expectedLength { get; }")]
-        public HassiumInt get_expectedLength(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("expected { get; }")]
+        public HassiumInt get_expected(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return ExpectedLength;
         }
@@ -48,8 +48,8 @@ namespace Hassium.Runtime
             return Function;
         }
 
-        [FunctionAttribute("givenLength { get; }")]
-        public HassiumInt get_givenLength(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("given { get; }")]
+        public HassiumInt get_given(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return GivenLength;
         }
@@ -60,7 +60,7 @@ namespace Hassium.Runtime
             return new HassiumString(string.Format("Argument Length Error: Expected '{0}' arguments, '{1}' given", ExpectedLength.Int, GivenLength.Int));
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();

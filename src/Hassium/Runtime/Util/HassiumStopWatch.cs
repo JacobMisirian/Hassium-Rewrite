@@ -24,7 +24,7 @@ namespace Hassium.Runtime.Util
 
             watch.StopWatch = new Stopwatch();
             watch.AddAttribute("hours", new HassiumProperty(watch.get_hours));
-            watch.AddAttribute("isRunning", new HassiumProperty(watch.get_isRunning));
+            watch.AddAttribute("isrunning", new HassiumProperty(watch.get_isrunning));
             watch.AddAttribute("milliseconds", new HassiumProperty(watch.get_milliseconds));
             watch.AddAttribute("minutes", new HassiumProperty(watch.get_minutes));
             watch.AddAttribute("restart", watch.restart, 0);
@@ -43,8 +43,8 @@ namespace Hassium.Runtime.Util
             return new HassiumInt(StopWatch.Elapsed.Hours);
         }
 
-        [FunctionAttribute("isRunning { get; }")]
-        public HassiumBool get_isRunning(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("isrunning { get; }")]
+        public HassiumBool get_isrunning(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(StopWatch.IsRunning);
         }

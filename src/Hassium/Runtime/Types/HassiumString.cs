@@ -15,6 +15,7 @@ namespace Hassium.Runtime.Types
             AddType(TypeDefinition);
             String = val;
 
+            AddAttribute(ADD, Add, 1);
             AddAttribute(EQUALTO, EqualTo, 1);
             AddAttribute("format", format, -1);
             AddAttribute(GREATERTHAN, GreaterThan, 1);
@@ -25,7 +26,16 @@ namespace Hassium.Runtime.Types
             AddAttribute(LESSERTHAN, LesserThan, 1);
             AddAttribute(LESSERTHANOREQUAL, LesserThanOrEqual, 1);
             AddAttribute(NOTEQUALTO, NotEqualTo, 1);
+            AddAttribute(TOFLOAT, ToFloat, 0);
+            AddAttribute(TOINT, ToInt, 0);
+            AddAttribute("tolower", tolower, 0);
             AddAttribute(TOSTRING, ToString, 0);
+            AddAttribute("toupper", toupper, 0);
+        }
+
+        public override HassiumObject Add(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(String + args[0].ToString(vm, location).String);
         }
 
         [FunctionAttribute("func __equals__ (str : string) : bool")]
@@ -94,7 +104,13 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(String != args[0].ToString(vm, location).String);
         }
 
-        [FunctionAttribute("func toInt () : int")]
+        [FunctionAttribute("func tofloat () : float")]
+        public override HassiumFloat ToFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumFloat(Convert.ToDouble(String));
+        }
+
+        [FunctionAttribute("func toint () : int")]
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             try
@@ -108,20 +124,20 @@ namespace Hassium.Runtime.Types
             }
         }
 
-        [FunctionAttribute("func toLower () : string")]
-        public HassiumString toLower(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func tolower () : string")]
+        public HassiumString tolower(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(String.ToLower());
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
-        [FunctionAttribute("func toUpper () : string")]
-        public HassiumString toUpper(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func toupper () : string")]
+        public HassiumString toupper(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(String.ToUpper());
         }

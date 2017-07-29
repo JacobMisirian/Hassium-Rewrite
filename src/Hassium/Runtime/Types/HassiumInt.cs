@@ -27,7 +27,7 @@ namespace Hassium.Runtime.Types
             AddAttribute(BITWISEOR, BitwiseOr, 1);
             AddAttribute(DIVIDE, Divide, 1);
             AddAttribute(EQUALTO, EqualTo, 1);
-            AddAttribute("getBit", getBit, 1);
+            AddAttribute("getbit", getbit, 1);
             AddAttribute(GREATERTHAN, GreaterThan, 1);
             AddAttribute(GREATERTHANOREQUAL, GreaterThanOrEqual, 1);
             AddAttribute(INTEGERDIVISION, IntegerDivision, 1);
@@ -37,7 +37,7 @@ namespace Hassium.Runtime.Types
             AddAttribute(NEGATE, Negate, 0);
             AddAttribute(NOTEQUALTO, NotEqualTo, 1);
             AddAttribute(POWER, Power, 1);
-            AddAttribute("setBit", setBit, 2);
+            AddAttribute("setbit", setbit, 2);
             AddAttribute(SUBTRACT, Subtract, 1);
             AddAttribute(TOFLOAT, ToFloat, 0);
             AddAttribute(TOINT, ToInt, 0);
@@ -108,8 +108,8 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(Int == args[0].ToInt(vm, location).Int);
         }
 
-        [FunctionAttribute("func getBit (index : int) : bool")]
-        public HassiumBool getBit(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func getbit (index : int) : bool")]
+        public HassiumBool getbit(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool((Int & (1 << (int)args[0].ToInt(vm, location).Int - 1)) != 0);
         }
@@ -181,8 +181,8 @@ namespace Hassium.Runtime.Types
             return new HassiumInt((long)System.Math.Pow((double)Int, (double)args[0].ToInt(vm, location).Int));
         }
 
-        [FunctionAttribute("func setBit (index : int, val : bool) : int")]
-        public HassiumInt setBit(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func setbit (index : int, val : bool) : int")]
+        public HassiumInt setbit(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             int index = (int)args[0].ToInt(vm, location).Int;
             bool val = args[1].ToBool(vm, location).Bool;
@@ -205,25 +205,25 @@ namespace Hassium.Runtime.Types
             return this;
         }
 
-        [FunctionAttribute("func toBool () : bool")]
+        [FunctionAttribute("func tobool () : bool")]
         public override HassiumBool ToBool(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumBool(Int == 1);
         }
 
-        [FunctionAttribute("func toFloat () : float")]
+        [FunctionAttribute("func tofloat () : float")]
         public override HassiumFloat ToFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumFloat(Int);
         }
 
-        [FunctionAttribute("func toInt () : int")]
+        [FunctionAttribute("func toint () : int")]
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Int.ToString());

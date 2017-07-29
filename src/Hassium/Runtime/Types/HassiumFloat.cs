@@ -115,19 +115,19 @@ namespace Hassium.Runtime.Types
             return new HassiumFloat(Float - args[0].ToFloat(vm, location).Float);
         }
 
-        [FunctionAttribute("func toFloat () : float")]
+        [FunctionAttribute("func tofloat () : float")]
         public override HassiumFloat ToFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
-        [FunctionAttribute("func toInt () : int")]
+        [FunctionAttribute("func toint () : int")]
         public override HassiumInt ToInt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumInt((long)Float);
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return new HassiumString(Float.ToString());

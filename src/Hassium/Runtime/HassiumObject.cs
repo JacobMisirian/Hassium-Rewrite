@@ -46,13 +46,13 @@ namespace Hassium.Runtime
         public static string ITERABLEFULL = "__iterfull__";
         public static string ITERABLENEXT = "__iternext__";
         public static string DISPOSE = "dispose";
-        public static string TOBOOL = "toBool";
-        public static string TOCHAR = "toChar";
-        public static string TOINT = "toInt";
-        public static string TOFLOAT = "toFloat";
-        public static string TOLIST = "toList";
-        public static string TOSTRING = "toString";
-        public static string TOTUPLE = "toTuple";
+        public static string TOBOOL = "tobool";
+        public static string TOCHAR = "tochar";
+        public static string TOINT = "toint";
+        public static string TOFLOAT = "tofloat";
+        public static string TOLIST = "tolist";
+        public static string TOSTRING = "tostring";
+        public static string TOTUPLE = "totuple";
         public static string XOR = "__xor__";
 
         public HassiumClass Parent { get; set; }

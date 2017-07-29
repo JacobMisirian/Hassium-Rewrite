@@ -25,7 +25,7 @@ namespace Hassium.Runtime.Types
             AddAttribute(ITERABLENEXT, IterableNext, 0);
             AddAttribute("length", new HassiumProperty(get_length));
             AddAttribute("remove", remove, 1);
-            AddAttribute("removeAt", removeAt, 1);
+            AddAttribute("removeat", removeat, 1);
             AddAttribute("reverse", reverse, 0);
             AddAttribute(STOREINDEX, StoreIndex, 2);
             AddAttribute(TOLIST, ToList, 0);
@@ -116,8 +116,8 @@ namespace Hassium.Runtime.Types
             return Null;
         }
 
-        [FunctionAttribute("func removeAt (index : int) : null")]
-        public HassiumNull removeAt(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        [FunctionAttribute("func removeat (index : int) : null")]
+        public HassiumNull removeat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             var index = args[0].ToInt(vm, location);
             if (index.Int < 0 || index.Int >= Values.Count)
@@ -151,13 +151,13 @@ namespace Hassium.Runtime.Types
             return args[1];
         }
 
-        [FunctionAttribute("func toList () : list")]
+        [FunctionAttribute("func tolist () : list")]
         public override HassiumList ToList(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             return this;
         }
 
-        [FunctionAttribute("func toString () : string")]
+        [FunctionAttribute("func tostring () : string")]
         public override HassiumString ToString(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             StringBuilder sb = new StringBuilder();

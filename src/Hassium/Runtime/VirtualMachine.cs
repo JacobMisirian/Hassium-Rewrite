@@ -201,7 +201,7 @@ namespace Hassium.Runtime
                             Stack.Pop();
                             break;
                         case InstructionType.PopHandler:
-                            Handlers.Pop();
+                            //Handlers.Pop();
                             break;
                         case InstructionType.Push:
                             Stack.Push(new HassiumInt(arg));
@@ -413,7 +413,7 @@ namespace Hassium.Runtime
                 Environment.Exit(0);
                 return;
             }
-            var handler = Handlers.Peek();
+            var handler = Handlers.Pop();
             handler.Invoke(this, CurrentSourceLocation, message);
             ExceptionReturns.Add(handler.Caller, handler.Caller.Labels[handler.Label]);
         }
