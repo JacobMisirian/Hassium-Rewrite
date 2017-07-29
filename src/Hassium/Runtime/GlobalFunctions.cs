@@ -11,6 +11,7 @@ namespace Hassium.Runtime
         public static Dictionary<string, HassiumObject> Functions = new Dictionary<string, HassiumObject>()
         {
             { "format",        new HassiumFunction(format,         -1) },
+            { "input",         new HassiumFunction(input,           0) },
             { "print",         new HassiumFunction(print,          -1) },
             { "println",       new HassiumFunction(println,        -1) },
             { "type",          new HassiumFunction(type,            1) },
@@ -29,6 +30,12 @@ namespace Hassium.Runtime
             for (int i = 1; i < args.Length; i++)
                 fargs[i] = args[i].ToString(vm, location).String;
             return new HassiumString(string.Format(args[0].ToString(vm, location).String, fargs));
+        }
+
+        [FunctionAttribute("func input () : string")]
+        public static HassiumString input(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumString(Console.ReadLine());
         }
 
         [FunctionAttribute("func print (params obj) : null")]

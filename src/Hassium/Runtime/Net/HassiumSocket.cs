@@ -15,6 +15,9 @@ namespace Hassium.Runtime.Net
         public BinaryReader Reader { get; set; }
         public BinaryWriter Writer { get; set; }
 
+        public StreamReader StreamReader { get; set; }
+        public StreamWriter StreamWriter { get; set; }
+
         public bool AutoFlush { get; set; }
         public bool Closed { get; set; }
 
@@ -50,6 +53,8 @@ namespace Hassium.Runtime.Net
             }
             socket.Reader = new BinaryReader(socket.Client.GetStream());
             socket.Writer = new BinaryWriter(socket.Client.GetStream());
+            socket.StreamReader = new StreamReader(socket.Client.GetStream());
+            socket.StreamWriter = new StreamWriter(socket.Client.GetStream());
             socket.AutoFlush = true;
             socket.Closed = false;
             socket.AddAttribute("autoflush", new HassiumProperty(socket.get_autoflush, socket.set_autoflush));
@@ -59,6 +64,7 @@ namespace Hassium.Runtime.Net
             socket.AddAttribute("toip", new HassiumProperty(socket.get_toip));
             socket.AddAttribute("flush", socket.flush, 0);
             socket.AddAttribute("isconnected", new HassiumProperty(socket.get_isconnected));
+            socket.AddAttribute("readbyte", socket.readbyte, 0);
             socket.AddAttribute("readbytes", socket.readbytes, 1);
             socket.AddAttribute("readint", socket.readint, 0);
             socket.AddAttribute("readline", socket.readline, 0);
@@ -228,7 +234,7 @@ namespace Hassium.Runtime.Net
                 return Null;
             }
 
-            return new HassiumString(new StreamReader(Reader.BaseStream).ReadLine());
+            return new HassiumString(StreamReader.ReadLine());
         }
 
         [FunctionAttribute("func readlong () : int")]
@@ -324,7 +330,10 @@ namespace Hassium.Runtime.Net
 
             string str = args[0].ToString(vm, location).String;
 
-            new StreamWriter(Writer.BaseStream).WriteLine(str);
+            foreach (var c in str)
+                Writer.Write(c);
+            Writer.Write('\r');
+            Writer.Write('\n');
 
             if (AutoFlush)
                 Writer.Flush();
