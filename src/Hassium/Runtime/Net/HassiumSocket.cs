@@ -28,7 +28,7 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 0, 1, 2);
         }
 
-        [FunctionAttribute("func new () : Socket", "func new (IPAddrOrStr : IPAddr) : Socket", "func new (ip : string, port : int) : Socket")]
+        [FunctionAttribute("func new () : Socket", "func new (IPAddrOrStr : object) : Socket", "func new (ip : string, port : int) : Socket")]
         public HassiumObject _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumSocket socket = new HassiumSocket();
@@ -55,6 +55,14 @@ namespace Hassium.Runtime.Net
             socket.Writer = new BinaryWriter(socket.Client.GetStream());
             socket.StreamReader = new StreamReader(socket.Client.GetStream());
             socket.StreamWriter = new StreamWriter(socket.Client.GetStream());
+
+            ImportAttribs(socket);
+
+            return socket;
+        }
+
+        public void ImportAttribs(HassiumSocket socket)
+        {
             socket.AutoFlush = true;
             socket.Closed = false;
             socket.AddAttribute("autoflush", new HassiumProperty(socket.get_autoflush, socket.set_autoflush));
@@ -79,8 +87,6 @@ namespace Hassium.Runtime.Net
             socket.AddAttribute("writelong", socket.writelong, 1);
             socket.AddAttribute("writeshort", socket.writeshort, 1);
             socket.AddAttribute("writestring", socket.writestring, 1);
-
-            return socket;
         }
 
         [FunctionAttribute("autoflush { get; }")]

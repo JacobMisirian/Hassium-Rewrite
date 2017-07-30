@@ -1,8 +1,6 @@
 ﻿using Hassium.Compiler;
 using Hassium.Runtime.Types;
 
-using System.Net;
-
 namespace Hassium.Runtime.Net
 {
     public class HassiumIPAddr : HassiumObject

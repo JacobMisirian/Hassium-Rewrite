@@ -1,0 +1,6 @@
+use Net;
+
+func main () {
+	println (DNS.gethost ("162.243.36.14"));
+	println (DNS.gethosts ("162.243.36.14"));
+}

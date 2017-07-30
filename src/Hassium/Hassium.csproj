@@ -124,6 +124,7 @@
     <Compile Include="Runtime\Math\HassiumMath.cs" />
     <Compile Include="Runtime\Math\HassiumMathModule.cs" />
     <Compile Include="Runtime\Math\HassiumRandom.cs" />
+    <Compile Include="Runtime\Net\HassiumDNS.cs" />
     <Compile Include="Runtime\Net\HassiumSocketClosedException.cs" />
     <Compile Include="Runtime\Net\HassiumNetModule.cs" />
     <Compile Include="Runtime\Net\HassiumSocket.cs" />

@@ -16,6 +16,7 @@ namespace Hassium.Runtime.Net
         {
             AddType(TypeDefinition);
 
+            AddAttribute(INVOKE, _new, 1, 2);
         }
 
         [FunctionAttribute("func new (portOrIPAddr : object) : SocketListener", "func new (ip : string, port) : SocketListener")]
@@ -38,8 +39,43 @@ namespace Hassium.Runtime.Net
                     listener.TcpListener = new TcpListener(IPAddress.Parse(args[0].ToString(vm, location).String), (int)args[1].ToInt(vm, location).Int);
                     break;
             }
+            listener.AddAttribute("acceptsock", listener.acceptsock, 0);
+            listener.AddAttribute("localip", new HassiumProperty(listener.get_localip));
+            listener.AddAttribute("start", listener.start, 0);
+            listener.AddAttribute("stop", listener.stop, 0);
 
             return listener;
+        }
+
+        [FunctionAttribute("func acceptsock () : Socket")]
+        public HassiumSocket acceptsock(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            HassiumSocket socket = new HassiumSocket();
+
+            socket.ImportAttribs(socket);
+            socket.Client = TcpListener.AcceptTcpClient();
+
+            return socket;
+        }
+
+        [FunctionAttribute("localip { get; }")]
+        public HassiumIPAddr get_localip(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return HassiumIPAddr._new(vm, location, new HassiumString((TcpListener.LocalEndpoint as IPEndPoint).Address.ToString()), new HassiumInt((TcpListener.LocalEndpoint as IPEndPoint).Port));
+        }
+
+        [FunctionAttribute("func start () : null")]
+        public HassiumNull start(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            TcpListener.Start();
+            return Null;
+        }
+
+        [FunctionAttribute("func stop () : null")]
+        public HassiumNull stop(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            TcpListener.Stop();
+            return Null;
         }
     }
 }
