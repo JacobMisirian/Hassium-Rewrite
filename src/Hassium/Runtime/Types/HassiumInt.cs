@@ -211,6 +211,12 @@ namespace Hassium.Runtime.Types
             return new HassiumBool(Int == 1);
         }
 
+        [FunctionAttribute("func tochar () : char")]
+        public override HassiumChar ToChar(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            return new HassiumChar((char)Int);
+        }
+
         [FunctionAttribute("func tofloat () : float")]
         public override HassiumFloat ToFloat(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {

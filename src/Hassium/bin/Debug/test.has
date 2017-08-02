@@ -1,12 +1,9 @@
-func main (args : list) : null {
-	println (add (3, 4));
-	println (add (3.3, 4.2));
-}
+use Text;
 
-func add (x : int, y : int) {
-	return x + y;
-}
+func main () {
+	l = [ 0x02, 0x70 ];
 
-func add (x : float, y : float) {
-	return x + y;
+	arr = l.toByteArr ();
+
+	println (arr);
 }

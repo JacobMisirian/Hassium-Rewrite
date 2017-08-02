@@ -65,12 +65,8 @@ namespace Hassium.Runtime.Text
         public HassiumList getbytes(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             byte[] bytes = Encoding.GetBytes(args[0].ToString(vm, location).String);
-            HassiumList list = new HassiumList(new HassiumObject[0]);
 
-            foreach (byte b in bytes)
-                list.add(vm, location, new HassiumChar((char)b));
-
-            return list;
+            return new HassiumByteArray(bytes, new HassiumObject[0]);
         }
 
         [FunctionAttribute("func getstring (bytes : list) : string")]
