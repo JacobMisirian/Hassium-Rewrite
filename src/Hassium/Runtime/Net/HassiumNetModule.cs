@@ -9,6 +9,7 @@
             AddAttribute("Socket", new HassiumSocket());
             AddAttribute("SocketListener", new HassiumSocketListener());
             AddAttribute("SocketClosedException", new HassiumSocketClosedException());
+            AddAttribute("Web", new HassiumWeb());
         }
     }
 }
