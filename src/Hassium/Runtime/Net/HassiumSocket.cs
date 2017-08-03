@@ -61,7 +61,7 @@ namespace Hassium.Runtime.Net
             return socket;
         }
 
-        public void ImportAttribs(HassiumSocket socket)
+        public static void ImportAttribs(HassiumSocket socket)
         {
             socket.AutoFlush = true;
             socket.Closed = false;

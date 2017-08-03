@@ -163,7 +163,8 @@ namespace Hassium.Runtime.Types
             sb.Append("[ ");
             foreach (var v in Values)
                 sb.AppendFormat("{0}, ", v.ToString());
-            sb.Remove(sb.Length - 2, 2);
+            if (Values.Count > 0)
+                sb.Remove(sb.Length - 2, 2);
             sb.Append(" ]");
 
             return new HassiumString(sb.ToString());

@@ -52,7 +52,7 @@ namespace Hassium.Runtime.Net
         {
             HassiumSocket socket = new HassiumSocket();
 
-            socket.ImportAttribs(socket);
+            HassiumSocket.ImportAttribs(socket);
             socket.Client = TcpListener.AcceptTcpClient();
 
             return socket;
