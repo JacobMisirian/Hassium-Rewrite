@@ -47,7 +47,7 @@ namespace Hassium.Compiler.Parser.Ast
                         sb.AppendFormat("{0}, ", param.Name);
                         break;
                     case FunctionParameterType.Variadic:
-                        sb.AppendFormat("params {0}", param.Name);
+                        sb.AppendFormat("params {0}, ", param.Name);
                         break;
                 }
             }

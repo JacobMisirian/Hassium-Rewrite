@@ -96,7 +96,7 @@ namespace Hassium.Runtime
                     else
                     {
                         HassiumList list = new HassiumList(new HassiumObject[0]);
-                        for (; i < args.Length; i++)
+                        for (--i; i < args.Length; i++)
                             list.add(vm, location, args[i]);
                         vm.StackFrame.Add(param.Value, list);
                     }

@@ -1,6 +1,7 @@
-use Net;
-
 func main () {
-	println (DNS.gethost ("162.243.36.14"));
-	println (DNS.gethosts ("162.243.36.14"));
+	foo (4, 6, "hai");
+}
+
+func foo (x, params args) {
+	raise "foo";
 }

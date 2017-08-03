@@ -1,0 +1,17 @@
+use Net;
+
+func main (params args) {
+	sock = new Socket (args [1], args [2].toint ());
+
+	while (!sock.isconnected) sleep (100);
+
+	thread do {
+		while (true) {
+			print (sock.readbyte ());
+		}
+	}
+
+	while (true) {
+		sock.writeline (input ());
+	}
+}
