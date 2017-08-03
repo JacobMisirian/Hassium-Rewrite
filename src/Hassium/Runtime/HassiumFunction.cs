@@ -18,7 +18,7 @@ namespace Hassium.Runtime
             Target = target;
             ParameterLengths = new int[] { paramLength };
         }
-        public HassiumFunction(HassiumFunctionDelegate target, int[] paramLengths)
+        public HassiumFunction(HassiumFunctionDelegate target, params int[] paramLengths)
         {
             AddType(TypeDefinition);
             Target = target;

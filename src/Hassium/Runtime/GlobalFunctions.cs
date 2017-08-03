@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Hassium.Compiler;
 using Hassium.Runtime.Types;
@@ -21,6 +20,7 @@ namespace Hassium.Runtime
             { "print",         new HassiumFunction(print,          -1) },
             { "printf",        new HassiumFunction(printf,         -1) },
             { "println",       new HassiumFunction(println,        -1) },
+            { "range",         new HassiumFunction(range,        1, 2) },
             { "setattrib",     new HassiumFunction(setattrib,       3) },
             { "sleep",         new HassiumFunction(sleep,           1) },
             { "type",          new HassiumFunction(type,            1) },
@@ -110,6 +110,21 @@ namespace Hassium.Runtime
                 Console.WriteLine(arg.ToString(vm, location).String);
             return HassiumObject.Null;
         }
+
+        [FunctionAttribute("func range (upper : int) : list", "func range (lower : int, upper : int) : list")]
+        public static HassiumList range(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            int lower = args.Length == 1 ? 0 : (int)args[1].ToInt(vm, location).Int;
+            int upper = args.Length == 1 ? (int)args[0].ToInt(vm, location).Int : (int)args[1].ToInt(vm, location).Int;
+
+            HassiumList list = new HassiumList(new HassiumObject[0]);
+
+            while (lower < upper)
+                list.add(vm, location, new HassiumInt(lower++));
+
+            return list;
+        }
+
 
         [FunctionAttribute("func setattrib (obj : object, attrib : string, val : object) : null")]
         public static HassiumNull setattrib(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
