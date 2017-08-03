@@ -16,14 +16,14 @@ namespace Hassium.Runtime.Types
             Get = get_;
             Set = set_;
 
-            AddType(get_.Type());
+            AddType(TypeDefinition);
         }
         public HassiumProperty(HassiumFunctionDelegate get_, HassiumFunctionDelegate set_ = null)
         {
             Get = new HassiumFunction(get_, 0);
             Set = set_ != null ? new HassiumFunction(set_, 1) : null;
 
-            AddType(HassiumFunction.TypeDefinition);
+            AddType(TypeDefinition);
         }
 
         public override HassiumObject Invoke(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)

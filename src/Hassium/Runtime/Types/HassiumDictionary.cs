@@ -9,7 +9,7 @@ namespace Hassium.Runtime.Types
 {
     public class HassiumDictionary : HassiumObject
     {
-        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("dictionary");
+        public static new HassiumTypeDefinition TypeDefinition = new HassiumTypeDefinition("dict");
 
         public Dictionary<HassiumObject, HassiumObject> Dictionary { get; private set; }
 

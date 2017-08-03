@@ -8,6 +8,7 @@
             AddAttribute("OS", new HassiumOS());
             AddAttribute("Process", new HassiumProcess());
             AddAttribute("StopWatch", new HassiumStopWatch());
+            AddAttribute("UI", new HassiumUI());
         }
     }
 }

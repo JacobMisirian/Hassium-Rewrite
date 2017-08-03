@@ -33,7 +33,7 @@ namespace Hassium.Runtime.IO
         [FunctionAttribute("message { get; }")]
         public HassiumString get_message(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
-            return new HassiumString(string.Format("Directory Not Found: '{0}' does not exist!", Path.String));
+            return new HassiumString(string.Format("Directory Not Found: '{0}' does not exist", Path.String));
         }
 
         [FunctionAttribute("path { get; }")]

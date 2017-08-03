@@ -1,11 +1,11 @@
-use Util;
-
 func main () {
-	proc = new Process ("cmd.exe", "ipconfig");
+	l = [ 3, 6, 2 ];
 
-	proc.start ();
+	l = map (l, double);
 
-	sleep (4000);
+	println (l);
+}
 
-	proc.stop ();
+func double (x : int) : int {
+	return x * 2;
 }
