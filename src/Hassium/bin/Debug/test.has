@@ -1,9 +1,11 @@
-use Text;
+use Util;
 
 func main () {
-	l = [ 0x02, 0x70 ];
+	proc = new Process ("cmd.exe", "ipconfig");
 
-	arr = l.toByteArr ();
+	proc.start ();
 
-	println (arr);
+	sleep (4000);
+
+	proc.stop ();
 }

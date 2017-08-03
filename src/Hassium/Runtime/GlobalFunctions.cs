@@ -14,6 +14,7 @@ namespace Hassium.Runtime
             { "input",         new HassiumFunction(input,           0) },
             { "print",         new HassiumFunction(print,          -1) },
             { "println",       new HassiumFunction(println,        -1) },
+            { "sleep",         new HassiumFunction(sleep,           1) },
             { "type",          new HassiumFunction(type,            1) },
             { "types",         new HassiumFunction(types,           1) }
         };
@@ -51,6 +52,13 @@ namespace Hassium.Runtime
         {
             foreach (var arg in args)
                 Console.WriteLine(arg.ToString(vm, location).String);
+            return HassiumObject.Null;
+        }
+
+        [FunctionAttribute("func sleep (milliseconds : int) : null")]
+        public static HassiumNull sleep(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
+        {
+            System.Threading.Thread.Sleep((int)args[0].ToInt(vm, location).Int);
             return HassiumObject.Null;
         }
 

@@ -6,7 +6,7 @@
         {
             AddAttribute("DateTime", new HassiumDateTime());
             AddAttribute("OS", new HassiumOS());
-            AddAttribute("Process", HassiumProcess.TypeDefinition);
+            AddAttribute("Process", new HassiumProcess());
             AddAttribute("StopWatch", new HassiumStopWatch());
         }
     }

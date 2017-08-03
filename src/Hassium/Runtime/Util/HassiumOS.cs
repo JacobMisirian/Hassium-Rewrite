@@ -37,7 +37,10 @@ namespace Hassium.Runtime.Util
                 arguments.AppendFormat("{0} ", args[i].ToString(vm, location).String);
             if (args.Length > 1)
                 arguments.Remove(arguments.Length - 1, 1);
-            return new HassiumProcess(Process.Start(args[0].ToString(vm, location).String, arguments.ToString()));
+            var proc = new HassiumProcess(Process.Start(args[0].ToString(vm, location).String, arguments.ToString()));
+
+            HassiumProcess.ImportAttribs(proc);
+            return proc;
         }
 
         [FunctionAttribute("func exit () : null", "func exit (code : int) : null")]
