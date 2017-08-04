@@ -3,6 +3,7 @@ using Hassium.Runtime.Types;
 
 using System.IO;
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
 
 namespace Hassium.Runtime.Net
@@ -28,33 +29,44 @@ namespace Hassium.Runtime.Net
             AddAttribute(INVOKE, _new, 0, 1, 2);
         }
 
-        [FunctionAttribute("func new () : Socket", "func new (IPAddrOrStr : object) : Socket", "func new (ip : string, port : int) : Socket")]
+        [FunctionAttribute("func new () : Socket", "func new (IPAddrOrStr : object) : Socket", "func new (ip : string, port : int) : Socket", "func new (ip : string, port : int, ssl : bool) : Socket")]
         public HassiumObject _new(VirtualMachine vm, SourceLocation location, params HassiumObject[] args)
         {
             HassiumSocket socket = new HassiumSocket();
+            Stream stream = null;
 
             switch (args.Length)
             {
                 case 0:
                     socket.Client = new TcpClient();
+                    stream = socket.Client.GetStream();
                     break;
                 case 1:
                     if (args[0] is HassiumIPAddr)
                     {
                         var ipAddr = args[0] as HassiumIPAddr;
                         socket.Client = new TcpClient(ipAddr.Address.String, (int)ipAddr.Port.Int);
+                        stream = socket.Client.GetStream();
                     }
                     else
                         return _new(vm, location, HassiumIPAddr._new(vm, location, args[0].ToString(vm, location)));
                     break;
                 case 2:
                     socket.Client = new TcpClient(args[0].ToString(vm, location).String, (int)args[1].ToInt(vm, location).Int);
+                    stream = socket.Client.GetStream();
+                    break;
+                case 3:
+                    socket.Client = new TcpClient(args[0].ToString(vm, location).String, (int)args[1].ToInt(vm, location).Int);
+                    if (args[2].ToBool(vm, location).Bool)
+                        stream = new SslStream(socket.Client.GetStream(), false, new RemoteCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) => true), null);
+                    else
+                        stream = socket.Client.GetStream();
                     break;
             }
-            socket.Reader = new BinaryReader(socket.Client.GetStream());
-            socket.Writer = new BinaryWriter(socket.Client.GetStream());
-            socket.StreamReader = new StreamReader(socket.Client.GetStream());
-            socket.StreamWriter = new StreamWriter(socket.Client.GetStream());
+            socket.Reader = new BinaryReader(stream);
+            socket.Writer = new BinaryWriter(stream);
+            socket.StreamReader = new StreamReader(stream);
+            socket.StreamWriter = new StreamWriter(stream);
 
             ImportAttribs(socket);
 
