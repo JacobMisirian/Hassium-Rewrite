@@ -553,32 +553,41 @@ namespace Hassium.Compiler.Emit
             if (mod.Attributes.ContainsKey("__global__"))
             {
                 var globalClass = mod.Attributes["__global__"];
-                foreach (var attrib in globalClass.Attributes)
+                if (node.Class == string.Empty)
                 {
-                    if (attrib.Key == "__init__")
-                        foreach (var instruction in (attrib.Value as HassiumMethod).Instructions)
-                            methodStack.Peek().Instructions.Add(instruction);
-                    else if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                    foreach (var attrib in globalClass.Attributes)
                     {
-                        var value = attrib.Value.Clone() as HassiumObject;
-                        value.Parent = classStack.Peek();
-                        classStack.Peek().Attributes.Add(attrib.Key, value);
+                        if (attrib.Key == "__init__")
+                            foreach (var instruction in (attrib.Value as HassiumMethod).Instructions)
+                                methodStack.Peek().Instructions.Add(instruction);
+                        else if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                        {
+                            var value = attrib.Value.Clone() as HassiumObject;
+                            value.Parent = classStack.Peek();
+                            classStack.Peek().Attributes.Add(attrib.Key, value);
+                        }
                     }
-
                 }
+                else
+                    classStack.Peek().Attributes.Add(node.Class, globalClass.Attributes[node.Class]);
             }
             else
             {
-                foreach (var attrib in mod.Attributes)
+                if (node.Class == string.Empty)
                 {
-                    if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                    foreach (var attrib in mod.Attributes)
                     {
-                        var value = attrib.Value.Clone() as HassiumObject;
-                        value.Parent = classStack.Peek();
                         if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
-                            classStack.Peek().Attributes.Add(attrib.Key, value);
+                        {
+                            var value = attrib.Value.Clone() as HassiumObject;
+                            value.Parent = classStack.Peek();
+                            if (!classStack.Peek().Attributes.ContainsKey(attrib.Key))
+                                classStack.Peek().Attributes.Add(attrib.Key, value);
+                        }
                     }
                 }
+                else
+                    classStack.Peek().Attributes.Add(node.Class, mod.Attributes[node.Class]);
             }
 
             if (mod is HassiumModule)
@@ -663,7 +672,7 @@ namespace Hassium.Compiler.Emit
             if (filePath == string.Empty)
                 filePath = locateFile(path, ".dll");
             if (filePath == string.Empty)
-                throw new CompilerException(location, "Could not locate file by reference {0}!", path);
+                throw new CompilerException(location, "Could not locate file by reference '{0}'!", path);
 
             return CompileModuleFromFilePath(filePath);
         }

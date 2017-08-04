@@ -1,8 +1,8 @@
-use Net;
+use Socket from Net;
 
 func main (params args) {
 	sock = new Socket (args [1], args [2].toint ());
-
+	println (DNS);
 	while (!sock.isconnected) sleep (100);
 
 	thread do {

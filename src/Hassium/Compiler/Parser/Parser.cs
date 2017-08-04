@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Hassium.Compiler.Exceptions;
@@ -327,6 +326,13 @@ namespace Hassium.Compiler.Parser
         {
             var location = this.location;
             expectToken(TokenType.Identifier, "use");
+            string clazz = "";
+            if (tokens[position + 1].Value == "from")
+            {
+                clazz = expectToken(TokenType.Identifier).Value;
+                expectToken(TokenType.Identifier, "from");
+            }
+
             StringBuilder module = new StringBuilder();
             if (matchToken(TokenType.String))
                 module.Append(expectToken(TokenType.String).Value);
@@ -339,7 +345,7 @@ namespace Hassium.Compiler.Parser
                 while (acceptToken(TokenType.Dot) || acceptToken(TokenType.Operation, "/"));
             }
 
-            return new UseNode(location, module.ToString());
+            return new UseNode(location, module.ToString(), clazz);
         }
 
         private WhileNode parseWhile()

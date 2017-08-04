@@ -4,12 +4,14 @@
     {
         public override SourceLocation SourceLocation { get; }
 
+        public string Class { get; private set; }
         public string Module { get; private set; }
-
-        public UseNode(SourceLocation location, string module)
+        
+        public UseNode(SourceLocation location, string module, string clazz = "")
         {
             SourceLocation = location;
 
+            Class = clazz;
             Module = module;
         }
 
