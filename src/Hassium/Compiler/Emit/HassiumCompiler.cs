@@ -414,7 +414,11 @@ namespace Hassium.Compiler.Emit
         }
         public void Accept(MultipleAssignmentNode node)
         {
-
+            node.Value.Visit(this);
+            for (int i = 0; i < node.Targets.Count; i++)
+                emit(node.Targets[i].SourceLocation, InstructionType.Duplicate);
+            foreach (var target in node.Targets)
+                Accept(new BinaryOperationNode(target.SourceLocation, BinaryOperation.Assignment, target, new CodeBlockNode(target.SourceLocation)));
         }
         public void Accept(RaiseNode node)
         {

@@ -72,6 +72,8 @@ namespace Hassium.Compiler.Parser
                 return parseUse();
             else if (matchToken(TokenType.Identifier, "while"))
                 return parseWhile();
+            else if (matchToken(TokenType.Identifier) && tokens[position + 1].TokenType == TokenType.Comma)
+                return parseMultipleAssignment();
             else if (matchToken(TokenType.OpenCurlyBrace))
                 return parseCodeBlockNode();
             else
@@ -256,6 +258,25 @@ namespace Hassium.Compiler.Parser
             }
 
             return new ListDeclarationNode(location, elements);
+        }
+
+        private MultipleAssignmentNode parseMultipleAssignment()
+        {
+            var location = this.location;
+            List<AstNode> targets = new List<AstNode>();
+            do
+            {
+                if (tokens[position + 1].TokenType == TokenType.Comma || tokens[position + 1].TokenType == TokenType.Assignment)
+                    targets.Add(new IdentifierNode(this.location, expectToken(TokenType.Identifier).Value));
+                else
+                    targets.Add(parseExpression());
+            }
+            while (acceptToken(TokenType.Comma));
+            expectToken(TokenType.Assignment);
+
+            AstNode value = parseExpression();
+
+            return new MultipleAssignmentNode(location, targets, value);
         }
 
         private RaiseNode parseRaise()

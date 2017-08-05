@@ -1,13 +1,10 @@
 func main () {
-	obj = new Data () { val1 = "val1 str", val2 = "val2 str" }
+	a, b, c = data ();
 
-	println (obj.val2);
-	println (obj.val1);
-	println (obj.val1);
+	println (a, b, c);
 }
 
-class Data {
-	func new () {
-
-	}
+func data () {
+	println ("I got called!");
+	return "a";
 }
