@@ -21,6 +21,11 @@ namespace Hassium
 
                 vm.Execute(module, hargs);
             }
+            catch (CompilerException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
+            }
             catch (ParserException ex)
             {
                 Console.WriteLine(ex.Message);

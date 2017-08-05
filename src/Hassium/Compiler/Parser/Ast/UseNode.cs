@@ -7,7 +7,7 @@
         public string Class { get; private set; }
         public string Module { get; private set; }
         
-        public UseNode(SourceLocation location, string module, string clazz = "")
+        public UseNode(SourceLocation location, string clazz, string module)
         {
             SourceLocation = location;
 

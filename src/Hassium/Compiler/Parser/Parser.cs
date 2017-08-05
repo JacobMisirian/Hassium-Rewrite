@@ -326,12 +326,8 @@ namespace Hassium.Compiler.Parser
         {
             var location = this.location;
             expectToken(TokenType.Identifier, "use");
-            string clazz = "";
-            if (tokens[position + 1].Value == "from")
-            {
-                clazz = expectToken(TokenType.Identifier).Value;
-                expectToken(TokenType.Identifier, "from");
-            }
+            string clazz = tokens[position++].Value;
+            expectToken(TokenType.Identifier, "from");
 
             StringBuilder module = new StringBuilder();
             if (matchToken(TokenType.String))
@@ -345,7 +341,7 @@ namespace Hassium.Compiler.Parser
                 while (acceptToken(TokenType.Dot) || acceptToken(TokenType.Operation, "/"));
             }
 
-            return new UseNode(location, module.ToString(), clazz);
+            return new UseNode(location, clazz, module.ToString());
         }
 
         private WhileNode parseWhile()

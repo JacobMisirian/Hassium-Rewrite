@@ -1,4 +1,4 @@
-use Socket from Net;
+use *s from Net;
 
 func main (params args) {
 	sock = new Socket (args [1], args [2].toint ());

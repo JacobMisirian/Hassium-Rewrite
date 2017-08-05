@@ -560,7 +560,7 @@ namespace Hassium.Compiler.Emit
             if (mod.Attributes.ContainsKey("__global__"))
             {
                 var globalClass = mod.Attributes["__global__"];
-                if (node.Class == string.Empty)
+                if (node.Class == "*")
                 {
                     foreach (var attrib in globalClass.Attributes)
                     {
@@ -580,7 +580,7 @@ namespace Hassium.Compiler.Emit
             }
             else
             {
-                if (node.Class == string.Empty)
+                if (node.Class == "*")
                 {
                     foreach (var attrib in mod.Attributes)
                     {
