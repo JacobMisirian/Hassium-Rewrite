@@ -1,11 +1,13 @@
 func main () {
-	l = [ 3, 6, 2 ];
+	obj = new Data () { val1 = "val1 str", val2 = "val2 str" }
 
-	l = map (l, double);
-
-	println (l);
+	println (obj.val2);
+	println (obj.val1);
+	println (obj.val1);
 }
 
-func double (x : int) : int {
-	return x * 2;
+class Data {
+	func new () {
+
+	}
 }

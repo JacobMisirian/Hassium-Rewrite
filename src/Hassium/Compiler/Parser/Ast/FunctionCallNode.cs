@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Hassium.Compiler.Parser.Ast
 {
@@ -6,13 +6,15 @@ namespace Hassium.Compiler.Parser.Ast
     {
         public override SourceLocation SourceLocation { get; }
 
+        public Dictionary<string, AstNode> InitialAttributes { get; private set; }
         public AstNode Target { get; private set; }
         public ArgumentListNode Parameters { get; private set; }
 
-        public FunctionCallNode(SourceLocation location, AstNode target, ArgumentListNode parameters)
+        public FunctionCallNode(SourceLocation location, AstNode target, ArgumentListNode parameters, Dictionary<string, AstNode> initialAttributes)
         {
             SourceLocation = location;
 
+            InitialAttributes = initialAttributes;
             Target = target;
             Parameters = parameters;
         }

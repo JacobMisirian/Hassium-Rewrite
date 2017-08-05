@@ -284,6 +284,13 @@ namespace Hassium.Compiler.Emit
                 param.Visit(this);
             node.Target.Visit(this);
             emit(node.SourceLocation, InstructionType.Call, node.Parameters.Arguments.Count);
+
+            foreach (var attrib in node.InitialAttributes)
+            {
+                attrib.Value.Visit(this);
+                emit(attrib.Value.SourceLocation, InstructionType.PushConstant, handleConstant(attrib.Key));
+                emit(attrib.Value.SourceLocation, InstructionType.SetInitialAttribute);
+            }
         }
         public void Accept(FunctionDeclarationNode node)
         {

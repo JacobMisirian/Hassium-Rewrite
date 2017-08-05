@@ -228,11 +228,10 @@ namespace Hassium.Runtime
                         case InstructionType.SetInitialAttribute:
                             attrib = Stack.Pop().ToString(this, CurrentSourceLocation).String;
                             val = Stack.Pop();
-                            var obj = Stack.Pop();
+                            var obj = Stack.Peek();
                             if (obj.Attributes.ContainsKey(attrib))
                                 obj.Attributes.Remove(attrib);
                             obj.Attributes.Add(attrib, val);
-                            Stack.Push(obj);
                             break;
                         case InstructionType.StartThread:
                             (Stack.Pop() as HassiumThread).start(this, CurrentSourceLocation);

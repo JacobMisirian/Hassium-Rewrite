@@ -667,7 +667,7 @@ namespace Hassium.Compiler.Parser
         {
             var location = this.location;
             if (matchToken(TokenType.OpenParentheses))
-                return new FunctionCallNode(location, left, parseArgumentList());
+                return new FunctionCallNode(location, left, parseArgumentList(), parseInitialAttributes());
             else if (acceptToken(TokenType.OpenSquareBrace))
             {
                 var index = parseExpression();
@@ -720,6 +720,26 @@ namespace Hassium.Compiler.Parser
             else if (matchToken(TokenType.Identifier))
                 return new IdentifierNode(location, expectToken(TokenType.Identifier).Value);
             throw new ParserException(location, "Unexpected token of type '{0}' with value '{1}'", tokens[position].TokenType, tokens[position].Value);
+        }
+
+        private Dictionary<string, AstNode> parseInitialAttributes()
+        {
+            Dictionary<string, AstNode> attribs = new Dictionary<string, AstNode>();
+
+            if (acceptToken(TokenType.OpenCurlyBrace))
+            {
+                do
+                {
+                    string attrib = expectToken(TokenType.Identifier).Value;
+                    expectToken(TokenType.Assignment);
+                    AstNode value = parseExpression();
+                    acceptToken(TokenType.Comma);
+                    attribs.Add(attrib, value);
+                }
+                while (!acceptToken(TokenType.CloseCurlyBrace));
+            }
+
+            return attribs;
         }
 
         private EnforcedAssignmentNode parseEnforcedAssignment()
